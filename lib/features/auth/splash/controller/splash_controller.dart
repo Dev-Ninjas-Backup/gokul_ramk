@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:get/get.dart';
-import 'package:gokul_ramk/auth/onboarding/screen/onboarding_screen.dart';
+import 'package:gokul_ramk/features/auth/onboarding/screen/onboarding_screen.dart';
 
 class SplashController extends GetxController {
   var currentIndex = 0.obs;

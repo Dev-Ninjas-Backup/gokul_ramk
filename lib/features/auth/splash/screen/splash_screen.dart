@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:gokul_ramk/auth/splash/controller/splash_controller.dart';
+import 'package:gokul_ramk/features/auth/splash/controller/splash_controller.dart';
 import 'package:gokul_ramk/core/utils/constants/imagepath.dart';
 import 'package:gokul_ramk/core/utils/constants/colors.dart';
 
