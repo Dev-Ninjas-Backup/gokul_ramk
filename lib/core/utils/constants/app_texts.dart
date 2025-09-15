@@ -1,6 +1,20 @@
+import 'package:flutter/material.dart';
 
-class AppText{
-  AppText._();
-
-  static const String appName='';
+TextStyle getTextStyles({
+  double? fontSize,
+  FontWeight? fontWeight,
+  Color? color,
+  double? letterSpacing,
+  double? height,
+  TextDecoration? decoration,
+}) {
+  return TextStyle(
+    fontFamily: 'Rajdhani',
+    fontSize: fontSize,
+    fontWeight: fontWeight,
+    color: color,
+    letterSpacing: letterSpacing,
+    height: height,
+    decoration: decoration,
+  );
 }
