@@ -27,15 +27,15 @@ class OnboardingScreen extends StatelessWidget {
               ),
 
               Positioned(
-                top: 48,
-                left: 28,
+                top: 68,
+                left: 22,
                 child: GestureDetector(
                   onTap: () {},
                   child: Text(
                     'Skip',
                     style: getTextStyles(
                       fontWeight: FontWeight.w500,
-                      fontSize: 16,
+                      fontSize: 18,
                       color: AppColors.secondaryButtonColor,
                     ),
                   ),

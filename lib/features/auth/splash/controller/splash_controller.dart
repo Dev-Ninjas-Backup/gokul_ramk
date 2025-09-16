@@ -21,7 +21,7 @@ class SplashController extends GetxController {
   }
 
   void _startDotAnimation() {
-    _timer = Timer.periodic(Duration(milliseconds: 500), (timer) {
+    _timer = Timer.periodic(Duration(milliseconds: 800), (timer) {
       currentIndex.value = (currentIndex.value + 1) % 4;
     });
   }
