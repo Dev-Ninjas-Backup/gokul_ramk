@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gokul_ramk/core/utils/constants/app_texts.dart';
+import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
 import 'package:gokul_ramk/core/utils/constants/imagepath.dart';
 import 'package:gokul_ramk/core/utils/constants/colors.dart';
 
@@ -33,7 +33,7 @@ class OnboardingScreen extends StatelessWidget {
                   onTap: () {},
                   child: Text(
                     'Skip',
-                    style: getTextStyles(
+                    style: getTextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 18,
                       color: AppColors.secondaryButtonColor,
@@ -51,7 +51,7 @@ class OnboardingScreen extends StatelessWidget {
             child: Text(
               'Your Fitness Journey Starts Here',
               textAlign: TextAlign.center,
-              style: getTextStyles(
+              style: getTextStyle(
                 fontWeight: FontWeight.w700,
                 fontSize: 32,
                 color: AppColors.primaryFontColor,
@@ -66,7 +66,7 @@ class OnboardingScreen extends StatelessWidget {
             child: Text(
               'Track workouts, connect with trainers, and stay motivated',
               textAlign: TextAlign.center,
-              style: getTextStyles(
+              style: getTextStyle(
                 fontWeight: FontWeight.w400,
                 fontSize: 16,
                 color: AppColors.secondaryFontColor,
