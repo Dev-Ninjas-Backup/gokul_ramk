@@ -15,38 +15,40 @@ class SplashScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: size.height * 0.55,
-              width: size.width,
-              child: Center(
-                child: Image.asset(
-                  Imagepath.splash,
-                  height: size.height * 0.45,
-                  width: size.width,
-                  fit: BoxFit.contain,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: size.height * 0.55,
+                width: size.width,
+                child: Center(
+                  child: Image.asset(
+                    Imagepath.splash,
+                    height: size.height * 0.45,
+                    width: size.width,
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
-            ),
-             SizedBox(height: 38),
-
-            Padding(
-              padding:  EdgeInsets.only(bottom: 40.0),
-              child: Obx(
-                () => Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: List.generate(4, (index) {
-                    return _buildDot(
-                      isActive: controller.currentIndex.value == index,
-                    );
-                  }),
+               SizedBox(height: 38),
+          
+              Padding(
+                padding:  EdgeInsets.only(bottom: 40.0),
+                child: Obx(
+                  () => Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(4, (index) {
+                      return _buildDot(
+                        isActive: controller.currentIndex.value == index,
+                      );
+                    }),
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

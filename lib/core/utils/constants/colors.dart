@@ -31,4 +31,7 @@ class AppColors {
   static const Color borderColor = Color(0xFFEBEBEB);
   static const Color background = Color(0xFFFFFFFF);
   static const Color primaryColor = Color(0XFF60BF7B);
+
+  //login button color
+  static const Color loginButtonColor = Color(0xFF148CBB);
 }
