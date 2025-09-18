@@ -1,5 +1,9 @@
 import 'package:get/get_navigation/src/routes/get_route.dart';
+
 import 'package:gokul_ramk/features/auth/forgot_password/screen/create_password_screen.dart';
+
+import 'package:gokul_ramk/features/bottom_navbar/screen/custom_navbar.dart';
+
 import 'package:gokul_ramk/features/auth/forgot_password/screen/forgot_pass_verify_otp_screen.dart';
 import 'package:gokul_ramk/features/auth/forgot_password/screen/forgot_password_screen.dart';
 import 'package:gokul_ramk/features/auth/login/screen/login_screen.dart';
@@ -19,6 +23,7 @@ class AppRoute {
   static String signUpScreen = '/signUpScreen';
   static String forgotPasswordScreen = '/forgotPasswordScreen';
   static String forgotPassVerifyOtpScreen = '/forgotPassVerifyOtpScreen';
+
   static String createNewPasswordScreen = '/createNewPasswordScreen';
   static String tellUsAboutYourselfScreen1 =
       '/signup/tellUsAboutYourselfScreen1';
@@ -30,12 +35,15 @@ class AppRoute {
       '/signup/tellUsAboutYourTrainingScreen';
   static String consentAgreementScreen = '/signUp/consentAgreementScreen';
 
+
+
   static String getSplashScreen() => splashScreen;
   static String getOnboardingScreen() => onboardingScreen;
   static String getloginScreen() => loginScreen;
   static String getsignUpScreen() => signUpScreen;
   static String getforgotPasswordScreen() => forgotPasswordScreen;
   static String getforgotPassVerifyOtpScreen() => forgotPassVerifyOtpScreen;
+
   static String getcreateNewPasswordScreen() => createNewPasswordScreen;
   static String gettellUsAboutYourselfScreen1() => tellUsAboutYourselfScreen1;
   static String gettellUsAboutYourselfScreen2() => tellUsAboutYourselfScreen2;
@@ -43,6 +51,11 @@ class AppRoute {
   static String gettellUsAboutYourTrainingScreen() =>
       tellUsAboutYourTrainingScreen;
   static String getconsentAgreementScreen() => consentAgreementScreen;
+
+
+  // home
+  static String trainerHomeScreen = "/trainer/homeScreen";
+
 
   static List<GetPage> routes = [
     GetPage(name: splashScreen, page: () => SplashScreen()),
@@ -54,6 +67,7 @@ class AppRoute {
       name: forgotPassVerifyOtpScreen,
       page: () => ForgotPassVerifyOtpScreen(),
     ),
+
     GetPage(name: createNewPasswordScreen, page: () => CreatePasswordScreen()),
     GetPage(
       name: tellUsAboutYourselfScreen1,
@@ -72,5 +86,10 @@ class AppRoute {
       page: () => TellUsAboutTrainingScreen(),
     ),
     GetPage(name: consentAgreementScreen, page: () => ConsentAgrementScreen()),
+
+
+    // home
+    GetPage(name: trainerHomeScreen, page: () => HomeScreen()),
+
   ];
 }
