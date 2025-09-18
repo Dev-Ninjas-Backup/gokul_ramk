@@ -1,5 +1,5 @@
 import 'package:get/get_navigation/src/routes/get_route.dart';
-import 'package:gokul_ramk/core/common/widgets/custom_navbar.dart';
+import 'package:gokul_ramk/features/bottom_navbar/screen/custom_navbar.dart';
 import 'package:gokul_ramk/features/auth/forgot_password/screen/forgot_pass_verify_otp_screen.dart';
 import 'package:gokul_ramk/features/auth/forgot_password/screen/forgot_password_screen.dart';
 import 'package:gokul_ramk/features/auth/login/screen/login_screen.dart';
