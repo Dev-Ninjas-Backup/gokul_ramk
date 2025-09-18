@@ -4,6 +4,7 @@ import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
 import 'package:gokul_ramk/core/utils/constants/colors.dart';
 import 'package:gokul_ramk/core/utils/constants/icon_path.dart';
 import 'package:gokul_ramk/features/auth/login/controller/login_controller.dart';
+import 'package:gokul_ramk/routes/app_routes.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
@@ -101,7 +102,9 @@ class LoginScreen extends StatelessWidget {
                       ],
                     ),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Get.toNamed(AppRoute.getforgotPasswordScreen());
+                      },
                       child: Text(
                         "Forgot Password?",
                         style: TextStyle(
@@ -160,9 +163,11 @@ class LoginScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Don’t have an account? "),
+                    Text("Don't have an account? "),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Get.toNamed(AppRoute.getsignUpScreen());
+                      },
                       child: Text(
                         "Signup",
                         style: TextStyle(

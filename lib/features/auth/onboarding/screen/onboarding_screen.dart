@@ -44,7 +44,9 @@ class OnboardingScreen extends StatelessWidget {
                     top: 68,
                     left: 22,
                     child: GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Get.offAllNamed(AppRoute.getloginScreen());
+                      },
                       child: Text(
                         'Skip',
                         style: getTextStyle(
@@ -107,8 +109,7 @@ class OnboardingScreen extends StatelessWidget {
                   onPressed: () {
                     if (controller.pageNumber.value < 2) {
                       controller.pageNumber.value++;
-                    }
-                    else {
+                    } else {
                       Get.offAllNamed(AppRoute.getloginScreen());
                     }
                   },
