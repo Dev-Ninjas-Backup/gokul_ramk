@@ -4,13 +4,13 @@ class CustomLabelTextField extends StatelessWidget {
   final String label;
   final String hintText;
   final TextEditingController editingController;
-  final IconData icon;
+  final IconData? icon;
   const CustomLabelTextField({
     super.key,
     required this.label,
     required this.editingController,
     required this.hintText,
-    required this.icon,
+    this.icon,
   });
 
   @override
@@ -24,7 +24,7 @@ class CustomLabelTextField extends StatelessWidget {
           controller: editingController,
           decoration: InputDecoration(
             hintText: hintText,
-            prefixIcon: Icon(icon, color: Colors.grey.shade400),
+            prefixIcon:icon!=null ? Icon(icon, color: Colors.grey.shade400) :null,
           ),
         ),
       ],
