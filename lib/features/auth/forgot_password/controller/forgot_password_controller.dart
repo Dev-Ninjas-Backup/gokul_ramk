@@ -7,8 +7,13 @@ class ForgotPasswordController extends GetxController {
   RxBool smsSelected = false.obs;
   final pinController = TextEditingController();
 
+  final newPasswordController = TextEditingController();
+    RxBool isNewPassObsecure = false.obs;
+  final newPassConfirmController = TextEditingController();
+  RxBool isNewPassConfirmObsecure = false.obs;
+
   var secondsRemaining = 30.obs; // countdown starts from 30 seconds
-  var enableResend = false.obs;
+  var enableResend = true.obs;
   Timer? timer;
   void resendCode() {
     startTimer();

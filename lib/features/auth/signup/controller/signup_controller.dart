@@ -8,6 +8,6 @@ class SignupController extends GetxController {
   final TextEditingController confirmPasswordController =
       TextEditingController();
 
-  var selectedValue = RxnString();
-  final List<String> item = ['User', 'Trainer'];
+  var selectedRole = RxnString();
+
 }

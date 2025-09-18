@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/widgets/custom_app_bar_title.dart';
 import 'package:gokul_ramk/core/common/widgets/custom_label_textfield.dart';
+import 'package:gokul_ramk/core/common/widgets/show_easy_loading_error.dart';
 import 'package:gokul_ramk/core/utils/constants/icon_path.dart';
 import 'package:gokul_ramk/features/auth/signup/controller/signup_controller.dart';
 import 'package:gokul_ramk/routes/app_routes.dart';
@@ -22,7 +23,7 @@ class SignupScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               spacing: 16,
               children: [
-                CustomAppBarTitle(title: 'Create Your Account',),
+                CustomAppBarTitle(title: 'Create Your Account'),
                 //Full Name
                 CustomLabelTextField(
                   label: 'Full Name',
@@ -92,17 +93,17 @@ class SignupScreen extends StatelessWidget {
                       child: Obx(
                         () => DropdownButton<String>(
                           isExpanded: true,
-                          value: controller.selectedValue.value,
+                          value: controller.selectedRole.value,
                           underline: const SizedBox(),
                           hint: const Text("Select your role"),
-                          items: controller.item.map((f) {
+                          items: ['User', 'Trainer'].map((f) {
                             return DropdownMenuItem<String>(
                               value: f,
                               child: Text(f[0].toUpperCase() + f.substring(1)),
                             );
                           }).toList(),
                           onChanged: (val) =>
-                              controller.selectedValue.value = val,
+                              controller.selectedRole.value = val,
                         ),
                       ),
                     ),
@@ -110,7 +111,17 @@ class SignupScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 //create account button
-                ElevatedButton(onPressed: () {}, child: Text('Create Account')),
+                ElevatedButton(
+                  onPressed: () {
+                    if (controller.selectedRole.value == 'User') {
+                      Get.toNamed(AppRoute.gettellUsAboutYourselfScreen1());
+                    } else if (controller.selectedRole.value == 'Trainer') {
+                    } else {
+                      showEasyLoadingError();
+                    }
+                  },
+                  child: Text('Create Account'),
+                ),
                 const SizedBox(height: 10),
                 // Divider
                 Row(
@@ -170,4 +181,5 @@ class SignupScreen extends StatelessWidget {
     );
   }
 }
+
 
