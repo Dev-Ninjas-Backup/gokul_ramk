@@ -1,20 +1,5 @@
-// import 'package:flutter/material.dart';
+class AppTexts {
+  static String agreementText =
+      'By submitting this form, I confirm that the information provided is accurate and complete to the best of my knowledge. I acknowledge that it is my responsibility to consult with a physician before participating in any physical activity if necessary.';
+}
 
-// TextStyle getAppTextStyles({
-//   double? fontSize,
-//   FontWeight? fontWeight,
-//   Color? color,
-//   double? letterSpacing,
-//   double? height,
-//   TextDecoration? decoration,
-// }) {
-//   return TextStyle(
-//     fontFamily: 'Rajdhani',
-//     fontSize: fontSize,
-//     fontWeight: fontWeight,
-//     color: color,
-//     letterSpacing: letterSpacing,
-//     height: height,
-//     decoration: decoration,
-//   );
-// }
