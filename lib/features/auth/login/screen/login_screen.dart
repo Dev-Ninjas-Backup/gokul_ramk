@@ -120,7 +120,9 @@ class LoginScreen extends StatelessWidget {
 
                 // Login Button
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.toNamed("/trainer/homeScreen");
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.loginButtonColor,
                   ),
