@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:gokul_ramk/features/trainer/program/screen/create_program.dart';
 
-class DashboardPage extends StatelessWidget {
-  const DashboardPage({super.key});
+import '../../../../../core/utils/constants/icon_path.dart';
+
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,10 +21,20 @@ class DashboardPage extends StatelessWidget {
               children: [
                 const Text(
                   "Good morning, Gokul 👋",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontFamily: 'Rajdhani',
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold, // Bold (700)
+                    height: 1.0, // line-height: 100%
+                    letterSpacing: 0.0, // no extra spacing
+                  ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.notifications),
+                  icon: Image.asset(
+                    IconPath.notificationIcon,
+                    width: 24, // adjust size
+                    height: 24,
+                  ),
                   onPressed: () {},
                 ),
               ],
@@ -28,7 +42,7 @@ class DashboardPage extends StatelessWidget {
             const SizedBox(height: 8),
             const Text(
               "You have 3 sessions today and 2 new requests.",
-              style: TextStyle(color: Colors.grey),
+              style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(height: 20),
@@ -106,6 +120,8 @@ class DashboardPage extends StatelessWidget {
                   const SizedBox(height: 6),
                   const Text(
                     "Design a structured training plan tailored for your clients.",
+
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 12),
                   ElevatedButton(
@@ -115,7 +131,9 @@ class DashboardPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(25),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Get.to(CreateProgramScreen());
+                    },
                     child: const Text("Start Now"),
                   ),
                 ],
@@ -139,18 +157,22 @@ class DashboardPage extends StatelessWidget {
           boxShadow: [
             BoxShadow(
               // ignore: deprecated_member_use
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withOpacity(0.15),
               blurRadius: 6,
               offset: const Offset(0, 2),
             ),
           ],
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
               title,
-              style: const TextStyle(color: Colors.grey, fontSize: 12),
+              style: const TextStyle(
+                color: Colors.grey,
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const SizedBox(height: 6),
             Text(
@@ -166,19 +188,26 @@ class DashboardPage extends StatelessWidget {
   Widget _sessionCard(String time, String title, Color bgColor) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(time, style: const TextStyle(color: Colors.grey, fontSize: 12)),
+          Text(
+            time,
+            style: const TextStyle(
+              color: Colors.black87,
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           const SizedBox(height: 4),
           Text(
             title,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
           ),
         ],
       ),
@@ -214,11 +243,15 @@ class DashboardPage extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             name,
-            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           const Text(
             "Done 25kg this month",
-            style: TextStyle(color: Colors.grey, fontSize: 12),
+            style: TextStyle(
+              color: Colors.grey,
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ],
       ),

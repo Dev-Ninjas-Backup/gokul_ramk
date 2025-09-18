@@ -2,20 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/features/bottom_navbar/controller/navbar_controller.dart';
 
-import '../../home/home_screen/screen/dashboard.dart';
+import '../../trainer/home/home_screen/screen/home_screen.dart';
 import '../../../core/utils/constants/icon_path.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class NavBarScreen extends StatelessWidget {
+  const NavBarScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final NavBarController controller = Get.put(NavBarController());
 
     final List<Widget> pages = [
-      const DashboardPage(),
+      const HomeScreen(),
       const Center(child: Text("Programs Page")),
-
       const Center(child: Text("Calendar Page")),
       const Center(child: Text("Group Page")),
       const Center(child: Text("Profile Page")),

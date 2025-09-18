@@ -10,4 +10,5 @@ class IconPath {
   static const String groupIcon = 'assets/icons/group_icon.png';
 
   static const String peopleIcon = 'assets/icons/people_icon.png';
+  static const String notificationIcon = "assets/icons/notification_icon.png";
 }

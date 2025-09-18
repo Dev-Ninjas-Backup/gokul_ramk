@@ -37,6 +37,6 @@ class AppRoute {
     ),
 
     // home
-    GetPage(name: trainerHomeScreen, page: () => HomeScreen()),
+    GetPage(name: trainerHomeScreen, page: () => NavBarScreen()),
   ];
 }
