@@ -1,23 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gokul_ramk/features/bottom_navbar/controller/navbar_controller.dart';
 
-import '../../../features/home/home_screen/screen/dashboard.dart';
-import '../../utils/constants/icon_path.dart';
-
-class HomeController extends GetxController {
-  var currentIndex = 0.obs;
-
-  void changeIndex(int index) {
-    currentIndex.value = index;
-  }
-}
+import '../../home/home_screen/screen/dashboard.dart';
+import '../../../core/utils/constants/icon_path.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final HomeController controller = Get.put(HomeController());
+    final NavBarController controller = Get.put(NavBarController());
 
     final List<Widget> pages = [
       const DashboardPage(),
