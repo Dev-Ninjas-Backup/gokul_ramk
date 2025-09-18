@@ -89,6 +89,7 @@ class AppRoute {
 
 
     // home
+    GetPage(name: trainerHomeScreen, page: () => NavBarScreen()),
     GetPage(name: trainerHomeScreen, page: () => HomeScreen()),
 
   ];
