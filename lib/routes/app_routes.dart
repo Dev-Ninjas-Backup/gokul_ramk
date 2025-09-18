@@ -14,6 +14,7 @@ import 'package:gokul_ramk/features/auth/signup/more_user_information_screen/scr
 import 'package:gokul_ramk/features/auth/signup/more_user_information_screen/screen/tell_us_about_yourself_screen1.dart';
 import 'package:gokul_ramk/features/auth/signup/more_user_information_screen/screen/tell_us_about_yourself_screen2.dart';
 import 'package:gokul_ramk/features/auth/signup/screen/signup_screen.dart';
+import 'package:gokul_ramk/features/trainer/home/home_screen/screen/home_screen.dart';
 import '../features/auth/splash/screen/splash_screen.dart';
 
 class AppRoute {
