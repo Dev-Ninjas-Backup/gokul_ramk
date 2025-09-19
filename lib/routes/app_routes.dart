@@ -1,8 +1,9 @@
 import 'package:get/get_navigation/src/routes/get_route.dart';
 
 import 'package:gokul_ramk/features/auth/forgot_password/screen/create_password_screen.dart';
+import 'package:gokul_ramk/features/auth/signup/more_trainer_information/screen/tell_about_trainer_screen.dart';
 
-import 'package:gokul_ramk/features/bottom_navbar/screen/custom_navbar.dart';
+import 'package:gokul_ramk/features/trainer/bottom_navbar/screen/custom_navbar.dart';
 
 import 'package:gokul_ramk/features/auth/forgot_password/screen/forgot_pass_verify_otp_screen.dart';
 import 'package:gokul_ramk/features/auth/forgot_password/screen/forgot_password_screen.dart';
@@ -15,6 +16,7 @@ import 'package:gokul_ramk/features/auth/signup/more_user_information_screen/scr
 import 'package:gokul_ramk/features/auth/signup/more_user_information_screen/screen/tell_us_about_yourself_screen2.dart';
 import 'package:gokul_ramk/features/auth/signup/screen/signup_screen.dart';
 import 'package:gokul_ramk/features/trainer/home/home_screen/screen/home_screen.dart';
+import 'package:gokul_ramk/features/user/bottom_navbar/screen/custom_navbar.dart';
 import '../features/auth/splash/screen/splash_screen.dart';
 
 class AppRoute {
@@ -35,6 +37,15 @@ class AppRoute {
   static String tellUsAboutYourTrainingScreen =
       '/signup/tellUsAboutYourTrainingScreen';
   static String consentAgreementScreen = '/signUp/consentAgreementScreen';
+  static String trainerTellAboutScreen = '/signUp/trainerTellAboutScreen';
+
+  //User
+    static String userNavBarScreen = "/user/userNavBarScreen";
+
+  // Trainer
+  static String trainerHomeScreen = "/trainer/trainerHomeScreen";
+  static String trainerNavBarScreen = "/trainer/trainerNavBarScreen";
+
 
 
 
@@ -52,10 +63,11 @@ class AppRoute {
   static String gettellUsAboutYourTrainingScreen() =>
       tellUsAboutYourTrainingScreen;
   static String getconsentAgreementScreen() => consentAgreementScreen;
+  static String getTrainerTellAboutScreen() => trainerTellAboutScreen;
 
+  //user
+  static String getUserNavBarScreen() => userNavBarScreen;
 
-  // home
-  static String trainerHomeScreen = "/trainer/homeScreen";
 
 
   static List<GetPage> routes = [
@@ -87,11 +99,13 @@ class AppRoute {
       page: () => TellUsAboutTrainingScreen(),
     ),
     GetPage(name: consentAgreementScreen, page: () => ConsentAgrementScreen()),
+    GetPage(name: trainerTellAboutScreen, page: () => TellAboutTrainerScreen()),
 
+    //User
+        GetPage(name: userNavBarScreen, page: () => UserNavBarScreen()),
 
-    // home
-    GetPage(name: trainerHomeScreen, page: () => NavBarScreen()),
+    // Trainer
+    GetPage(name: trainerNavBarScreen, page: () => NavBarScreen()),
     GetPage(name: trainerHomeScreen, page: () => HomeScreen()),
-
   ];
 }

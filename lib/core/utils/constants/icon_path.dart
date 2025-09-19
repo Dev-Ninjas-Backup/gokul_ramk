@@ -11,4 +11,10 @@ class IconPath {
 
   static const String peopleIcon = 'assets/icons/people_icon.png';
   static const String notificationIcon = "assets/icons/notification_icon.png";
+
+  static const String userHome = 'assets/icons/user_home.png';
+  static const String useCart = 'assets/icons/user_cart.png';
+  static const String userPost = 'assets/icons/user_post.png';
+  static const String userProfile = 'assets/icons/user_profile.png';
+  static const String userSession = 'assets/icons/user_session.png';
 }

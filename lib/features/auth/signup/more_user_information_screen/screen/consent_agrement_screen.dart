@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:gokul_ramk/core/utils/constants/app_texts.dart';
 import 'package:gokul_ramk/features/auth/signup/more_user_information_screen/controller/tell_about_youselt_controller.dart';
 import 'package:gokul_ramk/features/auth/signup/more_user_information_screen/widget/tell_us_page_heading.dart';
+import 'package:gokul_ramk/routes/app_routes.dart';
 
 class ConsentAgrementScreen extends StatelessWidget {
   ConsentAgrementScreen({super.key});
@@ -33,7 +34,9 @@ class ConsentAgrementScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Get.offAllNamed(AppRoute.getUserNavBarScreen());
+                },
                 child: Text('Continue to Homepage'),
               ),
             ],

@@ -1,39 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:gokul_ramk/features/bottom_navbar/controller/navbar_controller.dart';
+import 'package:gokul_ramk/core/utils/constants/icon_path.dart';
+import 'package:gokul_ramk/features/user/bottom_navbar/controller/navbar_controller.dart';
+import 'package:gokul_ramk/features/user/user_home/screen/user_home_screen.dart';
 
-import '../../trainer/home/home_screen/screen/home_screen.dart';
-import '../../../core/utils/constants/icon_path.dart';
 
-class NavBarScreen extends StatelessWidget {
-  const NavBarScreen({super.key});
-
+class UserNavBarScreen extends StatelessWidget {
+   UserNavBarScreen({super.key});
+  final UserNavBarController controller = Get.put(UserNavBarController());
   @override
   Widget build(BuildContext context) {
-    final NavBarController controller = Get.put(NavBarController());
+    
 
     final List<Widget> pages = [
-      const HomeScreen(),
-      const Center(child: Text("Programs Page")),
-      const Center(child: Text("Calendar Page")),
-      const Center(child: Text("Group Page")),
+      UserHomeScreen(),
+      const Center(child: Text("Session Page")),
+      const Center(child: Text("Cart Page")),
+      const Center(child: Text("Post Page")),
       const Center(child: Text("Profile Page")),
     ];
 
     final List<String> icons = [
-      IconPath.homeIcon,
-      IconPath.programIcon,
-      IconPath.calendarIcon,
-      IconPath.groupIcon,
-      IconPath.peopleIcon,
+      IconPath.userHome,
+      IconPath.userSession,
+      IconPath.useCart,
+      IconPath.userPost,
+      IconPath.userProfile,
     ];
 
     final List<String> labels = [
-      "Home",
-      "Programs",
-      "Calender",
-      "Group",
-      "Profile",
+      "",
+      "",
+      "",
+      "",
+      "",
     ];
 
     return Obx(
@@ -42,19 +42,7 @@ class NavBarScreen extends StatelessWidget {
         body: pages[controller.currentIndex.value],
         bottomNavigationBar: Container(
           decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
-            ),
-            boxShadow: [
-              BoxShadow(
-                // ignore: deprecated_member_use
-                color: Colors.black.withOpacity(0.05),
-                blurRadius: 8,
-                offset: const Offset(0, -2),
-              ),
-            ],
+            color: Colors.white,                    
           ),
           padding: const EdgeInsets.symmetric(vertical: 30),
           child: Row(
@@ -67,7 +55,7 @@ class NavBarScreen extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Image.asset(
-                      icons[index], // 👈 FIXED
+                      icons[index],
                       width: 28,
                       height: 28,
                       color: isSelected ? Colors.blue : Colors.grey,
