@@ -17,6 +17,7 @@ import 'package:gokul_ramk/features/auth/signup/more_user_information_screen/scr
 import 'package:gokul_ramk/features/auth/signup/screen/signup_screen.dart';
 import 'package:gokul_ramk/features/trainer/home/home_screen/screen/home_screen.dart';
 import 'package:gokul_ramk/features/user/bottom_navbar/screen/custom_navbar.dart';
+import 'package:gokul_ramk/features/user/notification/screen/usere_notification_screen.dart';
 import '../features/auth/splash/screen/splash_screen.dart';
 
 class AppRoute {
@@ -41,6 +42,7 @@ class AppRoute {
 
   //User
     static String userNavBarScreen = "/user/userNavBarScreen";
+    static String userNotificationScreen = "/user/userNotificationScreen";
 
   // Trainer
   static String trainerHomeScreen = "/trainer/trainerHomeScreen";
@@ -67,6 +69,7 @@ class AppRoute {
 
   //user
   static String getUserNavBarScreen() => userNavBarScreen;
+    static String getUserNotificationScreen() => userNotificationScreen;
 
 
 
@@ -103,6 +106,8 @@ class AppRoute {
 
     //User
         GetPage(name: userNavBarScreen, page: () => UserNavBarScreen()),
+        GetPage(name: userNotificationScreen, page: () => UsereNotificationScreen()),
+        
 
     // Trainer
     GetPage(name: trainerNavBarScreen, page: () => NavBarScreen()),
