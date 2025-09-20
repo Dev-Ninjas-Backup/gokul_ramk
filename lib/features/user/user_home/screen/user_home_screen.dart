@@ -11,6 +11,7 @@ import 'package:gokul_ramk/features/user/user_home/widget/neutrition_card.dart';
 import 'package:gokul_ramk/features/user/user_home/widget/progress_card.dart';
 import 'package:gokul_ramk/features/user/user_home/widget/stats_card.dart';
 import 'package:gokul_ramk/features/user/user_home/widget/workout_card.dart';
+import 'package:gokul_ramk/routes/app_routes.dart';
 
 class UserHomeScreen extends StatelessWidget {
   UserHomeScreen({super.key});
@@ -47,6 +48,7 @@ class UserHomeScreen extends StatelessWidget {
                   ),
                   GestureDetector(
                     onTap: () {
+                      Get.toNamed(AppRoute.userNotificationScreen);
                       debugPrint("Notification tapped");
                     },
 
@@ -289,7 +291,7 @@ class UserHomeScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12.0),
                   gradient: LinearGradient(
-                    colors: [Color(0xFF7BCA91),Color(0xFF3CA0C7)],
+                    colors: [Color(0xFF7BCA91), Color(0xFF3CA0C7)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -314,7 +316,7 @@ class UserHomeScreen extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () {},
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,                     
+                        backgroundColor: Colors.black,
                       ),
                       child: Text(
                         '+ Join Now',
