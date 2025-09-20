@@ -44,6 +44,7 @@ dependencies:
   pinput: ^5.0.2
   country_state_city_pro: ^0.0.6
   carousel_slider: ^5.1.1
+  flutter_calendar_carousel: ^2.5.4
 
 dev_dependencies:
   flutter_test:
