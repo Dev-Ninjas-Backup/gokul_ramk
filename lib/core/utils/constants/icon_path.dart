@@ -2,6 +2,9 @@ class IconPath {
   static const String googleIcon = 'assets/icons/google.png';
   static const String facebookIcon = 'assets/icons/facebook.png';
   static const String eyecolse = 'assets/icons/eye_close.png';
+  static const String languageIcon = 'assets/icons/language.png';
+  static const String editIcon = 'assets/icons/edit.png';
+    static const String contactUsIcon = 'assets/icons/contact_us.png';
 
   static const String homeIcon = 'assets/icons/home_icon.png';
   static const String programIcon = 'assets/icons/program_icon.png';
