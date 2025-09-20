@@ -9,4 +9,5 @@ class Imagepath {
   static String forgotBackground = 'assets/images/forgot_background.png';
   static String forgotMessage = 'assets/images/message_forgot.png';
   static String forgotEmail = 'assets/images/email_forgot.png';
+  static String trainer = 'assets/images/trainer.png';
 }

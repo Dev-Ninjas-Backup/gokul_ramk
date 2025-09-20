@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/features/trainer/bottom_navbar/controller/navbar_controller.dart';
+import 'package:gokul_ramk/features/trainer/my_clients/my_clients_screen/screen/my_clients_screen.dart';
 
 import '../../home/home_screen/screen/home_screen.dart';
 import '../../../../core/utils/constants/icon_path.dart';
@@ -14,7 +15,7 @@ class NavBarScreen extends StatelessWidget {
 
     final List<Widget> pages = [
       const HomeScreen(),
-      const Center(child: Text("Programs Page")),
+      const MyClientsScreen(),
       const Center(child: Text("Calendar Page")),
       const Center(child: Text("Group Page")),
       const Center(child: Text("Profile Page")),
@@ -28,13 +29,7 @@ class NavBarScreen extends StatelessWidget {
       IconPath.peopleIcon,
     ];
 
-    final List<String> labels = [
-      "",
-      "",
-      "",
-      "",
-      "",
-    ];
+    final List<String> labels = ["", "", "", "", ""];
 
     return Obx(
       () => Scaffold(
