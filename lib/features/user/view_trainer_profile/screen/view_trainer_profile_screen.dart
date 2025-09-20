@@ -7,6 +7,7 @@ import 'package:gokul_ramk/features/user/view_trainer_profile/controller/view_tr
 import 'package:gokul_ramk/features/user/view_trainer_profile/widget/profile_info_card.dart';
 import 'package:gokul_ramk/features/user/view_trainer_profile/widget/section_tile_program_card.dart';
 import 'package:gokul_ramk/features/user/view_trainer_profile/widget/trainer_profile_header_widget.dart';
+import 'package:gokul_ramk/routes/app_routes.dart';
 
 class ViewTrainerProfileScreen extends StatelessWidget {
   final controller = Get.put(ViewTrainerProfileController());
@@ -63,7 +64,9 @@ class ViewTrainerProfileScreen extends StatelessWidget {
                   const SizedBox(width: 12),
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Get.toNamed(AppRoute.bookTrainerScreen);
+                      },
                       child: Text('Book Trainer'),
                     ),
                   ),

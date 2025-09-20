@@ -21,21 +21,52 @@ class OnboardingScreen extends StatelessWidget {
             Obx(
               () => Stack(
                 children: [
-                  Container(
-                    height: 440,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(
-                          controller.headingImagePathList[controller
-                              .pageNumber
-                              .value],
+                  AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 500),
+                    transitionBuilder:
+                        (Widget child, Animation<double> animation) {
+                          final inAnimation = Tween<Offset>(
+                            begin: const Offset(1.0, 0.0), // start from right
+                            end: Offset.zero,
+                          ).animate(animation);
+
+                          final outAnimation = Tween<Offset>(
+                            begin: Offset.zero,
+                            end: const Offset(-1.0, 0.0), // exit to left
+                          ).animate(animation);
+
+                          if (child.key ==
+                              ValueKey(controller.pageNumber.value)) {
+                            // new widget slides in from right
+                            return SlideTransition(
+                              position: inAnimation,
+                              child: child,
+                            );
+                          } else {
+                            // old widget slides out to left
+                            return SlideTransition(
+                              position: outAnimation,
+                              child: child,
+                            );
+                          }
+                        },
+                    child: Container(
+                      key: ValueKey(controller.pageNumber.value),
+                      height: 440,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage(
+                            controller.headingImagePathList[controller
+                                .pageNumber
+                                .value],
+                          ),
+                          fit: BoxFit.cover,
                         ),
-                        fit: BoxFit.cover,
-                      ),
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(30),
-                        bottomRight: Radius.circular(30),
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(30),
+                          bottomRight: Radius.circular(30),
+                        ),
                       ),
                     ),
                   ),

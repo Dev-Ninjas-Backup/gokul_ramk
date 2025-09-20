@@ -16,6 +16,7 @@ import 'package:gokul_ramk/features/auth/signup/more_user_information_screen/scr
 import 'package:gokul_ramk/features/auth/signup/more_user_information_screen/screen/tell_us_about_yourself_screen2.dart';
 import 'package:gokul_ramk/features/auth/signup/screen/signup_screen.dart';
 import 'package:gokul_ramk/features/trainer/home/home_screen/screen/home_screen.dart';
+import 'package:gokul_ramk/features/user/book_trainer/screen/bookings_screen.dart';
 import 'package:gokul_ramk/features/user/bookmark/screen/user_bookmark_screen.dart';
 import 'package:gokul_ramk/features/user/bottom_navbar/screen/custom_navbar.dart';
 import 'package:gokul_ramk/features/user/notification/screen/usere_notification_screen.dart';
@@ -47,6 +48,7 @@ class AppRoute {
   static String userNotificationScreen = "/user/userNotificationScreen";
   static String userBookmarkScreen = "/user/userBookmarkScreen";
   static String viewTrainerProfileScreen = "/user/viewTrainerProfileScreen";
+  static String bookTrainerScreen = "/user/bookTrainerScreen";
 
   // Trainer
   static String trainerHomeScreen = "/trainer/trainerHomeScreen";
@@ -73,6 +75,7 @@ class AppRoute {
   static String getUserNotificationScreen() => userNotificationScreen;
   static String getUserBookmarkScreen() => userBookmarkScreen;
   static String getViewTrainerProfileScreen() => viewTrainerProfileScreen;
+  static String getbookTrainerScreen() => bookTrainerScreen;
 
   static List<GetPage> routes = [
     GetPage(name: splashScreen, page: () => SplashScreen()),
@@ -115,6 +118,10 @@ class AppRoute {
     GetPage(
       name: viewTrainerProfileScreen,
       page: () => ViewTrainerProfileScreen(),
+    ),
+    GetPage(
+      name: bookTrainerScreen,
+      page: () => BookTrainerScreen(),
     ),
 
     // Trainer
