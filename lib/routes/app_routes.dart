@@ -16,8 +16,10 @@ import 'package:gokul_ramk/features/auth/signup/more_user_information_screen/scr
 import 'package:gokul_ramk/features/auth/signup/more_user_information_screen/screen/tell_us_about_yourself_screen2.dart';
 import 'package:gokul_ramk/features/auth/signup/screen/signup_screen.dart';
 import 'package:gokul_ramk/features/trainer/home/home_screen/screen/home_screen.dart';
+import 'package:gokul_ramk/features/user/bookmark/screen/user_bookmark_screen.dart';
 import 'package:gokul_ramk/features/user/bottom_navbar/screen/custom_navbar.dart';
 import 'package:gokul_ramk/features/user/notification/screen/usere_notification_screen.dart';
+import 'package:gokul_ramk/features/user/view_trainer_profile/screen/view_trainer_profile_screen.dart';
 import '../features/auth/splash/screen/splash_screen.dart';
 
 class AppRoute {
@@ -41,15 +43,14 @@ class AppRoute {
   static String trainerTellAboutScreen = '/signUp/trainerTellAboutScreen';
 
   //User
-    static String userNavBarScreen = "/user/userNavBarScreen";
-    static String userNotificationScreen = "/user/userNotificationScreen";
+  static String userNavBarScreen = "/user/userNavBarScreen";
+  static String userNotificationScreen = "/user/userNotificationScreen";
+  static String userBookmarkScreen = "/user/userBookmarkScreen";
+  static String viewTrainerProfileScreen = "/user/viewTrainerProfileScreen";
 
   // Trainer
   static String trainerHomeScreen = "/trainer/trainerHomeScreen";
   static String trainerNavBarScreen = "/trainer/trainerNavBarScreen";
-
-
-
 
   static String getSplashScreen() => splashScreen;
   static String getOnboardingScreen() => onboardingScreen;
@@ -69,9 +70,9 @@ class AppRoute {
 
   //user
   static String getUserNavBarScreen() => userNavBarScreen;
-    static String getUserNotificationScreen() => userNotificationScreen;
-
-
+  static String getUserNotificationScreen() => userNotificationScreen;
+  static String getUserBookmarkScreen() => userBookmarkScreen;
+  static String getViewTrainerProfileScreen() => viewTrainerProfileScreen;
 
   static List<GetPage> routes = [
     GetPage(name: splashScreen, page: () => SplashScreen()),
@@ -105,9 +106,16 @@ class AppRoute {
     GetPage(name: trainerTellAboutScreen, page: () => TellAboutTrainerScreen()),
 
     //User
-        GetPage(name: userNavBarScreen, page: () => UserNavBarScreen()),
-        GetPage(name: userNotificationScreen, page: () => UsereNotificationScreen()),
-        
+    GetPage(name: userNavBarScreen, page: () => UserNavBarScreen()),
+    GetPage(
+      name: userNotificationScreen,
+      page: () => UsereNotificationScreen(),
+    ),
+    GetPage(name: userBookmarkScreen, page: () => UserBookmarkScreen()),
+    GetPage(
+      name: viewTrainerProfileScreen,
+      page: () => ViewTrainerProfileScreen(),
+    ),
 
     // Trainer
     GetPage(name: trainerNavBarScreen, page: () => NavBarScreen()),
