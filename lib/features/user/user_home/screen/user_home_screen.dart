@@ -57,6 +57,7 @@ class UserHomeScreen extends StatelessWidget {
                   SizedBox(width: 8),
                   GestureDetector(
                     onTap: () {
+                      Get.toNamed(AppRoute.userBookmarkScreen);
                       debugPrint("Book tapped");
                     },
                     child: Icon(Icons.bookmark_border),
@@ -215,7 +216,7 @@ class UserHomeScreen extends StatelessWidget {
 
               const SizedBox(height: 12),
 
-              // Trainer cards row
+              // Trainer profile cards row
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
@@ -231,7 +232,10 @@ class UserHomeScreen extends StatelessWidget {
                           name: "Trainer ${index + 1}",
                           tagline: "Helping you push past limits.",
                           specialty: "Strength & Conditioning",
-                          onTapViewProfile: () {},
+                          onTapViewProfile: () {
+                            debugPrint('view profile tapped');
+                            Get.toNamed(AppRoute.getViewTrainerProfileScreen());
+                          },
                         ),
                       ),
                     ),
