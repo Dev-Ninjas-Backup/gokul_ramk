@@ -16,6 +16,7 @@ import 'package:gokul_ramk/features/auth/signup/more_user_information_screen/scr
 import 'package:gokul_ramk/features/auth/signup/more_user_information_screen/screen/tell_us_about_yourself_screen2.dart';
 import 'package:gokul_ramk/features/auth/signup/screen/signup_screen.dart';
 import 'package:gokul_ramk/features/trainer/home/home_screen/screen/home_screen.dart';
+import 'package:gokul_ramk/features/trainer/my_clients/client_profile/sceen/client_profile_screen.dart';
 import 'package:gokul_ramk/features/user/book_trainer/screen/bookings_screen.dart';
 import 'package:gokul_ramk/features/user/bookmark/screen/user_bookmark_screen.dart';
 import 'package:gokul_ramk/features/user/bottom_navbar/screen/custom_navbar.dart';
@@ -53,6 +54,7 @@ class AppRoute {
   // Trainer
   static String trainerHomeScreen = "/trainer/trainerHomeScreen";
   static String trainerNavBarScreen = "/trainer/trainerNavBarScreen";
+  static String clientProfileScreen = "/clientProfileScreen";
 
   static String getSplashScreen() => splashScreen;
   static String getOnboardingScreen() => onboardingScreen;
@@ -76,6 +78,7 @@ class AppRoute {
   static String getUserBookmarkScreen() => userBookmarkScreen;
   static String getViewTrainerProfileScreen() => viewTrainerProfileScreen;
   static String getbookTrainerScreen() => bookTrainerScreen;
+  static String getClientProfileScreen() => clientProfileScreen;
 
   static List<GetPage> routes = [
     GetPage(name: splashScreen, page: () => SplashScreen()),
@@ -119,13 +122,11 @@ class AppRoute {
       name: viewTrainerProfileScreen,
       page: () => ViewTrainerProfileScreen(),
     ),
-    GetPage(
-      name: bookTrainerScreen,
-      page: () => BookTrainerScreen(),
-    ),
+    GetPage(name: bookTrainerScreen, page: () => BookTrainerScreen()),
 
     // Trainer
     GetPage(name: trainerNavBarScreen, page: () => NavBarScreen()),
     GetPage(name: trainerHomeScreen, page: () => HomeScreen()),
+    GetPage(name: clientProfileScreen, page: () => ClientProfileScreen()),
   ];
 }

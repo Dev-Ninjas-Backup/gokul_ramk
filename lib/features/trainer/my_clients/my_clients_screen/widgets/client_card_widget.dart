@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
 import 'package:gokul_ramk/core/utils/constants/colors.dart';
 import 'package:gokul_ramk/features/trainer/my_clients/my_clients_screen/model/client_card_model.dart';
+import 'package:gokul_ramk/routes/app_routes.dart';
 
 class ClientCardWidget extends StatelessWidget {
   final ClientCardModel trainer;
@@ -151,7 +152,9 @@ class ClientCardWidget extends StatelessWidget {
                         SizedBox(width: 10),
                         Expanded(
                           child: GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              Get.toNamed(AppRoute.clientProfileScreen);
+                            },
                             child: Container(
                               padding: EdgeInsets.symmetric(vertical: 10),
                               decoration: BoxDecoration(
