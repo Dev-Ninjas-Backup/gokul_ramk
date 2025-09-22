@@ -4,7 +4,7 @@ import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
 import 'package:gokul_ramk/core/common/widgets/get_random_color.dart';
 import 'package:gokul_ramk/features/user/user_home/controller/user_home_controller.dart';
 import 'package:gokul_ramk/features/user/user_home/widget/catrgory_button.dart';
-import 'package:gokul_ramk/features/user/user_home/widget/featured_workout_card.dart';
+import 'package:gokul_ramk/features/user/user_home/widget/featured_trainer_card.dart';
 import 'package:gokul_ramk/features/user/user_home/widget/highlight_card.dart';
 import 'package:gokul_ramk/features/user/user_home/widget/home_carousel_slider.dart';
 import 'package:gokul_ramk/features/user/user_home/widget/neutrition_card.dart';
@@ -226,7 +226,7 @@ class UserHomeScreen extends StatelessWidget {
                       padding: const EdgeInsets.only(right: 12),
                       child: SizedBox(
                         width: 260,
-                        child: FeaturedWorkoutCard(
+                        child: FeaturedTrainerCard(
                           imageUrl:
                               "https://img.mensxp.com/media/content/2018/Dec/signs-your-nutrition-guru-or-gym-trainer-doesn-rsquo-t-know-anything-about-fitness1400-1544774850.jpg",
                           name: "Trainer ${index + 1}",

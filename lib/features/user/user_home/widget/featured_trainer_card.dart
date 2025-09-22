@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
 
-class FeaturedWorkoutCard extends StatelessWidget {
+class FeaturedTrainerCard extends StatelessWidget {
   final String imageUrl;
   final String name;
   final String tagline;
   final String specialty;
   final VoidCallback onTapViewProfile;
 
-  const FeaturedWorkoutCard({
+  const FeaturedTrainerCard({
     super.key,
     required this.imageUrl,
     required this.name,
