@@ -84,12 +84,17 @@ class ProgressSection extends StatelessWidget {
           return Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Expanded(child: _buildStatCard(data['steps'], "Steps")),
+              Expanded(
+                child: _buildStatCard(
+                  data['program covered'],
+                  "Program Covered",
+                ),
+              ),
               Expanded(
                 child: _buildStatCard(data['workoutTime'], "Workout Time"),
               ),
               Expanded(
-                child: _buildStatCard(data['calories'], "Calories Burned"),
+                child: _buildStatCard(data['calories'], "Calorie Target"),
               ),
             ],
           );

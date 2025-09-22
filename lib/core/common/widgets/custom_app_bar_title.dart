@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
 import 'package:gokul_ramk/core/common/widgets/custom_back_button.dart';
+import 'package:gokul_ramk/core/utils/constants/colors.dart';
 
 // ignore: must_be_immutable
 class CustomAppBarTitle extends StatelessWidget {
@@ -27,7 +28,11 @@ class CustomAppBarTitle extends StatelessWidget {
             alignment: Alignment.center,
             child: Text(
               title,
-              style: getTextStyle(fontSize: 22, fontWeight: FontWeight.w700),
+              style: getTextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w700,
+                color: AppColors.primaryFontColor,
+              ),
             ),
           ),
         ),
