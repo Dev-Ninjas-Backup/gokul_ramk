@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:gokul_ramk/features/bottom_navbar/controller/navbar_controller.dart';
+import 'package:gokul_ramk/features/trainer/bottom_navbar/controller/navbar_controller.dart';
+import 'package:gokul_ramk/features/trainer/my_clients/my_clients_screen/screen/my_clients_screen.dart';
 
-import '../../trainer/home/home_screen/screen/home_screen.dart';
-import '../../../core/utils/constants/icon_path.dart';
+import '../../home/home_screen/screen/home_screen.dart';
+import '../../../../core/utils/constants/icon_path.dart';
 
 class NavBarScreen extends StatelessWidget {
   const NavBarScreen({super.key});
@@ -14,7 +15,7 @@ class NavBarScreen extends StatelessWidget {
 
     final List<Widget> pages = [
       const HomeScreen(),
-      const Center(child: Text("Programs Page")),
+      const MyClientsScreen(),
       const Center(child: Text("Calendar Page")),
       const Center(child: Text("Group Page")),
       const Center(child: Text("Profile Page")),
@@ -28,34 +29,14 @@ class NavBarScreen extends StatelessWidget {
       IconPath.peopleIcon,
     ];
 
-    final List<String> labels = [
-      "Home",
-      "Programs",
-      "Calender",
-      "Group",
-      "Profile",
-    ];
+    final List<String> labels = ["", "", "", "", ""];
 
     return Obx(
       () => Scaffold(
         backgroundColor: Colors.grey[100],
         body: pages[controller.currentIndex.value],
         bottomNavigationBar: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
-            ),
-            boxShadow: [
-              BoxShadow(
-                // ignore: deprecated_member_use
-                color: Colors.black.withOpacity(0.05),
-                blurRadius: 8,
-                offset: const Offset(0, -2),
-              ),
-            ],
-          ),
+          decoration: BoxDecoration(color: Colors.white),
           padding: const EdgeInsets.symmetric(vertical: 30),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,

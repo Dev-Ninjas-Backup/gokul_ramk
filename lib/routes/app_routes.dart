@@ -1,8 +1,9 @@
 import 'package:get/get_navigation/src/routes/get_route.dart';
 
 import 'package:gokul_ramk/features/auth/forgot_password/screen/create_password_screen.dart';
+import 'package:gokul_ramk/features/auth/signup/more_trainer_information/screen/tell_about_trainer_screen.dart';
 
-import 'package:gokul_ramk/features/bottom_navbar/screen/custom_navbar.dart';
+import 'package:gokul_ramk/features/trainer/bottom_navbar/screen/custom_navbar.dart';
 
 import 'package:gokul_ramk/features/auth/forgot_password/screen/forgot_pass_verify_otp_screen.dart';
 import 'package:gokul_ramk/features/auth/forgot_password/screen/forgot_password_screen.dart';
@@ -14,6 +15,13 @@ import 'package:gokul_ramk/features/auth/signup/more_user_information_screen/scr
 import 'package:gokul_ramk/features/auth/signup/more_user_information_screen/screen/tell_us_about_yourself_screen1.dart';
 import 'package:gokul_ramk/features/auth/signup/more_user_information_screen/screen/tell_us_about_yourself_screen2.dart';
 import 'package:gokul_ramk/features/auth/signup/screen/signup_screen.dart';
+import 'package:gokul_ramk/features/trainer/home/home_screen/screen/home_screen.dart';
+import 'package:gokul_ramk/features/trainer/my_clients/client_profile/sceen/client_profile_screen.dart';
+import 'package:gokul_ramk/features/user/book_trainer/screen/bookings_screen.dart';
+import 'package:gokul_ramk/features/user/bookmark/screen/user_bookmark_screen.dart';
+import 'package:gokul_ramk/features/user/bottom_navbar/screen/custom_navbar.dart';
+import 'package:gokul_ramk/features/user/notification/screen/usere_notification_screen.dart';
+import 'package:gokul_ramk/features/user/view_trainer_profile/screen/view_trainer_profile_screen.dart';
 import '../features/auth/splash/screen/splash_screen.dart';
 
 class AppRoute {
@@ -34,8 +42,19 @@ class AppRoute {
   static String tellUsAboutYourTrainingScreen =
       '/signup/tellUsAboutYourTrainingScreen';
   static String consentAgreementScreen = '/signUp/consentAgreementScreen';
+  static String trainerTellAboutScreen = '/signUp/trainerTellAboutScreen';
 
+  //User
+  static String userNavBarScreen = "/user/userNavBarScreen";
+  static String userNotificationScreen = "/user/userNotificationScreen";
+  static String userBookmarkScreen = "/user/userBookmarkScreen";
+  static String viewTrainerProfileScreen = "/user/viewTrainerProfileScreen";
+  static String bookTrainerScreen = "/user/bookTrainerScreen";
 
+  // Trainer
+  static String trainerHomeScreen = "/trainer/trainerHomeScreen";
+  static String trainerNavBarScreen = "/trainer/trainerNavBarScreen";
+  static String clientProfileScreen = "/clientProfileScreen";
 
   static String getSplashScreen() => splashScreen;
   static String getOnboardingScreen() => onboardingScreen;
@@ -51,11 +70,15 @@ class AppRoute {
   static String gettellUsAboutYourTrainingScreen() =>
       tellUsAboutYourTrainingScreen;
   static String getconsentAgreementScreen() => consentAgreementScreen;
+  static String getTrainerTellAboutScreen() => trainerTellAboutScreen;
 
-
-  // home
-  static String trainerHomeScreen = "/trainer/homeScreen";
-
+  //user
+  static String getUserNavBarScreen() => userNavBarScreen;
+  static String getUserNotificationScreen() => userNotificationScreen;
+  static String getUserBookmarkScreen() => userBookmarkScreen;
+  static String getViewTrainerProfileScreen() => viewTrainerProfileScreen;
+  static String getbookTrainerScreen() => bookTrainerScreen;
+  static String getClientProfileScreen() => clientProfileScreen;
 
   static List<GetPage> routes = [
     GetPage(name: splashScreen, page: () => SplashScreen()),
@@ -86,11 +109,24 @@ class AppRoute {
       page: () => TellUsAboutTrainingScreen(),
     ),
     GetPage(name: consentAgreementScreen, page: () => ConsentAgrementScreen()),
+    GetPage(name: trainerTellAboutScreen, page: () => TellAboutTrainerScreen()),
 
+    //User
+    GetPage(name: userNavBarScreen, page: () => UserNavBarScreen()),
+    GetPage(
+      name: userNotificationScreen,
+      page: () => UsereNotificationScreen(),
+    ),
+    GetPage(name: userBookmarkScreen, page: () => UserBookmarkScreen()),
+    GetPage(
+      name: viewTrainerProfileScreen,
+      page: () => ViewTrainerProfileScreen(),
+    ),
+    GetPage(name: bookTrainerScreen, page: () => BookTrainerScreen()),
 
-    // home
-    GetPage(name: trainerHomeScreen, page: () => NavBarScreen()),
+    // Trainer
+    GetPage(name: trainerNavBarScreen, page: () => NavBarScreen()),
     GetPage(name: trainerHomeScreen, page: () => HomeScreen()),
-
+    GetPage(name: clientProfileScreen, page: () => ClientProfileScreen()),
   ];
 }

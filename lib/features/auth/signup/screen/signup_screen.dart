@@ -116,6 +116,7 @@ class SignupScreen extends StatelessWidget {
                     if (controller.selectedRole.value == 'User') {
                       Get.toNamed(AppRoute.gettellUsAboutYourselfScreen1());
                     } else if (controller.selectedRole.value == 'Trainer') {
+                      Get.toNamed(AppRoute.getTrainerTellAboutScreen());
                     } else {
                       showEasyLoadingError();
                     }
