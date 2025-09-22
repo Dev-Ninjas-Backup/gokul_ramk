@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/utils/constants/icon_path.dart';
 import 'package:gokul_ramk/features/user/bottom_navbar/controller/navbar_controller.dart';
+import 'package:gokul_ramk/features/user/session/screen/session_screen.dart';
 import 'package:gokul_ramk/features/user/user_home/screen/user_home_screen.dart';
 import 'package:gokul_ramk/features/user/user_profile/screen/user_profile_screen.dart';
 
@@ -15,7 +16,7 @@ class UserNavBarScreen extends StatelessWidget {
 
     final List<Widget> pages = [
       UserHomeScreen(),
-      const Center(child: Text("Session Page")),
+      SessionsScreen(),
       const Center(child: Text("Cart Page")),
       const Center(child: Text("Post Page")),
       UserProfileScreen(),

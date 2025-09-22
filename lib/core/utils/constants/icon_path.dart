@@ -20,9 +20,14 @@ class IconPath {
   static const String userPost = 'assets/icons/user_post.png';
   static const String userProfile = 'assets/icons/user_profile.png';
   static const String userSession = 'assets/icons/user_session.png';
+  static const String searchIcon = 'assets/icons/search_icon.png';
   static const String hiitTraining = 'assets/icons/hit_training.png';
   static const String loggedBreakfast = 'assets/icons/logged_breakfast.png';
   static const String weeklyCheckIn = 'assets/icons/weekly_check_in.png';
+
   static const String sleep = 'assets/icons/sleep.png';
   static const String weight = 'assets/icons/weight.png';
+
+  static const String menuIcon = 'assets/icons/menu_icon.png';
+
 }
