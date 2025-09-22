@@ -14,7 +14,7 @@ class CreateProgramScreen extends StatelessWidget {
         automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
         elevation: 0,
-        title: const Text(
+        title: Text(
           "New Program",
           style: TextStyle(
             fontSize: 18,
@@ -27,7 +27,7 @@ class CreateProgramScreen extends StatelessWidget {
             onPressed: () {
               Get.back();
             },
-            child: const Text(
+            child: Text(
               "Cancel",
               style: TextStyle(
                 color: Colors.green,
@@ -39,16 +39,16 @@ class CreateProgramScreen extends StatelessWidget {
       ),
 
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // ✅ Thumbnail
-            const Text(
+            Text(
               "Thumbnail",
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             GestureDetector(
               onTap: () {},
               child: Container(
@@ -61,7 +61,7 @@ class CreateProgramScreen extends StatelessWidget {
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
+                  children: [
                     Icon(Icons.image, size: 40, color: Colors.grey),
                     SizedBox(height: 6),
                     Text(
@@ -73,16 +73,16 @@ class CreateProgramScreen extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
 
             // ✅ Program Info
-            const Text(
+            Text(
               "Program Info",
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 12),
-            const SizedBox(height: 20),
-            const Text(
+            SizedBox(height: 12),
+            SizedBox(height: 20),
+            Text(
               "Program Name",
               style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
             ),
@@ -91,9 +91,9 @@ class CreateProgramScreen extends StatelessWidget {
             // Program Name
             _buildTextField("Add program name"),
 
-            const SizedBox(height: 12),
-            const SizedBox(height: 20),
-            const Text(
+            SizedBox(height: 12),
+            SizedBox(height: 20),
+            Text(
               "Duration",
               style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
             ),
@@ -105,9 +105,9 @@ class CreateProgramScreen extends StatelessWidget {
               suffixIcon: Icons.calendar_today,
             ),
 
-            const SizedBox(height: 12),
-            const SizedBox(height: 20),
-            const Text(
+            SizedBox(height: 12),
+            SizedBox(height: 20),
+            Text(
               "Category",
               style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
             ),
@@ -116,9 +116,9 @@ class CreateProgramScreen extends StatelessWidget {
             // Category
             _buildTextField("Add program category"),
 
-            const SizedBox(height: 12),
-            const SizedBox(height: 20),
-            const Text(
+            SizedBox(height: 12),
+            SizedBox(height: 20),
+            Text(
               "Description",
               style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
             ),
@@ -130,14 +130,14 @@ class CreateProgramScreen extends StatelessWidget {
               maxLines: 3,
             ),
 
-            const SizedBox(height: 30),
+            SizedBox(height: 30),
 
             // ✅ Continue Button
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {},
-                child: const Text(
+                child: Text(
                   "Continue",
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
@@ -161,10 +161,7 @@ class CreateProgramScreen extends StatelessWidget {
         hintText: hint,
         filled: true,
         fillColor: Colors.grey[100],
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 14,
-        ),
+        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: Colors.grey[300]!),
@@ -175,7 +172,7 @@ class CreateProgramScreen extends StatelessWidget {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.green, width: 1.5),
+          borderSide: BorderSide(color: Colors.green, width: 1.5),
         ),
         suffixIcon: suffixIcon != null
             ? Icon(suffixIcon, color: Colors.grey)
