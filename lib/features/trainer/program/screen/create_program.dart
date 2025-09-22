@@ -50,9 +50,7 @@ class CreateProgramScreen extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             GestureDetector(
-              onTap: () {
-                // TODO: Handle image upload
-              },
+              onTap: () {},
               child: Container(
                 width: double.infinity,
                 height: 140,
@@ -145,9 +143,7 @@ class CreateProgramScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(25),
                   ),
                 ),
-                onPressed: () {
-                  // TODO: Continue to next step
-                },
+                onPressed: () {},
                 child: const Text(
                   "Continue",
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
