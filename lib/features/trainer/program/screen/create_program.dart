@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
+
+import '../controller/program_controller.dart';
+import '../widgets/text_field.dart';
+import 'workout_plan.dart';
 
 class CreateProgramScreen extends StatelessWidget {
   const CreateProgramScreen({super.key});
@@ -9,14 +14,13 @@ class CreateProgramScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
 
-      // ✅ AppBar (New Program + Cancel)
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
         elevation: 0,
         title: Text(
           "New Program",
-          style: TextStyle(
+          style: getTextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
             color: Colors.black,
@@ -29,7 +33,7 @@ class CreateProgramScreen extends StatelessWidget {
             },
             child: Text(
               "Cancel",
-              style: TextStyle(
+              style: getTextStyle(
                 color: Colors.green,
                 fontWeight: FontWeight.bold,
               ),
@@ -46,7 +50,7 @@ class CreateProgramScreen extends StatelessWidget {
             // ✅ Thumbnail
             Text(
               "Thumbnail",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: getTextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 8),
             GestureDetector(
@@ -66,7 +70,7 @@ class CreateProgramScreen extends StatelessWidget {
                     SizedBox(height: 6),
                     Text(
                       "Click here to upload thumbnail image",
-                      style: TextStyle(color: Colors.grey),
+                      style: getTextStyle(color: Colors.grey),
                     ),
                   ],
                 ),
@@ -78,29 +82,29 @@ class CreateProgramScreen extends StatelessWidget {
             // ✅ Program Info
             Text(
               "Program Info",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: getTextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 12),
             SizedBox(height: 20),
             Text(
               "Program Name",
-              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+              style: getTextStyle(fontSize: 12, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 8),
 
             // Program Name
-            _buildTextField("Add program name"),
+            buildTextField("Add program name"),
 
             SizedBox(height: 12),
             SizedBox(height: 20),
             Text(
               "Duration",
-              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+              style: getTextStyle(fontSize: 12, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 8),
 
             // Duration with calendar icon
-            _buildTextField(
+            buildTextField(
               "Add program duration",
               suffixIcon: Icons.calendar_today,
             ),
@@ -109,74 +113,57 @@ class CreateProgramScreen extends StatelessWidget {
             SizedBox(height: 20),
             Text(
               "Category",
-              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+              style: getTextStyle(fontSize: 12, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 8),
 
             // Category
-            _buildTextField("Add program category"),
+            buildTextField("Add program category"),
 
             SizedBox(height: 12),
             SizedBox(height: 20),
             Text(
               "Description",
-              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+              style: getTextStyle(fontSize: 12, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 8),
 
             // Description
-            _buildTextField(
+            buildTextField(
               "Write a description about this program",
               maxLines: 3,
             ),
 
             SizedBox(height: 30),
 
-            // ✅ Continue Button
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  final controller = Get.put(ProgramController());
+
+                  controller.createProgram(
+                    name: "HIIT Program",
+                    duration: "4 weeks",
+                    category: "Fat Burn",
+                    description:
+                        "This program helps burn fat and improve stamina.",
+                  );
+
+                  Get.to(() => WorkoutPlanScreen());
+                },
                 child: Text(
                   "Continue",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: getTextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  // ✅ Reusable TextField
-  Widget _buildTextField(
-    String hint, {
-    IconData? suffixIcon,
-    int maxLines = 1,
-  }) {
-    return TextField(
-      maxLines: maxLines,
-      decoration: InputDecoration(
-        hintText: hint,
-        filled: true,
-        fillColor: Colors.grey[100],
-        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.grey[300]!),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.grey[300]!),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.green, width: 1.5),
-        ),
-        suffixIcon: suffixIcon != null
-            ? Icon(suffixIcon, color: Colors.grey)
-            : null,
       ),
     );
   }
