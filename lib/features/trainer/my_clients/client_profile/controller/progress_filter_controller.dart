@@ -9,23 +9,23 @@ class ProgressFilterController extends GetxController {
     "This Week": {
       "goalPercent": 65,
       "circlePercent": 0.60,
-      "steps": "5,320 / 8,000",
+      "program covered": "120/180mins",
       "workoutTime": "32 min",
-      "calories": "420 kcal",
+      "calories": "420/1000 kcal",
     },
     "Last Week": {
       "goalPercent": 50,
       "circlePercent": 0.45,
-      "steps": "4,200 / 8,000",
+      "program covered": "80/180mins",
       "workoutTime": "25 min",
-      "calories": "350 kcal",
+      "calories": "350/1000 kcal",
     },
     "This Month": {
       "goalPercent": 72,
       "circlePercent": 0.70,
-      "steps": "22,500 / 32,000",
+      "program covered": "180/180mins",
       "workoutTime": "2 hr",
-      "calories": "1680 kcal",
+      "calories": "980/1000kcal",
     },
   };
 

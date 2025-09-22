@@ -23,4 +23,6 @@ class IconPath {
   static const String hiitTraining = 'assets/icons/hit_training.png';
   static const String loggedBreakfast = 'assets/icons/logged_breakfast.png';
   static const String weeklyCheckIn = 'assets/icons/weekly_check_in.png';
+  static const String sleep = 'assets/icons/sleep.png';
+  static const String weight = 'assets/icons/weight.png';
 }

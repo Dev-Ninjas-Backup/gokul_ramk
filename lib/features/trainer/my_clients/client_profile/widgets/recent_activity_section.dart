@@ -33,7 +33,7 @@ class RecentActivitySection extends StatelessWidget {
                   controller.showAll.toggle();
                 },
                 child: Text(
-                  controller.showAll.value ? "Show Less" : "View All",
+                  controller.showAll.value ? "Show Less" : "Show All",
                   style: getTextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,

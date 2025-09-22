@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gokul_ramk/features/trainer/bookings/my_bookings/screen/my_bookings_screen.dart';
 import 'package:gokul_ramk/features/trainer/bottom_navbar/controller/navbar_controller.dart';
 import 'package:gokul_ramk/features/trainer/my_clients/my_clients_screen/screen/my_clients_screen.dart';
 
@@ -16,7 +17,7 @@ class NavBarScreen extends StatelessWidget {
     final List<Widget> pages = [
       const HomeScreen(),
       const MyClientsScreen(),
-      const Center(child: Text("Calendar Page")),
+      const MyBookingsScreen(),
       const Center(child: Text("Group Page")),
       const Center(child: Text("Profile Page")),
     ];
