@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
-import 'package:gokul_ramk/features/user/book_trainer/controller/book_trainer_controller.dart';
+import 'package:gokul_ramk/features/user/user_home/book_trainer/controller/book_trainer_controller.dart';
 
 class StatContainer extends StatelessWidget {
   StatContainer({super.key});

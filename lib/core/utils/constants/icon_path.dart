@@ -29,5 +29,6 @@ class IconPath {
   static const String weight = 'assets/icons/weight.png';
 
   static const String menuIcon = 'assets/icons/menu_icon.png';
+  static const String shopIcon = 'assets/icons/shop_icon.png';
 
 }
