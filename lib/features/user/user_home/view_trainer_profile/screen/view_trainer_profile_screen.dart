@@ -3,10 +3,10 @@ import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
 import 'package:gokul_ramk/core/common/widgets/custom_app_bar_title.dart';
 import 'package:gokul_ramk/core/utils/constants/app_texts.dart';
-import 'package:gokul_ramk/features/user/view_trainer_profile/controller/view_trainer_profile_controller.dart';
-import 'package:gokul_ramk/features/user/view_trainer_profile/widget/profile_info_card.dart';
-import 'package:gokul_ramk/features/user/view_trainer_profile/widget/section_tile_program_card.dart';
-import 'package:gokul_ramk/features/user/view_trainer_profile/widget/trainer_profile_header_widget.dart';
+import 'package:gokul_ramk/features/user/user_home/view_trainer_profile/controller/view_trainer_profile_controller.dart';
+import 'package:gokul_ramk/features/user/user_home/view_trainer_profile/widget/profile_info_card.dart';
+import 'package:gokul_ramk/features/user/user_home/view_trainer_profile/widget/section_tile_program_card.dart';
+import 'package:gokul_ramk/features/user/user_home/view_trainer_profile/widget/trainer_profile_header_widget.dart';
 import 'package:gokul_ramk/routes/app_routes.dart';
 
 class ViewTrainerProfileScreen extends StatelessWidget {
