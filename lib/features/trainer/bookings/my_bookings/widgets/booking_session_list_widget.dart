@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
 import 'package:gokul_ramk/core/utils/constants/colors.dart';
 import 'package:gokul_ramk/core/utils/constants/imagepath.dart';
+import 'package:gokul_ramk/features/trainer/bookings/booking_details/screen/booking_details_screen.dart';
 import 'package:gokul_ramk/features/trainer/bookings/my_bookings/controller/booking_session_controller.dart';
 import 'package:gokul_ramk/features/trainer/bookings/my_bookings/model/booking_session_model.dart';
 
@@ -135,7 +136,7 @@ class BookingSessionCard extends StatelessWidget {
                     onTap: session.status == SessionStatus.upcoming
                         ? onMarkComplete
                         : () {
-                            EasyLoading.showInfo('Feature coming soon');
+                            Get.to(() => BookingDetailsScreen());
                           },
                     child: Container(
                       padding: EdgeInsets.symmetric(vertical: 8),

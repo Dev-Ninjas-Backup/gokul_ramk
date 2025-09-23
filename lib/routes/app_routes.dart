@@ -2,6 +2,7 @@ import 'package:get/get_navigation/src/routes/get_route.dart';
 
 import 'package:gokul_ramk/features/auth/forgot_password/screen/create_password_screen.dart';
 import 'package:gokul_ramk/features/auth/signup/more_trainer_information/screen/tell_about_trainer_screen.dart';
+import 'package:gokul_ramk/features/trainer/bookings/booking_details/screen/booking_details_screen.dart';
 
 import 'package:gokul_ramk/features/trainer/bottom_navbar/screen/custom_navbar.dart';
 
@@ -57,6 +58,7 @@ class AppRoute {
   static String trainerHomeScreen = "/trainer/trainerHomeScreen";
   static String trainerNavBarScreen = "/trainer/trainerNavBarScreen";
   static String clientProfileScreen = "/clientProfileScreen";
+  static String bookingDetailsScreen = "/bookingDetailsScreen";
 
   static String getSplashScreen() => splashScreen;
   static String getOnboardingScreen() => onboardingScreen;
@@ -82,6 +84,7 @@ class AppRoute {
   static String getbookTrainerScreen() => bookTrainerScreen;
   static String getClientProfileScreen() => clientProfileScreen;
   static String getUserSessionsScreen() => userSessionsScreen;
+  static String getBookingDetailsScreen() => bookingDetailsScreen;
 
   static List<GetPage> routes = [
     GetPage(name: splashScreen, page: () => SplashScreen()),
@@ -132,5 +135,6 @@ class AppRoute {
     GetPage(name: trainerNavBarScreen, page: () => NavBarScreen()),
     GetPage(name: trainerHomeScreen, page: () => HomeScreen()),
     GetPage(name: clientProfileScreen, page: () => ClientProfileScreen()),
+    GetPage(name: bookingDetailsScreen, page: () => BookingDetailsScreen()),
   ];
 }
