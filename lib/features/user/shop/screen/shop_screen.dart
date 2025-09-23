@@ -5,6 +5,7 @@ import 'package:gokul_ramk/core/utils/constants/icon_path.dart';
 import 'package:gokul_ramk/features/user/shop/widget/categories_item_widget.dart';
 import 'package:gokul_ramk/features/user/shop/widget/shop_banner_widget.dart';
 import 'package:gokul_ramk/features/user/shop/widget/shop_product_widget.dart';
+import 'package:gokul_ramk/routes/app_routes.dart';
 import '../controller/shop_controller.dart';
 
 class ShopScreen extends StatelessWidget {
@@ -56,7 +57,9 @@ class ShopScreen extends StatelessWidget {
                           (cat) => CategoriesItemWidget(
                             icon: cat["icon"]!,
                             title: cat["title"]!,
-                            onTap: () {},
+                            onTap: () {
+                              Get.toNamed(AppRoute.getCategoriesScreen(),arguments: cat['title']);
+                            },
                           ),
                         )
                         .toList(),

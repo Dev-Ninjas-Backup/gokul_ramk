@@ -17,6 +17,7 @@ import 'package:gokul_ramk/features/auth/signup/more_user_information_screen/scr
 import 'package:gokul_ramk/features/auth/signup/screen/signup_screen.dart';
 import 'package:gokul_ramk/features/trainer/home/home_screen/screen/home_screen.dart';
 import 'package:gokul_ramk/features/trainer/my_clients/client_profile/sceen/client_profile_screen.dart';
+import 'package:gokul_ramk/features/user/shop/categories/screen/categories_screen.dart';
 import 'package:gokul_ramk/features/user/user_home/book_trainer/screen/bookings_screen.dart';
 import 'package:gokul_ramk/features/user/bookmark/screen/user_bookmark_screen.dart';
 import 'package:gokul_ramk/features/user/bottom_navbar/screen/custom_navbar.dart';
@@ -56,6 +57,7 @@ class AppRoute {
   static String userSessionsScreen = "/user/userSessionsScreen";
   static String mealDetailScreen = "/user/mealDetailScreen";
   static String planDetailScreen = "/user/planDetailScreen";
+  static String categoriesScreen = "/user/shop/categoriesScreen";
 
   // Trainer
   static String trainerHomeScreen = "/trainer/trainerHomeScreen";
@@ -88,6 +90,7 @@ class AppRoute {
   static String getUserSessionsScreen() => userSessionsScreen;
    static String getMealDetailScreen() => mealDetailScreen;
    static String getPlanDetailScreen() => planDetailScreen;
+   static String getCategoriesScreen() => categoriesScreen;
 
   static List<GetPage> routes = [
     GetPage(name: splashScreen, page: () => SplashScreen()),
@@ -135,6 +138,7 @@ class AppRoute {
     GetPage(name: userSessionsScreen, page: () => SessionsScreen()),
     GetPage(name: mealDetailScreen, page: () => MealDetailScreen()),
     GetPage(name: planDetailScreen, page: () => PlanDetailScreen()),
+    GetPage(name: categoriesScreen, page: () => CategoriesScreen()),
 
     // Trainer
     GetPage(name: trainerNavBarScreen, page: () => NavBarScreen()),
