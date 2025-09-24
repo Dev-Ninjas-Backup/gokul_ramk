@@ -13,7 +13,6 @@ class CreateGroupScreen extends StatelessWidget {
       backgroundColor: Colors.white,
 
       appBar: AppBar(
-        automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
         elevation: 0,
         title: Text(
@@ -108,20 +107,36 @@ class CreateGroupScreen extends StatelessWidget {
 
             SizedBox(height: 30),
 
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {},
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.lightBlue[50],
+                    ),
 
-                child: Text(
-                  "Continue",
-                  style: getTextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    onPressed: () {},
+                    child: Text(
+                      "Cancel",
+                      style: getTextStyle(
+                        color: Colors.blueAccent,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 17,
+                      ),
+                    ),
                   ),
                 ),
-              ),
+                SizedBox(width: 10), // spacing
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFF148CBB),
+                    ),
+                    onPressed: () {},
+                    child: Text("Send Request"),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
