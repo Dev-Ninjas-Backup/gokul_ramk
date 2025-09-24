@@ -4,10 +4,10 @@ import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
 import 'package:gokul_ramk/core/common/widgets/custom_app_bar_title.dart';
 import 'package:gokul_ramk/core/utils/constants/colors.dart';
-import 'package:gokul_ramk/features/user/book_trainer/controller/book_trainer_controller.dart';
-import 'package:gokul_ramk/features/user/book_trainer/widgets/duration_widget.dart';
-import 'package:gokul_ramk/features/user/book_trainer/widgets/start_time_list.dart';
-import 'package:gokul_ramk/features/user/book_trainer/widgets/stat_container.dart';
+import 'package:gokul_ramk/features/user/user_home/book_trainer/controller/book_trainer_controller.dart';
+import 'package:gokul_ramk/features/user/user_home/book_trainer/widgets/duration_widget.dart';
+import 'package:gokul_ramk/features/user/user_home/book_trainer/widgets/start_time_list.dart';
+import 'package:gokul_ramk/features/user/user_home/book_trainer/widgets/stat_container.dart';
 
 class BookTrainerScreen extends StatelessWidget {
   BookTrainerScreen({super.key});
