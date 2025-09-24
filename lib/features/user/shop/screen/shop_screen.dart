@@ -34,7 +34,9 @@ class ShopScreen extends StatelessWidget {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Get.toNamed(AppRoute.getUserCartScreen());
+                    },
                     child: Image.asset(IconPath.shopIcon),
                   ),
                 ],
@@ -58,7 +60,10 @@ class ShopScreen extends StatelessWidget {
                             icon: cat["icon"]!,
                             title: cat["title"]!,
                             onTap: () {
-                              Get.toNamed(AppRoute.getCategoriesScreen(),arguments: cat['title']);
+                              Get.toNamed(
+                                AppRoute.getCategoriesScreen(),
+                                arguments: cat['title'],
+                              );
                             },
                           ),
                         )
@@ -78,6 +83,12 @@ class ShopScreen extends StatelessWidget {
                       .map(
                         (product) => ShopProductWidget(
                           product: product,
+                          onTap: () {
+                            Get.toNamed(
+                              AppRoute.productDetailScreen,
+                              arguments: product.title,
+                            );
+                          },
                           onAddToCart: () {},
                           onBuyNow: () {},
                         ),

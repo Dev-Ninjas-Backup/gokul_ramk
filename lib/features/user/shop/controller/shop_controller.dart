@@ -6,6 +6,27 @@ class ShopController extends GetxController {
   final TextEditingController categorySearchController =
       TextEditingController();
 
+  final TextEditingController shippingFullNameController =
+      TextEditingController();
+  final TextEditingController shippingAddressController =
+      TextEditingController();
+  final TextEditingController shippingCityController = TextEditingController();
+  final TextEditingController shippingStateController = TextEditingController();
+  final TextEditingController shippingZipController = TextEditingController();
+  final TextEditingController shippingCountryController =
+      TextEditingController();
+
+  String shippingPhone = '';
+  RxBool saveShipingInfo = true.obs;
+  RxBool standardDelivery = true.obs;
+
+  var quantity = 1.obs;
+
+  void increase() => quantity.value++;
+  void decrease() {
+    if (quantity.value > 1) quantity.value--;
+  }
+
   var categories = [
     {
       "icon":
