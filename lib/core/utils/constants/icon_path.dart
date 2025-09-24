@@ -14,6 +14,7 @@ class IconPath {
 
   static const String peopleIcon = 'assets/icons/people_icon.png';
   static const String notificationIcon = "assets/icons/notification_icon.png";
+  static const String shareIcon = 'assets/icons/share_icon.png';
 
   static const String userHome = 'assets/icons/user_home.png';
   static const String useCart = 'assets/icons/user_cart.png';
@@ -29,5 +30,4 @@ class IconPath {
   static const String weight = 'assets/icons/weight.png';
 
   static const String menuIcon = 'assets/icons/menu_icon.png';
-
 }

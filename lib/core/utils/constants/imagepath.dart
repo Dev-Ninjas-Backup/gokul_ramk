@@ -10,4 +10,8 @@ class Imagepath {
   static String forgotMessage = 'assets/images/message_forgot.png';
   static String forgotEmail = 'assets/images/email_forgot.png';
   static String trainer = 'assets/images/trainer.png';
+  static String programDetailImg = 'assets/images/programDetailScreenIMG.png';
+  static String yogaGroup = 'assets/images/yogaGroup.png';
+  static String strengthGroup = 'assets/images/strengthGroup.png';
+  static String weightLossGroup = 'assets/images/weightLossGroup.png';
 }
