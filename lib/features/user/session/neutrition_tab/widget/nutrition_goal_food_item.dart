@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
 import 'package:gokul_ramk/features/user/session/neutrition_tab/model/nutrition_goal_food_model.dart';
 
+// ignore: must_be_immutable
 class NutritionGoalFoodItem extends StatelessWidget {
   final NutritionGoalFoodModel foodModel;
-  const NutritionGoalFoodItem({super.key, required this.foodModel});
+  VoidCallback? onTap;
+  NutritionGoalFoodItem({super.key, required this.foodModel,this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +58,7 @@ class NutritionGoalFoodItem extends StatelessWidget {
                 ),
                 const SizedBox(height: 12),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: onTap,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
                   ),

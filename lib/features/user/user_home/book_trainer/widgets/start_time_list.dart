@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:gokul_ramk/features/user/book_trainer/controller/book_trainer_controller.dart';
+import 'package:gokul_ramk/features/user/user_home/book_trainer/controller/book_trainer_controller.dart';
 
 class StartTimeList extends StatelessWidget {
   StartTimeList({super.key});
