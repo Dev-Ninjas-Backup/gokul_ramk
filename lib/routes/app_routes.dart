@@ -18,7 +18,10 @@ import 'package:gokul_ramk/features/auth/signup/more_user_information_screen/scr
 import 'package:gokul_ramk/features/auth/signup/screen/signup_screen.dart';
 import 'package:gokul_ramk/features/trainer/home/home_screen/screen/home_screen.dart';
 import 'package:gokul_ramk/features/trainer/my_clients/client_profile/sceen/client_profile_screen.dart';
+import 'package:gokul_ramk/features/user/shop/cart/screen/cart_screen.dart';
 import 'package:gokul_ramk/features/user/shop/categories/screen/categories_screen.dart';
+import 'package:gokul_ramk/features/user/shop/product_detail/screen/product_detail_screen.dart';
+import 'package:gokul_ramk/features/user/shop/shipping/screen/shipping_information_screen.dart';
 import 'package:gokul_ramk/features/user/user_home/book_trainer/screen/bookings_screen.dart';
 import 'package:gokul_ramk/features/user/bookmark/screen/user_bookmark_screen.dart';
 import 'package:gokul_ramk/features/user/bottom_navbar/screen/custom_navbar.dart';
@@ -59,6 +62,10 @@ class AppRoute {
   static String mealDetailScreen = "/user/mealDetailScreen";
   static String planDetailScreen = "/user/planDetailScreen";
   static String categoriesScreen = "/user/shop/categoriesScreen";
+  static String productDetailScreen = "/user/shop/productDetailScreen";
+  static String userCartScreen = "/user/shop/userCartScreen";
+  static String shippingInformationScreen =
+      "/user/shop/shippingInformationScreen";
 
   // Trainer
   static String trainerHomeScreen = "/trainer/trainerHomeScreen";
@@ -95,6 +102,11 @@ class AppRoute {
   static String getMealDetailScreen() => mealDetailScreen;
   static String getPlanDetailScreen() => planDetailScreen;
   static String getCategoriesScreen() => categoriesScreen;
+
+  
+  static String getProductDetailScreen() => productDetailScreen;
+  static String getUserCartScreen() => userCartScreen;
+  static String getShippingInformationScreen() => shippingInformationScreen;
 
   static List<GetPage> routes = [
     GetPage(name: splashScreen, page: () => SplashScreen()),
@@ -143,6 +155,12 @@ class AppRoute {
     GetPage(name: mealDetailScreen, page: () => MealDetailScreen()),
     GetPage(name: planDetailScreen, page: () => PlanDetailScreen()),
     GetPage(name: categoriesScreen, page: () => CategoriesScreen()),
+    GetPage(name: productDetailScreen, page: () => ProductDetailScreen()),
+    GetPage(name: userCartScreen, page: () => CartScreen()),
+    GetPage(
+      name: shippingInformationScreen,
+      page: () => ShippingInformationScreen(),
+    ),
 
     // Trainer
     GetPage(name: trainerNavBarScreen, page: () => NavBarScreen()),

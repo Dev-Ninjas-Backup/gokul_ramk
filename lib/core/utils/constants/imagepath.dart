@@ -17,5 +17,6 @@ class Imagepath {
   static String weightLossGroup = 'assets/images/weightLossGroup.png';
 
   static String mussleMan = 'assets/images/mussle_man.png';
+  static String proteinBottle = 'assets/images/protein_bottle.png';
 
 }
