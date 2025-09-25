@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
+import 'package:gokul_ramk/features/trainer/community/challenges/screen/challenges_screen.dart';
+import 'package:gokul_ramk/features/trainer/community/events/screen/event_screen.dart';
 
 import '../../../../../core/utils/constants/icon_path.dart';
 import '../../groups/screen/groups_screen.dart';
@@ -80,6 +82,10 @@ class CommunityScreen extends StatelessWidget {
               switch (controller.selectedTab.value) {
                 case 1: // Groups
                   return GroupsTab();
+                case 2:
+                  return EventsScreen();
+                case 3:
+                  return ChallengesScreen();
                 default:
                   return Center(child: Text("Coming soon..."));
               }
