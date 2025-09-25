@@ -4,6 +4,7 @@ import 'package:gokul_ramk/features/trainer/bookings/my_bookings/screen/my_booki
 import 'package:gokul_ramk/features/trainer/bottom_navbar/controller/navbar_controller.dart';
 import 'package:gokul_ramk/features/trainer/community/posts/screen/posts.dart';
 import 'package:gokul_ramk/features/trainer/my_clients/my_clients_screen/screen/my_clients_screen.dart';
+import 'package:gokul_ramk/features/trainer/profile/add_product/screen/add_product_screen.dart';
 
 import '../../home/home_screen/screen/home_screen.dart';
 import '../../../../core/utils/constants/icon_path.dart';
@@ -20,7 +21,7 @@ class NavBarScreen extends StatelessWidget {
       const MyClientsScreen(),
       const MyBookingsScreen(),
       const CommunityScreen(),
-      const Center(child: Text("Profile Page")),
+      AddProductScreen(),
     ];
 
     final List<String> icons = [
