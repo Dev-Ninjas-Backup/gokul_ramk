@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
 import 'package:gokul_ramk/core/common/widgets/get_random_color.dart';
+import 'package:gokul_ramk/core/utils/constants/icon_path.dart';
 import 'package:gokul_ramk/features/user/user_home/controller/user_home_controller.dart';
 import 'package:gokul_ramk/features/user/user_home/widget/catrgory_button.dart';
 import 'package:gokul_ramk/features/user/user_home/widget/featured_trainer_card.dart';
@@ -88,11 +89,14 @@ class UserHomeScreen extends StatelessWidget {
                   itemCount: controller.workoutList.length,
                   itemBuilder: (context, index) {
                     final workout = controller.workoutList[index];
-                    return WorkoutCard(
-                      title: workout['title'],
-                      subtitle: workout['subtitle'],
-                      image: workout['image'],
-                      isBookmarked: workout['isBookmarked'] ?? false,
+                    return GestureDetector(
+                      onTap: () => Get.toNamed(AppRoute.getProgramDetailScreen()),
+                      child: WorkoutCard(
+                        title: workout['title'],
+                        subtitle: workout['subtitle'],
+                        image: workout['image'],
+                        isBookmarked: workout['isBookmarked'] ?? false,
+                      ),
                     );
                   },
                 ),
@@ -334,6 +338,13 @@ class UserHomeScreen extends StatelessWidget {
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Get.toNamed(AppRoute.getUserChatScreen());
+        },
+        child: Image.asset(IconPath.agentIcon),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
