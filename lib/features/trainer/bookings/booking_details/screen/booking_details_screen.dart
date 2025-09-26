@@ -5,6 +5,7 @@ import 'package:gokul_ramk/core/utils/constants/colors.dart';
 import 'package:gokul_ramk/core/utils/constants/imagepath.dart';
 import 'package:gokul_ramk/features/trainer/bookings/booking_details/widgets/bottom_reschedule_button.dart';
 import 'package:gokul_ramk/features/trainer/bookings/booking_details/widgets/infotiile_widget.dart';
+import 'package:gokul_ramk/features/trainer/bookings/booking_details/widgets/map.dart';
 
 class BookingDetailsScreen extends StatelessWidget {
   const BookingDetailsScreen({super.key});
@@ -79,19 +80,36 @@ class BookingDetailsScreen extends StatelessWidget {
               SizedBox(height: 20),
               Divider(),
 
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Image.asset(
-                  Imagepath.onboarding2,
-                  height: 160,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-              ),
+              LocationMap(latitude: 18, longitude: 18),
 
               SizedBox(height: 24),
 
               BottomRescheduleButton(),
+              SizedBox(height: 32),
+              GestureDetector(
+                child: Container(
+                  height: 54,
+
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: AppColors.primaryButtonColor,
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Mark Complete',
+                      style: getTextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.secondaryButtonColor,
+                      ),
+                    ),
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
             ],
           ),
         ),
