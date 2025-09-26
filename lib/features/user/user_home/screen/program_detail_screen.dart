@@ -27,7 +27,7 @@ class ProgramDetailsScreen extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: Image.asset(
-                  Imagepath.trainer, // replace with your asset
+                  Imagepath.trainer, 
                   height: 200,
                   width: double.infinity,
                   fit: BoxFit.cover,
