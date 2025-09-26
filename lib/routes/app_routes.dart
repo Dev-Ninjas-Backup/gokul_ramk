@@ -25,6 +25,7 @@ import 'package:gokul_ramk/features/user/shop/shipping/screen/order_confirmation
 import 'package:gokul_ramk/features/user/shop/shipping/screen/review_order_screen.dart';
 import 'package:gokul_ramk/features/user/shop/shipping/screen/shipping_information_screen.dart';
 import 'package:gokul_ramk/features/user/user_chat/screen/chat_screen.dart';
+import 'package:gokul_ramk/features/user/user_community/community_groups/screen/create_group.dart';
 import 'package:gokul_ramk/features/user/user_home/book_trainer/screen/bookings_screen.dart';
 import 'package:gokul_ramk/features/user/bookmark/screen/user_bookmark_screen.dart';
 import 'package:gokul_ramk/features/user/bottom_navbar/screen/custom_navbar.dart';
@@ -71,6 +72,7 @@ class AppRoute {
   static String reviewOrderScreen = "/user/shop/reviewOrderScreen";
   static String userShopScreen = "/user/shop";
   static String userChatScreen = "/user/userChatScreen";
+  static String userCreateGroupScreen = "/user/community/userCreateGroupScreen";
   static String programDetailScreen = "/user/home/programDetailScreen";
   static String orderConfirmationScreen = "/user/shop/orderConfirmationScreen";
   static String shippingInformationScreen =
@@ -116,6 +118,7 @@ class AppRoute {
   static String getOrderConfirmationScreen() => orderConfirmationScreen;
   static String getUserShopScreen() => userShopScreen;
   static String getUserChatScreen() => userChatScreen;
+  static String getUserCreateGroupScreen() => userCreateGroupScreen;
 
   static List<GetPage> routes = [
     GetPage(name: splashScreen, page: () => SplashScreen()),
@@ -181,6 +184,7 @@ class AppRoute {
       page: () => ChatScreen(),
     ),
     GetPage(name: programDetailScreen, page: () => ProgramDetailsScreen()),
+    GetPage(name: userCreateGroupScreen, page: () => UserCreateGroupScreen()),
 
     // Trainer
     GetPage(name: trainerNavBarScreen, page: () => NavBarScreen()),

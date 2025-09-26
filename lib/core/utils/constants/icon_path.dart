@@ -35,6 +35,9 @@ class IconPath {
 
   static const String stripeIcon = 'assets/icons/stripe.png';
   static const String agentIcon = 'assets/icons/agent.png';
+  static const String favoriteIcon = 'assets/icons/favorite.png';
+  static const String commentIcon = 'assets/icons/comment.png';
+
 
   static const String productSample = 'assets/icons/productSample.png';
 
