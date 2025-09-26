@@ -20,7 +20,11 @@ import 'package:gokul_ramk/features/trainer/my_clients/client_profile/sceen/clie
 import 'package:gokul_ramk/features/user/shop/cart/screen/cart_screen.dart';
 import 'package:gokul_ramk/features/user/shop/categories/screen/categories_screen.dart';
 import 'package:gokul_ramk/features/user/shop/product_detail/screen/product_detail_screen.dart';
+import 'package:gokul_ramk/features/user/shop/screen/shop_screen.dart';
+import 'package:gokul_ramk/features/user/shop/shipping/screen/order_confirmation_screen.dart';
+import 'package:gokul_ramk/features/user/shop/shipping/screen/review_order_screen.dart';
 import 'package:gokul_ramk/features/user/shop/shipping/screen/shipping_information_screen.dart';
+import 'package:gokul_ramk/features/user/user_chat/screen/chat_screen.dart';
 import 'package:gokul_ramk/features/user/user_home/book_trainer/screen/bookings_screen.dart';
 import 'package:gokul_ramk/features/user/bookmark/screen/user_bookmark_screen.dart';
 import 'package:gokul_ramk/features/user/bottom_navbar/screen/custom_navbar.dart';
@@ -28,6 +32,7 @@ import 'package:gokul_ramk/features/user/notification/screen/usere_notification_
 import 'package:gokul_ramk/features/user/session/neutrition_tab/meal_detail/screen/meal_detail_screen.dart';
 import 'package:gokul_ramk/features/user/session/neutrition_tab/plan_detail/screen/plan_detail_screen.dart';
 import 'package:gokul_ramk/features/user/session/screen/session_screen.dart';
+import 'package:gokul_ramk/features/user/user_home/screen/program_detail_screen.dart';
 import 'package:gokul_ramk/features/user/user_home/view_trainer_profile/screen/view_trainer_profile_screen.dart';
 import '../features/auth/splash/screen/splash_screen.dart';
 
@@ -63,6 +68,11 @@ class AppRoute {
   static String categoriesScreen = "/user/shop/categoriesScreen";
   static String productDetailScreen = "/user/shop/productDetailScreen";
   static String userCartScreen = "/user/shop/userCartScreen";
+  static String reviewOrderScreen = "/user/shop/reviewOrderScreen";
+  static String userShopScreen = "/user/shop";
+  static String userChatScreen = "/user/userChatScreen";
+  static String programDetailScreen = "/user/home/programDetailScreen";
+  static String orderConfirmationScreen = "/user/shop/orderConfirmationScreen";
   static String shippingInformationScreen =
       "/user/shop/shippingInformationScreen";
 
@@ -86,6 +96,7 @@ class AppRoute {
       tellUsAboutYourTrainingScreen;
   static String getconsentAgreementScreen() => consentAgreementScreen;
   static String getTrainerTellAboutScreen() => trainerTellAboutScreen;
+  static String getProgramDetailScreen() => programDetailScreen;
 
   //user
   static String getUserNavBarScreen() => userNavBarScreen;
@@ -101,6 +112,10 @@ class AppRoute {
   static String getProductDetailScreen() => productDetailScreen;
   static String getUserCartScreen() => userCartScreen;
   static String getShippingInformationScreen() => shippingInformationScreen;
+  static String getReviewOrderScreen() => reviewOrderScreen;
+  static String getOrderConfirmationScreen() => orderConfirmationScreen;
+  static String getUserShopScreen() => userShopScreen;
+  static String getUserChatScreen() => userChatScreen;
 
   static List<GetPage> routes = [
     GetPage(name: splashScreen, page: () => SplashScreen()),
@@ -151,10 +166,21 @@ class AppRoute {
     GetPage(name: categoriesScreen, page: () => CategoriesScreen()),
     GetPage(name: productDetailScreen, page: () => ProductDetailScreen()),
     GetPage(name: userCartScreen, page: () => CartScreen()),
+    GetPage(name: reviewOrderScreen, page: () => ReviewOrderScreen()),
+    GetPage(name: orderConfirmationScreen, page: () => OrderConfirmationScreen()),
+    GetPage(
+      name: userShopScreen,
+      page: () => ShopScreen(),
+    ),
     GetPage(
       name: shippingInformationScreen,
       page: () => ShippingInformationScreen(),
     ),
+    GetPage(
+      name: userChatScreen,
+      page: () => ChatScreen(),
+    ),
+    GetPage(name: programDetailScreen, page: () => ProgramDetailsScreen()),
 
     // Trainer
     GetPage(name: trainerNavBarScreen, page: () => NavBarScreen()),

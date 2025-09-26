@@ -4,14 +4,19 @@ import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
 import 'package:gokul_ramk/core/common/widgets/custom_app_bar_title.dart';
 import 'package:gokul_ramk/core/common/widgets/custom_label_textfield.dart';
+import 'package:gokul_ramk/core/utils/constants/icon_path.dart';
+import 'package:gokul_ramk/core/utils/constants/imagepath.dart';
+import 'package:gokul_ramk/features/user/shop/cart/controller/cart_controller.dart';
+import 'package:gokul_ramk/features/user/shop/cart/widget/order_summary_tile.dart';
 import 'package:gokul_ramk/features/user/shop/controller/shop_controller.dart';
 import 'package:gokul_ramk/routes/app_routes.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
-class ShippingInformationScreen extends StatelessWidget {
-  ShippingInformationScreen({super.key});
+class ReviewOrderScreen extends StatelessWidget {
+  ReviewOrderScreen({super.key});
 
   final ShopController controller = Get.put(ShopController());
+  final CartController cartController = Get.put(CartController());
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +29,105 @@ class ShippingInformationScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               spacing: 10,
               children: [
-                CustomAppBarTitle(title: 'Shipping Details'),
+                CustomAppBarTitle(title: 'Review Your Order'),
                 const SizedBox(height: 10),
+
+                Container(
+                  padding: EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black38),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Row(
+                    spacing: 16,
+                    children: [
+                      Container(
+                        height: 80,
+                        width: 80,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: Colors.grey.shade200),
+                          image: DecorationImage(
+                            image: AssetImage(Imagepath.proteinBottle),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          spacing: 12,
+                          children: [
+                            Text(
+                              'Whey Protein Isolate',
+                              style: getTextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  '\$49',
+                                  style: getTextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text('01'),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 4),
+
+                Center(
+                  child: Text(
+                    'Order Summary',
+                    style: getTextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 10),
+                OrderSummaryTile(
+                  title: "Subtotal",
+                  value: "\$${cartController.subtotal.toStringAsFixed(0)}",
+                ),
+                OrderSummaryTile(
+                  title: "Shipping Cost",
+                  value: "\$${cartController.shippingCost.toStringAsFixed(0)}",
+                ),
+                Obx(
+                  () => OrderSummaryTile(
+                    title: "Discount",
+                    value:
+                        "(-) ${cartController.promoDiscount.value.toStringAsFixed(0)}",
+                  ),
+                ),
+                const Divider(),
+                OrderSummaryTile(
+                  title: "Total",
+                  value: "\$${cartController.total.toStringAsFixed(0)}",
+                  isTotal: true,
+                ),
+
+                Center(
+                  child: Text(
+                    'Delivery Address',
+                    style: getTextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+
                 CustomLabelTextField(
                   label: 'Full Name',
                   editingController: controller.shippingFullNameController,
@@ -121,23 +223,9 @@ class ShippingInformationScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
 
-                Obx(
-                  () => SwitchListTile(
-                    activeThumbColor: Colors.green,
-                    title: Text(
-                      'Save this address for future orders',
-                      style: getTextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    value: controller.saveShipingInfo.value,
-                    onChanged: (bool value) {
-                      controller.saveShipingInfo.value = value;
-                    },
-                  ),
-                ),
-
                 Center(
                   child: Text(
-                    'Delivery Method',
+                    'Payment Method',
                     style: getTextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -145,90 +233,19 @@ class ShippingInformationScreen extends StatelessWidget {
                   ),
                 ),
 
-                Obx(
-                  () => GestureDetector(
-                    onTap: () {
-                      controller.standardDelivery.value =
-                          !controller.standardDelivery.value;
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: controller.standardDelivery.value
-                            ? Colors.green.withValues(alpha: 0.1)
-                            : Colors.grey.shade100,
-                        border: Border.all(
-                          color: controller.standardDelivery.value
-                              ? Colors.green
-                              : Colors.grey,
-                        ),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Standard Delivery'),
-                                Text('Free (5-7 Days)'),
-                              ],
-                            ),
-                          ),
-                          CircleAvatar(
-                            backgroundColor: controller.standardDelivery.value
-                                ? Colors.green
-                                : Colors.grey,
-                            radius: 4,
-                          ),
-                        ],
-                      ),
-                    ),
+                Container(
+                  padding: EdgeInsets.only(left: 8),
+                  width: double.maxFinite,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.deepPurple.shade100),
+                    borderRadius: BorderRadius.circular(16),
+                    color: Colors.purpleAccent.withValues(alpha: 0.08),
                   ),
-                ),
-
-                Obx(
-                  () => GestureDetector(
-                    onTap: () {
-                      controller.standardDelivery.value =
-                          !controller.standardDelivery.value;
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: controller.standardDelivery.value
-                            ? Colors.grey.shade100
-                            : Colors.green.withValues(alpha: 0.1),
-                        border: Border.all(
-                          color: controller.standardDelivery.value
-                              ? Colors.grey
-                              : Colors.green,
-                        ),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Express Delivery'),
-                                Text('\$9.99 (2-3 Days))'),
-                              ],
-                            ),
-                          ),
-                          CircleAvatar(
-                            backgroundColor: controller.standardDelivery.value
-                                ? Colors.grey
-                                : Colors.green,
-                            radius: 4,
-                          ),
-                        ],
-                      ),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: SizedBox(
+                      height: 60,
+                      child: Image.asset(IconPath.stripeIcon),
                     ),
                   ),
                 ),
@@ -236,9 +253,9 @@ class ShippingInformationScreen extends StatelessWidget {
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {
-                    Get.toNamed(AppRoute.getReviewOrderScreen());
+                    Get.toNamed(AppRoute.getOrderConfirmationScreen());
                   },
-                  child: Text('Continue to Payment'),
+                  child: Text('Place Order'),
                 ),
                 const SizedBox(height: 26),
               ],

@@ -32,6 +32,8 @@ class IconPath {
   static const String menuIcon = 'assets/icons/menu_icon.png';
 
   static const String shopIcon = 'assets/icons/shop_icon.png';
+  static const String stripeIcon = 'assets/icons/stripe.png';
+  static const String agentIcon = 'assets/icons/agent.png';
 
 
 }

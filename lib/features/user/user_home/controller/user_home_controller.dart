@@ -67,4 +67,17 @@ class UserHomeController extends GetxController {
   var selectedFeaturedWorkout = "All Workouts".obs;
 
   final filters = ["All Workouts", "Online", "In person", "Hybrid"];
+
+
+  RxString duration = "4 weeks".obs;
+  RxString type = "Fat Burn".obs;
+  RxString description =
+      "This 30-day program combines HIIT, strength training, and nutrition guidance to help you burn fat and boost stamina."
+          .obs;
+
+  RxList workoutSchedule = [
+    "Day 1: Full Body HIIT - 20 min | Burn calories",
+    "Day 3: Upper Body Strength - Push & pull focus",
+    "Day 5: Core & Flexibility - Improve balance",
+  ].obs;
 }
