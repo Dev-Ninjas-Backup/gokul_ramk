@@ -121,7 +121,7 @@ class LoginScreen extends StatelessWidget {
                 // Login Button
                 ElevatedButton(
                   onPressed: () {
-                    Get.toNamed(AppRoute.trainerNavBarScreen);
+                    controller.authenticateUser();
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.loginButtonColor,
