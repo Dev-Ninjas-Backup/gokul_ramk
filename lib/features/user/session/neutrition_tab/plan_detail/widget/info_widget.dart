@@ -10,7 +10,7 @@ class InfoWidget extends StatelessWidget {
     return Chip(
       label: Text(text, style: getTextStyle(color: Colors.white)),
       backgroundColor: Colors.black87,
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
     );
   }
 }

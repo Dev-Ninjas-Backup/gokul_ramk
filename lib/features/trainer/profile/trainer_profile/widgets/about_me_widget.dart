@@ -16,7 +16,7 @@ class AboutMeWidget extends StatelessWidget {
       children: [
         Obx(
           () => Wrap(
-            spacing: 36,
+            spacing: 8,
             children: controller.tags
                 .map(
                   (tag) => Chip(
@@ -63,65 +63,51 @@ class AboutMeWidget extends StatelessWidget {
             color: Color(0xFFEFF9F2),
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Obx(
-            () => Row(
-              children: [
-                Column(
-                  children: [
-                    Icon(Icons.star, color: Colors.amber),
-                    SizedBox(width: 6),
-                    Text(
-                      controller.rating.value.toString(),
-                      style: getTextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.fontColor,
-                      ),
-                    ),
-                    SizedBox(width: 8),
-                    Text(
-                      "Average Rating",
-                      style: getTextStyle(color: AppColors.primaryFontColor),
-                    ),
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        _infoItem(Icons.verified, "Certified Trainer"),
-                        SizedBox(width: 2),
-
-                        _infoItem(
-                          Icons.schedule,
-                          controller.yearsExperience.value,
-                        ),
-                        SizedBox(width: 2),
-
-                        _infoItem(Icons.group, controller.clientsCount.value),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                children: [
+                  Text(
+                    "⭐ 4.89",
+                    style: getTextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(width: 6),
+                  Text("Average Rating"),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 6,
+                children: [
+                  InfoItem(icon: Icons.verified, text: "Certified Trainer"),
+                  InfoItem(icon: Icons.timer, text: "5+ Years Experience"),
+                  InfoItem(icon: Icons.group, text: "200+ Clients"),
+                ],
+              ),
+            ],
           ),
         ),
       ],
     );
   }
+}
 
-  Widget _infoItem(IconData icon, String text) {
+class InfoItem extends StatelessWidget {
+  final IconData icon;
+  final String text;
+
+  const InfoItem({super.key, required this.icon, required this.text});
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(icon, size: 18, color: AppColors.primaryFontColor),
-
-        Text(
-          text,
-          style: getTextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            color: AppColors.secondaryFontColor,
-          ),
-        ),
+        Icon(icon, color: Colors.green, size: 18),
+        const SizedBox(width: 6),
+        Text(text),
       ],
     );
   }

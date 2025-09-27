@@ -17,7 +17,7 @@ class HealthMetricsGrid extends StatelessWidget {
         crossAxisCount: 2,
         mainAxisSpacing: 12,
         crossAxisSpacing: 28,
-        childAspectRatio: 1.4,
+        childAspectRatio: 1.2,
         padding: EdgeInsets.all(6),
         children: controller.metrics.map((item) {
           return MetricCard(item: item);

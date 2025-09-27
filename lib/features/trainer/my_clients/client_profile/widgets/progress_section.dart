@@ -105,32 +105,36 @@ class ProgressSection extends StatelessWidget {
 
   Widget _buildStatCard(String value, String label) {
     return Container(
+      height: 110,
       margin: EdgeInsets.symmetric(horizontal: 6, vertical: 4),
       padding: EdgeInsets.symmetric(horizontal: 0, vertical: 16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.grey.withValues(alpha: 0.25)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: .15),
-
-            offset: Offset(2, 6),
+            color: Colors.grey.withValues(alpha: 0.1),
+            spreadRadius: 5,
+            blurRadius: 5,
           ),
         ],
       ),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             value,
-            style: getTextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+            style: getTextStyle(fontWeight: FontWeight.w600, fontSize: 12),
           ),
-          SizedBox(height: 4),
+
           Text(
             label,
+            textAlign: TextAlign.center,
             style: getTextStyle(
               color: AppColors.secondaryFontColor,
-              fontSize: 14,
+              fontSize: 12,
               fontWeight: FontWeight.w500,
             ),
           ),

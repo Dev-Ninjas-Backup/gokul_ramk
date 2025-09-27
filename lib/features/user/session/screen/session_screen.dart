@@ -24,19 +24,22 @@ class SessionsScreen extends StatelessWidget {
                 Obx(
                   () => Column(
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: controller.categories
-                            .map(
-                              (cat) => TabButton(
-                                label: cat,
-                                isSelected:
-                                    controller.selectedCategory.value == cat,
-                                onTap: () =>
-                                    controller.selectedCategory.value = cat,
-                              ),
-                            )
-                            .toList(),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: controller.categories
+                              .map(
+                                (cat) => TabButton(
+                                  label: cat,
+                                  isSelected:
+                                      controller.selectedCategory.value == cat,
+                                  onTap: () =>
+                                      controller.selectedCategory.value = cat,
+                                ),
+                              )
+                              .toList(),
+                        ),
                       ),
                       const SizedBox(height: 20),
                       getWidget(controller),

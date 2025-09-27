@@ -27,10 +27,6 @@ class TrainerProfileController extends GetxController {
               "NASM certified with additional certifications in yoga and nutrition coaching."
           .obs;
 
-  var rating = 4.5.obs;
-  var isCertifiedTrainer = true.obs;
-  var yearsExperience = "5+ Years Experience".obs;
-  var clientsCount = "200+ Clients".obs;
 
   // Programs Offered
   var programs = <Program>[
