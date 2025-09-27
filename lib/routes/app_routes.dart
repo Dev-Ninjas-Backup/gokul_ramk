@@ -18,6 +18,8 @@ import 'package:gokul_ramk/features/auth/signup/more_user_information_screen/scr
 import 'package:gokul_ramk/features/auth/signup/screen/signup_screen.dart';
 import 'package:gokul_ramk/features/trainer/home/home_screen/screen/home_screen.dart';
 import 'package:gokul_ramk/features/trainer/my_clients/client_profile/sceen/client_profile_screen.dart';
+import 'package:gokul_ramk/features/trainer/profile/add_product/screen/add_product_screen.dart';
+import 'package:gokul_ramk/features/trainer/profile/product_details/screen/product_details_screen.dart';
 import 'package:gokul_ramk/features/user/shop/cart/screen/cart_screen.dart';
 import 'package:gokul_ramk/features/user/shop/categories/screen/categories_screen.dart';
 import 'package:gokul_ramk/features/user/shop/product_detail/screen/product_detail_screen.dart';
@@ -84,6 +86,8 @@ class AppRoute {
   static String trainerNavBarScreen = "/trainer/trainerNavBarScreen";
   static String clientProfileScreen = "/clientProfileScreen";
   static String bookingDetailsScreen = "/bookingDetailsScreen";
+  static String addProducts = "/addProducts";
+  static String productDetails = "/productDetails";
 
   static String getSplashScreen() => splashScreen;
   static String getOnboardingScreen() => onboardingScreen;
@@ -116,7 +120,6 @@ class AppRoute {
   static String getPlanDetailScreen() => planDetailScreen;
   static String getCategoriesScreen() => categoriesScreen;
 
-  
   static String getProductDetailScreen() => productDetailScreen;
   static String getUserCartScreen() => userCartScreen;
   static String getShippingInformationScreen() => shippingInformationScreen;
@@ -125,6 +128,8 @@ class AppRoute {
   static String getUserShopScreen() => userShopScreen;
   static String getUserChatScreen() => userChatScreen;
   static String getUserCreateGroupScreen() => userCreateGroupScreen;
+  static String getAddProducts() => addProducts;
+  static String getProductDetails() => productDetails;
 
   static List<GetPage> routes = [
     GetPage(name: splashScreen, page: () => SplashScreen()),
@@ -176,19 +181,16 @@ class AppRoute {
     GetPage(name: productDetailScreen, page: () => ProductDetailScreen()),
     GetPage(name: userCartScreen, page: () => CartScreen()),
     GetPage(name: reviewOrderScreen, page: () => ReviewOrderScreen()),
-    GetPage(name: orderConfirmationScreen, page: () => OrderConfirmationScreen()),
     GetPage(
-      name: userShopScreen,
-      page: () => ShopScreen(),
+      name: orderConfirmationScreen,
+      page: () => OrderConfirmationScreen(),
     ),
+    GetPage(name: userShopScreen, page: () => ShopScreen()),
     GetPage(
       name: shippingInformationScreen,
       page: () => ShippingInformationScreen(),
     ),
-    GetPage(
-      name: userChatScreen,
-      page: () => ChatScreen(),
-    ),
+    GetPage(name: userChatScreen, page: () => ChatScreen()),
     GetPage(name: programDetailScreen, page: () => ProgramDetailsScreen()),
     GetPage(name: userCreateGroupScreen, page: () => UserCreateGroupScreen()),
 
@@ -197,5 +199,7 @@ class AppRoute {
     GetPage(name: trainerHomeScreen, page: () => HomeScreen()),
     GetPage(name: clientProfileScreen, page: () => ClientProfileScreen()),
     GetPage(name: bookingDetailsScreen, page: () => BookingDetailsScreen()),
+    GetPage(name: addProducts, page: () => AddProductScreen()),
+    GetPage(name: productDetails, page: () => ProductDetailsScreen()),
   ];
 }

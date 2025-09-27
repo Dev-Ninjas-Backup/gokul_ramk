@@ -18,5 +18,5 @@ class Imagepath {
 
   static String mussleMan = 'assets/images/mussle_man.png';
   static String proteinBottle = 'assets/images/protein_bottle.png';
-
+  static String gloves = 'assets/images/gloves.png';
 }

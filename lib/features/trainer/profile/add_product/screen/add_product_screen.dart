@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
+import 'package:gokul_ramk/features/trainer/profile/product_details/screen/product_details_screen.dart';
 
-import '../../product_details/screen/product_details_screen.dart';
 import '../controller/add_product_controller.dart';
 import '../widgets/product_images_widget.dart';
 
@@ -166,7 +166,7 @@ class AddProductScreen extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  Get.to(() => ProductDetailScreen());
+                  Get.to(() => ProductDetailsScreen());
                 },
                 child: Text(
                   "Submit for Review",
