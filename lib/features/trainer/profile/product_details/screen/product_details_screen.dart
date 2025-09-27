@@ -6,10 +6,10 @@ import '../../add_product/controller/add_product_controller.dart';
 import '../../add_product/widgets/product_images_widget.dart';
 import '../widgets/statbox.dart';
 
-class ProductDetailScreen extends StatelessWidget {
-  final AddProductController controller = Get.find<AddProductController>();
+class ProductDetailsScreen extends StatelessWidget {
+  final AddProductController controller = Get.put(AddProductController());
 
-  ProductDetailScreen({super.key});
+  ProductDetailsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

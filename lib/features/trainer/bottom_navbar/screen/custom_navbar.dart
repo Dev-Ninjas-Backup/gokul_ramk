@@ -4,7 +4,7 @@ import 'package:gokul_ramk/features/trainer/bookings/my_bookings/screen/my_booki
 import 'package:gokul_ramk/features/trainer/bottom_navbar/controller/navbar_controller.dart';
 import 'package:gokul_ramk/features/trainer/community/posts/screen/trainer_community_screen.dart';
 import 'package:gokul_ramk/features/trainer/my_clients/my_clients_screen/screen/my_clients_screen.dart';
-import 'package:gokul_ramk/features/trainer/profile/add_product/screen/add_product_screen.dart';
+import 'package:gokul_ramk/features/trainer/profile/trainer_profile/screen/trainer_profile_screen.dart';
 
 import '../../home/home_screen/screen/home_screen.dart';
 import '../../../../core/utils/constants/icon_path.dart';
@@ -20,8 +20,9 @@ class NavBarScreen extends StatelessWidget {
       const HomeScreen(),
       const MyClientsScreen(),
       const MyBookingsScreen(),
+
       TrainerCommunityScreen(),
-      AddProductScreen(),
+      TrainerProfileScreen(),
     ];
 
     final List<String> icons = [
@@ -51,7 +52,7 @@ class NavBarScreen extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Image.asset(
-                      icons[index], // 👈 FIXED
+                      icons[index],
                       width: 28,
                       height: 28,
                       color: isSelected ? Colors.blue : Colors.grey,
