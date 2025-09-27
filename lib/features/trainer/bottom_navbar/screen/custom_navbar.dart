@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/features/trainer/bookings/my_bookings/screen/my_bookings_screen.dart';
 import 'package:gokul_ramk/features/trainer/bottom_navbar/controller/navbar_controller.dart';
-import 'package:gokul_ramk/features/trainer/community/posts/screen/posts.dart';
+import 'package:gokul_ramk/features/trainer/community/posts/screen/trainer_community_screen.dart';
 import 'package:gokul_ramk/features/trainer/my_clients/my_clients_screen/screen/my_clients_screen.dart';
 import 'package:gokul_ramk/features/trainer/profile/trainer_profile/screen/trainer_profile_screen.dart';
 
@@ -20,7 +20,8 @@ class NavBarScreen extends StatelessWidget {
       const HomeScreen(),
       const MyClientsScreen(),
       const MyBookingsScreen(),
-      const CommunityScreen(),
+
+      TrainerCommunityScreen(),
       TrainerProfileScreen(),
     ];
 

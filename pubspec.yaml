@@ -48,6 +48,12 @@ dependencies:
   intl_phone_field: ^3.2.0
   country_picker: ^2.0.27
   image_picker: ^1.2.0
+  flutter_launcher_icons: ^0.14.4
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icons/appIcon.png"
 
 dev_dependencies:
   flutter_test:

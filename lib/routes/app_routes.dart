@@ -28,6 +28,7 @@ import 'package:gokul_ramk/features/user/shop/shipping/screen/order_confirmation
 import 'package:gokul_ramk/features/user/shop/shipping/screen/review_order_screen.dart';
 import 'package:gokul_ramk/features/user/shop/shipping/screen/shipping_information_screen.dart';
 import 'package:gokul_ramk/features/user/user_chat/screen/chat_screen.dart';
+import 'package:gokul_ramk/features/user/user_community/community_challenges/screen/challenge_complete_screen.dart';
 import 'package:gokul_ramk/features/user/user_community/community_groups/screen/create_group.dart';
 import 'package:gokul_ramk/features/user/user_home/book_trainer/screen/bookings_screen.dart';
 import 'package:gokul_ramk/features/user/bookmark/screen/user_bookmark_screen.dart';
@@ -75,6 +76,7 @@ class AppRoute {
   static String reviewOrderScreen = "/user/shop/reviewOrderScreen";
   static String userShopScreen = "/user/shop";
   static String userChatScreen = "/user/userChatScreen";
+  static String completeChallengeScreen = "/user/completeChallengeScreen";
   static String userCreateGroupScreen = "/user/community/userCreateGroupScreen";
   static String programDetailScreen = "/user/home/programDetailScreen";
   static String orderConfirmationScreen = "/user/shop/orderConfirmationScreen";
@@ -119,6 +121,11 @@ class AppRoute {
   static String getMealDetailScreen() => mealDetailScreen;
   static String getPlanDetailScreen() => planDetailScreen;
   static String getCategoriesScreen() => categoriesScreen;
+
+  static String getCompleteChallengeScreen() => completeChallengeScreen;
+  
+
+
 
   static String getProductDetailScreen() => productDetailScreen;
   static String getUserCartScreen() => userCartScreen;
@@ -193,6 +200,7 @@ class AppRoute {
     GetPage(name: userChatScreen, page: () => ChatScreen()),
     GetPage(name: programDetailScreen, page: () => ProgramDetailsScreen()),
     GetPage(name: userCreateGroupScreen, page: () => UserCreateGroupScreen()),
+    GetPage(name: completeChallengeScreen, page: () => ChallengeCompleteScreen()),
 
     // Trainer
     GetPage(name: trainerNavBarScreen, page: () => NavBarScreen()),
