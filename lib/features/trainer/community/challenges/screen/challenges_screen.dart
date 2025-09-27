@@ -17,7 +17,7 @@ class ChallengesScreen extends StatelessWidget {
       }
 
       return ListView.builder(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: EdgeInsets.symmetric(horizontal: 6, vertical: 6),
         itemCount: controller.events.length,
         itemBuilder: (context, index) {
           final event = controller.events[index];
