@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/features/trainer/community/groups/screen/create_group.dart';
+import 'package:gokul_ramk/features/trainer/community/posts/controller/trainer_community_controller.dart';
 
 import '../../../../../core/common/styles/global_text_style.dart';
-import '../../posts/controller/posts_controller.dart';
 
 class GroupsTab extends StatelessWidget {
   const GroupsTab({super.key});
@@ -15,7 +15,7 @@ class GroupsTab extends StatelessWidget {
 
     return Obx(
       () => ListView.builder(
-        padding: EdgeInsets.all(12),
+        padding: EdgeInsets.symmetric(horizontal: 6),
         itemCount: controller.groups.length + 1,
         itemBuilder: (context, index) {
           if (index == controller.groups.length) {
