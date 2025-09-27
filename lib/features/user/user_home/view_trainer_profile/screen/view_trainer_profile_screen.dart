@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
 import 'package:gokul_ramk/core/common/widgets/custom_app_bar_title.dart';
 import 'package:gokul_ramk/core/utils/constants/app_texts.dart';
+import 'package:gokul_ramk/core/utils/constants/colors.dart';
 import 'package:gokul_ramk/features/user/user_home/view_trainer_profile/controller/view_trainer_profile_controller.dart';
 import 'package:gokul_ramk/features/user/user_home/view_trainer_profile/widget/profile_info_card.dart';
 import 'package:gokul_ramk/features/user/user_home/view_trainer_profile/widget/section_tile_program_card.dart';
@@ -58,7 +59,14 @@ class ViewTrainerProfileScreen extends StatelessWidget {
                         backgroundColor: Colors.green.withValues(alpha: 0.2),
                         foregroundColor: Colors.green,
                       ),
-                      child: Text('Message Trainer'),
+                      child: Text(
+                        'Message Trainer',
+                        style: getTextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.primaryButtonColor,
+                        ),
+                      ),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -67,7 +75,14 @@ class ViewTrainerProfileScreen extends StatelessWidget {
                       onPressed: () {
                         Get.toNamed(AppRoute.bookTrainerScreen);
                       },
-                      child: Text('Book Trainer'),
+                      child: Text(
+                        'Book Trainer',
+                        style: getTextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.background,
+                        ),
+                      ),
                     ),
                   ),
                 ],
@@ -92,6 +107,7 @@ class ViewTrainerProfileScreen extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 crossAxisSpacing: 12,
                 mainAxisSpacing: 12,
+                childAspectRatio: 0.87,
                 children: const [
                   ProgramCard(
                     icon: Icons.favorite,
