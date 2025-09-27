@@ -27,7 +27,7 @@ class ProgramsOfferedWidget extends StatelessWidget {
             itemCount: controller.programs.length,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              childAspectRatio: .8,
+              childAspectRatio: 1.13,
               crossAxisSpacing: 10,
               mainAxisSpacing: 10,
             ),
@@ -53,7 +53,7 @@ class ProgramsOfferedWidget extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       backgroundColor: Colors.blue.shade50,
-                      radius: 22,
+                      radius: 26,
                       child: Image.asset(program.icon, fit: BoxFit.cover),
                     ),
                     SizedBox(height: 12),

@@ -34,7 +34,7 @@ class CategoriesScreen extends StatelessWidget {
                 ),
 
                 SizedBox(
-                  height: 400,
+                  height: 380,
                   child: ListView.builder(
                     itemCount: controller.products.length > 4
                         ? 4
@@ -59,7 +59,7 @@ class CategoriesScreen extends StatelessWidget {
                 ),
 
                 SizedBox(
-                  height: 400,
+                  height: 380,
                   child: ListView.builder(
                     itemCount: controller.products.length > 4
                         ? 4
@@ -84,7 +84,7 @@ class CategoriesScreen extends StatelessWidget {
                 ),
 
                 SizedBox(
-                  height: 400,
+                  height: 380,
                   child: ListView.builder(
                     itemCount: controller.products.length > 4
                         ? 4

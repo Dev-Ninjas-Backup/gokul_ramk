@@ -166,14 +166,7 @@ class MealDetailScreen extends StatelessWidget {
                                     vertical: 14,
                                   ),
                                 ),
-                                child: Text(
-                                  "Add to Meal Plan",
-                                  style: getTextStyle(
-                                    fontSize: 16,
-                                    color: Colors.green,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
+                                child: const Text("Add to Meal Plan"),
                               ),
                             ),
                             const SizedBox(width: 12),
@@ -186,14 +179,7 @@ class MealDetailScreen extends StatelessWidget {
                                     vertical: 14,
                                   ),
                                 ),
-                                child: Text(
-                                  "Share with Trainer",
-                                  style: getTextStyle(
-                                    fontSize: 16,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
+                                child: Text("Share with Trainer"),
                               ),
                             ),
                           ],
@@ -210,7 +196,7 @@ class MealDetailScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 12),
                         SizedBox(
-                          height: 290,
+                          height: 270,
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: ListView(

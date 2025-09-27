@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
 import 'package:gokul_ramk/core/utils/constants/colors.dart';
@@ -26,7 +27,7 @@ class ClientCardWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(6),
                 child: Image.asset(
                   trainer.imageUrl,
-                  width: 100,
+                  width: 110,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -124,7 +125,7 @@ class ClientCardWidget extends StatelessWidget {
                         Expanded(
                           child: GestureDetector(
                             onTap: () {
-                              Get.toNamed(AppRoute.userChatScreen);
+                              EasyLoading.showInfo('Chat Feature Coming Soon');
                             },
                             child: Container(
                               padding: EdgeInsets.symmetric(vertical: 8),

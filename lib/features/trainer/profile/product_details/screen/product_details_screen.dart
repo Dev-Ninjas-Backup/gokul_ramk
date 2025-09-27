@@ -50,9 +50,9 @@ class ProductDetailsScreen extends StatelessWidget {
                     color: Color.fromARGB(255, 61, 137, 65),
                   ),
                 ),
-                Spacer(),
+                SizedBox(width: 200),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
                     color: Colors.red.shade100,
                     borderRadius: BorderRadius.circular(20),
@@ -61,7 +61,7 @@ class ProductDetailsScreen extends StatelessWidget {
                     "Rejected",
                     style: getTextStyle(
                       color: Colors.red,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
@@ -113,9 +113,9 @@ class ProductDetailsScreen extends StatelessWidget {
                     child: Text(
                       "Edit Product",
                       style: getTextStyle(
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.bold,
                         color: Colors.blueAccent,
-                        fontSize: 16,
+                        fontSize: 17,
                       ),
                     ),
                   ),
@@ -131,9 +131,9 @@ class ProductDetailsScreen extends StatelessWidget {
                     child: Text(
                       "Remove Product",
                       style: getTextStyle(
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.bold,
                         color: Colors.redAccent,
-                        fontSize: 16,
+                        fontSize: 17,
                       ),
                     ),
                   ),

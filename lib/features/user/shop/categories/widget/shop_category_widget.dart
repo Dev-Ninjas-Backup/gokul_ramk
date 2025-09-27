@@ -17,9 +17,8 @@ class ShopCategoryWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 260,
-
-      margin: EdgeInsets.only(right: 8),
+      width: 250,
+      margin: const EdgeInsets.only(right: 8),
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(color: Colors.grey.shade300),

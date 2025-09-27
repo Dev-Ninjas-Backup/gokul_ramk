@@ -2,21 +2,10 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:gokul_ramk/routes/app_routes.dart';
 
 class LoginController extends GetxController {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-
-  void authenticateUser() {
-    if (emailController.text == "user@gmail.com" &&
-        passwordController.text == "1234") {
-      Get.toNamed(AppRoute.userNavBarScreen);
-    } else if (emailController.text == "trainer@gmail.com" &&
-        passwordController.text == "1234") {
-      Get.toNamed(AppRoute.trainerNavBarScreen);
-    }
-  }
 
   RxBool isObsecure = false.obs;
   RxBool isChecked = false.obs;
@@ -60,4 +49,6 @@ class LoginController extends GetxController {
     _timer?.cancel(); // ✅ cancel the timer
     super.onClose();
   }
+
+
 }

@@ -55,9 +55,9 @@ class PlanDetailScreen extends StatelessWidget {
                 /// Chips
                 Row(
                   children: [
-                    Expanded(child: InfoWidget(text: "Duration: ${plan.duration}")),
+                    InfoWidget(text: "Duration: ${plan.duration}"),
                     const SizedBox(width: 8),
-                    Expanded(child: InfoWidget(text: "Difficulty: ${plan.difficulty}")),
+                    InfoWidget(text: "Difficulty: ${plan.difficulty}"),
                   ],
                 ),
                 const SizedBox(height: 20),

@@ -14,7 +14,7 @@ class TopMealItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           CircleAvatar(
-            radius: 31,
+            radius: 35,
             backgroundImage: NetworkImage(topMeal.image),
           ),
           const SizedBox(height: 6),

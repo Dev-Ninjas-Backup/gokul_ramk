@@ -20,6 +20,8 @@ class GroupsTab extends StatelessWidget {
         itemBuilder: (context, index) {
           if (index == controller.groups.length) {
             return Container(
+              width: 50,
+              height: 150,
               margin: EdgeInsets.only(top: 16),
               padding: EdgeInsets.all(20),
               decoration: BoxDecoration(

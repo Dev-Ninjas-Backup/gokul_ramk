@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gokul_ramk/core/utils/constants/imagepath.dart';
 
 import '../../../../../core/common/styles/global_text_style.dart';
 
@@ -24,13 +23,8 @@ Widget clientCard(String name) {
         // Placeholder for image
         Container(
           height: 120,
-          width: double.maxFinite,
           decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(Imagepath.trainer),
-              fit: BoxFit.cover,
-            ),
-
+            color: Colors.grey[300],
             borderRadius: BorderRadius.circular(12),
           ),
         ),

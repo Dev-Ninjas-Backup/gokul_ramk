@@ -31,6 +31,7 @@ class ProgressFilterController extends GetxController {
 
   void updateFilter(String value) {
     selectedFilter.value = value;
+    Get.back();
   }
 
   Map<String, dynamic> get currentData => progressData[selectedFilter.value]!;
