@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
 import 'package:gokul_ramk/core/utils/constants/colors.dart';
@@ -7,6 +6,7 @@ import 'package:gokul_ramk/core/utils/constants/imagepath.dart';
 import 'package:gokul_ramk/features/trainer/bookings/booking_details/screen/booking_details_screen.dart';
 import 'package:gokul_ramk/features/trainer/bookings/my_bookings/controller/booking_session_controller.dart';
 import 'package:gokul_ramk/features/trainer/bookings/my_bookings/model/booking_session_model.dart';
+import 'package:gokul_ramk/routes/app_routes.dart';
 
 class BookingSessionListWidget extends StatelessWidget {
   final BookingSessionController controller = Get.put(
@@ -19,7 +19,6 @@ class BookingSessionListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() {
       return ListView.builder(
-        shrinkWrap: true,
         itemCount: controller.sessions.length,
         itemBuilder: (context, index) {
           final session = controller.sessions[index];
@@ -89,7 +88,7 @@ class BookingSessionCard extends StatelessWidget {
                   ),
                   SizedBox(height: 6),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 4, vertical: 6),
+                    padding: EdgeInsets.symmetric(horizontal: 6, vertical: 6),
                     decoration: BoxDecoration(
                       color: AppColors.primaryColor.withValues(alpha: .18),
                       borderRadius: BorderRadius.circular(8),
@@ -99,6 +98,7 @@ class BookingSessionCard extends StatelessWidget {
                       style: getTextStyle(
                         color: AppColors.primaryColor.withValues(alpha: .9),
                         fontWeight: FontWeight.w500,
+                        fontSize: 12,
                       ),
                     ),
                   ),
@@ -112,7 +112,7 @@ class BookingSessionCard extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      EasyLoading.showInfo('Chat Feature Coming soon');
+                      Get.toNamed(AppRoute.userChatScreen);
                     },
                     child: Container(
                       padding: EdgeInsets.symmetric(vertical: 8),
@@ -125,7 +125,7 @@ class BookingSessionCard extends StatelessWidget {
                         "Message",
                         style: getTextStyle(
                           color: AppColors.primaryFontColor,
-                          fontSize: 14,
+                          fontSize: 12,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -139,7 +139,7 @@ class BookingSessionCard extends StatelessWidget {
                             Get.to(() => BookingDetailsScreen());
                           },
                     child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 8),
+                      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 3),
                       decoration: BoxDecoration(
                         color: Colors.blue.shade400,
                         borderRadius: BorderRadius.circular(8),
@@ -151,7 +151,7 @@ class BookingSessionCard extends StatelessWidget {
                             : "View Details",
                         style: getTextStyle(
                           color: Colors.white,
-                          fontSize: 14,
+                          fontSize: 12,
                           fontWeight: FontWeight.w600,
                         ),
                       ),

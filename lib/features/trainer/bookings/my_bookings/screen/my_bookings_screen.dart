@@ -13,31 +13,29 @@ class MyBookingsScreen extends StatelessWidget {
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.all(16),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      'My Bookings',
-                      style: getTextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.primaryFontColor,
-                      ),
-                    ),
-                    Spacer(),
-                    Icon(
-                      Icons.sort_rounded,
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Text(
+                    'My Bookings',
+                    style: getTextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w700,
                       color: AppColors.primaryFontColor,
-                      size: 30,
                     ),
-                  ],
-                ),
-                SizedBox(height: 30),
-                BookingSessionListWidget(),
-              ],
-            ),
+                  ),
+                  Spacer(),
+                  Icon(
+                    Icons.sort_rounded,
+                    color: AppColors.primaryFontColor,
+                    size: 30,
+                  ),
+                ],
+              ),
+              SizedBox(height: 30),
+              Expanded(child: BookingSessionListWidget()),
+            ],
           ),
         ),
       ),

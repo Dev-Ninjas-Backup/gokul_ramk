@@ -6,6 +6,7 @@ import 'package:gokul_ramk/features/user/user_profile/controller/user_profile_co
 import 'package:gokul_ramk/features/user/user_profile/widget/settings_tile.dart';
 import 'package:gokul_ramk/features/user/user_profile/widget/user_profile_header.dart';
 import 'package:gokul_ramk/features/user/user_profile/widget/user_profile_stat_card.dart';
+import 'package:gokul_ramk/routes/app_routes.dart';
 
 class UserProfileScreen extends StatelessWidget {
   UserProfileScreen({super.key});
@@ -171,7 +172,6 @@ class UserProfileScreen extends StatelessWidget {
                       title: "Help & Support",
                       onTap: () {},
                     ),
-                    
                   ],
                 ),
               ),
@@ -183,7 +183,9 @@ class UserProfileScreen extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFFFF4D4F),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.offAllNamed(AppRoute.loginScreen);
+                  },
                   child: Text('Logout'),
                 ),
               ),
