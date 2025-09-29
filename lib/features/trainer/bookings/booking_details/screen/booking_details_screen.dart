@@ -51,13 +51,7 @@ class BookingDetailsScreen extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 4),
-                      Text(
-                        "alex@carter.com | +1 234 567 890",
-                        style: getTextStyle(
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.primaryFontColor,
-                        ),
-                      ),
+                      
                     ],
                   ),
                 ],
