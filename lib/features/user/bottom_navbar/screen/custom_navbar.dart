@@ -8,14 +8,11 @@ import 'package:gokul_ramk/features/user/user_community/community_posts/screen/u
 import 'package:gokul_ramk/features/user/user_home/screen/user_home_screen.dart';
 import 'package:gokul_ramk/features/user/user_profile/screen/user_profile_screen.dart';
 
-
 class UserNavBarScreen extends StatelessWidget {
-   UserNavBarScreen({super.key});
+  UserNavBarScreen({super.key});
   final UserNavBarController controller = Get.put(UserNavBarController());
   @override
   Widget build(BuildContext context) {
-    
-
     final List<Widget> pages = [
       UserHomeScreen(),
       SessionsScreen(),
@@ -32,22 +29,14 @@ class UserNavBarScreen extends StatelessWidget {
       IconPath.userProfile,
     ];
 
-    final List<String> labels = [
-      "",
-      "",
-      "",
-      "",
-      "",
-    ];
+    final List<String> labels = ["", "", "", "", ""];
 
     return Obx(
       () => Scaffold(
-        backgroundColor: Colors.grey[100],
+        backgroundColor: Colors.white,
         body: pages[controller.currentIndex.value],
         bottomNavigationBar: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,                    
-          ),
+          decoration: BoxDecoration(color: Colors.white),
           padding: const EdgeInsets.symmetric(vertical: 30),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,

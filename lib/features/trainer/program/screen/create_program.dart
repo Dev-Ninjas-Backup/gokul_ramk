@@ -162,6 +162,7 @@ class CreateProgramScreen extends StatelessWidget {
                 ),
               ),
             ),
+            SizedBox(height: 48),
           ],
         ),
       ),

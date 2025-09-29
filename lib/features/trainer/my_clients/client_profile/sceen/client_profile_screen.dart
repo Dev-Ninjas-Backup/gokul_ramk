@@ -37,16 +37,7 @@ class ClientProfileScreen extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                     color: AppColors.primaryFontColor,
                   ),
-                ),
-
-                Text(
-                  'alex@carter.com | +1 234 567 890',
-                  style: getTextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.secondaryFontColor,
-                  ),
-                ),
+                ),            
 
                 SizedBox(height: 12),
                 CurrentProgramWidget(),

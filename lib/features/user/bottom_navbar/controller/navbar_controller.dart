@@ -6,4 +6,13 @@ class UserNavBarController extends GetxController {
   void changeIndex(int index) {
     currentIndex.value = index;
   }
+
+
+  @override
+  void onInit() {
+    super.onInit();
+    if (Get.arguments != null) {
+      currentIndex.value = Get.arguments as int;
+    }
+  }
 }

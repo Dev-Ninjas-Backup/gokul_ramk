@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
 import 'package:gokul_ramk/features/user/session/controller/session_controller.dart';
 import 'package:gokul_ramk/features/user/session/trainers_tab/widget/trainer_profile_card.dart';
+import 'package:gokul_ramk/routes/app_routes.dart';
 import '../widget/top_trainer_item.dart';
 
 class TrainerTab extends StatelessWidget {
@@ -29,6 +30,29 @@ class TrainerTab extends StatelessWidget {
               separatorBuilder: (_, __) => const SizedBox(width: 16),
               itemBuilder: (context, index) {
                 return TopTrainerItem(trainer: controller.topTrainers[index]);
+              },
+            ),
+          ),
+        ),
+        const SizedBox(height: 14),
+
+        Text(
+          "My Trainers",
+          style: getTextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 12),
+        SizedBox(
+          height: 130,
+          child: Obx(
+            () => ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: controller.topTrainers.length > 1 ? 1 : 1,
+              separatorBuilder: (_, __) => const SizedBox(width: 16),
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () => Get.toNamed(AppRoute.viewTrainerProfileScreen,arguments: 'myTrainer'),
+                  child: TopTrainerItem(trainer: controller.topTrainers[index]),
+                );
               },
             ),
           ),

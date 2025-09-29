@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/features/user/session/controller/session_controller.dart';
 import 'package:gokul_ramk/features/user/session/sessions_tab/widget/sessions_widget.dart';
+import 'package:gokul_ramk/routes/app_routes.dart';
 
 class SessionsTab extends StatelessWidget {
   SessionsTab({super.key});
@@ -25,7 +26,9 @@ class SessionsTab extends StatelessWidget {
             isBookmarked: workout['isBookmarked'] ?? false,
             isOnlineSession: workout['isOnlineSession'] ?? false,
             onTapBookMark: () {},
-            onTapButton: () {},
+            onTapButton: () {
+              Get.toNamed(AppRoute.programDetailScreen);
+            },
           ),
         );
       },

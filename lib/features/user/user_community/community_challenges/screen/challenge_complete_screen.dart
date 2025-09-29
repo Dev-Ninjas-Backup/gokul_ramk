@@ -18,7 +18,10 @@ class ChallengeCompleteScreen extends StatelessWidget {
               spacing: 22,
               children: [
                 Center(child: Image.asset(Imagepath.challengeComplete)),
-                Text(AppTexts.challengeCompleteText, textAlign: TextAlign.center),
+                Text(
+                  AppTexts.challengeCompleteText,
+                  textAlign: TextAlign.center,
+                ),
                 Container(
                   padding: EdgeInsets.symmetric(vertical: 20),
                   width: double.maxFinite,
@@ -69,12 +72,12 @@ class ChallengeCompleteScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-            
+
                 ElevatedButton(
                   onPressed: () {},
                   child: Text('Share Achievement to Community Feed'),
                 ),
-            
+
                 Row(
                   spacing: 12,
                   children: [
@@ -88,6 +91,7 @@ class ChallengeCompleteScreen extends StatelessWidget {
                           'Back to Community',
                           style: getTextStyle(
                             color: Colors.blue,
+                            fontSize: 12,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -103,6 +107,7 @@ class ChallengeCompleteScreen extends StatelessWidget {
                           'Next Challenge',
                           style: getTextStyle(
                             fontWeight: FontWeight.bold,
+                            fontSize: 12,
                             color: Colors.green,
                           ),
                         ),

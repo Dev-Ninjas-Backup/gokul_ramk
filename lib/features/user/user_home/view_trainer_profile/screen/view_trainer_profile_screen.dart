@@ -15,8 +15,11 @@ class ViewTrainerProfileScreen extends StatelessWidget {
 
   ViewTrainerProfileScreen({super.key});
 
+  final String arguments = Get.arguments ?? '';
+
   @override
   Widget build(BuildContext context) {
+    bool formMytrainer = arguments == 'myTrainer';
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -33,8 +36,6 @@ class ViewTrainerProfileScreen extends StatelessWidget {
                     "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
                 name: "Sarah Johnson",
                 location: "Florida, USA",
-                email: "sarah.johnson@fitcoach.com",
-                phone: "+1 (555) 123-4567",
               ),
               const SizedBox(height: 20),
 
@@ -73,10 +74,15 @@ class ViewTrainerProfileScreen extends StatelessWidget {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        Get.toNamed(AppRoute.bookTrainerScreen);
+                        if(formMytrainer){
+                          Get.toNamed(AppRoute.bookTrainerScreen,arguments: 'myTrainer');
+                        }else{
+                          Get.toNamed(AppRoute.bookTrainerScreen);
+                        }
+                        
                       },
                       child: Text(
-                        'Book Trainer',
+                        formMytrainer ? 'Reschedule' : 'Book Trainer',
                         style: getTextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,

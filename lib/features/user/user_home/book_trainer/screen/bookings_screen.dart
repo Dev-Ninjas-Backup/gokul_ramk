@@ -13,9 +13,11 @@ class BookTrainerScreen extends StatelessWidget {
   BookTrainerScreen({super.key});
 
   final BookTrainerController controller = Get.put(BookTrainerController());
+  final String arguments = Get.arguments ?? '';
 
   @override
   Widget build(BuildContext context) {
+    bool formMytrainer = arguments == 'myTrainer';
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -23,7 +25,7 @@ class BookTrainerScreen extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Column(
               children: [
-                CustomAppBarTitle(title: 'Book Trainer'),
+                CustomAppBarTitle(title:formMytrainer ?'Reschedule' : 'Book Trainer'),
                 SizedBox(
                   height: 400,
                   child: CalendarCarousel(
@@ -104,6 +106,60 @@ class BookTrainerScreen extends StatelessWidget {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
+                    "Select Days For a Month",
+                    style: getTextStyle(
+                      color: Color(0xFF2D2D2D),
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10),
+                Obx(() {
+                  return Container(
+                    width: double.maxFinite,
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton<int>(
+                              isExpanded: true,
+                              value: controller.selectedTrainingDays.value,
+                              icon: const Icon(
+                                Icons.arrow_drop_down_rounded,
+                              ), // custom icon here
+                              items: controller.trainingDaysOptions.map((
+                                int day,
+                              ) {
+                                return DropdownMenuItem<int>(
+                                  value: day,
+                                  child: Text("$day days in a week"),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                controller.trainingDayForMonthSelected.value = true;
+                                if (value != null) {
+                                  controller.selectedTrainingDays.value = value;
+                                }
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }),
+
+                SizedBox(height: 10),
+
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
                     "Start Time",
                     style: getTextStyle(
                       color: Color(0xFF2D2D2D),
@@ -133,7 +189,7 @@ class BookTrainerScreen extends StatelessWidget {
                 SizedBox(height: 30),
                 ElevatedButton(
                   onPressed: () {},
-                  child: Text('Confirm Booking'),
+                  child: Text(formMytrainer ? 'Reschedule' :'Confirm Booking'),
                 ),
               ],
             ),
