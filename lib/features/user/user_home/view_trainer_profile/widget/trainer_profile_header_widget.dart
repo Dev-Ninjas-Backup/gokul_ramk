@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
 
 class TrainerProfileHeaderWidget extends StatelessWidget {
-  final String imageUrl, name, location, email, phone;
+  final String imageUrl, name, location;
 
   const TrainerProfileHeaderWidget({
     super.key,
     required this.imageUrl,
     required this.name,
     required this.location,
-    required this.email,
-    required this.phone,
+
   });
 
   @override
@@ -40,14 +39,6 @@ class TrainerProfileHeaderWidget extends StatelessWidget {
           ),
           Text(location, style: getTextStyle(color: Colors.grey.shade600)),
           const SizedBox(height: 6),
-          Text(
-            email,
-            style: getTextStyle(color: Colors.grey.shade600, fontSize: 13),
-          ),
-          Text(
-            phone,
-            style: getTextStyle(color: Colors.grey.shade600, fontSize: 13),
-          ),
         ],
       ),
     );

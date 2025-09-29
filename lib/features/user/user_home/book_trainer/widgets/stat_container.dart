@@ -36,6 +36,16 @@ class StatContainer extends StatelessWidget {
                 style: getTextStyle(fontSize: 14, fontWeight: FontWeight.w400),
               ),
             ),
+            SizedBox(height: 16),
+            Obx(() {
+              if (controller.trainingDayForMonthSelected.value == false) {
+                return SizedBox.shrink();
+              }
+              return Text(
+                "Selected Days For a Month: ${controller.selectedTrainingDays.value.toString()} days ",
+                style: getTextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+              );
+            }),
             SizedBox(height: 12),
             Text(
               "Advance Payment (20%): \$24",

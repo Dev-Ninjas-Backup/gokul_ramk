@@ -67,43 +67,6 @@ class UserHomeScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
 
-              // Featured Workouts
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Featured Workouts",
-                    style: getTextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text("See all", style: getTextStyle(color: Colors.blue)),
-                ],
-              ),
-              const SizedBox(height: 12),
-              SizedBox(
-                height: 150,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: controller.workoutList.length,
-                  itemBuilder: (context, index) {
-                    final workout = controller.workoutList[index];
-                    return GestureDetector(
-                      onTap: () => Get.toNamed(AppRoute.getProgramDetailScreen()),
-                      child: WorkoutCard(
-                        title: workout['title'],
-                        subtitle: workout['subtitle'],
-                        image: workout['image'],
-                        isBookmarked: workout['isBookmarked'] ?? false,
-                      ),
-                    );
-                  },
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
               // Today's Highlights
               Text(
                 "Today's Highlights",

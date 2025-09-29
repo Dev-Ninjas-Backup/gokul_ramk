@@ -40,7 +40,7 @@ class OrderConfirmationScreen extends StatelessWidget {
                   const SizedBox(height: 40),
                   ElevatedButton(
                     onPressed: () {
-                      Get.offAllNamed(AppRoute.userNavBarScreen);
+                      Get.offAllNamed(AppRoute.userNavBarScreen,arguments: 2);                     
                     },
                     child: Text('Back to Shop'),
                   ),

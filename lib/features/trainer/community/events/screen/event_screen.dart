@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
+import 'package:gokul_ramk/core/utils/constants/imagepath.dart';
 
 import '../controller/event_controller.dart';
 
@@ -27,51 +28,106 @@ class EventsScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
             ),
             margin: EdgeInsets.symmetric(vertical: 16),
-            child: Padding(
-              padding: EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Align(
-                    alignment: AlignmentGeometry.center,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(12),
+                      ),
+                      child: Image.asset(
+                        Imagepath.yogaGroup,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Align(
+                        alignment: Alignment.topRight,
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 3,
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.green.shade50,
+                          ),
+                          child: Text(
+                            event['isOnline'] ? 'online' : 'on-site',
+                            style: getTextStyle(
+                              color: Colors.green,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Align(
+                        alignment: AlignmentGeometry.center,
+                        child: Text(
+                          event["title"] ?? "",
+                          style: getTextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 6),
+                      Align(
+                        alignment: AlignmentGeometry.center,
+                        child: Text(
+                          event["date"] ?? "",
+                          style: getTextStyle(
+                            fontSize: 14,
+                            color: Colors.grey.shade600,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 12),
+                Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: Align(
+                    alignment: AlignmentGeometry.centerLeft,
                     child: Text(
-                      event["title"] ?? "",
+                      event["isOnline"] ? "" : event['location'],
                       style: getTextStyle(
-                        fontSize: 18,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Handle host event action
+                    },
+                  
+                    child: Text(
+                      "Host Event",
+                      style: getTextStyle(
+                        color: Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                  SizedBox(height: 6),
-                  Align(
-                    alignment: AlignmentGeometry.center,
-                    child: Text(
-                      event["date"] ?? "",
-                      style: getTextStyle(
-                        fontSize: 14,
-                        color: Colors.grey.shade600,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 12),
-                  Align(
-                    alignment: Alignment.center,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Handle host event action
-                      },
-
-                      child: Text(
-                        "Host Event",
-                        style: getTextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           );
         },

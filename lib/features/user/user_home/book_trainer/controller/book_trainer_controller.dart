@@ -2,6 +2,13 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class BookTrainerController extends GetxController {
+  // Observable selected value
+  var selectedTrainingDays = 1.obs;
+  RxBool trainingDayForMonthSelected = false.obs;
+
+  // Options for dropdown
+  final List<int> trainingDaysOptions = [1, 2, 3, 4, 5, 6];
+
   var selectedDates = <DateTime>[].obs;
 
   void onDateSelected(DateTime date) {
