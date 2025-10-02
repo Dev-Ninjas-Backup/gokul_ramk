@@ -34,7 +34,7 @@ class IconPath {
   static const String shopIcon = 'assets/icons/shop_icon.png';
 
   static const String stripeIcon = 'assets/icons/stripe.png';
-  static const String agentIcon = 'assets/icons/agent.png';
+  static const String agentIcon = 'assets/icons/ai_Chat.png';
   static const String favoriteIcon = 'assets/icons/favorite.png';
   static const String commentIcon = 'assets/icons/comment.png';
 
@@ -44,4 +44,5 @@ class IconPath {
   static const String musclGain = 'assets/icons/muscle_gain.png';
   static const String weightLoss = 'assets/icons/weight_loss.png';
   static const String yoga = 'assets/icons/yoga.png';
+  static const String aiChatIcon = 'assets/icons/ai_Chat.png';
 }
