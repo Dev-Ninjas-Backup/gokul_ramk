@@ -32,7 +32,7 @@ import 'package:gokul_ramk/features/user/user_community/community_challenges/scr
 import 'package:gokul_ramk/features/user/user_community/community_groups/screen/create_group.dart';
 import 'package:gokul_ramk/features/user/user_home/book_trainer/screen/bookings_screen.dart';
 import 'package:gokul_ramk/features/user/bookmark/screen/user_bookmark_screen.dart';
-import 'package:gokul_ramk/features/user/bottom_navbar/screen/custom_navbar.dart';
+import 'package:gokul_ramk/features/user/bottom_navbar/screen/user_custom_navbar.dart';
 import 'package:gokul_ramk/features/user/notification/screen/usere_notification_screen.dart';
 import 'package:gokul_ramk/features/user/session/neutrition_tab/meal_detail/screen/meal_detail_screen.dart';
 import 'package:gokul_ramk/features/user/session/neutrition_tab/plan_detail/screen/plan_detail_screen.dart';
