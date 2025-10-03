@@ -17,11 +17,12 @@ class TrainerProfileCardWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey.withValues(alpha: 0.1)),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.shade300,
-            blurRadius: 4,
-            spreadRadius: 2,
+            color: Colors.grey.withValues(alpha: 0.2),
+            blurRadius: 5,
+            spreadRadius: 5,
           ),
         ],
       ),

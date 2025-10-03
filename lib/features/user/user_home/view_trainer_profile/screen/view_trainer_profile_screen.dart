@@ -36,6 +36,7 @@ class ViewTrainerProfileScreen extends StatelessWidget {
                     "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
                 name: "Sarah Johnson",
                 location: "Florida, USA",
+                fromMyTrainer: formMytrainer,
               ),
               const SizedBox(height: 20),
 

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
 import 'package:gokul_ramk/core/common/widgets/get_random_color.dart';
 import 'package:gokul_ramk/core/utils/constants/icon_path.dart';
+import 'package:gokul_ramk/features/user/bottom_navbar/controller/navbar_controller.dart';
 import 'package:gokul_ramk/features/user/user_home/controller/user_home_controller.dart';
 import 'package:gokul_ramk/features/user/user_home/widget/catrgory_button.dart';
 import 'package:gokul_ramk/features/user/user_home/widget/featured_trainer_card.dart';
@@ -17,12 +18,14 @@ import 'package:gokul_ramk/routes/app_routes.dart';
 class UserHomeScreen extends StatelessWidget {
   UserHomeScreen({super.key});
   final UserHomeController controller = Get.put(UserHomeController());
+  final UserNavBarController navBarController = Get.put(UserNavBarController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -285,7 +288,9 @@ class UserHomeScreen extends StatelessWidget {
                     ),
                     SizedBox(height: 16.0),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        navBarController.changeIndex(3);
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.black,
                       ),

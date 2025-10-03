@@ -19,7 +19,7 @@ class UserCommunityScreen extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsetsGeometry.symmetric(horizontal: 10, vertical: 10),
+          padding: EdgeInsetsGeometry.symmetric(horizontal: 10),
           child: Column(
             children: [
               Row(

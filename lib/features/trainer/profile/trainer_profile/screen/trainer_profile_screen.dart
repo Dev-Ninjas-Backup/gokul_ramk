@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gokul_ramk/core/common/widgets/custom_app_bar_title.dart';
 import 'package:gokul_ramk/features/trainer/profile/trainer_profile/widgets/about_me_widget.dart';
 import 'package:gokul_ramk/features/trainer/profile/trainer_profile/widgets/my_product_widget.dart';
 import 'package:gokul_ramk/features/trainer/profile/trainer_profile/widgets/programs_offer_widgets.dart';
@@ -18,7 +17,6 @@ class TrainerProfileScreen extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                CustomAppBarTitle(title: 'Trainer Profile'),
                 SizedBox(height: 30),
                 TrainerProfileCardWidget(),
                 SizedBox(height: 16),
