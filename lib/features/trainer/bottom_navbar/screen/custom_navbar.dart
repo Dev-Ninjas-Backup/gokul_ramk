@@ -41,7 +41,7 @@ class NavBarScreen extends StatelessWidget {
         body: pages[controller.currentIndex.value],
         bottomNavigationBar: Container(
           decoration: BoxDecoration(color: Colors.white),
-          padding: const EdgeInsets.symmetric(vertical: 30),
+          padding: const EdgeInsets.only(bottom: 20, top: 8),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: List.generate(icons.length, (index) {
