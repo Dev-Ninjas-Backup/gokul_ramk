@@ -85,7 +85,7 @@ class SessionsWidget extends StatelessWidget {
                   backgroundColor: getRandomDeepColor(),
                 ),
                 onPressed: onTapButton,
-                child: Text(isOnlineSession ? 'Join Now' : 'View Details'),
+                child: Text('View Details'),
               ),
             ),
           ),

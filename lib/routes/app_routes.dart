@@ -16,6 +16,7 @@ import 'package:gokul_ramk/features/auth/signup/more_user_information_screen/scr
 import 'package:gokul_ramk/features/auth/signup/more_user_information_screen/screen/tell_us_about_yourself_screen1.dart';
 import 'package:gokul_ramk/features/auth/signup/more_user_information_screen/screen/tell_us_about_yourself_screen2.dart';
 import 'package:gokul_ramk/features/auth/signup/screen/signup_screen.dart';
+import 'package:gokul_ramk/features/trainer/community/events/screen/create_event_screen.dart';
 import 'package:gokul_ramk/features/trainer/home/home_screen/screen/home_screen.dart';
 import 'package:gokul_ramk/features/trainer/my_clients/client_profile/sceen/client_profile_screen.dart';
 import 'package:gokul_ramk/features/trainer/profile/add_product/screen/add_product_screen.dart';
@@ -90,6 +91,7 @@ class AppRoute {
   static String bookingDetailsScreen = "/bookingDetailsScreen";
   static String addProducts = "/addProducts";
   static String productDetails = "/productDetails";
+  static String createEvent = '/tainer/createEvent';
 
   static String getSplashScreen() => splashScreen;
   static String getOnboardingScreen() => onboardingScreen;
@@ -107,6 +109,7 @@ class AppRoute {
   static String getconsentAgreementScreen() => consentAgreementScreen;
   static String getTrainerTellAboutScreen() => trainerTellAboutScreen;
   static String getProgramDetailScreen() => programDetailScreen;
+  static String getCreateEvent() => createEvent;
 
   //user
   static String getUserNavBarScreen() => userNavBarScreen;
@@ -123,9 +126,6 @@ class AppRoute {
   static String getCategoriesScreen() => categoriesScreen;
 
   static String getCompleteChallengeScreen() => completeChallengeScreen;
-  
-
-
 
   static String getProductDetailScreen() => productDetailScreen;
   static String getUserCartScreen() => userCartScreen;
@@ -200,7 +200,10 @@ class AppRoute {
     GetPage(name: userChatScreen, page: () => ChatScreen()),
     GetPage(name: programDetailScreen, page: () => ProgramDetailsScreen()),
     GetPage(name: userCreateGroupScreen, page: () => UserCreateGroupScreen()),
-    GetPage(name: completeChallengeScreen, page: () => ChallengeCompleteScreen()),
+    GetPage(
+      name: completeChallengeScreen,
+      page: () => ChallengeCompleteScreen(),
+    ),
 
     // Trainer
     GetPage(name: trainerNavBarScreen, page: () => NavBarScreen()),
@@ -209,5 +212,6 @@ class AppRoute {
     GetPage(name: bookingDetailsScreen, page: () => BookingDetailsScreen()),
     GetPage(name: addProducts, page: () => AddProductScreen()),
     GetPage(name: productDetails, page: () => ProductDetailsScreen()),
+    GetPage(name: createEvent, page: () => CreateEventScreen()),
   ];
 }

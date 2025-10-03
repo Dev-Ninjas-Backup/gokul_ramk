@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
+import 'package:gokul_ramk/core/common/widgets/custom_app_bar_title.dart';
 import 'package:gokul_ramk/core/utils/constants/app_texts.dart';
 import 'package:gokul_ramk/core/utils/constants/imagepath.dart';
 import 'package:gokul_ramk/features/user/user_community/community_challenges/widget/challenge_stat_card.dart';
@@ -17,6 +18,7 @@ class ChallengeCompleteScreen extends StatelessWidget {
             child: Column(
               spacing: 22,
               children: [
+                CustomAppBarTitle(title: ''),
                 Center(child: Image.asset(Imagepath.challengeComplete)),
                 Text(
                   AppTexts.challengeCompleteText,

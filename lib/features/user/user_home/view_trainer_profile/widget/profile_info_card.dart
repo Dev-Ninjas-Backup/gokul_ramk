@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
 
 class ProfileInfoCard extends StatelessWidget {
-  final double rating;
+  final int rating;
   final int clients;
 
   const ProfileInfoCard({

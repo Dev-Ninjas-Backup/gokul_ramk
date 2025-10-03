@@ -3,6 +3,9 @@ import 'package:get/get.dart';
 class EventsController extends GetxController {
   var events = <Map<String, dynamic>>[].obs;
 
+  var options = ['online', 'onsite'].obs;
+  RxnString selectedOption = RxnString();
+
   @override
   void onInit() {
     super.onInit();
@@ -11,7 +14,7 @@ class EventsController extends GetxController {
 
   void loadEvents() {
     events.value = [
-       {
+      {
         "title": "Virtual Zumba Party",
         "date": "Sat, Sep 7 - 7:00PM",
         "isOnline": true,

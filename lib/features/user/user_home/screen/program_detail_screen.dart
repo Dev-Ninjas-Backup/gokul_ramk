@@ -27,7 +27,7 @@ class ProgramDetailsScreen extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: Image.asset(
-                  Imagepath.trainer, 
+                  Imagepath.trainer,
                   height: 200,
                   width: double.infinity,
                   fit: BoxFit.cover,
@@ -48,7 +48,7 @@ class ProgramDetailsScreen extends StatelessWidget {
               const SizedBox(height: 16),
 
               // Description
-             Text(
+              Text(
                 "Description-",
                 style: getTextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
@@ -62,34 +62,45 @@ class ProgramDetailsScreen extends StatelessWidget {
 
               const SizedBox(height: 20),
 
-              // Buttons Row
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red.withValues(alpha: 0.1),
-                        foregroundColor: Colors.red,
+              Obx(() {
+                if (controller.joinedHitProgram.value == false) {
+                  return ElevatedButton(
+                    onPressed: () {
+                      controller.joinedHitProgram.value = true;
+                    },
+                    child: Text('Join Now'),
+                  );
+                }
+
+                return Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red.withValues(alpha: 0.1),
+                          foregroundColor: Colors.red,
+                        ),
+                        child: Text('Cancel Program'),
                       ),
-                      child: Text('Cancel Program'),
                     ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {},
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {},
 
-                      child: Text('Reschedule'),
+                        child: Text('Reschedule'),
+                      ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                );
+              }),
 
+              // Buttons Row
               const SizedBox(height: 20),
 
               // Workout Schedule
-               Text(
+              Text(
                 "Workout Schedule-",
                 style: getTextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),

@@ -25,7 +25,9 @@ class BookTrainerScreen extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Column(
               children: [
-                CustomAppBarTitle(title:formMytrainer ?'Reschedule' : 'Book Trainer'),
+                CustomAppBarTitle(
+                  title: formMytrainer ? 'Reschedule' : 'Book Trainer',
+                ),
                 SizedBox(
                   height: 400,
                   child: CalendarCarousel(
@@ -91,22 +93,11 @@ class BookTrainerScreen extends StatelessWidget {
                     weekendTextStyle: TextStyle(color: Colors.black),
                   ),
                 ),
-                SizedBox(height: 36),
-
-                // Obx(
-                //   () => Padding(
-                //     padding: EdgeInsets.all(16.0),
-                //     child: Text(
-                //       controller.selectedDatesText,
-                //       style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                //       textAlign: TextAlign.center,
-                //     ),
-                //   ),
-                // ),
+                SizedBox(height: 16),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "Select Days For a Month",
+                    "Select Days Per Week",
                     style: getTextStyle(
                       color: Color(0xFF2D2D2D),
                       fontSize: 18,
@@ -142,7 +133,8 @@ class BookTrainerScreen extends StatelessWidget {
                                 );
                               }).toList(),
                               onChanged: (value) {
-                                controller.trainingDayForMonthSelected.value = true;
+                                controller.trainingDayForMonthSelected.value =
+                                    true;
                                 if (value != null) {
                                   controller.selectedTrainingDays.value = value;
                                 }
@@ -189,7 +181,7 @@ class BookTrainerScreen extends StatelessWidget {
                 SizedBox(height: 30),
                 ElevatedButton(
                   onPressed: () {},
-                  child: Text(formMytrainer ? 'Reschedule' :'Confirm Booking'),
+                  child: Text(formMytrainer ? 'Reschedule' : 'Confirm Booking'),
                 ),
               ],
             ),

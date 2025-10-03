@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
 
 class UserHomeController extends GetxController {
+  RxBool joinedHitProgram = false.obs;
+
   var progress = 0.65.obs; // 65% progress
 
   final List<Map<String, dynamic>> workoutList = [
@@ -58,16 +60,15 @@ class UserHomeController extends GetxController {
   void updateSliderIndex(int index) {
     currentSliderIndex.value = index;
   }
-  final List<String> imageUrls = [
-    'https://www.mlchc.org/sites/default/files/styles/max_650x650/public/2022-03/nutrition_image2.jpg', 
-    'https://www.weljii.com/wp-content/uploads/2024/06/apr-1.jpg'
-  ];
 
+  final List<String> imageUrls = [
+    'https://www.mlchc.org/sites/default/files/styles/max_650x650/public/2022-03/nutrition_image2.jpg',
+    'https://www.weljii.com/wp-content/uploads/2024/06/apr-1.jpg',
+  ];
 
   var selectedFeaturedWorkout = "All Workouts".obs;
 
   final filters = ["All Workouts", "Online", "In person", "Hybrid"];
-
 
   RxString duration = "4 weeks".obs;
   RxString type = "Fat Burn".obs;

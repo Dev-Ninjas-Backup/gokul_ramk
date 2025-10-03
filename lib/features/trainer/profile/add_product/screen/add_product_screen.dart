@@ -59,7 +59,7 @@ class AddProductScreen extends StatelessWidget {
             ),
             TextField(
               controller: controller.nameController,
-              decoration: InputDecoration(labelText: "Product Name"),
+              decoration: InputDecoration(),
             ),
             SizedBox(height: 10),
 
@@ -98,7 +98,7 @@ class AddProductScreen extends StatelessWidget {
             ),
             TextField(
               controller: controller.priceController,
-              decoration: InputDecoration(labelText: "Price"),
+              decoration: InputDecoration(),
               keyboardType: TextInputType.number,
             ),
             SizedBox(height: 10),
@@ -115,7 +115,7 @@ class AddProductScreen extends StatelessWidget {
             ),
             TextField(
               controller: controller.stockController,
-              decoration: InputDecoration(labelText: "Stock Quantity"),
+              decoration: InputDecoration(),
               keyboardType: TextInputType.number,
             ),
             SizedBox(height: 10),
@@ -132,7 +132,7 @@ class AddProductScreen extends StatelessWidget {
             ),
             TextField(
               controller: controller.descriptionController,
-              decoration: InputDecoration(labelText: "Description (Optional)"),
+              decoration: InputDecoration(),
               maxLines: 3,
             ),
             SizedBox(height: 10),
@@ -189,6 +189,7 @@ class AddProductScreen extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
+            SizedBox(height: 48),
           ],
         ),
       ),
