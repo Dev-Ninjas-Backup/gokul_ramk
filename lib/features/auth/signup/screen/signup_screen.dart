@@ -63,7 +63,7 @@ class SignupScreen extends StatelessWidget {
                   children: [
                     Text('Confirm Password'),
                     TextField(
-                      controller: controller.passwordController,
+                      controller: controller.confirmPasswordController,
                       decoration: InputDecoration(
                         hintText: '*******',
                         prefixIcon: Icon(
