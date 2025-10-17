@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/widgets/custom_app_bar_title.dart';
 import 'package:gokul_ramk/core/common/widgets/custom_label_textfield.dart';
-import 'package:gokul_ramk/core/common/widgets/show_easy_loading_error.dart';
+import 'package:gokul_ramk/core/services/auth_service.dart';
 import 'package:gokul_ramk/core/utils/constants/icon_path.dart';
 import 'package:gokul_ramk/features/auth/signup/controller/signup_controller.dart';
 import 'package:gokul_ramk/routes/app_routes.dart';
@@ -24,27 +24,25 @@ class SignupScreen extends StatelessWidget {
               spacing: 16,
               children: [
                 CustomAppBarTitle(title: 'Create Your Account'),
-                //Full Name
                 CustomLabelTextField(
                   label: 'Full Name',
                   icon: Icons.person_4_outlined,
                   hintText: 'Enter your full name',
                   editingController: controller.fullNameController,
                 ),
-                //Email
                 CustomLabelTextField(
                   label: 'Email or Phone',
                   icon: Icons.email_outlined,
                   hintText: 'Enter your email or phone',
                   editingController: controller.emailController,
                 ),
-                //Password
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   spacing: 3,
                   children: [
-                    Text('Password'),
+                    const Text('Password'),
                     TextField(
+                      obscureText: true,
                       controller: controller.passwordController,
                       decoration: InputDecoration(
                         hintText: '*******',
@@ -56,13 +54,13 @@ class SignupScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                //Confirm Password
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   spacing: 3,
                   children: [
-                    Text('Confirm Password'),
+                    const Text('Confirm Password'),
                     TextField(
+                      obscureText: true,
                       controller: controller.confirmPasswordController,
                       decoration: InputDecoration(
                         hintText: '*******',
@@ -74,18 +72,17 @@ class SignupScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                //Select Role
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   spacing: 3,
                   children: [
-                    Text(
+                    const Text(
                       "Your Role (If you're a trainer then, select trainer)",
                     ),
                     Container(
                       width: double.infinity,
                       height: 50,
-                      padding: EdgeInsets.symmetric(horizontal: 8),
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
                       decoration: BoxDecoration(
                         color: Colors.grey.shade200,
                         borderRadius: BorderRadius.circular(8),
@@ -96,7 +93,7 @@ class SignupScreen extends StatelessWidget {
                           value: controller.selectedRole.value,
                           underline: const SizedBox(),
                           hint: const Text("Select your role"),
-                          items: ['User', 'Trainer'].map((f) {
+                          items: ['USER', 'TRAINER'].map((f) {
                             return DropdownMenuItem<String>(
                               value: f,
                               child: Text(f[0].toUpperCase() + f.substring(1)),
@@ -110,34 +107,47 @@ class SignupScreen extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 20),
-                //create account button
                 ElevatedButton(
-                  onPressed: () {
-                    if (controller.selectedRole.value == 'User') {
-                      Get.toNamed(AppRoute.gettellUsAboutYourselfScreen1());
-                    } else if (controller.selectedRole.value == 'Trainer') {
-                      Get.toNamed(AppRoute.getTrainerTellAboutScreen());
-                    } else {
-                      showEasyLoadingError();
+                  onPressed: () async {
+                    if (controller.validateSignup()) {
+                      final success = await AuthService.signUp(
+                        fullName: controller.fullNameController.text,
+                        email: controller.emailController.text,
+                        phone: controller
+                            .emailController
+                            .text, 
+                        password: controller.passwordController.text,
+                        role: controller.selectedRole.value ?? "USER",
+                      );
+
+                      if (success) {
+                        if (controller.selectedRole.value == 'USER') {
+                          Get.toNamed(AppRoute.gettellUsAboutYourselfScreen1());
+                        } else if (controller.selectedRole.value == 'TRAINER') {
+                          Get.toNamed(AppRoute.getTrainerTellAboutScreen());
+                        }
+                      }
                     }
                   },
-                  child: Text('Create Account'),
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(double.infinity, 50),
+                  ),
+                  child: const Text('Create Account'),
                 ),
+
+
                 const SizedBox(height: 10),
-                // Divider
                 Row(
                   children: [
-                    Expanded(child: Divider()),
-                    Padding(
+                    const Expanded(child: Divider()),
+                    const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 10),
                       child: Text("or"),
                     ),
-                    Expanded(child: Divider()),
+                    const Expanded(child: Divider()),
                   ],
                 ),
                 const SizedBox(height: 10),
-
-                // Social Login
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   spacing: 16,
@@ -153,17 +163,15 @@ class SignupScreen extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 10),
-
-                // Signup
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Already have an account? "),
+                    const Text("Already have an account? "),
                     GestureDetector(
                       onTap: () {
                         Get.offAllNamed(AppRoute.getloginScreen());
                       },
-                      child: Text(
+                      child: const Text(
                         "Login",
                         style: TextStyle(
                           color: Colors.green,
@@ -182,5 +190,3 @@ class SignupScreen extends StatelessWidget {
     );
   }
 }
-
-
