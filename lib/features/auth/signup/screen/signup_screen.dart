@@ -113,14 +113,17 @@ class SignupScreen extends StatelessWidget {
                       final success = await AuthService.signUp(
                         fullName: controller.fullNameController.text,
                         email: controller.emailController.text,
-                        phone: controller
-                            .emailController
-                            .text, 
+                        // phone: controller
+                        //     .emailController
+                        //     .text, 
                         password: controller.passwordController.text,
                         role: controller.selectedRole.value ?? "USER",
                       );
 
                       if (success) {
+
+
+
                         if (controller.selectedRole.value == 'USER') {
                           Get.toNamed(AppRoute.gettellUsAboutYourselfScreen1());
                         } else if (controller.selectedRole.value == 'TRAINER') {

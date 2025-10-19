@@ -103,9 +103,9 @@ class CreatePasswordScreen extends StatelessWidget {
                     //Continue button
                     ElevatedButton(
                       onPressed: () {
-                        SuccessDialog.show();
+                        SuccessDialog.show(context);
                       },
-                      child: Text('Continue'),
+                      child: const Text('Continue'),
                     ),
                   ],
                 ),

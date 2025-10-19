@@ -1,14 +1,14 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:gokul_ramk/core/common/widgets/end_points.dart';
+import 'package:gokul_ramk/core/endpoint/end_points.dart';
 import 'package:http/http.dart' as http;
 
 class AuthService {
   static Future<bool> signUp({
     required String fullName,
     required String email,
-    required String phone,
+    //required String phone,
     required String password,
     required String role,
   }) async {
@@ -18,7 +18,7 @@ class AuthService {
       final body = {
         "fullname": fullName.trim(),
         "email": email.trim(),
-        "phone": phone.trim(),
+       // "phone": phone.trim(),
         "password": password.trim(),
         "role": role.trim().toUpperCase(),
       };
@@ -31,7 +31,8 @@ class AuthService {
 
       final decoded = jsonDecode(response.body);
 
-      if (response.statusCode == 201 && decoded["status"] == "success") {
+      if (response.statusCode == 201 || response.statusCode == 200) {
+      print(response.body);
         EasyLoading.showSuccess(decoded["message"] ?? "Signup successful");
         return true; 
       } else {
@@ -49,3 +50,4 @@ class AuthService {
     }
   }
 }
+
