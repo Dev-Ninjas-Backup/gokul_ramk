@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'package:get/get.dart';
+import 'package:gokul_ramk/core/services/local_service/shared_preferences_helper.dart';
 import 'package:gokul_ramk/features/auth/onboarding/screen/onboarding_screen.dart';
 
 class SplashController extends GetxController {
+SharedPreferencesHelperController pref=Get.put(SharedPreferencesHelperController());
   var currentIndex = 0.obs;
   Timer? _timer;
 
@@ -12,6 +14,8 @@ class SplashController extends GetxController {
     _startDotAnimation();
 
     Future.delayed(Duration(seconds: 3), () {
+
+
       Get.off(
         () => OnboardingScreen(),
         transition: Transition.fade,
