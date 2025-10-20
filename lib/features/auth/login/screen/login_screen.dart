@@ -120,8 +120,8 @@ class LoginScreen extends StatelessWidget {
 
                 // Login Button
                 ElevatedButton(
-                  onPressed: () {
-                    controller.authenticateUser();
+                  onPressed: () async {
+                    controller.loginMethod();
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.loginButtonColor,

@@ -1,53 +1,59 @@
-import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:get/get.dart';
 import 'package:gokul_ramk/core/endpoint/end_points.dart';
-import 'package:http/http.dart' as http;
+import 'package:gokul_ramk/core/services/network_service/network_client.dart';
+import 'package:gokul_ramk/routes/app_routes.dart';
 
-class AuthService {
-  static Future<bool> signUp({
+class AuthServiceController extends GetxController {
+  NetworkClient networkClient = NetworkClient(
+    onUnAuthorize: () {
+      Get.offAllNamed(AppRoute.loginScreen);
+    },
+  );
+  Future<NetworkResponse> signUp({
     required String fullName,
-    required String email,
-    //required String phone,
+    required Map<String, dynamic> emailOrPhone,
     required String password,
     required String role,
   }) async {
     try {
       EasyLoading.show(status: "Creating account...");
 
-      final body = {
+      final Map<String, dynamic> body = {
         "fullname": fullName.trim(),
-        "email": email.trim(),
-       // "phone": phone.trim(),
         "password": password.trim(),
         "role": role.trim().toUpperCase(),
       };
+      body.addAll(emailOrPhone);
 
-      final response = await http.post(
-        Uri.parse(Urls.signUp),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(body),
+      final NetworkResponse response = await networkClient.postRequest(
+        url: Urls.signUp,
+        body: body,
       );
 
-      final decoded = jsonDecode(response.body);
-
-      if (response.statusCode == 201 || response.statusCode == 200) {
-      print(response.body);
-        EasyLoading.showSuccess(decoded["message"] ?? "Signup successful");
-        return true; 
-      } else {
-        EasyLoading.showError(decoded["message"] ?? "Signup failed");
-        return false; 
-      }
+      return response;
     } catch (e) {
-      EasyLoading.showError("Error: $e");
-      if (kDebugMode) {
-        print("Signup Exception: $e");
-      }
-      return false;
+      throw Exception("Error: $e");
+    } finally {
+      EasyLoading.dismiss();
+    }
+  }
+
+  Future<NetworkResponse> login({
+    required Map<String, dynamic> emailOrphone,
+    required String password,
+  }) async {
+    try {
+      EasyLoading.show(status: "LogIn....");
+
+      final Map<String, dynamic> body = {"password": password};
+      body.addAll(emailOrphone);
+
+      return await networkClient.postRequest(url: Urls.logIn, body: body);
+    } catch (e) {
+      throw Exception("Error :$e");
     } finally {
       EasyLoading.dismiss();
     }
   }
 }
-

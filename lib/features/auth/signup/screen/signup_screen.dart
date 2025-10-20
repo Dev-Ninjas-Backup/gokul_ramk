@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/widgets/custom_app_bar_title.dart';
 import 'package:gokul_ramk/core/common/widgets/custom_label_textfield.dart';
-import 'package:gokul_ramk/core/services/auth_service.dart';
 import 'package:gokul_ramk/core/utils/constants/icon_path.dart';
 import 'package:gokul_ramk/features/auth/signup/controller/signup_controller.dart';
 import 'package:gokul_ramk/routes/app_routes.dart';
@@ -108,36 +107,13 @@ class SignupScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: () async {
-                    if (controller.validateSignup()) {
-                      final success = await AuthService.signUp(
-                        fullName: controller.fullNameController.text,
-                        email: controller.emailController.text,
-                        // phone: controller
-                        //     .emailController
-                        //     .text, 
-                        password: controller.passwordController.text,
-                        role: controller.selectedRole.value ?? "USER",
-                      );
+                  onPressed: controller.signUpMethod,
 
-                      if (success) {
-
-
-
-                        if (controller.selectedRole.value == 'USER') {
-                          Get.toNamed(AppRoute.gettellUsAboutYourselfScreen1());
-                        } else if (controller.selectedRole.value == 'TRAINER') {
-                          Get.toNamed(AppRoute.getTrainerTellAboutScreen());
-                        }
-                      }
-                    }
-                  },
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 50),
                   ),
                   child: const Text('Create Account'),
                 ),
-
 
                 const SizedBox(height: 10),
                 Row(
