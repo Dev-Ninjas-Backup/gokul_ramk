@@ -115,12 +115,8 @@ class LoginController extends GetxController {
         await sharedPreferencesHelperController.saveSelectedRole(role);
 
         if (role == "TRAINER") {
-                print("=====================================Trainer login success");
-
           Get.offAllNamed(AppRoute.trainerNavBarScreen);
         } else {
-                print("=====================================user login success");
-
           Get.offAllNamed(AppRoute.userNavBarScreen);
         }
 

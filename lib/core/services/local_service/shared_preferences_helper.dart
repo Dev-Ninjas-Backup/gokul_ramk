@@ -43,5 +43,4 @@ class SharedPreferencesHelperController extends GetxController {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getBool("success") ?? false;
   }
-
 }
