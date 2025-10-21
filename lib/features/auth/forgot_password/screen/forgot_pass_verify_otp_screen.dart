@@ -24,7 +24,7 @@ class ForgotPassVerifyOtpScreen extends StatelessWidget {
               const SizedBox(height: 60),
               Text('Code has been sent to +1 111 ******99'),
               const SizedBox(height: 60),
-              Pinput(controller: controller.pinController),
+              Pinput(controller: controller.pinController,length: 6,),
               const SizedBox(height: 60),
               Obx(
                 () => controller.enableResend.value
