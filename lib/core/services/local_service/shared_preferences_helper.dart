@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferencesHelperController extends GetxController {
   static const String _accessTokenKey = 'access_token';
   static const String _selectedRoleKey = 'role';
+  static const String _emailOrPhoneKey = 'email_or_phone';
 
   // Save access token
   Future<void> saveToken(String token) async {
@@ -18,6 +21,66 @@ class SharedPreferencesHelperController extends GetxController {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString(_accessTokenKey);
   }
+
+
+
+
+
+
+
+
+
+  // ✅ Save email or phone dynamically
+  Future<void> saveEmailOrPhone(String value) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // Check whether it's email or phone and wrap it in a map
+    Map<String, dynamic> data;
+    if (value.contains('@')) {
+      data = {'email': value};
+    } else {
+      data = {'phone': value};
+    }
+
+    String jsonString = jsonEncode(data);
+    await prefs.setString(_emailOrPhoneKey, jsonString);
+  }
+
+  //  saved email or phone as Map
+  Future<Map<String, dynamic>?> getEmailOrPhoneAsMap() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? jsonString = prefs.getString(_emailOrPhoneKey);
+    if (jsonString != null) {
+      return jsonDecode(jsonString);
+    }
+    return null;
+  }
+
+  //  Get only the value (email or phone)
+  Future<String?> getEmailOrPhoneValue() async {
+    final data = await getEmailOrPhoneAsMap();
+    if (data == null) return null;
+
+    if (data.containsKey('email')) return data['email'];
+    if (data.containsKey('phone')) return data['phone'];
+    return null;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   // Clear access token
   Future<void> clearAllData() async {

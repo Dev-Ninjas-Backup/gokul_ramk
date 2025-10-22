@@ -56,4 +56,43 @@ class AuthServiceController extends GetxController {
       EasyLoading.dismiss();
     }
   }
+
+  Future<NetworkResponse> requestForgotPassword({required String email}) async {
+    try {
+      return await networkClient.postRequest(
+        url: Urls.forgotPassword,
+        body: {'email': email.trim()},
+      );
+    } catch (e) {
+      throw Exception("Error :$e");
+    }
+  }
+
+  Future<NetworkResponse> requestVerifyOtp({
+    required String email,
+    required String otp,
+  }) async {
+    try {
+      return await networkClient.postRequest(
+        url: Urls.verifyotp,
+        body: {'email': email.trim(), 'otp': otp.trim()},
+      );
+    } catch (e) {
+      throw Exception("Error : $e");
+    }
+  }
+
+  Future<NetworkResponse> requestResetPassword({
+    required String email,
+    required String newPassword,
+  }) async {
+    try {
+      return networkClient.postRequest(
+        url: Urls.resetPassword,
+        body: {'email': email.trim(), 'new_password': newPassword.trim()},
+      );
+    } catch (e) {
+      throw Exception("Error : $e");
+    }
+  }
 }

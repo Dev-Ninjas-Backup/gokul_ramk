@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/widgets/show_easy_loading_error.dart';
 import 'package:gokul_ramk/core/services/auth_service.dart';
+import 'package:gokul_ramk/core/services/local_service/shared_preferences_helper.dart';
 import 'package:gokul_ramk/core/services/network_service/network_client.dart';
 import 'package:gokul_ramk/routes/app_routes.dart';
 
 class SignupController extends GetxController {
   final authServiceController = Get.put(AuthServiceController());
   final TextEditingController fullNameController = TextEditingController();
+  SharedPreferencesHelperController sharedPreferencesHelperController = Get.put(
+    SharedPreferencesHelperController(),
+  );
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
@@ -85,6 +89,11 @@ class SignupController extends GetxController {
         role: selectedRole.value!,
       );
       if (response.isSuccess) {
+        sharedPreferencesHelperController.saveEmailOrPhone(
+          emailOrPhone.containsKey("email")
+              ? emailOrPhone["email"]
+              : emailOrPhone["phone"],
+        );
         Get.toNamed(AppRoute.loginScreen);
       } else {
         showEasyLoadingError(message: "Signup failed");
