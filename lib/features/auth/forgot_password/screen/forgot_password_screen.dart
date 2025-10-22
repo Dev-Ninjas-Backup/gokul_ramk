@@ -94,7 +94,9 @@ class ForgotPasswordScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 ElevatedButton(
-                  onPressed: controller.forgotPasswordMethod,
+                  onPressed: () {
+                    controller.forgotPasswordMethod();
+                  },
                   child: Text('Continue'),
                 ),
               ],
