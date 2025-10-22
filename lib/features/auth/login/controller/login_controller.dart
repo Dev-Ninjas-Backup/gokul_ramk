@@ -103,6 +103,7 @@ class LoginController extends GetxController {
       emailOrPhone = {"phone": emailController.text};
     }
     if (validateLogin()) {
+    
       final NetworkResponse response = await authServiceController.login(
         emailOrphone: emailOrPhone,
         password: passwordController.text,

@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/widgets/custom_app_bar_title.dart';
 import 'package:gokul_ramk/core/utils/constants/icon_path.dart';
 import 'package:gokul_ramk/features/auth/forgot_password/controller/forgot_password_controller.dart';
-import 'package:gokul_ramk/features/auth/forgot_password/widget/success_dialog.dart';
 
 class CreatePasswordScreen extends StatelessWidget {
   CreatePasswordScreen({super.key});
@@ -103,7 +102,8 @@ class CreatePasswordScreen extends StatelessWidget {
                     //Continue button
                     ElevatedButton(
                       onPressed: () {
-                        SuccessDialog.show(context);
+                      controller.resetPasswordMethod(context);
+                       
                       },
                       child: const Text('Continue'),
                     ),

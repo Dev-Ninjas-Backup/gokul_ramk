@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/widgets/custom_app_bar_title.dart';
 import 'package:gokul_ramk/features/auth/forgot_password/controller/forgot_password_controller.dart';
-import 'package:gokul_ramk/routes/app_routes.dart';
 import 'package:pinput/pinput.dart';
 
 class ForgotPassVerifyOtpScreen extends StatelessWidget {
@@ -53,7 +52,7 @@ class ForgotPassVerifyOtpScreen extends StatelessWidget {
               const SizedBox(height: 120),
               ElevatedButton(
                 onPressed: () {
-                  Get.toNamed(AppRoute.createNewPasswordScreen);
+                 controller.verityOtpdMethod();
                 },
                 child: Text('Verify'),
               ),

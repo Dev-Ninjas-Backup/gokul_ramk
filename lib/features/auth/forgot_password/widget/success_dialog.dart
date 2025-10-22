@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gokul_ramk/core/utils/constants/colors.dart';
 
 class SuccessDialog {
-  static void show(BuildContext context) {
+  static  show(BuildContext context) {
     showDialog(
       context: context, 
       barrierDismissible: false, 
