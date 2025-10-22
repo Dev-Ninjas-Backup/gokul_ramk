@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/widgets/custom_app_bar_title.dart';
 import 'package:gokul_ramk/core/utils/constants/imagepath.dart';
 import 'package:gokul_ramk/features/auth/forgot_password/controller/forgot_password_controller.dart';
-import 'package:gokul_ramk/routes/app_routes.dart';
 
 class ForgotPasswordScreen extends StatelessWidget {
   ForgotPasswordScreen({super.key});
@@ -95,9 +94,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 ElevatedButton(
-                  onPressed: () {
-                    Get.toNamed(AppRoute.forgotPassVerifyOtpScreen);
-                  },
+                  onPressed: controller.forgotPasswordMethod,
                   child: Text('Continue'),
                 ),
               ],

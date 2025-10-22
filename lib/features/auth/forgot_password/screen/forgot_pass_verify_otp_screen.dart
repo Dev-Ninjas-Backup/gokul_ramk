@@ -22,9 +22,13 @@ class ForgotPassVerifyOtpScreen extends StatelessWidget {
             children: [
               CustomAppBarTitle(title: 'Forgot Password'),
               const SizedBox(height: 60),
-              Text('Code has been sent to +1 111 ******99'),
+              Obx(
+                () => controller.smsSelected.value
+                    ? Text('Code has been sent to *****.gmail.com')
+                    : Text('Code has been sent to +1 111 ******99'),
+              ),
               const SizedBox(height: 60),
-              Pinput(controller: controller.pinController,length: 6,),
+              Pinput(controller: controller.pinController, length: 6),
               const SizedBox(height: 60),
               Obx(
                 () => controller.enableResend.value
@@ -38,8 +42,11 @@ class ForgotPassVerifyOtpScreen extends StatelessWidget {
               ),
               Obx(
                 () => controller.enableResend.value == false
-                    ? Text(
-                        'Resend code in ${controller.secondsRemaining.value} s',
+                    ? GestureDetector(
+                        onTap: controller.forgotPasswordMethod,
+                        child: Text(
+                          'Resend code in ${controller.secondsRemaining.value} s',
+                        ),
                       )
                     : SizedBox.shrink(),
               ),
