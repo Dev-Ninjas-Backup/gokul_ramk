@@ -39,6 +39,37 @@ class AuthServiceController extends GetxController {
     }
   }
 
+
+//send otp
+  Future<NetworkResponse> requestSendotp({required String email}) async {
+    try {
+      return await networkClient.postRequest(
+        url: Urls.sendOtp,
+        body: {'email': email.trim()},
+      );
+    } catch (e) {
+      throw Exception("Error :$e");
+    }
+  }
+
+
+
+
+ Future<NetworkResponse> requestVerifyEmail({
+    required String email,
+    required String otp,
+  }) async {
+    try {
+      return await networkClient.postRequest(
+        url: Urls.verifyEmail,
+        body: {'email': email.trim(), 'otp': otp.trim()},
+      );
+    } catch (e) {
+      throw Exception("Error : $e");
+    }
+  }
+
+
   Future<NetworkResponse> login({
     required Map<String, dynamic> emailOrphone,
     required String password,

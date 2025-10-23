@@ -2,6 +2,7 @@ import 'package:get/get_navigation/src/routes/get_route.dart';
 
 import 'package:gokul_ramk/features/auth/forgot_password/screen/create_password_screen.dart';
 import 'package:gokul_ramk/features/auth/signup/more_trainer_information/screen/tell_about_trainer_screen.dart';
+import 'package:gokul_ramk/features/auth/signup/screen/email_verify_otp_screen.dart';
 import 'package:gokul_ramk/features/trainer/bookings/booking_details/screen/booking_details_screen.dart';
 
 import 'package:gokul_ramk/features/trainer/bottom_navbar/screen/custom_navbar.dart';
@@ -61,6 +62,7 @@ class AppRoute {
       '/signup/tellUsAboutYourTrainingScreen';
   static String consentAgreementScreen = '/signUp/consentAgreementScreen';
   static String trainerTellAboutScreen = '/signUp/trainerTellAboutScreen';
+  static String emailVerificationScreen = '/signup/emailVerificationScreen';
 
   //User
   static String userNavBarScreen = "/user/userNavBarScreen";
@@ -97,6 +99,7 @@ class AppRoute {
   static String getOnboardingScreen() => onboardingScreen;
   static String getloginScreen() => loginScreen;
   static String getsignUpScreen() => signUpScreen;
+  static String getemailVerificationScreen() => emailVerificationScreen;
   static String getforgotPasswordScreen() => forgotPasswordScreen;
   static String getforgotPassVerifyOtpScreen() => forgotPassVerifyOtpScreen;
 
@@ -143,6 +146,7 @@ class AppRoute {
     GetPage(name: onboardingScreen, page: () => OnboardingScreen()),
     GetPage(name: loginScreen, page: () => LoginScreen()),
     GetPage(name: signUpScreen, page: () => SignupScreen()),
+    GetPage(name: emailVerificationScreen, page: () => EmailVerifyOtpScreen()),
     GetPage(name: forgotPasswordScreen, page: () => ForgotPasswordScreen()),
     GetPage(
       name: forgotPassVerifyOtpScreen,

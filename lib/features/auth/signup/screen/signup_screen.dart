@@ -107,7 +107,7 @@ class SignupScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: controller.signUpMethod,
+                  onPressed: controller.otpRequestMethod,
 
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 50),
