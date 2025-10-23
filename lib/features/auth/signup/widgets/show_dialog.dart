@@ -64,10 +64,10 @@ class SuccessDialogEmail {
                   child: ElevatedButton(
                     onPressed: () {
                     EasyLoading.show();
-                      Get.toNamed(AppRoute.loginScreen);
+                      Get.offAllNamed(AppRoute.loginScreen);
                     },
                     child: const Text(
-                      "SignUp",
+                      "Go to logIn",
                       style: TextStyle(fontSize: 16, color: Colors.white),
                     ),
                   ),

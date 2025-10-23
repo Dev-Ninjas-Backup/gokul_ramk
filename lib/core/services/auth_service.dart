@@ -50,13 +50,16 @@ class AuthServiceController extends GetxController {
     } catch (e) {
       throw Exception("Error :$e");
     }
+    finally {
+      EasyLoading.dismiss();
+    }
   }
 
 
 
 
  Future<NetworkResponse> requestVerifyEmail({
-    required Map<String,dynamic> email,
+    required String email,
     required String otp,
   }) async {
     try {
@@ -67,6 +70,10 @@ class AuthServiceController extends GetxController {
     } catch (e) {
       throw Exception("Error : $e");
     }
+    finally{
+    
+    
+    EasyLoading.dismiss();}
   }
 
 
@@ -97,6 +104,10 @@ class AuthServiceController extends GetxController {
     } catch (e) {
       throw Exception("Error :$e");
     }
+    finally {
+      EasyLoading.dismiss();
+    }
+    
   }
 
   Future<NetworkResponse> requestVerifyOtp({
@@ -111,6 +122,9 @@ class AuthServiceController extends GetxController {
     } catch (e) {
       throw Exception("Error : $e");
     }
+    finally {
+      EasyLoading.dismiss();
+    }
   }
 
   Future<NetworkResponse> requestResetPassword({
@@ -124,6 +138,9 @@ class AuthServiceController extends GetxController {
       );
     } catch (e) {
       throw Exception("Error : $e");
+    }
+    finally {
+      EasyLoading.dismiss();
     }
   }
 }

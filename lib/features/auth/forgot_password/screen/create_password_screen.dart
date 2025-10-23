@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/widgets/custom_app_bar_title.dart';
 import 'package:gokul_ramk/core/utils/constants/icon_path.dart';
@@ -102,6 +103,7 @@ class CreatePasswordScreen extends StatelessWidget {
                     //Continue button
                     ElevatedButton(
                       onPressed: () {
+                      EasyLoading.show();
                       controller.resetPasswordMethod(context);
                        
                       },

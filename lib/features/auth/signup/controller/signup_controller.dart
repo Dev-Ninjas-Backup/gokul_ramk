@@ -103,14 +103,6 @@ class SignupController extends GetxController {
     return true;
   }
 
-
-
-
-
-
-
-
-
   Future<void> otpResendRequestMethod() async {
     Map<String, dynamic> emailOrPhone = {};
     if (emailController.text.contains("@")) {
@@ -119,7 +111,8 @@ class SignupController extends GetxController {
       emailOrPhone = {"phone": emailController.text};
     }
     if (validateSignup()) {
-      final NetworkResponse response = await authServiceController.requestRsendotp(email: emailController.text);
+      final NetworkResponse response = await authServiceController
+          .requestRsendotp(email: emailController.text);
       if (response.isSuccess) {
         sharedPreferencesHelperController.saveEmailOrPhone(
           emailOrPhone.containsKey("email")
@@ -130,26 +123,10 @@ class SignupController extends GetxController {
       } else {
         showEasyLoadingError(message: "Signup failed");
       }
+      
     }
+    
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   // Future<void> otpRequestMethod() async {
   //   Map<String, dynamic> emailOrPhone = {};
@@ -175,7 +152,7 @@ class SignupController extends GetxController {
   // }
 
   Future<void> verifyEmailMethod(BuildContext context) async {
-   Map<String, dynamic> emailOrPhone = {};
+    Map<String, dynamic> emailOrPhone = {};
     if (emailController.text.contains("@")) {
       emailOrPhone = {"email": emailController.text};
     } else {
@@ -183,18 +160,15 @@ class SignupController extends GetxController {
     }
     if (validateSignup()) {
       final NetworkResponse response = await authServiceController
-          .requestVerifyEmail(
-            email: emailOrPhone,
-            otp: pinController.text,
-          );
-      if (response.isSuccess==true&& response.statusCode==200) {
-
-        
+          .requestVerifyEmail(email: emailOrPhone["email"], otp: pinController.text);
+      if (response.isSuccess == true && response.statusCode == 200|| response.statusCode==201) {
+        // ignore: use_build_context_synchronously
         SuccessDialogEmail.show(context);
       } else {
         showEasyLoadingError(message: "Verification failed");
       }
     }
+    
   }
 
   Future<void> signUpMethod() async {
@@ -211,7 +185,8 @@ class SignupController extends GetxController {
         password: passwordController.text,
         role: selectedRole.value!,
       );
-      if (response.isSuccess==true && response.statusCode==200) {
+      if (response.isSuccess == true && response.statusCode == 200 ||
+          response.statusCode == 201) {
         sharedPreferencesHelperController.saveEmailOrPhone(
           emailOrPhone.containsKey("email")
               ? emailOrPhone["email"]
