@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -135,7 +137,7 @@ class ForgotPasswordController extends GetxController {
           newPassword: newPassword,
         );
 
-        if (response.isSuccess && response.statusCode==200) {
+        if (response.isSuccess && response.statusCode==200||response.statusCode==201) {
           EasyLoading.showSuccess("${response.responseData!['message']}");
           await SuccessDialog.show(context);
         } else if(response.statusCode==400)

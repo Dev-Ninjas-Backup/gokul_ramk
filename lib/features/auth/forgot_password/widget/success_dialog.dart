@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:gokul_ramk/core/utils/constants/colors.dart';
+import 'package:gokul_ramk/routes/app_routes.dart';
 
 class SuccessDialog {
   static  show(BuildContext context) {
@@ -59,10 +61,10 @@ class SuccessDialog {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.of(context).pop(); 
+                     Get.offAllNamed(AppRoute.loginScreen); 
                     },
                     child: const Text(
-                      "Go to Homepage",
+                      "Go to logIn",
                       style: TextStyle(fontSize: 16, color: Colors.white),
                     ),
                   ),
