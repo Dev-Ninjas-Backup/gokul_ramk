@@ -1,17 +1,46 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/widgets/show_easy_loading_error.dart';
 import 'package:gokul_ramk/core/services/auth_service.dart';
 import 'package:gokul_ramk/core/services/local_service/shared_preferences_helper.dart';
 import 'package:gokul_ramk/core/services/network_service/network_client.dart';
+import 'package:gokul_ramk/features/auth/signup/widgets/show_dialog.dart';
 import 'package:gokul_ramk/routes/app_routes.dart';
 
 class SignupController extends GetxController {
   final authServiceController = Get.put(AuthServiceController());
+  final SharedPreferencesHelperController sharedPreferencesHelperController =
+      Get.put(SharedPreferencesHelperController());
+
+  RxBool smsSelected = false.obs;
+  final pinController = TextEditingController();
+
+  var secondsRemaining = 30.obs; // countdown starts from 30 seconds
+  var enableResend = true.obs;
+  Timer? timer;
+  void resendCode() {
+    startTimer();
+  }
+
+  void startTimer() {
+    enableResend.value = false;
+    secondsRemaining.value = 60;
+
+    timer?.cancel();
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (secondsRemaining.value > 0) {
+        secondsRemaining.value--;
+      } else {
+        enableResend.value = true;
+        timer.cancel();
+      }
+    });
+  }
+
   final TextEditingController fullNameController = TextEditingController();
-  SharedPreferencesHelperController sharedPreferencesHelperController = Get.put(
-    SharedPreferencesHelperController(),
-  );
+
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
@@ -72,6 +101,100 @@ class SignupController extends GetxController {
     }
 
     return true;
+  }
+
+
+
+
+
+
+
+
+
+  Future<void> otpRequestMethod() async {
+    Map<String, dynamic> emailOrPhone = {};
+    if (emailController.text.contains("@")) {
+      emailOrPhone = {"email": emailController.text};
+    } else {
+      emailOrPhone = {"phone": emailController.text};
+    }
+    if (validateSignup()) {
+      final NetworkResponse response = await authServiceController.requestSendotp(email: emailController.text);
+      if (response.isSuccess) {
+        sharedPreferencesHelperController.saveEmailOrPhone(
+          emailOrPhone.containsKey("email")
+              ? emailOrPhone["email"]
+              : emailOrPhone["phone"],
+        );
+        Get.toNamed(AppRoute.emailVerificationScreen);
+      } else {
+        showEasyLoadingError(message: "Signup failed");
+      }
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // Future<void> otpRequestMethod() async {
+  //   Map<String, dynamic> emailOrPhone = {};
+  //   if (emailController.text.contains("@")) {
+  //     emailOrPhone = {"email": emailController.text};
+  //   } else {
+  //     emailOrPhone = {"phone": emailController.text};
+  //   }
+  //   if (validateSignup()) {
+  //     final NetworkResponse response = await authServiceController
+  //         .requestSendotp(email: emailController.text);
+  //     if (response.isSuccess==true && response.statusCode==200) {
+  //       sharedPreferencesHelperController.saveEmailOrPhone(
+  //         emailOrPhone.containsKey("email")
+  //             ? emailOrPhone["email"]
+  //             : emailOrPhone["phone"],
+  //       );
+  //       Get.toNamed(AppRoute.emailVerificationScreen);
+  //     } else {
+  //       showEasyLoadingError(message: "Request Failed");
+  //     }
+  //   }
+  // }
+
+  Future<void> verifyEmailMethod(BuildContext context) async {
+   Map<String, dynamic> emailOrPhone = {};
+    if (emailController.text.contains("@")) {
+      emailOrPhone = {"email": emailController.text};
+    } else {
+      emailOrPhone = {"phone": emailController.text};
+    }
+    if (validateSignup()) {
+      final NetworkResponse response = await authServiceController
+          .requestVerifyEmail(
+            email: emailOrPhone.toString(),
+            otp: pinController.text,
+          );
+      if (response.isSuccess==true&& response.statusCode==200) {
+
+        
+        SuccessDialogEmail.show(context);
+      } else {
+        showEasyLoadingError(message: "Verification failed");
+      }
+    }
   }
 
   Future<void> signUpMethod() async {
