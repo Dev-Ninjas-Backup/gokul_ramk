@@ -63,7 +63,6 @@ class SuccessDialogEmail {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                    EasyLoading.show();
                       Get.offAllNamed(AppRoute.loginScreen);
                     },
                     child: const Text(
