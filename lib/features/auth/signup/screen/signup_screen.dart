@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/widgets/custom_app_bar_title.dart';
 import 'package:gokul_ramk/core/common/widgets/custom_label_textfield.dart';
@@ -107,7 +108,10 @@ class SignupScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: controller.otpRequestMethod,
+                  onPressed: (){
+                  EasyLoading.show();
+                  controller.signUpMethod();
+                  },
 
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 50),

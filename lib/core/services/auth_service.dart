@@ -41,11 +41,11 @@ class AuthServiceController extends GetxController {
 
 
 //send otp
-  Future<NetworkResponse> requestSendotp({required String email}) async {
+  Future<NetworkResponse> requestRsendotp({required String email}) async {
     try {
       return await networkClient.postRequest(
-        url: Urls.sendOtp,
-        body: {'email': email.trim()},
+        url: Urls.resendOtp,
+        body: {'email': email},
       );
     } catch (e) {
       throw Exception("Error :$e");
@@ -56,13 +56,13 @@ class AuthServiceController extends GetxController {
 
 
  Future<NetworkResponse> requestVerifyEmail({
-    required String email,
+    required Map<String,dynamic> email,
     required String otp,
   }) async {
     try {
       return await networkClient.postRequest(
         url: Urls.verifyEmail,
-        body: {'email': email.trim(), 'otp': otp.trim()},
+        body: {'email': email, 'otp': otp},
       );
     } catch (e) {
       throw Exception("Error : $e");
@@ -92,7 +92,7 @@ class AuthServiceController extends GetxController {
     try {
       return await networkClient.postRequest(
         url: Urls.forgotPassword,
-        body: {'email': email.trim()},
+        body: {'email': email},
       );
     } catch (e) {
       throw Exception("Error :$e");
@@ -106,7 +106,7 @@ class AuthServiceController extends GetxController {
     try {
       return await networkClient.postRequest(
         url: Urls.verifyotp,
-        body: {'email': email.trim(), 'otp': otp.trim()},
+        body: {'email': email, 'otp': otp},
       );
     } catch (e) {
       throw Exception("Error : $e");
@@ -120,7 +120,7 @@ class AuthServiceController extends GetxController {
     try {
       return networkClient.postRequest(
         url: Urls.resetPassword,
-        body: {'email': email.trim(), 'new_password': newPassword.trim()},
+        body: {'email': email, 'new_password': newPassword},
       );
     } catch (e) {
       throw Exception("Error : $e");
