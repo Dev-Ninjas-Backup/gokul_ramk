@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/utils/constants/colors.dart';
-import 'package:gokul_ramk/features/auth/signup/controller/signup_controller.dart';
+import 'package:gokul_ramk/routes/app_routes.dart';
 
 class SuccessDialogEmail {
   static  show(BuildContext context) {
-  SignupController controller=Get.put(SignupController());
+  // SignupController controller=Get.put(SignupController());
     showDialog(
       context: context, 
       barrierDismissible: false, 
@@ -62,7 +63,8 @@ class SuccessDialogEmail {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      controller.signUpMethod();
+                    EasyLoading.show();
+                      Get.toNamed(AppRoute.loginScreen);
                     },
                     child: const Text(
                       "SignUp",

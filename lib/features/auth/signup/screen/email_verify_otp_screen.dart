@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/widgets/custom_app_bar_title.dart';
 import 'package:gokul_ramk/features/auth/signup/controller/signup_controller.dart';
@@ -40,7 +41,9 @@ class EmailVerifyOtpScreen extends StatelessWidget {
               Obx(
                 () => controller.enableResend.value == false
                     ? GestureDetector(
-                           onTap: controller.otpRequestMethod,
+                           onTap: (){
+                           EasyLoading.show();
+                           controller.otpResendRequestMethod();},
                         child: Text(
                           'Resend code in ${controller.secondsRemaining.value} s',
                         ),
@@ -50,6 +53,7 @@ class EmailVerifyOtpScreen extends StatelessWidget {
               const SizedBox(height: 120),
               ElevatedButton(
                 onPressed: () {
+                EasyLoading.show();
                      controller.verifyEmailMethod(context);
                 },
                 child: Text('Verify'),
