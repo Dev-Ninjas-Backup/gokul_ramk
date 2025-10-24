@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import '../controller/add_product_controller.dart';
@@ -24,7 +25,7 @@ class ProductImagesSection extends StatelessWidget {
           child: Obx(() {
             if (controller.selectedImages.isNotEmpty) {
               return Image.file(
-                controller.selectedImages[controller.index.value],
+                File(controller.selectedImagePath.value),
                 fit: BoxFit.cover,
                 width: double.infinity,
               );
@@ -48,7 +49,14 @@ class ProductImagesSection extends StatelessWidget {
               itemBuilder: (context, index) {
                 if (index == controller.selectedImages.length) {
                   return GestureDetector(
-                    onTap: () => controller.pickImage(ImageSource.gallery),
+                    onTap: () async {
+                      if (controller.selectedImages.length < 5) {
+                        await controller.pickImage(ImageSource.gallery);
+                        controller.setImageInitial();
+                      } else {
+                        EasyLoading.showInfo('Not more than 5');
+                      }
+                    },
                     child: Container(
                       width: 80,
                       height: 80,
@@ -71,7 +79,7 @@ class ProductImagesSection extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        controller.index.value = index;
+                        controller.selectedImagePath.value = imageFile.path;
                       },
                       child: Container(
                         height: 80,
