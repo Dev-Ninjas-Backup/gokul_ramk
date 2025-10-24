@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
-import 'package:gokul_ramk/features/trainer/profile/product_details/screen/product_details_screen.dart';
-
+import 'package:gokul_ramk/core/common/widgets/custom_app_bar_title.dart';
+import 'package:gokul_ramk/features/trainer/profile/add_product/widgets/ingredient_input_widget.dart';
+import 'package:gokul_ramk/features/trainer/profile/add_product/widgets/key_benefit_input_widget.dart';
 import '../controller/add_product_controller.dart';
 import '../widgets/product_images_widget.dart';
 
@@ -14,27 +15,15 @@ class AddProductScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Get.back(),
-        ),
-        title: Text(
-          "Add New Product",
-          style: getTextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-            color: Colors.black,
-          ),
-        ),
-        backgroundColor: Colors.white,
-        elevation: 0,
-      ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(height: 35),
+            CustomAppBarTitle(title: 'Add New Product'),
+            const SizedBox(height: 20),
+
             /// Product Images Section
             ProductImagesSection(controller: controller),
 
@@ -106,6 +95,32 @@ class AddProductScreen extends StatelessWidget {
             Padding(
               padding: EdgeInsets.all(8),
               child: Text(
+                "Ingredients",
+                style: getTextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey,
+                ),
+              ),
+            ),
+            IngredientsInputWidget(),
+
+            SizedBox(height: 10),
+            Padding(
+              padding: EdgeInsets.all(8),
+              child: Text(
+                "Key Benefits",
+                style: getTextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey,
+                ),
+              ),
+            ),
+            KeyBenefitsInputWidget(),
+            SizedBox(height: 10),
+
+            Padding(
+              padding: EdgeInsets.all(8),
+              child: Text(
                 "Stock Quantity",
                 style: getTextStyle(
                   fontWeight: FontWeight.bold,
@@ -135,29 +150,6 @@ class AddProductScreen extends StatelessWidget {
               decoration: InputDecoration(),
               maxLines: 3,
             ),
-            SizedBox(height: 10),
-
-            Padding(
-              padding: EdgeInsets.all(8),
-              child: Text(
-                "Delivery Info",
-                style: getTextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.grey,
-                ),
-              ),
-            ),
-            Obx(
-              () => DropdownButtonFormField<String>(
-                // ignore: deprecated_member_use
-                value: controller.selectedDelivery.value,
-                items: controller.deliveryOptions
-                    .map((d) => DropdownMenuItem(value: d, child: Text(d)))
-                    .toList(),
-                onChanged: (value) =>
-                    controller.selectedDelivery.value = value!,
-              ),
-            ),
 
             SizedBox(height: 50),
 
@@ -165,8 +157,8 @@ class AddProductScreen extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                  Get.to(() => ProductDetailsScreen());
+                onPressed: () async{
+                  await controller.postCreateProduct();
                 },
                 child: Text(
                   "Submit for Review",
