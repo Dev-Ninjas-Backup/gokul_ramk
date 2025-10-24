@@ -30,7 +30,7 @@ class PostScreen extends StatelessWidget {
                     const SizedBox(width: 8),
                     Expanded(
                       child: GestureDetector(
-                        onDoubleTap: () => Get.to(TrainerCreatePostScreen()),
+                        onTap: () => Get.to(TrainerCreatePostScreen()),
                         child: Container(
                           padding: EdgeInsets.all(8),
                           decoration: BoxDecoration(

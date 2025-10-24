@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:gokul_ramk/core/services/local_service/shared_preferences_helper.dart';
 import 'package:gokul_ramk/features/trainer/profile/trainer_profile/widgets/about_me_widget.dart';
 import 'package:gokul_ramk/features/trainer/profile/trainer_profile/widgets/my_product_widget.dart';
 import 'package:gokul_ramk/features/trainer/profile/trainer_profile/widgets/programs_offer_widgets.dart';
 import 'package:gokul_ramk/features/trainer/profile/trainer_profile/widgets/sales_balance_widget.dart';
 import 'package:gokul_ramk/features/trainer/profile/trainer_profile/widgets/trainer_profile_card_widget.dart';
+import 'package:gokul_ramk/routes/app_routes.dart';
 
 class TrainerProfileScreen extends StatelessWidget {
   const TrainerProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+  final SharedPreferencesHelperController sharedPreferencesHelperController = Get.put(SharedPreferencesHelperController());
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -27,6 +32,14 @@ class TrainerProfileScreen extends StatelessWidget {
                 MyProductsWidget(),
                 SizedBox(height: 12),
                 SalesAndBalanceWidget(),
+                const SizedBox(height: 30,),
+                ElevatedButton(onPressed: (){
+                sharedPreferencesHelperController.clearAllData();
+                Get.offAllNamed(AppRoute.loginScreen);
+                },
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                 child: Text('Logout')),
+                const SizedBox(height: 20,),
               ],
             ),
           ),
