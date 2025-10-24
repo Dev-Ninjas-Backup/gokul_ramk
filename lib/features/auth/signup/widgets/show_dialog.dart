@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/utils/constants/colors.dart';
 import 'package:gokul_ramk/routes/app_routes.dart';

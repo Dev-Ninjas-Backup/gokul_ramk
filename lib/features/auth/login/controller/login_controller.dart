@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/widgets/show_easy_loading_error.dart';
-import 'package:gokul_ramk/core/services/auth_service.dart';
+import 'package:gokul_ramk/features/auth/sservice/auth_service.dart';
 import 'package:gokul_ramk/core/services/local_service/shared_preferences_helper.dart';
 import 'package:gokul_ramk/core/services/network_service/network_client.dart';
 import 'package:gokul_ramk/routes/app_routes.dart';

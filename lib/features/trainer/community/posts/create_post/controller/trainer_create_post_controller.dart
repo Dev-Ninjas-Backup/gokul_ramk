@@ -1,6 +1,8 @@
 import 'dart:io';
-import 'package:flutter/foundation.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:gokul_ramk/core/services/network_service/network_client.dart';
+import 'package:gokul_ramk/features/trainer/community/posts/service/post_service.dart';
 import 'package:image_picker/image_picker.dart';
 
 class TrainerCreatePostController extends GetxController {
@@ -10,31 +12,62 @@ class TrainerCreatePostController extends GetxController {
 
   final ImagePicker _picker = ImagePicker();
 
+  /// Pick an image from the gallery
   Future<void> pickImage() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
-      pickedImage.value = File(image.path);
+    try {
+      final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+      if (image != null) {
+        pickedImage.value = File(image.path);
+      }
+    } catch (e) {
+      Get.snackbar("Error", "Failed to pick image: $e");
     }
   }
 
+  /// Remove selected image
   void removeImage() {
     pickedImage.value = null;
   }
 
-  void submitPost() {
+  /// Submit post to API
+  Future<void> submitPost() async {
+    // Validate inputs
     if (titleController.value.isEmpty || contentController.value.isEmpty) {
-      Get.snackbar("Error", "Please fill all fields");
+      EasyLoading.showError("Please fill all fields");
+      return;
+    }
+    if (pickedImage.value == null) {
+      EasyLoading.showError("Please select an image");
       return;
     }
 
-    // For now just print — integrate with backend later
-    if (kDebugMode) {
-      print("Title: ${titleController.value}");
-      print("Content: ${contentController.value}");
-      print("Image: ${pickedImage.value?.path}");
-    }
-    
+    try {
+      EasyLoading.show(status: "Uploading...");
 
-    Get.snackbar("Success", "Post Created Successfully");
+      // Call API to create post (multipart)
+      final NetworkResponse response = await createPost(
+        title: titleController.value,
+        content: contentController.value,
+        imageFile: pickedImage.value!,
+      );
+
+      if (response.isSuccess &&
+          (response.statusCode == 200 || response.statusCode == 201)) {
+        EasyLoading.showSuccess("Post created successfully!");
+        // Clear form
+        titleController.value = '';
+        contentController.value = '';
+        pickedImage.value = null;
+      } else {
+        EasyLoading.showError(
+          "Failed to create post: ${response.responseData?['message'] ?? 'Unknown error'}",
+        );
+      }
+    } catch (e) {
+      EasyLoading.dismiss();
+      Get.snackbar("Error", "Error creating post: $e");
+    } finally {
+      EasyLoading.dismiss();
+    }
   }
 }
