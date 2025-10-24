@@ -9,5 +9,12 @@ class Urls {
   static const String forgotPassword = '$baseUrl/auth/forgot-password';
   static const String verifyotp = '$baseUrl/auth/verify-otp';
   static const String resetPassword = '$baseUrl/auth/reset-password';
+
   static const String createNewProductUrl = '$baseUrl/product/create-product';
+
+
+
+  //trainer post
+  static const String trainerPost='$baseUrl/post';
+
 }

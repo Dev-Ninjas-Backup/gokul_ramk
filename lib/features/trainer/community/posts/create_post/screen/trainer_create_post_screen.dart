@@ -83,7 +83,10 @@ class TrainerCreatePostScreen extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
-                onPressed: controller.submitPost,
+                onPressed: (){controller.submitPost();
+                
+                
+                Get.back();},
                 icon: const Icon(Icons.send),
                 label: const Text("Post"),
                 style: ElevatedButton.styleFrom(
@@ -124,7 +127,7 @@ class DottedBorderContainer extends StatelessWidget {
         children: [
           Icon(Icons.image_outlined, size: 40, color: Colors.grey),
           SizedBox(height: 8),
-          Text("Tap to add image", style: TextStyle(color: Colors.grey)),
+          Text("Tap to add image (jpg,jpeg,png)", style: TextStyle(color: Colors.grey)),
         ],
       ),
     );

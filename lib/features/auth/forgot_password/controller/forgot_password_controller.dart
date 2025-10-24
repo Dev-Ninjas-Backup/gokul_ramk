@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/widgets/show_easy_loading_error.dart';
-import 'package:gokul_ramk/core/services/auth_service.dart';
+import 'package:gokul_ramk/features/auth/sservice/auth_service.dart';
 import 'package:gokul_ramk/core/services/local_service/shared_preferences_helper.dart';
 import 'package:gokul_ramk/features/auth/forgot_password/widget/success_dialog.dart';
 import 'package:gokul_ramk/routes/app_routes.dart';

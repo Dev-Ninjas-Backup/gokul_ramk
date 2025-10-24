@@ -22,14 +22,6 @@ class SharedPreferencesHelperController extends GetxController {
     return prefs.getString(_accessTokenKey);
   }
 
-
-
-
-
-
-
-
-
   // ✅ Save email or phone dynamically
   Future<void> saveEmailOrPhone(String value) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -65,22 +57,6 @@ class SharedPreferencesHelperController extends GetxController {
     if (data.containsKey('phone')) return data['phone'];
     return null;
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   // Clear access token
   Future<void> clearAllData() async {
