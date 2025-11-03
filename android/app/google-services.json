@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "247020261019",
+    "project_id": "gokul-ramk",
+    "storage_bucket": "gokul-ramk.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:247020261019:android:f9447a9303c2c2345a003e",
+        "android_client_info": {
+          "package_name": "com.example.gokul_ramk"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPgCL7o9vt4_X32hBjCbstiLqPVxJNSrI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
