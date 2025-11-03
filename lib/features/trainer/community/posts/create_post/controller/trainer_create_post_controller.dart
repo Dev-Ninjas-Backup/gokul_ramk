@@ -65,7 +65,7 @@ class TrainerCreatePostController extends GetxController {
       }
     } catch (e) {
       EasyLoading.dismiss();
-      Get.snackbar("Error", "Error creating post: $e");
+      EasyLoading.showError("Error, Error creating post: $e");
     } finally {
       EasyLoading.dismiss();
     }
