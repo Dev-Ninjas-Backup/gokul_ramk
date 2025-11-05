@@ -4,6 +4,7 @@ import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
 import 'package:gokul_ramk/core/utils/constants/colors.dart';
 import 'package:gokul_ramk/core/utils/constants/icon_path.dart';
 import 'package:gokul_ramk/features/auth/login/controller/login_controller.dart';
+import 'package:gokul_ramk/features/auth/login/service/google_sign_in_services.dart';
 import 'package:gokul_ramk/routes/app_routes.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -150,7 +151,13 @@ class LoginScreen extends StatelessWidget {
                   spacing: 16,
                   children: [
                     InkWell(
-                      onTap: () {},
+                      onTap: () async {
+                        final GoogleSignInService googleService =
+                            GoogleSignInService();
+                        if (googleService.isAuthorized == false) {
+                          await googleService.signIn();
+                        }
+                      },
                       child: Image.asset(IconPath.googleIcon),
                     ),
                     InkWell(
@@ -169,6 +176,7 @@ class LoginScreen extends StatelessWidget {
                     GestureDetector(
                       onTap: () {
                         Get.toNamed(AppRoute.getsignUpScreen());
+                        print("djfidshfdisfjdisfj ");
                       },
                       child: Text(
                         "Signup",
