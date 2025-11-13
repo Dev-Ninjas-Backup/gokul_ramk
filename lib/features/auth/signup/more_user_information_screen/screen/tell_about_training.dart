@@ -26,13 +26,13 @@ class TellUsAboutTrainingScreen extends StatelessWidget {
               Expanded(
                 child: Obx(
                   () => ListView.builder(
-                    itemCount: controller.traingDays.length,
+                    itemCount: controller.trainingDays.length,
                     itemBuilder: (context, index) {
-                      final traingDay = controller.traingDays[index];
+                      final traingDay = controller.trainingDays[index];
                       return TrainingDaysItem(
                         title: traingDay.title,
                         isSelected: traingDay.isSelected,
-                        onTap: () => controller.toggleTrainingDays(index),
+                        onTap: () => controller.selectTrainingDay(index),
                       );
                     },
                   ),

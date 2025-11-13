@@ -56,7 +56,9 @@ class GoogleSignInService {
     _currentUser = user;
     _isAuthorized = authorization != null;
     String? idtoken = user!.authentication.idToken;
-    print("================signin with google===================$idtoken             ;;;;;;;;;;;;;55555555555555;;;;;;;;;;;;;;;;");
+    if (kDebugMode) {
+      print("================signin with google===================$idtoken  ");
+    }
 
     if (_currentUser != null) {
       EasyLoading.showSuccess("✅ Signed in:(${_currentUser!.email})");

@@ -31,7 +31,7 @@ class TellUsAboutYourselfScreen1 extends StatelessWidget {
                   children: [
                     Text('Nationality'),
                     CountryStateCityPicker(
-                      country: controller.country,
+                      country: controller.nationality,
                       state: controller.state,
                       city: controller.city,
                       dialogColor: Colors.grey.shade200,
@@ -83,21 +83,21 @@ class TellUsAboutYourselfScreen1 extends StatelessWidget {
                 const SizedBox(height: 16),
                 CustomLabelTextField(
                   label: 'Your age',
-                  editingController: controller.ageController,
+                  editingController: controller.age,
                   hintText: 'Enter your age',
                 ),
 
                 const SizedBox(height: 16),
                 CustomLabelTextField(
                   label: 'Your height',
-                  editingController: controller.heightController,
+                  editingController: controller.height,
                   hintText: 'Enter your height',
                 ),
 
                 const SizedBox(height: 16),
                 CustomLabelTextField(
                   label: 'Your weight',
-                  editingController: controller.weightController,
+                  editingController: controller.weight,
                   hintText: 'Enter your weight',
                 ),
                 const SizedBox(height: 26),

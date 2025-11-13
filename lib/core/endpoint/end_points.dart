@@ -16,5 +16,6 @@ class Urls {
 
   //trainer post
   static const String trainerPost='$baseUrl/post';
-
+  //user onboarding(tell us about yourseft)
+  static const String tellAboutOnboarding="$baseUrl/user/onbording-step/me";
 }
