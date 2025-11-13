@@ -75,12 +75,18 @@ class ViewTrainerProfileScreen extends StatelessWidget {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        if(formMytrainer){
-                          Get.toNamed(AppRoute.bookTrainerScreen,arguments: 'myTrainer');
-                        }else{
-                          Get.toNamed(AppRoute.bookTrainerScreen);
-                        }
+
+                        Get.toNamed(AppRoute.tellUsAboutYourselfScreen1);
+
+
+                        // if(formMytrainer){
+                        //   Get.toNamed(AppRoute.bookTrainerScreen,arguments: 'myTrainer');
+                        // }else{
+                        //   Get.toNamed(AppRoute.bookTrainerScreen);
+                        // }
                         
+
+
                       },
                       child: Text(
                         formMytrainer ? 'Reschedule' : 'Book Trainer',

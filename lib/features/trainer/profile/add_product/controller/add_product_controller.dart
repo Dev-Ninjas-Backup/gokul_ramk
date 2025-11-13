@@ -59,6 +59,7 @@ class AddProductController extends GetxController {
 
   Future<void> postCreateProduct() async {
     await validation();
+    // ignore: unused_local_variable
     final response = await AddProductRequestService.createProduct(
       name: nameController.text.trim(),
       description: descriptionController.text.trim(),
