@@ -72,7 +72,7 @@ class TellAboutYouseltService {
           data["success"] == true) {
         EasyLoading.showSuccess(data["message"]);
 
-        Get.offAllNamed(AppRoute.viewTrainerProfileScreen);
+        Get.offAllNamed(AppRoute.bookTrainerScreen);
       } else {
         EasyLoading.showError(data["message"] ?? "Update failed");
       }

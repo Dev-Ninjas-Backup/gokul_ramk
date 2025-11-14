@@ -8,6 +8,7 @@ import 'package:gokul_ramk/features/user/user_home/book_trainer/controller/book_
 import 'package:gokul_ramk/features/user/user_home/book_trainer/widgets/duration_widget.dart';
 import 'package:gokul_ramk/features/user/user_home/book_trainer/widgets/start_time_list.dart';
 import 'package:gokul_ramk/features/user/user_home/book_trainer/widgets/stat_container.dart';
+import 'package:gokul_ramk/routes/app_routes.dart';
 
 class BookTrainerScreen extends StatelessWidget {
   BookTrainerScreen({super.key});
@@ -27,6 +28,9 @@ class BookTrainerScreen extends StatelessWidget {
               children: [
                 CustomAppBarTitle(
                   title: formMytrainer ? 'Reschedule' : 'Book Trainer',
+                  onTapBack: () {
+                    Get.toNamed(AppRoute.bookTrainerScreen);
+                  },
                 ),
                 SizedBox(
                   height: 400,
