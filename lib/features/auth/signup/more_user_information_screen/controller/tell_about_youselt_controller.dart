@@ -142,4 +142,5 @@ class TellAboutYouseltController extends GetxController {
   Future<void> submitOnboarding() async {
     await TellAboutYouseltService().submitOnboarding(this);
   }
+  
 }

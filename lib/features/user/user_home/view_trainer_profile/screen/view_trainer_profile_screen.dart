@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
@@ -75,18 +77,14 @@ class ViewTrainerProfileScreen extends StatelessWidget {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-
-                        Get.toNamed(AppRoute.tellUsAboutYourselfScreen1);
-
+                      controller.checkOnboarding();
+                        // Get.toNamed(AppRoute.tellUsAboutYourselfScreen1);
 
                         // if(formMytrainer){
                         //   Get.toNamed(AppRoute.bookTrainerScreen,arguments: 'myTrainer');
                         // }else{
                         //   Get.toNamed(AppRoute.bookTrainerScreen);
                         // }
-                        
-
-
                       },
                       child: Text(
                         formMytrainer ? 'Reschedule' : 'Book Trainer',

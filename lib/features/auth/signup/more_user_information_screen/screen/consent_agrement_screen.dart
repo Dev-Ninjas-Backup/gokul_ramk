@@ -38,7 +38,7 @@ class ConsentAgrementScreen extends StatelessWidget {
                 // onPressed: () {
                 //   Get.offAllNamed(AppRoute.getUserNavBarScreen());
                 // },
-                child: Text('Continue to Homepage'),
+                child: Text('Continue to Book Trainer'),
               ),
             ],
           ),
