@@ -7,7 +7,8 @@ import '../widgets/text_field.dart';
 import 'workout_plan.dart';
 
 class CreateProgramScreen extends StatelessWidget {
-  const CreateProgramScreen({super.key});
+final ProgramController controller = Get.put(ProgramController());
+   CreateProgramScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +55,10 @@ class CreateProgramScreen extends StatelessWidget {
             ),
             SizedBox(height: 8),
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+
+              controller.thumbnailPickFromGallery();
+              },
               child: Container(
                 width: double.infinity,
                 height: 140,
