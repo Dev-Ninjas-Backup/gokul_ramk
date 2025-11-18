@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 
-Widget buildTextField(String hint, {IconData? suffixIcon, int maxLines = 1}) {
+Widget buildTextField(
+  String hint, {
+  IconData? suffixIcon,
+  int maxLines = 1,
+   TextEditingController? controller, TextInputType? keyboardType,
+}) {
   return TextField(
     maxLines: maxLines,
+    controller: controller,
     decoration: InputDecoration(
       hintText: hint,
       filled: true,
