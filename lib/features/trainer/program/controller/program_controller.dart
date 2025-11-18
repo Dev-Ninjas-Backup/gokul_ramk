@@ -1,208 +1,9 @@
-// // controller/program_controller.dart
-
-
-// import 'dart:io';
-
-// import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
-// import 'package:gokul_ramk/features/trainer/program/model/categories_model.dart';
-// import 'package:gokul_ramk/features/trainer/program/services/program_services.dart';
-// import 'package:image_picker/image_picker.dart';
-// import '../model/program_model.dart';
-
-// class ProgramController extends GetxController {
-//   final ProgramService service = ProgramService();
-
-//   // ----------------------------------------------------
-//   // TEXT CONTROLLERS
-//   // ----------------------------------------------------
-//   final nameC = TextEditingController();
-//   final descriptionC = TextEditingController();
-//   final durationC = TextEditingController();
-//   final sessionsPerWeekC = TextEditingController();
-//   final priceC = TextEditingController();
-//   final maxParticipantsC = TextEditingController();
-
-//   final dayNumberC = TextEditingController();
-//   final setsC = TextEditingController();
-//   final repsC = TextEditingController();
-//   final workoutDurationC = TextEditingController();
-//   final exerciseIdC = TextEditingController();
-
-//   // ----------------------------------------------------
-//   // FILE URLs
-//   // ----------------------------------------------------
-//   var thumbnailUrl = "".obs;
-//   var videoUrl = "".obs;
-
-//   // ----------------------------------------------------
-//   // STATE
-//   // ----------------------------------------------------
-//   var isLoading = false.obs;
-
-//   // Categories
-//   var categories = <CategoryModel>[].obs;
-//   var selectedCategoryId = Rxn<String>();
-//   @override
-//   void onInit() {
-//     fetchCategories();
-//     super.onInit();
-//   }
-
-//   // ----------------------------------------------------
-//   // FETCH CATEGORIES
-//   // ----------------------------------------------------
-//   Future<void> fetchCategories() async {
-//     isLoading(true);
-
-//     categories.value = await ProgramService.fetchCategories();
-
-//     /// Auto-select first category
-//     if (categories.isNotEmpty) {
-//       selectedCategoryId.value = categories.first.id;
-//     }
-
-//     isLoading(false);
-//   }
-
-//   // ----------------------------------------------------
-//   // SUBMIT PROGRAM
-//   // ----------------------------------------------------
-//   Future<void> submitProgram() async {
-//     if (selectedCategoryId.value == null) {
-//       Get.snackbar("Error", "Please select a category");
-//       return;
-//     }
-
-//     isLoading(true);
-
-//     final body = {
-//       "name": nameC.text,
-//       "description": descriptionC.text,
-//       "categoryId": selectedCategoryId.value,
-//       "duration": int.tryParse(durationC.text) ?? 0,
-//       "sessionsPerWeek": int.tryParse(sessionsPerWeekC.text) ?? 0,
-//       "thumbnailUrl": thumbnailUrl.value,
-//       "videoUrl": videoUrl.value,
-//       "price": double.tryParse(priceC.text) ?? 0,
-//       "maxParticipants": int.tryParse(maxParticipantsC.text) ?? 0,
-//       "workoutDays": [
-//         {
-//           "dayNumber": int.tryParse(dayNumberC.text) ?? 1,
-//           "sets": int.tryParse(setsC.text) ?? 0,
-//           "reps": int.tryParse(repsC.text) ?? 0,
-//           "duration": int.tryParse(workoutDurationC.text) ?? 0,
-//           "exerciseId": exerciseIdC.text,
-//           "description": "Workout Description",
-//         },
-//       ],
-//     };
-
-//     final success = await service.createProgram(body);
-
-//     isLoading(false);
-
-//     if (success) {
-//       Get.snackbar("Success", "Program created successfully");
-//       Get.back();
-//     } else {
-//       Get.snackbar("Error", "Failed to create program");
-//     }
-//   }
-
-//   @override
-//   void onClose() {
-//     nameC.dispose();
-//     descriptionC.dispose();
-//     durationC.dispose();
-//     sessionsPerWeekC.dispose();
-//     priceC.dispose();
-//     maxParticipantsC.dispose();
-//     dayNumberC.dispose();
-//     setsC.dispose();
-//     repsC.dispose();
-//     workoutDurationC.dispose();
-//     exerciseIdC.dispose();
-//     super.onClose();
-//   }
-
-//   //
-
-//   //washifurs code
-
-//   //
-
-//   //
-
-
-//   final Rx<XFile?> thumbnailImage = Rx<XFile?>(null);
-
-//   Future<void> pickFromGallery() async {
-//     final ImagePicker picker = ImagePicker();
-//     final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-//     if (image != null) {
-//       thumbnailImage.value = image;
-//     }
-//   }
-
-
-//   void removeThumbnail() {
-//     thumbnailImage.value = null;
-//   }
-
-//   // void createProgram({
-//   //   required String name,
-//   //   required String duration,
-//   //   required String category,
-//   //   required String description,
-//   //   String? thumbnail,
-//   // }) {
-//   //   currentProgram.value = WorkoutProgram(
-//   //     name: name,
-//   //     duration: duration,
-//   //     category: category,
-//   //     description: description,
-//   //     thumbnail: thumbnail,
-//   //     sessions: [],
-//   //   );
-//   // }
-
-//   // void addSession(WorkoutSession session) {
-//   //   if (currentProgram.value != null) {
-//   //     final updatedSessions = [...currentProgram.value!.sessions, session];
-//   //     currentProgram.value = currentProgram.value!.copyWith(
-//   //       sessions: updatedSessions,
-//   //     );
-//   //   }
-//   // }
-
-//     var selectedDay = 0.obs;
-
-
-//   void changeDay(int day) {
-//     selectedDay.value = day;
-//   }
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-// features/trainer/program/controller/program_controller.dart
-// features/trainer/program/controller/program_controller.dart
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import '../model/categories_model.dart';
+import '../model/excercise_model.dart';
 import '../services/program_services.dart';
 
 class ProgramController extends GetxController {
@@ -230,13 +31,19 @@ class ProgramController extends GetxController {
   var thumbnailUrl = "".obs;
   var videoUrl = "".obs;
 
-  // State
+  // Loading State
   var isLoading = false.obs;
+
+  // Selected Day
   var selectedDay = 0.obs;
 
   // Categories
   var categories = <CategoryModel>[].obs;
   var selectedCategoryId = Rxn<String>();
+
+  // Exercises
+  var allExercises = <Exercise>[].obs;
+  var selectedExercise = Rxn<Exercise>();
 
   final picker = ImagePicker();
 
@@ -244,23 +51,62 @@ class ProgramController extends GetxController {
   void onInit() {
     super.onInit();
     fetchCategories();
+    fetchExercises();
   }
 
+  // =================== Fetch Categories ===================
   Future<void> fetchCategories() async {
     isLoading(true);
-    final list = await ProgramService.fetchCategories();
-    categories.assignAll(list);
-    if (categories.isNotEmpty) selectedCategoryId.value = categories.first.id;
-    isLoading(false);
+    try {
+      final list = await ProgramService.fetchCategories();
+      categories.assignAll(list);
+      if (categories.isNotEmpty) selectedCategoryId.value = categories.first.id;
+    } catch (e) {
+      debugPrint("Error fetching categories: $e");
+    } finally {
+      isLoading(false);
+    }
   }
 
-  // Pick Thumbnail
+  // =================== Fetch Exercises ===================
+  Future<void> fetchExercises() async {
+    isLoading(true);
+    try {
+      final response = await service.fetchAllExercises();
+      allExercises.assignAll(response.data);
+
+      // Print readable list of exercise names
+      print(
+        "===============================================Exercises: ${allExercises.map((e) => e.name).toList()}",
+      );
+
+      if (selectedExercise.value == null && allExercises.isNotEmpty) {
+        selectExercise(allExercises.first);
+      }
+    } catch (e) {
+      debugPrint("Error fetching exercises: $e");
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  void selectExercise(Exercise? exercise) {
+    selectedExercise.value = exercise;
+    exerciseIdC.text = exercise?.id ?? "";
+  }
+
+  String get selectedExerciseName =>
+      selectedExercise.value?.name ?? "Select exercise";
+
+  // =================== Pick Files ===================
   Future<void> pickThumbnail() async {
-    final picked = await picker.pickImage(source: ImageSource.gallery, imageQuality: 85);
+    final picked = await picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 85,
+    );
     if (picked != null) thumbnailFile.value = File(picked.path);
   }
 
-  // Pick Intro Video
   Future<void> pickIntroVideo() async {
     final picked = await picker.pickVideo(source: ImageSource.gallery);
     if (picked != null) introVideoFile.value = File(picked.path);
@@ -268,28 +114,30 @@ class ProgramController extends GetxController {
 
   void removeThumbnail() => thumbnailFile.value = null;
   void removeIntroVideo() => introVideoFile.value = null;
+
   void changeDay(int day) => selectedDay.value = day;
 
-  // FINAL SUBMIT
+  // =================== Submit Program ===================
   Future<void> submitProgram() async {
-    if (thumbnailFile.value == null) return debugPrint("Required" "Add thumbnail image");
-    if (introVideoFile.value == null) return debugPrint("Required" "Add intro video");
+    if (thumbnailFile.value == null) return debugPrint("Add thumbnail image");
+    if (introVideoFile.value == null) return debugPrint("Add intro video");
 
     isLoading(true);
-    Get.dialog(const Center(child: CircularProgressIndicator()), barrierDismissible: false);
+    Get.dialog(
+      const Center(child: CircularProgressIndicator()),
+      barrierDismissible: false,
+    );
 
     try {
-      // Upload thumbnail
+      // Upload files
       final thumb = await service.uploadFile(thumbnailFile.value!);
-      if (thumb == null) return;
-      thumbnailUrl.value = thumb;
-
-      // Upload intro video
       final vid = await service.uploadFile(introVideoFile.value!);
-      if (vid == null) return;
+      if (thumb == null || vid == null) return;
+
+      thumbnailUrl.value = thumb;
       videoUrl.value = vid;
 
-      // Create program
+      // Prepare body
       final body = {
         "name": nameC.text.trim(),
         "description": descriptionC.text.trim(),
@@ -306,17 +154,20 @@ class ProgramController extends GetxController {
             "sets": int.tryParse(setsC.text) ?? 3,
             "reps": int.tryParse(repsC.text) ?? 12,
             "duration": int.tryParse(workoutDurationC.text) ?? 30,
-            "exerciseId": exerciseIdC.text.isEmpty ? "cmi2aqu6p0000qt01m7jd1nzk" : exerciseIdC.text,
-            "description": "Day ${selectedDay.value + 1} workout"
-          }
-        ]
+            "exerciseId": exerciseIdC.text,
+            "description": "Day ${selectedDay.value + 1} workout",
+          },
+        ],
       };
 
       final success = await service.createProgram(body);
       if (success) {
         Get.back(); // close dialog
-        Get.snackbar("Success! 🎉", "Program created!", backgroundColor: Colors.green);
-       // Get.offAllNamed('/trainer-dashboard'); // or wherever you want
+        Get.snackbar(
+          "Success! 🎉",
+          "Program created!",
+          backgroundColor: Colors.green,
+        );
       }
     } finally {
       isLoading(false);
@@ -326,16 +177,21 @@ class ProgramController extends GetxController {
 
   @override
   void onClose() {
-    nameC.dispose();
-    descriptionC.dispose();
-    durationC.dispose();
-    sessionsPerWeekC.dispose();
-    priceC.dispose();
-    maxParticipantsC.dispose();
-    exerciseIdC.dispose();
-    setsC.dispose();
-    repsC.dispose();
-    workoutDurationC.dispose();
+    // Dispose controllers
+    for (var c in [
+      nameC,
+      descriptionC,
+      durationC,
+      sessionsPerWeekC,
+      priceC,
+      maxParticipantsC,
+      exerciseIdC,
+      setsC,
+      repsC,
+      workoutDurationC,
+    ]) {
+      c.dispose();
+    }
     super.onClose();
   }
 }
