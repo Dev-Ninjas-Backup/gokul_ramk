@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:ui';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/services/local_service/shared_preferences_helper.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 import 'package:logger/logger.dart';
 
 part 'network_response.dart';
@@ -10,8 +12,9 @@ part 'network_response.dart';
 class NetworkClient {
   final String _defaultErrorMsg = 'Something went wrong';
 
-  final SharedPreferencesHelperController sharedPreferencesHelper =
-      Get.put(SharedPreferencesHelperController());
+  final SharedPreferencesHelperController sharedPreferencesHelper = Get.put(
+    SharedPreferencesHelperController(),
+  );
 
   final VoidCallback onUnAuthorize;
 
@@ -211,6 +214,69 @@ class NetworkClient {
     }
   }
 
+
+
+
+  // ADD THIS METHOD ONLY — keep all your existing get/post/patch/delete
+// In NetworkClient class — REPLACE your uploadFile method with this
+Future<NetworkResponse> uploadFile({
+  required String url,
+  required File file,
+  String fieldName = 'file',
+  Map<String, String>? extraFields,
+}) async {
+  try {
+    final token = await sharedPreferencesHelper.getAccessToken() ?? '';
+
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+    request.headers['authorization'] = token;
+
+    if (extraFields != null) request.fields.addAll(extraFields);
+
+    // ←←← THIS IS THE MAGIC FIX ←←←
+    String mimeType = 'application/octet-stream'; // fallback
+    final extension = file.path.split('.').last.toLowerCase();
+
+    if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'].contains(extension)) {
+      mimeType = 'image/$extension';
+      if (extension == 'jpg') mimeType = 'image/jpeg';
+    } else if (['mp4', 'mov', 'avi', 'mkv', 'webm', 'm4v'].contains(extension)) {
+      mimeType = 'video/$extension';
+      if (extension == 'mov' || extension == 'm4v') mimeType = 'video/mp4';
+    }
+
+    request.files.add(await http.MultipartFile.fromPath(
+      fieldName,
+      file.path,
+      filename: file.path.split(Platform.pathSeparator).last,
+      contentType: MediaType.parse(mimeType), // ← THIS LINE IS CRITICAL
+    ));
+
+    var streamedResponse = await request.send();
+    var response = await http.Response.fromStream(streamedResponse);
+
+    _logResponse(response: response);
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return NetworkResponse(
+        statusCode: response.statusCode,
+        isSuccess: true,
+        responseData: jsonDecode(response.body),
+      );
+    } else {
+      final body = jsonDecode(response.body);
+      return NetworkResponse(
+        statusCode: response.statusCode,
+        isSuccess: false,
+        errorMessage: body['message'] ?? 'Upload failed',
+      );
+    }
+  } catch (e) {
+    return NetworkResponse(statusCode: -1, isSuccess: false, errorMessage: e.toString());
+  }
+}
+
+
   void _logRequest({
     required String url,
     Map<String, String>? headers,
@@ -234,4 +300,6 @@ class NetworkClient {
     ''';
     _logger.i(message);
   }
+
+
 }
