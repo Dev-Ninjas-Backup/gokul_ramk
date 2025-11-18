@@ -103,14 +103,13 @@ class LoginController extends GetxController {
       emailOrPhone = {"phone": emailController.text};
     }
     if (validateLogin()) {
-    
       final NetworkResponse response = await authServiceController.login(
         emailOrphone: emailOrPhone,
         password: passwordController.text,
       );
       if (response.isSuccess == true) {
-        final access_token = response.responseData?["data"]["access_token"];
-        final role = response.responseData?["data"]["user"]["role"];
+        final access_token = response.responseData?["access_token"];
+        final role = response.responseData?["user"]["role"];
 
         await sharedPreferencesHelperController.saveToken(access_token);
         await sharedPreferencesHelperController.saveSelectedRole(role);
