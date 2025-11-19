@@ -32,13 +32,15 @@ class TrainerProfileCardWidget extends StatelessWidget {
           Obx(
             () => CircleAvatar(
               radius: 50,
-              backgroundImage: AssetImage(controller.image.value),
+              backgroundImage: NetworkImage(
+                controller.trainerProfileData.value?.images ?? "",
+              ),
             ),
           ),
           SizedBox(height: 12),
           Obx(
             () => Text(
-              controller.name.value,
+              controller.trainerProfileData.value?.fullname ?? "",
               style: getTextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.w600,
@@ -49,7 +51,7 @@ class TrainerProfileCardWidget extends StatelessWidget {
 
           Obx(
             () => Text(
-              controller.email.value,
+              controller.trainerProfileData.value?.email ?? "",
               style: getTextStyle(
                 fontSize: 16,
                 color: AppColors.secondaryFontColor,
@@ -60,7 +62,7 @@ class TrainerProfileCardWidget extends StatelessWidget {
 
           Obx(
             () => Text(
-              controller.phone.value,
+              controller.trainerProfileData.value?.phone ?? "",
               style: getTextStyle(
                 fontSize: 16,
                 color: AppColors.secondaryFontColor,

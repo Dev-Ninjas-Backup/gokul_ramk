@@ -10,7 +10,7 @@ Widget exercisePicker(ProgramController controller) {
     children: [
       const SizedBox(height: 20),
       Text(
-        "Search Exercise",
+        "Find Exercise",
         style: getTextStyle(fontSize: 12, fontWeight: FontWeight.bold),
       ),
       const SizedBox(height: 8),
