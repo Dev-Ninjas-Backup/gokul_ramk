@@ -13,7 +13,8 @@ class TrainerProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  final SharedPreferencesHelperController sharedPreferencesHelperController = Get.put(SharedPreferencesHelperController());
+    final SharedPreferencesHelperController sharedPreferencesHelperController =
+        Get.put(SharedPreferencesHelperController());
 
     return Scaffold(
       body: SafeArea(
@@ -22,6 +23,24 @@ class TrainerProfileScreen extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               children: [
+                Align(
+                  alignment: Alignment.topRight,
+                  child: GestureDetector(
+                    onTap: () {
+                      Get.toNamed(AppRoute.trainerTellAboutScreen);
+                    },
+
+                    child: Text(
+                      "Edit Profile",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green[400],
+                      ),
+                      textAlign: TextAlign.end,
+                    ),
+                  ),
+                ),
                 SizedBox(height: 30),
                 TrainerProfileCardWidget(),
                 SizedBox(height: 16),
@@ -32,14 +51,16 @@ class TrainerProfileScreen extends StatelessWidget {
                 MyProductsWidget(),
                 SizedBox(height: 12),
                 SalesAndBalanceWidget(),
-                const SizedBox(height: 30,),
-                ElevatedButton(onPressed: (){
-                sharedPreferencesHelperController.clearAllData();
-                Get.offAllNamed(AppRoute.loginScreen);
-                },
+                const SizedBox(height: 30),
+                ElevatedButton(
+                  onPressed: () {
+                    sharedPreferencesHelperController.clearAllData();
+                    Get.offAllNamed(AppRoute.loginScreen);
+                  },
                   style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                 child: Text('Logout')),
-                const SizedBox(height: 20,),
+                  child: Text('Logout'),
+                ),
+                const SizedBox(height: 20),
               ],
             ),
           ),

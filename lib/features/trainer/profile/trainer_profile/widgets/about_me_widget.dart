@@ -17,7 +17,7 @@ class AboutMeWidget extends StatelessWidget {
         Obx(
           () => Wrap(
             spacing: 8,
-            children: controller.tags
+            children: controller.trainerProfileData.value!.specializations
                 .map(
                   (tag) => Chip(
                     label: Text(
@@ -47,7 +47,7 @@ class AboutMeWidget extends StatelessWidget {
 
         Obx(
           () => Text(
-            controller.description.value,
+            controller.trainerProfileData.value?.bio ?? "",
             style: getTextStyle(
               fontSize: 15,
               color: AppColors.secondaryFontColor,

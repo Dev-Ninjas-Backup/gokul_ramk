@@ -1,8 +1,12 @@
 // trainer_profile_controller.dart
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/utils/constants/icon_path.dart';
 import 'package:gokul_ramk/core/utils/constants/imagepath.dart';
 import 'package:gokul_ramk/features/trainer/profile/trainer_profile/model/product_model.dart';
+import 'package:gokul_ramk/features/trainer/profile/trainer_profile/model/trainer_model.dart';
+
+import '../service/trainer_profile_service.dart';
 
 class Program {
   final String title;
@@ -13,19 +17,8 @@ class Program {
 }
 
 class TrainerProfileController extends GetxController {
+TrainerService trainerService = TrainerService();
   // Basic Info
-  var name = "Sarah Johnson".obs;
-  var email = "sarah.johnson@fitcoach.com".obs;
-  var phone = "+1 (555) 123-4567".obs;
-  var image = "assets/images/trainer.png".obs;
-
-  // About Me
-  var tags = ["Weight Loss", "Strength Training", "Yoga"].obs;
-  var description =
-      "Certified personal trainer with over 8 years of experience helping clients achieve their fitness goals. "
-              "Specialized in weight management, strength building, and functional movement. "
-              "NASM certified with additional certifications in yoga and nutrition coaching."
-          .obs;
 
 
   // Programs Offered
@@ -76,4 +69,27 @@ class TrainerProfileController extends GetxController {
   var totalProductsSold = 120.obs;
 
   var balance = 15590.0.obs;
+
+
+//for api
+Rx<Trainer?> trainerProfileData = Rx<Trainer?>(null);
+
+@override
+void onInit() {
+  super.onInit();
+  fetchTrainerProfile();
+}
+
+void fetchTrainerProfile() async {
+  try {
+    var data = await trainerService.getProfile();
+    trainerProfileData.value = data; 
+  } catch (e) {
+    if (kDebugMode) {
+      print("Error fetching trainer profile: $e");
+    }
+  }
+}
+
+
 }

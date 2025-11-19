@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -76,9 +77,11 @@ class ProgramController extends GetxController {
       allExercises.assignAll(response.data);
 
       // Print readable list of exercise names
-      print(
+      if (kDebugMode) {
+        print(
         "===============================================Exercises: ${allExercises.map((e) => e.name).toList()}",
       );
+      }
 
       if (selectedExercise.value == null && allExercises.isNotEmpty) {
         selectExercise(allExercises.first);
@@ -125,7 +128,7 @@ class ProgramController extends GetxController {
     isLoading(true);
     Get.dialog(
       const Center(child: CircularProgressIndicator()),
-      barrierDismissible: false,
+      barrierDismissible: true,
     );
 
     try {
