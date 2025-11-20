@@ -9,89 +9,93 @@ class AboutMeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(TrainerProfileController());
+    final controller = Get.find<TrainerProfileController>();
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Obx(
-          () => Wrap(
-            spacing: 8,
-            children: controller.trainerProfileData.value!.specializations
-                .map(
-                  (tag) => Chip(
-                    label: Text(
-                      tag,
-                      style: getTextStyle(fontWeight: FontWeight.w600),
+    return Obx(() {
+      final trainer = controller.trainerProfileData.value;
+
+      if (trainer == null) {
+        return const Center(child: CircularProgressIndicator());
+      }
+
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (trainer.specializations.isNotEmpty == true)
+            Wrap(
+              spacing: 8,
+              children: trainer.specializations
+                  .map(
+                    (tag) => Chip(
+                      label: Text(
+                        tag,
+                        style: getTextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      backgroundColor: const Color(0xFFE8F4F8),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
                     ),
-                    backgroundColor: Color(0xFFE8F4F8),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                )
-                .toList(),
-          ),
-        ),
-        SizedBox(height: 16),
+                  )
+                  .toList(),
+            ),
 
-        Text(
-          "About Me",
-          style: getTextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-            color: AppColors.primaryFontColor,
-          ),
-        ),
-        SizedBox(height: 8),
+          const SizedBox(height: 16),
 
-        Obx(
-          () => Text(
-            controller.trainerProfileData.value?.bio ?? "",
+          Text(
+            "About Me",
+            style: getTextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: const Color.fromARGB(255, 54, 3, 3),
+            ),
+          ),
+          const SizedBox(height: 8),
+
+          Text(
+            trainer.bio.isNotEmpty == true ? trainer.bio : 'No bio yet',
             style: getTextStyle(
               fontSize: 15,
               color: AppColors.secondaryFontColor,
               fontWeight: FontWeight.w500,
             ),
           ),
-        ),
-        SizedBox(height: 16),
+          const SizedBox(height: 16),
 
-        Container(
-          padding: EdgeInsets.all(14),
-          decoration: BoxDecoration(
-            color: Color(0xFFEFF9F2),
-            borderRadius: BorderRadius.circular(8),
+          Container(
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: const Color(0xFFEFF9F2),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  children: [
+                    Text(
+                      "⭐  4.89",
+                      style: getTextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 6),
+                    const Text("Average Rating"),
+                  ],
+                ),
+                const SizedBox(width: 20),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    InfoItem(icon: Icons.verified, text: "Certified Trainer"),
+                    InfoItem(icon: Icons.timer, text: "5+ Years Experience"),
+                    InfoItem(icon: Icons.group, text: "200+ Clients"),
+                  ],
+                ),
+              ],
+            ),
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                children: [
-                  Text(
-                    "⭐ 4.89",
-                    style: getTextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(width: 6),
-                  Text("Average Rating"),
-                ],
-              ),
-              const SizedBox(height: 12),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                spacing: 6,
-                children: [
-                  InfoItem(icon: Icons.verified, text: "Certified Trainer"),
-                  InfoItem(icon: Icons.timer, text: "5+ Years Experience"),
-                  InfoItem(icon: Icons.group, text: "200+ Clients"),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
+        ],
+      );
+    });
   }
 }
 
