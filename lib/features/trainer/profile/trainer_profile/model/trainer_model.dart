@@ -1,4 +1,3 @@
-// lib/models/trainer_model.dart
 
 class Trainer {
   final String id;

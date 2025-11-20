@@ -8,6 +8,8 @@ import 'package:gokul_ramk/features/trainer/profile/trainer_profile/widgets/sale
 import 'package:gokul_ramk/features/trainer/profile/trainer_profile/widgets/trainer_profile_card_widget.dart';
 import 'package:gokul_ramk/routes/app_routes.dart';
 
+import '../controller/trainer_profile_controller.dart';
+
 class TrainerProfileScreen extends StatelessWidget {
   const TrainerProfileScreen({super.key});
 
@@ -15,6 +17,9 @@ class TrainerProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final SharedPreferencesHelperController sharedPreferencesHelperController =
         Get.put(SharedPreferencesHelperController());
+    final TrainerProfileController trainerProfileController = Get.put(
+      TrainerProfileController(),
+    );
 
     return Scaffold(
       body: SafeArea(
@@ -27,7 +32,16 @@ class TrainerProfileScreen extends StatelessWidget {
                   alignment: Alignment.topRight,
                   child: GestureDetector(
                     onTap: () {
-                      Get.toNamed(AppRoute.trainerTellAboutScreen);
+                      final trainer =
+                          trainerProfileController.trainerProfileData.value;
+                      Get.toNamed(
+                        AppRoute.trainerTellAboutScreen,
+                        arguments: [
+                          trainer?.fullname ?? "",
+                          trainer?.images ?? "",
+                          trainer?.bio ?? "",
+                        ],
+                      );
                     },
 
                     child: Text(
