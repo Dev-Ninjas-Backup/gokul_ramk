@@ -2,12 +2,14 @@ import 'dart:io';
 
 import 'package:country_state_city_pro/country_state_city_pro.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/widgets/custom_label_textfield.dart';
 import 'package:gokul_ramk/core/utils/constants/icon_path.dart';
 import 'package:gokul_ramk/features/auth/signup/more_trainer_information/controller/tell_about_trainer_controller.dart';
 import 'package:gokul_ramk/features/auth/signup/more_user_information_screen/widget/tell_us_page_heading.dart';
-import 'package:gokul_ramk/routes/app_routes.dart';
+import 'package:gokul_ramk/features/trainer/profile/trainer_profile/controller/trainer_profile_controller.dart';
+import 'package:gokul_ramk/features/trainer/profile/trainer_profile/screen/trainer_profile_screen.dart';
 
 import '../widgets/availability.dart';
 
@@ -67,7 +69,9 @@ class TellAboutTrainerScreen extends StatelessWidget {
                                   : currentNetworkImage.isNotEmpty
                                   ? NetworkImage(currentNetworkImage)
                                         as ImageProvider
-                                  : Image.network(controller.imageUrl).image,
+                                  : Image.network(
+                                      controller.imageUrl as String,
+                                    ).image,
                               child:
                                   (localImageFile == null &&
                                       currentNetworkImage.isEmpty)
@@ -149,14 +153,13 @@ class TellAboutTrainerScreen extends StatelessWidget {
                 //Gender
                 const SizedBox(height: 16),
                 CustomLabelTextField(
-                maxLine: 5,
+                  maxLine: 5,
                   label: 'Bio/experience summary',
                   editingController: controller.bioController,
                   hintText: 'Add bio/experience summary',
                 ),
 
-
-                                const SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   spacing: 3,
@@ -176,7 +179,7 @@ class TellAboutTrainerScreen extends StatelessWidget {
                           value: controller.sessionType.value,
                           underline: const SizedBox(),
                           hint: const Text("Select your session type"),
-                          items: ['Online', 'Offline'].map((f) {
+                          items: ['Online', 'Onsite'].map((f) {
                             return DropdownMenuItem<String>(
                               value: f,
                               child: Text(f[0].toUpperCase() + f.substring(1)),
@@ -193,7 +196,7 @@ class TellAboutTrainerScreen extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                  SizedBox(height: 16,),
+                    SizedBox(height: 16),
                     CustomLabelTextField(
                       editingController: controller.specializeController,
                       hintText: 'Add your specializations',
@@ -258,7 +261,7 @@ class TellAboutTrainerScreen extends StatelessWidget {
                                       backgroundColor: Colors.blue.shade50,
                                       deleteIcon: Icon(Icons.close, size: 18),
                                       onDeleted: () => controller
-                                          .removeSpecialization(index),
+                                          .removeSpecializationAt(index),
                                     );
                                   })
                                   .toList(),
@@ -267,19 +270,24 @@ class TellAboutTrainerScreen extends StatelessWidget {
                   ],
                 ),
 
-
-
                 SizedBox(height: 16),
 
-                SizedBox(height: 600,child: AvailabilityScreen()),
+                SizedBox(height: 500, child: AvailabilityScreen()),
 
-                const SizedBox(height: 26),
+                const SizedBox(height: 8),
                 ElevatedButton(
-                  onPressed: () {
-                    Get.offAllNamed(AppRoute.trainerNavBarScreen);
+                  onPressed: () async {
+                    await controller.submitProfile();
+
+                    Get.find<TrainerProfileController>().fetchTrainerProfile();
+                    EasyLoading.show(status: 'Loading...');
+                    await Future.delayed(const Duration(seconds: 2));
+                    EasyLoading.dismiss();
+
+                    Get.off(() => TrainerProfileScreen());
                   },
 
-                  child: Text('Done'),
+                  child: Text('Submit'),
                 ),
 
                 const SizedBox(height: 50),

@@ -17,9 +17,8 @@ class Program {
 }
 
 class TrainerProfileController extends GetxController {
-TrainerService trainerService = TrainerService();
+  TrainerService trainerService = TrainerService();
   // Basic Info
-
 
   // Programs Offered
   var programs = <Program>[
@@ -70,26 +69,26 @@ TrainerService trainerService = TrainerService();
 
   var balance = 15590.0.obs;
 
+  //for api
+  var trainerProfileData = Rxn<Trainer>();
 
-//for api
-Rx<Trainer?> trainerProfileData = Rx<Trainer?>(null);
+  @override
+  void onInit() {
+    super.onInit();
+    fetchTrainerProfile();
+  }
 
-@override
-void onInit() {
-  super.onInit();
-  fetchTrainerProfile();
-}
+  var isLoading = false.obs;
 
-void fetchTrainerProfile() async {
-  try {
-    var data = await trainerService.getProfile();
-    trainerProfileData.value = data; 
-  } catch (e) {
-    if (kDebugMode) {
-      print("Error fetching trainer profile: $e");
+  void fetchTrainerProfile() async {
+    try {
+      isLoading.value = true;
+      var data = await trainerService.getProfile();
+      trainerProfileData.value = data;
+    } catch (e) {
+      if (kDebugMode) print("Error fetching trainer profile: $e");
+    } finally {
+      isLoading.value = false;
     }
   }
-}
-
-
 }

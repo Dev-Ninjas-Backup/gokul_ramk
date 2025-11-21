@@ -1,4 +1,3 @@
-
 class Trainer {
   final String id;
   final String fullname;
@@ -50,31 +49,59 @@ class Trainer {
 
   factory Trainer.fromJson(Map<String, dynamic> json) {
     return Trainer(
-      id: json['id'] as String,
-      fullname: json['fullname'] as String,
-      email: json['email'] as String,
-      phone: json['phone'] as String?,
-      role: json['role'] as String,
-      nationality: json['nationality'] as String,
-      city: json['city'] as String,
-      images: json['images'] as String,
-      bio: json['bio'] as String,
-      specializations:
-          List<String>.from(json['specializations'] ?? <String>["Yoga","Cardio"]),
-      areaOfService: json['areaOfService'] as String,
+      id: json['id'] ?? '',
+      fullname: json['fullname'] ?? '',
+      email: json['email'] ?? '',
+      phone: json['phone'],
+      role: json['role'] ?? '',
+      nationality: json['nationality'] ?? '',
+      city: json['city'] ?? '',
+
+      // SAFE IMAGE
+      images: (json['images'] ?? "").toString().isEmpty
+          ? "https://www.pngitem.com/pimgs/m/663-6635378_user-avatar-login-account-profile-people-simple-head.png"
+          : json['images'],
+
+      // SAFE BIO
+      bio: json['bio'] ?? "No bio available",
+
+      // SAFE LIST
+      specializations: json['specializations'] != null
+          ? List<String>.from(json['specializations'])
+          : <String>["Yoga", "Cardio"],
+
+      areaOfService: json['areaOfService'] ?? "",
+
+      // Convert any type → string
       rate: json['rate']?.toString(),
-      trainerStatus: json['trainerStatus'] as String,
-      userStatus: json['userStatus'] as String,
-      isDeleted: json['isDeleted'] as bool,
-      availabilities: (json['availabilities'] as List<dynamic>? ?? [])
-          .map((e) => Availability.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      sessionType: json['sessionType'] as String,
-      receivedReviews: json['receivedReviews'] as List<dynamic>? ?? [],
-      isVerified: json['isVerified'] as bool,
-      hourlyRate: json['hourlyRate'].toString(),
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: DateTime.parse(json['updatedAt'] as String),
+
+      trainerStatus: json['trainerStatus'] ?? "",
+      userStatus: json['userStatus'] ?? "",
+      isDeleted: json['isDeleted'] ?? false,
+
+      // SAFE AVAILABILITY LIST
+      availabilities: json['availabilities'] != null
+          ? (json['availabilities'] as List)
+                .map((e) => Availability.fromJson(e))
+                .toList()
+          : <Availability>[],
+
+      sessionType: json['sessionType'] ?? "",
+
+      // SAFE REVIEW LIST
+      receivedReviews: json['receivedReviews'] ?? [],
+
+      isVerified: json['isVerified'] ?? false,
+
+      hourlyRate: json['hourlyRate']?.toString() ?? "0",
+
+      createdAt:
+          DateTime.tryParse(json['createdAt'] ?? "") ??
+          DateTime.fromMillisecondsSinceEpoch(0),
+
+      updatedAt:
+          DateTime.tryParse(json['updatedAt'] ?? "") ??
+          DateTime.fromMillisecondsSinceEpoch(0),
     );
   }
 }
@@ -102,14 +129,22 @@ class Availability {
 
   factory Availability.fromJson(Map<String, dynamic> json) {
     return Availability(
-      id: json['id'] as String,
-      day: json['day'] as String,
-      startDate: DateTime.parse(json['startDate'] as String),
-      endDate: DateTime.parse(json['endDate'] as String),
-      isBooked: json['isBooked'] as bool,
-      userId: json['userId'] as String,
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: DateTime.parse(json['updatedAt'] as String),
+      id: json['id'] ?? '',
+      day: json['day'] ?? '',
+      startDate:
+          DateTime.tryParse(json['startDate'] ?? "") ??
+          DateTime.fromMillisecondsSinceEpoch(0),
+      endDate:
+          DateTime.tryParse(json['endDate'] ?? "") ??
+          DateTime.fromMillisecondsSinceEpoch(0),
+      isBooked: json['isBooked'] ?? false,
+      userId: json['userId'] ?? '',
+      createdAt:
+          DateTime.tryParse(json['createdAt'] ?? "") ??
+          DateTime.fromMillisecondsSinceEpoch(0),
+      updatedAt:
+          DateTime.tryParse(json['updatedAt'] ?? "") ??
+          DateTime.fromMillisecondsSinceEpoch(0),
     );
   }
 }
