@@ -9,7 +9,7 @@ class TrainerProfileCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(TrainerProfileController());
+    final controller = Get.find<TrainerProfileController>();
 
     return Container(
       width: double.infinity,
@@ -29,14 +29,19 @@ class TrainerProfileCardWidget extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Obx(
-            () => CircleAvatar(
+
+          Obx(() {
+            final imageUrl = controller.trainerProfileData.value?.images ?? "";
+
+            return CircleAvatar(
               radius: 50,
-              backgroundImage: NetworkImage(
-                controller.trainerProfileData.value?.images ?? "",
-              ),
-            ),
-          ),
+              backgroundImage: imageUrl.isNotEmpty
+                  ? NetworkImage(imageUrl)
+                  : const NetworkImage(
+                      "https://www.pngitem.com/pimgs/m/663-6635378_user-avatar-login-account-profile-people-simple-head.png",
+                    ),
+            );
+          }),
           SizedBox(height: 12),
           Obx(
             () => Text(
@@ -75,3 +80,7 @@ class TrainerProfileCardWidget extends StatelessWidget {
     );
   }
 }
+
+
+
+
