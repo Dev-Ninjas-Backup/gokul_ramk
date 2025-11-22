@@ -272,7 +272,7 @@ class TellAboutTrainerScreen extends StatelessWidget {
 
                 SizedBox(height: 16),
 
-                SizedBox(height: 500, child: AvailabilityScreen()),
+                AvailabilityScreen(),
 
                 const SizedBox(height: 8),
                 ElevatedButton(
