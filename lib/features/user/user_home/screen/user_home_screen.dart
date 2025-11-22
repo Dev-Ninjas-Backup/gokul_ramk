@@ -114,38 +114,33 @@ class UserHomeScreen extends StatelessWidget {
               const SizedBox(height: 16),
 
               // Categories
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Explore Workouts",
-                    style: getTextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text("See all", style: getTextStyle(color: Colors.blue)),
-                ],
+              Text(
+                "Explore Workouts",
+                style: getTextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 12),
-              Obx(
-                () => SingleChildScrollView(
+              Obx(() {
+                if (controller.isLoading.value) {
+                  return Center(child: CircularProgressIndicator());
+                }
+                return SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: controller.categories
                         .map(
                           (cat) => CategoryButton(
-                            label: cat,
+                            label: cat.name, 
                             isSelected:
-                                controller.selectedCategory.value == cat,
+                                controller.selectedCategory.value == cat.id,
                             onTap: () =>
-                                controller.selectedCategory.value = cat,
+                                controller.selectedCategory.value = cat.id,
                           ),
                         )
                         .toList(),
                   ),
-                ),
-              ),
+                );
+              }),
+
               const SizedBox(height: 16),
 
               // explore Workouts
@@ -316,4 +311,3 @@ class UserHomeScreen extends StatelessWidget {
     );
   }
 }
-
