@@ -19,4 +19,7 @@ class Urls {
   static const String tellAboutOnboarding="$baseUrl/user/onbording-step/me";
   static const String userProfile="$baseUrl/user/profile/me";
   static const String trainerProfile="$baseUrl/trainer";
+  //categories/workout
+  static const String categories="$baseUrl/categories";
+  static const String workOut="$baseUrl/workouts";
 }

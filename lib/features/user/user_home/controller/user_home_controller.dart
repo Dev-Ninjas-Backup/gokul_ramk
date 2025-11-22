@@ -1,9 +1,45 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:gokul_ramk/core/services/network_service/network_client.dart';
+import 'package:gokul_ramk/features/user/user_home/model/user_home_model.dart';
+import 'package:gokul_ramk/features/user/user_home/service/user_home_service.dart';
 
 class UserHomeController extends GetxController {
   RxBool joinedHitProgram = false.obs;
+  var progress = 0.65.obs;
 
-  var progress = 0.65.obs; // 65% progress
+  final CategoryService service = CategoryService(
+    client: NetworkClient(
+      onUnAuthorize: () {
+        if (kDebugMode) {
+          print("unauthorized");
+        }
+      },
+    ),
+  );
+
+  RxString selectedCategory = ''.obs;
+  var categories = <CategoryModelWorkOut>[].obs;
+
+  var isLoading = false.obs;
+
+  void fetchCategoriesMethod() async {
+    isLoading(true);
+    try {
+      final categoriesList = await service.fetchCategories();
+      categories.assignAll(categoriesList);
+    } catch (e) {
+      debugPrint("Error fetching categories: $e");
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  @override
+  void onInit() {
+    fetchCategoriesMethod();
+    super.onInit();
+  }
 
   final List<Map<String, dynamic>> workoutList = [
     {
@@ -12,6 +48,13 @@ class UserHomeController extends GetxController {
       "image":
           "https://images.pexels.com/photos/3823039/pexels-photo-3823039.jpeg",
       "isBookmarked": true,
+    },
+    {
+      "title": "Yoga",
+      "subtitle": "15 minutes | Basic",
+      "image":
+          "https://images.pexels.com/photos/3823037/pexels-photo-3823037.jpeg",
+      "isBookmarked": false,
     },
     {
       "title": "Yoga",
@@ -37,16 +80,6 @@ class UserHomeController extends GetxController {
       "image":
           "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg",
     },
-  ];
-
-  var selectedCategory = "All Workouts".obs;
-
-  final categories = [
-    "All Workouts",
-    "Yoga",
-    "Intense Gym",
-    "Focus Training",
-    "Full Body",
   ];
 
   final stats = {
