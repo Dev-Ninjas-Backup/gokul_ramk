@@ -21,5 +21,5 @@ class Urls {
   static const String trainerProfile="$baseUrl/trainer";
   //categories/workout
   static const String categories="$baseUrl/categories";
-  static const String workOut="$baseUrl/workouts";
+  static const String workOuts="$baseUrl/workouts";
 }

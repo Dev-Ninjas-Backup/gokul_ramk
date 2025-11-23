@@ -129,11 +129,13 @@ class UserHomeScreen extends StatelessWidget {
                     children: controller.categories
                         .map(
                           (cat) => CategoryButton(
-                            label: cat.name, 
+                            label: cat.name,
                             isSelected:
                                 controller.selectedCategory.value == cat.id,
-                            onTap: () =>
-                                controller.selectedCategory.value = cat.id,
+                            onTap: () {
+                                controller.selectedCategory.value = cat.id;
+                                controller.fetchWorkoutListMethod();
+                              },
                           ),
                         )
                         .toList(),
@@ -144,24 +146,31 @@ class UserHomeScreen extends StatelessWidget {
               const SizedBox(height: 16),
 
               // explore Workouts
-              ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: controller.workoutList.length,
-                itemBuilder: (context, index) {
-                  final workout = controller.workoutList[index];
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: WorkoutCard(
-                      large: true,
-                      title: workout['title'],
-                      subtitle: workout['subtitle'],
-                      image: workout['image'],
-                      isBookmarked: workout['isBookmarked'] ?? false,
-                    ),
-                  );
-                },
+              Obx(
+                () => ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: controller.workoutList.length,
+                  itemBuilder: (context, index) {
+                    final workout = controller.workoutList[index];
+                    debugPrint("Workout Name: ${workout.name}");
+                    return
+                    Text(workout.name.toString());
+                    //  Padding(
+                    //   padding: const EdgeInsets.only(bottom: 10),
+                    //   child: WorkoutCard(
+                    //     large: true,
+                    //     title: workout.name.toString(),
+                    //     subtitle: workout.duration.toString(),
+                    //     image: workout.coverImage.toString(),
+                    //   ),
+                    // );
+
+
+                  },
+                ),
               ),
+
               const SizedBox(height: 12),
               Text(
                 "Health & Nutrition",
@@ -244,10 +253,9 @@ class UserHomeScreen extends StatelessWidget {
                     padding: const EdgeInsets.only(bottom: 10),
                     child: WorkoutCard(
                       large: true,
-                      title: workout['title'],
-                      subtitle: workout['subtitle'],
-                      image: workout['image'],
-                      isBookmarked: workout['isBookmarked'] ?? false,
+                      title: workout.name.toString(),
+                      subtitle: workout.duration.toString(),
+                      image: workout.coverImage.toString(),
                     ),
                   );
                 },
