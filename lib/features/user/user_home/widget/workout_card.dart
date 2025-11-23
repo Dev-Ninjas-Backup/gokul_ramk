@@ -19,6 +19,7 @@ class WorkoutCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+  
     return Container(
       width: large! ? double.maxFinite : 180,
       height: 170,

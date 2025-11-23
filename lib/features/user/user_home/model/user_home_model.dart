@@ -9,7 +9,7 @@ class CategoryModelWorkOut {
 
   factory CategoryModelWorkOut.fromJson(Map<String, dynamic> json) {
     return CategoryModelWorkOut(
-      id: json['id'] ?? '',
+      id: json['id']?.toString() ?? '',
       name: json['name'] ?? '',
     );
   }

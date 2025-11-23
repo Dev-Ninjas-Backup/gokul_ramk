@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/services/network_service/network_client.dart';
 import 'package:gokul_ramk/features/user/user_home/model/user_home_model.dart';
+import 'package:gokul_ramk/features/user/user_home/model/workout_model.dart';
 import 'package:gokul_ramk/features/user/user_home/service/user_home_service.dart';
 
 class UserHomeController extends GetxController {
@@ -18,8 +19,8 @@ class UserHomeController extends GetxController {
     ),
   );
 
-  RxString selectedCategory = ''.obs;
   var categories = <CategoryModelWorkOut>[].obs;
+  RxString selectedCategory = ''.obs;
 
   var isLoading = false.obs;
 
@@ -28,8 +29,33 @@ class UserHomeController extends GetxController {
     try {
       final categoriesList = await service.fetchCategories();
       categories.assignAll(categoriesList);
+      if (categories.isNotEmpty) {
+        selectedCategory.value = categories[2].id;
+        fetchWorkoutListMethod();
+      }
     } catch (e) {
       debugPrint("Error fetching categories: $e");
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  var workoutList = <WorkOutModel>[].obs;
+  void fetchWorkoutListMethod() async {
+    if (selectedCategory.value.isEmpty) return;
+
+    isLoading(true);
+    try {
+      final list = await service.fetchWorkouts(selectedCategory.value);
+      if (kDebugMode) {
+        print(
+        "===============================================Workouts: ${list.map((e) => e.name).toList()}",
+      );
+      }
+
+      workoutList.assignAll(list);
+    } catch (e) {
+      debugPrint(e.toString());
     } finally {
       isLoading(false);
     }
@@ -38,32 +64,9 @@ class UserHomeController extends GetxController {
   @override
   void onInit() {
     fetchCategoriesMethod();
+    fetchWorkoutListMethod();
     super.onInit();
   }
-
-  final List<Map<String, dynamic>> workoutList = [
-    {
-      "title": "Full Body Stretching",
-      "subtitle": "10 minutes | Intermediate",
-      "image":
-          "https://images.pexels.com/photos/3823039/pexels-photo-3823039.jpeg",
-      "isBookmarked": true,
-    },
-    {
-      "title": "Yoga",
-      "subtitle": "15 minutes | Basic",
-      "image":
-          "https://images.pexels.com/photos/3823037/pexels-photo-3823037.jpeg",
-      "isBookmarked": false,
-    },
-    {
-      "title": "Yoga",
-      "subtitle": "15 minutes | Basic",
-      "image":
-          "https://images.pexels.com/photos/3823037/pexels-photo-3823037.jpeg",
-      "isBookmarked": false,
-    },
-  ];
 
   final List<Map<String, dynamic>> highlightList = [
     {
@@ -101,7 +104,7 @@ class UserHomeController extends GetxController {
 
   var selectedFeaturedWorkout = "All Workouts".obs;
 
-  final filters = ["All Workouts", "Online", "In person", "Hybrid"];
+  final filters = ["ONLINE", "IN_PERSON", "ONSITE","HYBRID"];
 
   RxString duration = "4 weeks".obs;
   RxString type = "Fat Burn".obs;
