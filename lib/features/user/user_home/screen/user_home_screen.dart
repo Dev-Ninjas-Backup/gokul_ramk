@@ -155,16 +155,17 @@ class UserHomeScreen extends StatelessWidget {
                     final workout = controller.workoutList[index];
                     debugPrint("Workout Name: ${workout.name}");
                     return
-                    Text(workout.name.toString());
-                    //  Padding(
-                    //   padding: const EdgeInsets.only(bottom: 10),
-                    //   child: WorkoutCard(
-                    //     large: true,
-                    //     title: workout.name.toString(),
-                    //     subtitle: workout.duration.toString(),
-                    //     image: workout.coverImage.toString(),
-                    //   ),
-                    // );
+                 //  Text(workout.name.toString());
+                     Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: WorkoutCard(
+                        large: true,
+                        title: workout.name.toString(),
+                        subtitle: workout.duration.toString(),
+                        image: workout.coverImage.toString(),
+                        difficulty: workout.difficulty.toString(),
+                      ),
+                    );
 
 
                   },
@@ -255,6 +256,7 @@ class UserHomeScreen extends StatelessWidget {
                       large: true,
                       title: workout.name.toString(),
                       subtitle: workout.duration.toString(),
+                      difficulty: workout.difficulty.toString(),
                       image: workout.coverImage.toString(),
                     ),
                   );
