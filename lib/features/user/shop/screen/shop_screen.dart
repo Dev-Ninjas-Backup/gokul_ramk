@@ -54,15 +54,15 @@ class ShopScreen extends StatelessWidget {
                   child: Row(
                     spacing: 16,
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: controller.categories
+                    children: controller.productcategoriesList
                         .map(
                           (cat) => CategoriesItemWidget(
-                            icon: cat["icon"]!,
-                            title: cat["title"]!,
+                            iconUrl: cat.imageUrl.toString(),
+                            title: cat.name.toString(),
                             onTap: () {
                               Get.toNamed(
                                 AppRoute.getCategoriesScreen(),
-                                arguments: cat['title'],
+                                arguments: cat.name,
                               );
                             },
                           ),
