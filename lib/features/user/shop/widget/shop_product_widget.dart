@@ -13,7 +13,7 @@ class ShopProductWidget extends StatelessWidget {
     required this.product,
     required this.onAddToCart,
     required this.onBuyNow,
-    required this.onTap
+    required this.onTap,
   });
 
   @override
@@ -39,17 +39,29 @@ class ShopProductWidget extends StatelessWidget {
           children: [
             Container(
               height: 150,
+              width: double.infinity,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(12),
                   topRight: Radius.circular(12),
                 ),
-                image: DecorationImage(
-                  image: NetworkImage(product.image),
-                  fit: BoxFit.cover,
-                ),
               ),
+              clipBehavior:
+                  Clip.hardEdge, 
+              child: product.thumbnail != null && product.thumbnail!.isNotEmpty
+                  ? Image.network(
+                      product.thumbnail![0],
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Icon(Icons.broken_image);
+                      },
+                    )
+                  : Image.asset(
+                      'assets/images/onboarding1.png',
+                      fit: BoxFit.cover,
+                    ),
             ),
+
             Padding(
               padding: const EdgeInsets.all(12),
               child: Column(
@@ -59,7 +71,7 @@ class ShopProductWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        product.title,
+                        product.name.toString(),
                         style: getTextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -77,7 +89,7 @@ class ShopProductWidget extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    product.description,
+                    product.description.toString(),
                     style: getTextStyle(color: Colors.black),
                   ),
                   const SizedBox(height: 8),

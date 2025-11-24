@@ -35,11 +35,6 @@ class CategoriesItemWidget extends StatelessWidget {
             ),
           ),
 
-          // CircleAvatar(
-          //   radius: 30,
-          //   backgroundColor: Colors.grey.shade200,
-          //   backgroundImage: NetworkImage(iconUrl,),
-          // ),
           const SizedBox(height: 6),
           Text(title, style: getTextStyle(fontSize: 12)),
         ],
