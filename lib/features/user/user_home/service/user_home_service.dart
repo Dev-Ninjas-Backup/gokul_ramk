@@ -1,5 +1,6 @@
 import 'package:gokul_ramk/core/endpoint/end_points.dart';
 import 'package:gokul_ramk/core/services/network_service/network_client.dart';
+import 'package:gokul_ramk/features/user/user_home/model/feature_workout_model.dart';
 import 'package:gokul_ramk/features/user/user_home/model/user_home_model.dart';
 import 'package:gokul_ramk/features/user/user_home/model/workout_model.dart';
 
@@ -41,6 +42,24 @@ class CategoryService {
       }
     } else {
       throw response.errorMessage ?? "Failed to load workouts";
+    }
+  }
+
+  Future<List<Workout>> fetchFeatureWorkout(
+    String workoutType,
+  ) async {
+    final String url = "${Urls.featureWorkout}?workoutType=$workoutType";
+    final response = await client.getRequest(url: url);
+    if (response.isSuccess &&
+        (response.statusCode == 200 || response.statusCode == 201)) {
+      try {
+        final List data = response.responseData!['data']['data'];
+        return data.map((json) => Workout.fromJson(json)).toList();
+      } catch (e) {
+        throw "Failed to parse feature workout data: $e";
+      }
+    } else {
+      throw response.errorMessage ?? "Failed to load feature workouts";
     }
   }
 }
