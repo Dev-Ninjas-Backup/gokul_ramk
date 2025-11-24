@@ -54,11 +54,12 @@ class MyProductsController extends GetxController {
 
       if (response.isNotEmpty) {
         List<dynamic> data = [];
-        
+
         // Handle different response structures
         if (response['data'] is List) {
           data = response['data'];
-        } else if (response['data'] is Map && response['data']['data'] is List) {
+        } else if (response['data'] is Map &&
+            response['data']['data'] is List) {
           data = response['data']['data'];
         }
 
@@ -84,8 +85,10 @@ class MyProductsController extends GetxController {
         totalPages.value = response['totalPages'] ?? 1;
         totalCount.value = response['totalCount'] ?? newProducts.length;
         hasMoreData.value = currentPage.value < totalPages.value;
-        
-        debugPrint('✅ Loaded ${newProducts.length} products. Total: ${totalCount.value}');
+
+        debugPrint(
+          '✅ Loaded ${newProducts.length} products. Total: ${totalCount.value}',
+        );
       }
     } catch (e) {
       debugPrint('Error fetching products: $e');
