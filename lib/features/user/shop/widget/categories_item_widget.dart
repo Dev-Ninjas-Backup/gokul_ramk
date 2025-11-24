@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
 
 class CategoriesItemWidget extends StatelessWidget {
-  final String icon;
+  final String iconUrl;
   final String title;
   final VoidCallback onTap;
 
   const CategoriesItemWidget({
     super.key,
-    required this.icon,
+    required this.iconUrl,
     required this.title,
     required this.onTap,
   });
@@ -22,8 +22,19 @@ class CategoriesItemWidget extends StatelessWidget {
           CircleAvatar(
             radius: 30,
             backgroundColor: Colors.grey.shade200,
-            backgroundImage: NetworkImage(icon),
+            child: ClipOval(
+              child: Image.network(
+                iconUrl,
+                width: 60,
+                height: 60,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return const Icon(Icons.broken_image_rounded, size: 30);
+                },
+              ),
+            ),
           ),
+
           const SizedBox(height: 6),
           Text(title, style: getTextStyle(fontSize: 12)),
         ],

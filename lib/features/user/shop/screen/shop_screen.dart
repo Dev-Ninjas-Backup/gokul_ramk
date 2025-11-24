@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
@@ -54,15 +55,15 @@ class ShopScreen extends StatelessWidget {
                   child: Row(
                     spacing: 16,
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: controller.categories
+                    children: controller.productcategoriesList
                         .map(
                           (cat) => CategoriesItemWidget(
-                            icon: cat["icon"]!,
-                            title: cat["title"]!,
+                            iconUrl: cat.imageUrl.toString(),
+                            title: cat.name.toString(),
                             onTap: () {
                               Get.toNamed(
                                 AppRoute.getCategoriesScreen(),
-                                arguments: cat['title'],
+                                arguments: cat.name,
                               );
                             },
                           ),
@@ -77,8 +78,12 @@ class ShopScreen extends StatelessWidget {
                 style: getTextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 12),
-              Obx(
-                () => Column(
+              Obx(() {
+
+              if (kDebugMode) {
+                print("=============================${controller.products.length}");
+              }
+                return Column(
                   children: controller.products
                       .map(
                         (product) => ShopProductWidget(
@@ -86,7 +91,7 @@ class ShopScreen extends StatelessWidget {
                           onTap: () {
                             Get.toNamed(
                               AppRoute.productDetailScreen,
-                              arguments: product.title,
+                              arguments: product.name,
                             );
                           },
                           onAddToCart: () {},
@@ -94,8 +99,8 @@ class ShopScreen extends StatelessWidget {
                         ),
                       )
                       .toList(),
-                ),
-              ),
+                );
+              }),
             ],
           ),
         ),

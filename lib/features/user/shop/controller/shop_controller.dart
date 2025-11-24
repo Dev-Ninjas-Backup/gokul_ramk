@@ -1,8 +1,22 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gokul_ramk/core/services/network_service/network_client.dart';
+import 'package:gokul_ramk/features/user/shop/model/produt_categories_model.dart';
 import 'package:gokul_ramk/features/user/shop/model/shop_product_model.dart';
+import 'package:gokul_ramk/features/user/shop/service/shop_service.dart';
 
 class ShopController extends GetxController {
+  final ShopService service = ShopService(
+    client: NetworkClient(
+      onUnAuthorize: () {
+        if (kDebugMode) {
+          print("unauthorized");
+        }
+      },
+    ),
+  );
+
   final TextEditingController categorySearchController =
       TextEditingController();
 
@@ -27,46 +41,73 @@ class ShopController extends GetxController {
     if (quantity.value > 1) quantity.value--;
   }
 
-  var categories = [
-    {
-      "icon":
-          "https://nutritionsource.hsph.harvard.edu/wp-content/uploads/2021/11/shutterstock_719023027-768x512.jpg",
-      "title": "Supplements",
-    },
-    {
-      "icon": "https://katiecouric.com/wp-content/uploads/2022/02/MealKit.jpg",
-      "title": "Meal Kits",
-    },
-    {
-      "icon":
-          "https://classpass.com/blog/wp-content/uploads/2019/09/shutterstock_1085127563.jpg",
-      "title": "Gear & Apparel",
-    },
-    {
-      "icon":
-          "https://libapps-au.s3-ap-southeast-2.amazonaws.com/accounts/1591/images/FAVPNG_educational-technology-smartphone-school-higher-education_WsiwsJxV.png",
-      "title": "Guides & E-Books",
-    },
-  ].obs;
+  var productcategoriesList = <ProductCategoryModel>[].obs;
 
-  var products = <ShopProductModel>[
-    ShopProductModel(
-      title: "Whey Protein Isolate (2lbs)",
-      description: "Vanilla, 25g protein per scoop.",
-      price: 39.99,
-      image:
-          "https://www.teamcp.co.nz/wp-content/uploads/2021/07/protiencpowder-600x433.png",
-      rating: 4.8,
-      reviews: 320,
-    ),
-    ShopProductModel(
-      title: "Whey Protein Isolate (2lbs)",
-      description: "Vanilla, 25g protein per scoop.",
-      price: 39.99,
-      image:
-          "https://www.teamcp.co.nz/wp-content/uploads/2021/07/protiencpowder-600x433.png",
-      rating: 4.8,
-      reviews: 320,
-    ),
-  ].obs;
+  @override
+  void onInit() {
+    fetchProductCategoriesMethod();
+    fetchProductMethod();
+
+    super.onInit();
+  }
+
+  var isLoading = false.obs;
+
+  void fetchProductCategoriesMethod() async {
+    isLoading(true);
+    try {
+      final productcategories = await service.fetchProductCategories();
+      productcategoriesList.assignAll(productcategories);
+          if (kDebugMode) {
+            print("productcategoriesList fetched: ${productcategoriesList.length}");
+          }
+
+
+    } catch (e) {
+      debugPrint("Error fetching categories: $e");
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  var products = <ShopProductModel>[].obs;
+
+void fetchProductMethod() async {
+  isLoading(true);
+  try {
+    final productList = await service.fetchShopProduct();
+    if (productList.isNotEmpty) {
+      products.assignAll(productList);
+    }
+    if (kDebugMode) {
+      print("Products fetched: ${products.length}");
+    }
+  } catch (e) {
+    debugPrint("Error fetching products: $e");
+  } finally {
+    isLoading(false);
+  }
+}
+
+
+  // var products = <ShopProductModel>[
+  //   ShopProductModel(
+  //     title: "Whey Protein Isolate (2lbs)",
+  //     description: "Vanilla, 25g protein per scoop.",
+  //     price: 39.99,
+  //     image:
+  //         "https://www.teamcp.co.nz/wp-content/uploads/2021/07/protiencpowder-600x433.png",
+  //     rating: 4.8,
+  //     reviews: 320,
+  //   ),
+  //   ShopProductModel(
+  //     title: "Whey Protein Isolate (2lbs)",
+  //     description: "Vanilla, 25g protein per scoop.",
+  //     price: 39.99,
+  //     image:
+  //         "https://www.teamcp.co.nz/wp-content/uploads/2021/07/protiencpowder-600x433.png",
+  //     rating: 4.8,
+  //     reviews: 320,
+  //   ),
+  // ].obs;
 }
