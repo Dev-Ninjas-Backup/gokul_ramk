@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/services/network_service/network_client.dart';
+import 'package:gokul_ramk/features/user/user_home/model/feature_workout_model.dart';
 import 'package:gokul_ramk/features/user/user_home/model/user_home_model.dart';
 import 'package:gokul_ramk/features/user/user_home/model/workout_model.dart';
 import 'package:gokul_ramk/features/user/user_home/service/user_home_service.dart';
@@ -30,7 +31,7 @@ class UserHomeController extends GetxController {
       final categoriesList = await service.fetchCategories();
       categories.assignAll(categoriesList);
       if (categories.isNotEmpty) {
-        selectedCategory.value = categories[2].id;
+        selectedCategory.value = categories[0].id;
         fetchWorkoutListMethod();
       }
     } catch (e) {
@@ -47,13 +48,24 @@ class UserHomeController extends GetxController {
     isLoading(true);
     try {
       final list = await service.fetchWorkouts(selectedCategory.value);
-      if (kDebugMode) {
-        print(
-        "===============================================Workouts: ${list.map((e) => e.name).toList()}",
-      );
-      }
 
       workoutList.assignAll(list);
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  var selectedFeaturedWorkout = "ONLINE".obs;
+
+  final filters = ["ONLINE", "IN_PERSON", "ONSITE", "HYBRID"];
+  var featureWorkoutList = <Workout>[].obs;
+  void fetchFeatureWorkoutMethod() async {
+    isLoading(true);
+    try { 
+      final list = await service.fetchFeatureWorkout(selectedFeaturedWorkout.value);
+      featureWorkoutList.assignAll(list);
     } catch (e) {
       debugPrint(e.toString());
     } finally {
@@ -65,6 +77,7 @@ class UserHomeController extends GetxController {
   void onInit() {
     fetchCategoriesMethod();
     fetchWorkoutListMethod();
+    fetchFeatureWorkoutMethod();
     super.onInit();
   }
 
@@ -101,10 +114,6 @@ class UserHomeController extends GetxController {
     'https://www.mlchc.org/sites/default/files/styles/max_650x650/public/2022-03/nutrition_image2.jpg',
     'https://www.weljii.com/wp-content/uploads/2024/06/apr-1.jpg',
   ];
-
-  var selectedFeaturedWorkout = "All Workouts".obs;
-
-  final filters = ["ONLINE", "IN_PERSON", "ONSITE","HYBRID"];
 
   RxString duration = "4 weeks".obs;
   RxString type = "Fat Burn".obs;

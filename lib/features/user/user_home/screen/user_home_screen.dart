@@ -133,9 +133,9 @@ class UserHomeScreen extends StatelessWidget {
                             isSelected:
                                 controller.selectedCategory.value == cat.id,
                             onTap: () {
-                                controller.selectedCategory.value = cat.id;
-                                controller.fetchWorkoutListMethod();
-                              },
+                              controller.selectedCategory.value = cat.id;
+                              controller.fetchWorkoutListMethod();
+                            },
                           ),
                         )
                         .toList(),
@@ -155,8 +155,8 @@ class UserHomeScreen extends StatelessWidget {
                     final workout = controller.workoutList[index];
                     debugPrint("Workout Name: ${workout.name}");
                     return
-                 //  Text(workout.name.toString());
-                     Padding(
+                    //  Text(workout.name.toString());
+                    Padding(
                       padding: const EdgeInsets.only(bottom: 10),
                       child: WorkoutCard(
                         large: true,
@@ -166,8 +166,6 @@ class UserHomeScreen extends StatelessWidget {
                         difficulty: workout.difficulty.toString(),
                       ),
                     );
-
-
                   },
                 ),
               ),
@@ -235,8 +233,10 @@ class UserHomeScreen extends StatelessWidget {
                       return CategoryButton(
                         label: filter,
                         isSelected: isSelected,
-                        onTap: () =>
-                            controller.selectedFeaturedWorkout.value = filter,
+                        onTap: () {
+                          controller.selectedFeaturedWorkout.value = filter;
+                          controller.fetchFeatureWorkoutMethod();
+                        },
                       );
                     }).toList(),
                   ),
@@ -244,23 +244,25 @@ class UserHomeScreen extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               // featured Workouts
-              ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: controller.workoutList.length,
-                itemBuilder: (context, index) {
-                  final workout = controller.workoutList[index];
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: WorkoutCard(
-                      large: true,
-                      title: workout.name.toString(),
-                      subtitle: workout.duration.toString(),
-                      difficulty: workout.difficulty.toString(),
-                      image: workout.coverImage.toString(),
-                    ),
-                  );
-                },
+              Obx(
+                () => ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: controller.featureWorkoutList.length,
+                  itemBuilder: (context, index) {
+                    final featureWorkout = controller.featureWorkoutList[index];
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: WorkoutCard(
+                        large: true,
+                        title: featureWorkout.name.toString(),
+                        subtitle: featureWorkout.duration.toString(),
+                        difficulty: featureWorkout.difficulty.toString(),
+                        image: featureWorkout.coverImage.toString(),
+                      ),
+                    );
+                  },
+                ),
               ),
 
               const SizedBox(height: 12),
