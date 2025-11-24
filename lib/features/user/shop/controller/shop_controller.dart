@@ -46,6 +46,7 @@ class ShopController extends GetxController {
   @override
   void onInit() {
     fetchProductCategoriesMethod();
+    fetchProductMethod();
 
     super.onInit();
   }
@@ -57,9 +58,11 @@ class ShopController extends GetxController {
     try {
       final productcategories = await service.fetchProductCategories();
       productcategoriesList.assignAll(productcategories);
-      if (productcategoriesList.isNotEmpty) {
-        return;
-      }
+          if (kDebugMode) {
+            print("productcategoriesList fetched: ${productcategoriesList.length}");
+          }
+
+
     } catch (e) {
       debugPrint("Error fetching categories: $e");
     } finally {
@@ -67,24 +70,44 @@ class ShopController extends GetxController {
     }
   }
 
-  var products = <ShopProductModel>[
-    ShopProductModel(
-      title: "Whey Protein Isolate (2lbs)",
-      description: "Vanilla, 25g protein per scoop.",
-      price: 39.99,
-      image:
-          "https://www.teamcp.co.nz/wp-content/uploads/2021/07/protiencpowder-600x433.png",
-      rating: 4.8,
-      reviews: 320,
-    ),
-    ShopProductModel(
-      title: "Whey Protein Isolate (2lbs)",
-      description: "Vanilla, 25g protein per scoop.",
-      price: 39.99,
-      image:
-          "https://www.teamcp.co.nz/wp-content/uploads/2021/07/protiencpowder-600x433.png",
-      rating: 4.8,
-      reviews: 320,
-    ),
-  ].obs;
+  var products = <ShopProductModel>[].obs;
+
+void fetchProductMethod() async {
+  isLoading(true);
+  try {
+    final productList = await service.fetchShopProduct();
+    if (productList.isNotEmpty) {
+      products.assignAll(productList);
+    }
+    if (kDebugMode) {
+      print("Products fetched: ${products.length}");
+    }
+  } catch (e) {
+    debugPrint("Error fetching products: $e");
+  } finally {
+    isLoading(false);
+  }
+}
+
+
+  // var products = <ShopProductModel>[
+  //   ShopProductModel(
+  //     title: "Whey Protein Isolate (2lbs)",
+  //     description: "Vanilla, 25g protein per scoop.",
+  //     price: 39.99,
+  //     image:
+  //         "https://www.teamcp.co.nz/wp-content/uploads/2021/07/protiencpowder-600x433.png",
+  //     rating: 4.8,
+  //     reviews: 320,
+  //   ),
+  //   ShopProductModel(
+  //     title: "Whey Protein Isolate (2lbs)",
+  //     description: "Vanilla, 25g protein per scoop.",
+  //     price: 39.99,
+  //     image:
+  //         "https://www.teamcp.co.nz/wp-content/uploads/2021/07/protiencpowder-600x433.png",
+  //     rating: 4.8,
+  //     reviews: 320,
+  //   ),
+  // ].obs;
 }

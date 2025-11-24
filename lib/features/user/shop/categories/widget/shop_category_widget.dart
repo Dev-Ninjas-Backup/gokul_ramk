@@ -43,7 +43,7 @@ class ShopCategoryWidget extends StatelessWidget {
                 topRight: Radius.circular(12),
               ),
               image: DecorationImage(
-                image: NetworkImage(product.image),
+                image: NetworkImage(product.thumbnail![0]),
                 fit: BoxFit.cover,
               ),
             ),
@@ -57,7 +57,7 @@ class ShopCategoryWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      product.title,
+                      product.name.toString(),
                       style: getTextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
