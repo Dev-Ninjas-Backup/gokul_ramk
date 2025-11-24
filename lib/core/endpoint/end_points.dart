@@ -11,18 +11,19 @@ class Urls {
   static const String resetPassword = '$baseUrl/auth/reset-password';
 
   static const String createNewProductUrl = '$baseUrl/product/create-product';
-
+  static const String productCategories = '$baseUrl/product-category';
+  static const String getProducts = '$baseUrl/product';
 
   //trainer post
-  static const String trainerPost='$baseUrl/post';
+  static const String trainerPost = '$baseUrl/post';
   //user onboarding(tell us about yourseft)
-  static const String tellAboutOnboarding="$baseUrl/user/onbording-step/me";
-  static const String userProfile="$baseUrl/user/profile/me";
-  static const String trainerProfile="$baseUrl/trainer";
+  static const String tellAboutOnboarding = "$baseUrl/user/onbording-step/me";
+  static const String userProfile = "$baseUrl/user/profile/me";
+  static const String trainerProfile = "$baseUrl/trainer";
   //categories/workout
-  static const String categories="$baseUrl/categories";
-  static const String workOuts="$baseUrl/workouts";
-  static const String featureWorkout="$baseUrl/workouts/feature-workouts";
+  static const String categories = "$baseUrl/categories";
+  static const String workOuts = "$baseUrl/workouts";
+  static const String featureWorkout = "$baseUrl/workouts/feature-workouts";
   //user shop
   static const String productcategories="$baseUrl/product-category";
   static const String products="$baseUrl/product";
