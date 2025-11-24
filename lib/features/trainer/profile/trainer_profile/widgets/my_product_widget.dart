@@ -4,6 +4,7 @@ import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
 import 'package:gokul_ramk/core/utils/constants/colors.dart';
 import 'package:gokul_ramk/features/trainer/profile/trainer_profile/controller/trainer_profile_controller.dart';
 import 'package:gokul_ramk/features/trainer/profile/trainer_profile/model/product_model.dart';
+import 'package:gokul_ramk/features/trainer/profile/my_products/screen/my_products_screen.dart';
 import 'package:gokul_ramk/routes/app_routes.dart';
 
 class MyProductsWidget extends StatelessWidget {
@@ -29,7 +30,7 @@ class MyProductsWidget extends StatelessWidget {
               ),
               TextButton(
                 onPressed: () {
-                  // see all tapped
+                  Get.to(() => MyProductsScreen());
                 },
                 child: Text("See all"),
               ),

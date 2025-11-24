@@ -35,6 +35,7 @@ class AddProductRequestService {
       request.fields['price'] = price.toString();
       request.fields['categoryId'] = categoryId;
       request.fields['stock'] = stock.toString();
+      request.fields['status'] = 'Active';
 
       if (rating != null) {
         request.fields['rating'] = rating.toString();
@@ -44,11 +45,13 @@ class AddProductRequestService {
       if (ingredients != null && ingredients.isNotEmpty) {
         request.fields['ingredients'] = jsonEncode(ingredients);
       }
+      // Send key_benefits - add each item as a separate field entry
       if (keyBenefits != null && keyBenefits.isNotEmpty) {
-        request.fields['key_benefits'] = jsonEncode(keyBenefits);
+        // In multipart form, adding multiple values with same key creates an array
+        for (int i = 0; i < keyBenefits.length; i++) {
+          request.fields['key_benefits[$i]'] = keyBenefits[i];
+        }
       }
-
-
 
       // Add image files (up to 5)
       for (var i = 0; i < thumbnailImages.length && i < 5; i++) {

@@ -62,17 +62,52 @@ class AddProductScreen extends StatelessWidget {
                 ),
               ),
             ),
-            Obx(
-              () => DropdownButtonFormField<String>(
-                // ignore: deprecated_member_use
-                value: controller.selectedCategory.value,
+            Obx(() {
+              if (controller.isLoadingCategories.value) {
+                return const SizedBox(
+                  height: 50,
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              }
+
+              if (controller.categories.isEmpty) {
+                return Container(
+                  padding: EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.red),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Text(
+                    'No categories available',
+                    style: getTextStyle(color: Colors.red),
+                  ),
+                );
+              }
+
+              return DropdownButtonFormField<String>(
+                initialValue: controller.selectedCategory.value?.id,
                 items: controller.categories
-                    .map((c) => DropdownMenuItem(value: c, child: Text(c)))
+                    .map(
+                      (c) => DropdownMenuItem(value: c.id, child: Text(c.name)),
+                    )
                     .toList(),
-                onChanged: (value) =>
-                    controller.selectedCategory.value = value!,
-              ),
-            ),
+                onChanged: (value) {
+                  if (value != null) {
+                    final selectedCat = controller.categories.firstWhereOrNull(
+                      (c) => c.id == value,
+                    );
+                    controller.selectedCategory.value = selectedCat;
+                  }
+                },
+                decoration: InputDecoration(
+                  hintText: 'Select a category',
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 12,
+                  ),
+                ),
+              );
+            }),
             SizedBox(height: 10),
 
             Padding(
@@ -157,7 +192,7 @@ class AddProductScreen extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () async{
+                onPressed: () async {
                   await controller.postCreateProduct();
                 },
                 child: Text(
@@ -172,8 +207,7 @@ class AddProductScreen extends StatelessWidget {
 
             SizedBox(height: 10),
             Text(
-              "Your product will be reviewed by our team before it appears in the store. "
-              "A commission fee applies per sale.",
+              "Your product will be reviewed by our team before it appears in the store. ",
               style: getTextStyle(
                 fontSize: 12,
                 color: Colors.grey,

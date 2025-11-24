@@ -1,14 +1,18 @@
 import 'dart:io';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:gokul_ramk/features/trainer/profile/add_product/model/category_model.dart';
 import 'package:gokul_ramk/features/trainer/profile/add_product/post_request_service/add_product_request_service.dart';
+import 'package:gokul_ramk/features/trainer/profile/add_product/post_request_service/category_request_service.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddProductController extends GetxController {
-  var categories = ["Nutrition", "Fitness", "Supplements", "Accessories"].obs;
-  var selectedCategory = "Nutrition".obs;
+  var categories = <ProductCategory>[].obs;
+  var selectedCategory = Rx<ProductCategory?>(null);
+  var isLoadingCategories = true.obs;
 
   var selectedDelivery = "Both Shipping & Pickup".obs;
 
@@ -21,6 +25,46 @@ class AddProductController extends GetxController {
   var selectedImages = <File>[].obs;
   var index = 0.obs;
   var selectedImagePath = ''.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    fetchCategories();
+  }
+
+  @override
+  void onClose() {
+    nameController.dispose();
+    priceController.dispose();
+    stockController.dispose();
+    descriptionController.dispose();
+    super.onClose();
+  }
+
+  Future<void> fetchCategories() async {
+    try {
+      isLoadingCategories.value = true;
+      final categoryList =
+          await CategoryRequestService.fetchProductCategories();
+
+      if (categoryList.isNotEmpty) {
+        categories.value = categoryList
+            .map(
+              (item) => ProductCategory.fromJson(item as Map<String, dynamic>),
+            )
+            .toList();
+
+        // Set first category as default
+        if (categories.isNotEmpty) {
+          selectedCategory.value = categories[0];
+        }
+      }
+    } catch (e) {
+      EasyLoading.showError('Failed to load categories: $e');
+    } finally {
+      isLoadingCategories.value = false;
+    }
+  }
 
   Future<void> pickImage(ImageSource source) async {
     try {
@@ -55,21 +99,75 @@ class AddProductController extends GetxController {
         stockController.text.isEmpty) {
       return EasyLoading.showError('Fill required field');
     }
+    if (selectedCategory.value == null) {
+      return EasyLoading.showError('Please select a category');
+    }
   }
 
   Future<void> postCreateProduct() async {
     await validation();
-    // ignore: unused_local_variable
-    final response = await AddProductRequestService.createProduct(
-      name: nameController.text.trim(),
-      description: descriptionController.text.trim(),
-      price: double.tryParse(priceController.text.trim()) ?? 0.0,
-      categoryId: selectedCategory.value,
-      stock: int.tryParse(stockController.text.trim()) ?? 0,
-      thumbnailImages: selectedImages,
-      ingredients: ingredientToJson(),
-      keyBenefits: benefitToList(),
-    );
+    try {
+      EasyLoading.show(status: 'Creating product...');
+      final response = await AddProductRequestService.createProduct(
+        name: nameController.text.trim(),
+        description: descriptionController.text.trim(),
+        price: double.tryParse(priceController.text.trim()) ?? 0.0,
+        categoryId: selectedCategory.value?.id ?? '',
+        stock: int.tryParse(stockController.text.trim()) ?? 0,
+        thumbnailImages: selectedImages,
+        ingredients: ingredientToJson(),
+        keyBenefits: benefitToList(),
+      );
+
+      // Parse response
+      final responseData = jsonDecode(response);
+
+      if (responseData['success'] == true) {
+        EasyLoading.dismiss();
+
+        // Clear all fields
+        clearAllFields();
+
+        // Show success dialog
+        Get.dialog(
+          AlertDialog(
+            title: const Text('Success!'),
+            content: const Text(
+              'Your product has been submitted for review. '
+              'A commission fee applies per sale.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Get.back(); // Close dialog
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      } else {
+        EasyLoading.showError(
+          responseData['message'] ?? 'Failed to create product',
+        );
+      }
+    } catch (e) {
+      EasyLoading.showError('Error: $e');
+    }
+  }
+
+  /// Clear all input fields and selections
+  void clearAllFields() {
+    nameController.clear();
+    priceController.clear();
+    stockController.clear();
+    descriptionController.clear();
+    selectedImages.clear();
+    ingredients.clear();
+    keyBenefits.clear();
+    if (categories.isNotEmpty) {
+      selectedCategory.value = categories[0];
+    }
   }
 
   //control ingredients
