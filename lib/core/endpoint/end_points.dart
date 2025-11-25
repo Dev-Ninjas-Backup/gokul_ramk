@@ -25,6 +25,6 @@ class Urls {
   static const String workOuts = "$baseUrl/workouts";
   static const String featureWorkout = "$baseUrl/workouts/feature-workouts";
   //user shop
-  static const String productcategories="$baseUrl/product-category";
-  static const String products="$baseUrl/product";
+  static const String productcategories = "$baseUrl/product-category";
+  static const String products = "$baseUrl/product";
 }

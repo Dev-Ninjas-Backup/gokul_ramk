@@ -4,6 +4,7 @@ import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
 import 'package:gokul_ramk/core/common/widgets/custom_app_bar_title.dart';
 import 'package:gokul_ramk/core/utils/constants/colors.dart';
 import 'package:gokul_ramk/features/trainer/profile/my_products/controller/my_products_controller.dart';
+import 'package:gokul_ramk/routes/app_routes.dart';
 
 class MyProductsScreen extends StatelessWidget {
   MyProductsScreen({super.key});
@@ -104,11 +105,18 @@ class MyProductsScreen extends StatelessWidget {
                   ...controller.products.map((product) {
                     return GestureDetector(
                       onTap: () {
-                        // Navigate to product details if needed
-                        Get.snackbar('Info', 'Product: ${product.name}');
+                        Get.toNamed(
+                          AppRoute.productDetails,
+                          arguments: product,
+                        );
                       },
                       child: Card(
                         margin: EdgeInsets.only(bottom: 12),
+                        color: Colors.white,
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                         child: Padding(
                           padding: EdgeInsets.all(12),
                           child: Row(
@@ -176,7 +184,7 @@ class MyProductsScreen extends StatelessWidget {
                                       ),
                                     SizedBox(height: 4),
                                     Text(
-                                      'Rs. ${product.price.toStringAsFixed(2)}',
+                                      '\$${product.price.toStringAsFixed(2)}',
                                       style: getTextStyle(
                                         fontSize: 13,
                                         fontWeight: FontWeight.w600,
@@ -232,7 +240,7 @@ class MyProductsScreen extends StatelessWidget {
                                         borderRadius: BorderRadius.circular(4),
                                       ),
                                       child: Text(
-                                        'Verified: ${product.verified}',
+                                        'Verification: ${product.verified}',
                                         style: getTextStyle(
                                           fontSize: 10,
                                           color: Colors.white,
