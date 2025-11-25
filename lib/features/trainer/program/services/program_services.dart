@@ -38,7 +38,7 @@ class ProgramService {
 
       if (res.isSuccess && res.responseData != null) {
         // ←←← THIS IS THE ONLY CHANGE ←←←
-        final List<dynamic> data = res.responseData!['data'] as List<dynamic>;
+        final List<dynamic> data = res.responseData!['data']['data'];
         return data.map((json) => CategoryModel.fromJson(json)).toList();
       }
     } catch (e) {
@@ -49,21 +49,22 @@ class ProgramService {
 
   //fetch excercises
 
-  Future<ExerciseResponse> fetchAllExercises() async {
+  Future<List<Exercise>> fetchAllExercises() async {
     try {
       final res = await _client.getRequest(
         url: "https://wellfitsync.com/workout-exercises",
       );
 
       if (res.isSuccess && res.responseData != null) {
-        return ExerciseResponse.fromJson(res.responseData!);
+        final List<dynamic> data = res.responseData!['data']['data'];
+        return data.map((json) => Exercise.fromJson(json)).toList();
       }
     } catch (e) {
       Get.snackbar("Error", "Failed to load exercises");
       rethrow;
     }
 
-    return ExerciseResponse(data: []);
+    return [];
   }
 
   // Create program

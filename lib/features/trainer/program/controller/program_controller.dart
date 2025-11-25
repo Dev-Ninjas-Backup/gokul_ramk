@@ -62,6 +62,12 @@ class ProgramController extends GetxController {
       final list = await ProgramService.fetchCategories();
       categories.assignAll(list);
       if (categories.isNotEmpty) selectedCategoryId.value = categories.first.id;
+
+      if (kDebugMode) {
+        print(
+          "===============================================CateGories: ${categories.map((e) => e.name).toList()}",
+        );
+      }
     } catch (e) {
       debugPrint("Error fetching categories: $e");
     } finally {
@@ -74,17 +80,21 @@ class ProgramController extends GetxController {
     isLoading(true);
     try {
       final response = await service.fetchAllExercises();
-      allExercises.assignAll(response.data);
+      allExercises.assignAll(response);
+
 
       // Print readable list of exercise names
       if (kDebugMode) {
         print(
-        "===============================================Exercises: ${allExercises.map((e) => e.name).toList()}",
-      );
+          "===============================================Exercises: ${allExercises.map((e) => e.name).toList()}",
+        );
       }
 
       if (selectedExercise.value == null && allExercises.isNotEmpty) {
         selectExercise(allExercises.first);
+      }
+      else{
+      debugPrint("No Exercises=================");
       }
     } catch (e) {
       debugPrint("Error fetching exercises: $e");
