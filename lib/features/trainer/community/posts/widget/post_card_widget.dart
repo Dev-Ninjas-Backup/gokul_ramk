@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
@@ -300,7 +302,7 @@ class _PostCardWidgetState extends State<PostCardWidget> {
                         children: [
                           ...displayedComments
                               .map((comment) => CommentWidget(comment: comment))
-                              .toList(),
+                              ,
                           if (_hasMoreComments())
                             Padding(
                               padding: EdgeInsets.symmetric(vertical: 12),

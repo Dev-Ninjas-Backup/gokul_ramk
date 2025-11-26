@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:gokul_ramk/core/endpoint/end_points.dart';
 import 'package:gokul_ramk/core/services/network_service/network_client.dart';
 import 'package:gokul_ramk/features/trainer/community/posts/model/posts_model.dart';

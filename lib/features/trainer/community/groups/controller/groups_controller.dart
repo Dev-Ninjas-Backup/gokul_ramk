@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -43,14 +45,10 @@ class GroupsController extends GetxController {
       if (trainer != null) {
         currentUserId.value = trainer.id;
         // Set the current user ID in the GroupModel
-        GroupModel.setCurrentUserId(trainer.id);
-        print('Current user ID set: ${trainer.id}');
-        // Now load groups
+        GroupModel.setCurrentUserId(trainer.id);        // Now load groups
         await loadMoreGroups();
       }
-    } catch (e) {
-      print('Error initializing current user: $e');
-      // Still load groups even if we can't get user ID
+    } catch (e) {      // Still load groups even if we can't get user ID
       await loadMoreGroups();
     }
   }
@@ -73,9 +71,7 @@ class GroupsController extends GetxController {
         groups.addAll(newGroups);
         currentPage++;
       }
-    } catch (e) {
-      print('Error loading groups: $e');
-      hasMoreGroups.value = false;
+    } catch (e) {      hasMoreGroups.value = false;
     } finally {
       isLoadingGroups.value = false;
     }
@@ -102,7 +98,6 @@ class GroupsController extends GetxController {
         Get.snackbar('Error', 'Failed to join group');
       }
     } catch (e) {
-      print('Error joining group: $e');
       Get.snackbar('Error', 'Failed to join group');
     } finally {
       joiningGroupId.value = '';
@@ -128,7 +123,6 @@ class GroupsController extends GetxController {
         Get.snackbar('Error', 'Failed to leave group');
       }
     } catch (e) {
-      print('Error leaving group: $e');
       Get.snackbar('Error', 'Failed to leave group');
     } finally {
       joiningGroupId.value = '';
