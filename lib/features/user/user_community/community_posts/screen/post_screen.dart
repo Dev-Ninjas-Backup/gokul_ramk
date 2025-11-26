@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:gokul_ramk/features/user/user_community/community_posts/controller/user_community_controller.dart';
 import 'package:gokul_ramk/features/user/user_community/community_posts/widget/post_card_widget.dart';
 
+import '../../../../trainer/community/posts/create_post/screen/trainer_create_post_screen.dart';
+
 class PostScreen extends StatelessWidget {
   PostScreen({super.key});
   final UserCommunityController controller = Get.put(UserCommunityController());
@@ -27,14 +29,19 @@ class PostScreen extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     Expanded(
-                      child: Container(
-                        padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Colors.grey.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Text(
-                          'Share your progress, ask questions, or motivate others!',
+                      child: GestureDetector(
+                      onTap: () {
+                        Get.to(TrainerCreatePostScreen());
+                      },
+                        child: Container(
+                          padding: EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.grey.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            'Share your progress, ask questions, or motivate others!',
+                          ),
                         ),
                       ),
                     ),
@@ -46,7 +53,7 @@ class PostScreen extends StatelessWidget {
             // --- Sliver for Posts ---
             SliverList(
               delegate: SliverChildBuilderDelegate((context, index) {
-                return PostCardWidget(post: controller.posts[index]);
+                return PostCardWidget(controller: controller, index: index);
               }, childCount: controller.posts.length),
             ),
           ],

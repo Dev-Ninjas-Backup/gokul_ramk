@@ -1,9 +1,21 @@
+import 'package:flutter/widgets.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:gokul_ramk/core/services/network_service/network_client.dart';
 import 'package:gokul_ramk/core/utils/constants/imagepath.dart';
 import 'package:gokul_ramk/features/user/user_community/community_groups/model/groups_model.dart';
 import 'package:gokul_ramk/features/user/user_community/community_posts/model/posts_model.dart';
+import 'package:gokul_ramk/features/user/user_community/community_posts/service/post_service.dart';
 
 class UserCommunityController extends GetxController {
+  final PostService service = PostService(
+    client: NetworkClient(
+      onUnAuthorize: () {
+        EasyLoading.showError("UnAuthorized");
+      },
+    ),
+  );
+
   var selectedTab = 1.obs;
 
   var groups = <UserCommunityGroup>[
@@ -34,30 +46,25 @@ class UserCommunityController extends GetxController {
     selectedTab.value = index;
   }
 
-  var posts = <PostModel>[
-    PostModel(
-      name: "Ricardo Vela",
-      username: "@ricvela",
-      role: "user",
-      imageUrl:
-          "https://media.self.com/photos/5b7c4e71ecbb7f4c41c77335/4:3/w_1920%2Cc_limit/triangle-pose-beginner-yoga.jpg",
-      likes: 100,
-      comments: 100,
-      caption:
-          "Lorem ipsum dolor sit amet consectetur. Neque interdum ornare elementum elit pulvinar molestie.",
-      timeAgo: "10 minutes ago",
-    ),
-    PostModel(
-      name: "Ricardo Vela",
-      username: "@ricvela",
-      role: "trainer",
-      imageUrl:
-          "https://media.self.com/photos/5b7c4e71ecbb7f4c41c77335/4:3/w_1920%2Cc_limit/triangle-pose-beginner-yoga.jpg",
-      likes: 100,
-      comments: 100,
-      caption:
-          "Lorem ipsum dolor sit amet consectetur. Neque interdum ornare elementum elit pulvinar molestie.",
-      timeAgo: "10 minutes ago",
-    ),
-  ].obs;
+  var posts = <PostModel>[].obs;
+  @override
+  void onInit() {
+    fetchPostMethod();
+
+    super.onInit();
+  }
+
+  var isLoading = false.obs;
+  void fetchPostMethod() async {
+    isLoading(true);
+    try {
+      final postList = await service.fetchPost();
+
+      posts.assignAll(postList);
+    } catch (e) {
+      debugPrint("Error is $e");
+    } finally {
+      isLoading(false);
+    }
+  }
 }

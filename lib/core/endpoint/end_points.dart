@@ -27,4 +27,8 @@ class Urls {
   //user shop
   static const String productcategories="$baseUrl/product-category";
   static const String products="$baseUrl/product";
+
+  //user get post
+  static const String getPost="$baseUrl/post";
+
 }
