@@ -1,63 +1,63 @@
 import 'package:get/get.dart';
-import 'package:gokul_ramk/core/utils/constants/imagepath.dart';
-import 'package:gokul_ramk/features/trainer/community/groups/model/groups_model.dart';
+import 'package:gokul_ramk/core/services/network_service/network_client.dart';
 import 'package:gokul_ramk/features/trainer/community/posts/model/posts_model.dart';
+import 'package:gokul_ramk/features/trainer/community/posts/repository/post_repository.dart';
 
 class CommunityController extends GetxController {
-  var selectedTab = 1.obs;
+  var selectedTab = 0.obs;
 
-  var groups = <CommunityGroup>[
-    CommunityGroup(
-      title: "Yoga & Mindfulness 🧘",
-      imagePath: Imagepath.yogaGroup,
-      members: "100k+ Members",
-    ),
+  // Posts pagination
+  late PostRepository postRepository;
+  var posts = <PostModel>[].obs;
+  var isLoadingPosts = false.obs;
+  var currentPage = 1;
+  var postsPerPage = 10;
+  var hasMorePosts = true.obs;
 
-    CommunityGroup(
-      title: "Strength & Bodybuilding 💪",
-      imagePath: Imagepath.strengthGroup,
-      members: "100k+ Members",
-    ),
-
-    CommunityGroup(
-      title: "Weight Loss Journey 🔥",
-      imagePath: Imagepath.weightLossGroup,
-      members: "100k+ Members",
-    ),
-  ].obs;
-
-  void toggleJoin(int index) {
-    groups[index] = groups[index].copyWith(isJoined: !groups[index].isJoined);
+  @override
+  void onInit() {
+    super.onInit();
+    // Initialize PostRepository with NetworkClient
+    final networkClient = Get.find<NetworkClient>();
+    postRepository = PostRepository(networkClient: networkClient);
+    loadMorePosts();
   }
 
   void changeTab(int index) {
     selectedTab.value = index;
   }
 
-  var posts = <PostModel>[
-    PostModel(
-      name: "Ricardo Vela",
-      username: "@ricvela",
-      role: "user",
-      imageUrl:
-          "https://media.self.com/photos/5b7c4e71ecbb7f4c41c77335/4:3/w_1920%2Cc_limit/triangle-pose-beginner-yoga.jpg",
-      likes: 100,
-      comments: 100,
-      caption:
-          "Lorem ipsum dolor sit amet consectetur. Neque interdum ornare elementum elit pulvinar molestie.",
-      timeAgo: "10 minutes ago",
-    ),
-    PostModel(
-      name: "Ricardo Vela",
-      username: "@ricvela",
-      role: "trainer",
-      imageUrl:
-          "https://media.self.com/photos/5b7c4e71ecbb7f4c41c77335/4:3/w_1920%2Cc_limit/triangle-pose-beginner-yoga.jpg",
-      likes: 100,
-      comments: 100,
-      caption:
-          "Lorem ipsum dolor sit amet consectetur. Neque interdum ornare elementum elit pulvinar molestie.",
-      timeAgo: "10 minutes ago",
-    ),
-  ].obs;
+  // Load more posts with pagination
+  Future<void> loadMorePosts() async {
+    if (isLoadingPosts.value || !hasMorePosts.value) return;
+
+    isLoadingPosts.value = true;
+    try {
+      final newPosts = await postRepository.getPosts(
+        page: currentPage,
+        limit: postsPerPage,
+        sortBy: 'createdAt',
+      );
+
+      if (newPosts.isEmpty) {
+        hasMorePosts.value = false;
+      } else {
+        posts.addAll(newPosts);
+        currentPage++;
+      }
+    } catch (e) {
+      print('Error loading posts: $e');
+      hasMorePosts.value = false;
+    } finally {
+      isLoadingPosts.value = false;
+    }
+  }
+
+  // Refresh posts (clear and reload from page 1)
+  Future<void> refreshPosts() async {
+    posts.clear();
+    currentPage = 1;
+    hasMorePosts.value = true;
+    await loadMorePosts();
+  }
 }
