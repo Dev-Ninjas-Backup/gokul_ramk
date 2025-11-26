@@ -4,16 +4,45 @@ import 'package:gokul_ramk/features/trainer/community/posts/controller/trainer_c
 import 'package:gokul_ramk/features/trainer/community/posts/create_post/screen/trainer_create_post_screen.dart';
 import 'package:gokul_ramk/features/trainer/community/posts/widget/post_card_widget.dart';
 
-class PostScreen extends StatelessWidget {
+class PostScreen extends StatefulWidget {
   PostScreen({super.key});
-  final CommunityController controller = Get.put(
-    CommunityController());
+
+  @override
+  State<PostScreen> createState() => _PostScreenState();
+}
+
+class _PostScreenState extends State<PostScreen> {
+  final CommunityController controller = Get.put(CommunityController());
+  late ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
+      // Load more posts when scrolled to the bottom
+      controller.loadMorePosts();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Obx(() {
         return CustomScrollView(
+          controller: _scrollController,
           slivers: [
             // --- Sliver for Header ---
             SliverToBoxAdapter(
@@ -49,11 +78,30 @@ class PostScreen extends StatelessWidget {
             ),
 
             // --- Sliver for Posts ---
-            SliverList(
-              delegate: SliverChildBuilderDelegate((context, index) {
-                return PostCardWidget(post: controller.posts[index]);
-              }, childCount: controller.posts.length),
-            ),
+            if (controller.posts.isEmpty && !controller.isLoadingPosts.value)
+              SliverToBoxAdapter(
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Text('No posts available'),
+                  ),
+                ),
+              )
+            else
+              SliverList(
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  return PostCardWidget(post: controller.posts[index]);
+                }, childCount: controller.posts.length),
+              ),
+
+            // --- Loading indicator at the bottom ---
+            if (controller.isLoadingPosts.value)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Center(child: CircularProgressIndicator()),
+                ),
+              ),
           ],
         );
       }),
