@@ -2,8 +2,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/utils/constants/icon_path.dart';
-import 'package:gokul_ramk/core/utils/constants/imagepath.dart';
-import 'package:gokul_ramk/features/trainer/profile/trainer_profile/model/product_model.dart';
+import 'package:gokul_ramk/features/trainer/profile/my_products/model/product_model.dart';
 import 'package:gokul_ramk/features/trainer/profile/trainer_profile/model/trainer_model.dart';
 
 import '../service/trainer_profile_service.dart';
@@ -45,24 +44,7 @@ class TrainerProfileController extends GetxController {
   ].obs;
 
   // ✅ Products
-  var products = <Product>[
-    Product(
-      name: "Whey Protein - Chocolate 1kg",
-      price: 45,
-      unitsSold: 0,
-      earnings: 0,
-      image: Imagepath.proteinBottle,
-      status: "Pending Review",
-    ),
-    Product(
-      name: "Premium Grip Training Gloves",
-      price: 25,
-      unitsSold: 32,
-      earnings: 640,
-      image: Imagepath.gloves,
-      status: "Approved (Live in Store)",
-    ),
-  ].obs;
+  var products = <Product>[].obs;
 
   var totalRevenue = 5700.0.obs;
   var totalProductsSold = 120.obs;
@@ -76,6 +58,7 @@ class TrainerProfileController extends GetxController {
   void onInit() {
     super.onInit();
     fetchTrainerProfile();
+    fetchRecentProducts();
   }
 
   var isLoading = false.obs;
@@ -89,6 +72,15 @@ class TrainerProfileController extends GetxController {
       if (kDebugMode) print("Error fetching trainer profile: $e");
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  void fetchRecentProducts() async {
+    try {
+      final recentProducts = await trainerService.getRecentProducts(limit: 2);
+      products.value = recentProducts;
+    } catch (e) {
+      if (kDebugMode) print("Error fetching products: $e");
     }
   }
 }

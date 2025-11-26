@@ -31,4 +31,5 @@ class Urls {
   //user get post
   static const String getPost="$baseUrl/post";
 
+
 }
