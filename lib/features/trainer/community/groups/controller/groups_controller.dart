@@ -3,21 +3,136 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:gokul_ramk/core/services/network_service/network_client.dart';
+import 'package:gokul_ramk/features/trainer/community/groups/model/groups_model.dart';
 import 'package:gokul_ramk/features/trainer/community/groups/repository/group_repository.dart';
+import 'package:gokul_ramk/features/trainer/community/groups/repository/trainer_service.dart';
 
 class GroupsController extends GetxController {
   late GroupRepository groupRepository;
+  late TrainerService trainerService;
   final ImagePicker _imagePicker = ImagePicker();
 
+  // Group creation
   var isCreatingGroup = false.obs;
   var selectedImage = Rxn<File>();
   var selectedImageName = ''.obs;
+
+  // Group listing
+  var groups = <GroupModel>[].obs;
+  var isLoadingGroups = false.obs;
+  var currentPage = 1;
+  var groupsPerPage = 10;
+  var hasMoreGroups = true.obs;
+  var joiningGroupId = ''.obs;
+  var currentUserId = ''.obs;
 
   @override
   void onInit() {
     super.onInit();
     final networkClient = Get.find<NetworkClient>();
     groupRepository = GroupRepository(networkClient: networkClient);
+    trainerService = TrainerService(networkClient: networkClient);
+
+    // Fetch current user ID first
+    _initializeCurrentUser();
+  }
+
+  Future<void> _initializeCurrentUser() async {
+    try {
+      final trainer = await trainerService.getCurrentTrainer();
+      if (trainer != null) {
+        currentUserId.value = trainer.id;
+        // Set the current user ID in the GroupModel
+        GroupModel.setCurrentUserId(trainer.id);
+        print('Current user ID set: ${trainer.id}');
+        // Now load groups
+        await loadMoreGroups();
+      }
+    } catch (e) {
+      print('Error initializing current user: $e');
+      // Still load groups even if we can't get user ID
+      await loadMoreGroups();
+    }
+  }
+
+  // Load groups with pagination
+  Future<void> loadMoreGroups() async {
+    if (isLoadingGroups.value || !hasMoreGroups.value) return;
+
+    isLoadingGroups.value = true;
+    try {
+      final newGroups = await groupRepository.getGroups(
+        page: currentPage,
+        limit: groupsPerPage,
+        sortBy: 'createdAt',
+      );
+
+      if (newGroups.isEmpty) {
+        hasMoreGroups.value = false;
+      } else {
+        groups.addAll(newGroups);
+        currentPage++;
+      }
+    } catch (e) {
+      print('Error loading groups: $e');
+      hasMoreGroups.value = false;
+    } finally {
+      isLoadingGroups.value = false;
+    }
+  }
+
+  // Refresh groups (clear and reload from page 1)
+  Future<void> refreshGroups() async {
+    groups.clear();
+    currentPage = 1;
+    hasMoreGroups.value = true;
+    await loadMoreGroups();
+  }
+
+  // Join group
+  Future<void> joinGroup(String groupId, int index) async {
+    joiningGroupId.value = groupId;
+    try {
+      final updatedGroup = await groupRepository.joinGroup(groupId);
+      if (updatedGroup != null) {
+        // Update the group in the list
+        groups[index] = updatedGroup;
+        Get.snackbar('Success', 'Joined group successfully');
+      } else {
+        Get.snackbar('Error', 'Failed to join group');
+      }
+    } catch (e) {
+      print('Error joining group: $e');
+      Get.snackbar('Error', 'Failed to join group');
+    } finally {
+      joiningGroupId.value = '';
+    }
+  }
+
+  // Leave group
+  Future<void> leaveGroup(String groupId, int index) async {
+    joiningGroupId.value = groupId;
+    try {
+      final success = await groupRepository.leaveGroup(groupId);
+      if (success) {
+        // Update the group in the list by reloading it
+        final updatedGroups = await groupRepository.getGroups(
+          page: 1,
+          limit: (index + 1) * 2,
+        );
+        if (updatedGroups.isNotEmpty && updatedGroups.length > index) {
+          groups[index] = updatedGroups[index];
+        }
+        Get.snackbar('Success', 'Left group successfully');
+      } else {
+        Get.snackbar('Error', 'Failed to leave group');
+      }
+    } catch (e) {
+      print('Error leaving group: $e');
+      Get.snackbar('Error', 'Failed to leave group');
+    } finally {
+      joiningGroupId.value = '';
+    }
   }
 
   Future<void> pickImage() async {
@@ -61,6 +176,8 @@ class GroupsController extends GetxController {
         // Clear form
         selectedImage.value = null;
         selectedImageName.value = '';
+        // Refresh groups list
+        await refreshGroups();
       } else {
         Get.snackbar('Error', response?.message ?? 'Failed to create group');
       }
@@ -88,11 +205,7 @@ class GroupsController extends GetxController {
                   shape: BoxShape.circle,
                   color: Colors.green[100],
                 ),
-                child: Icon(
-                  Icons.check_circle,
-                  size: 50,
-                  color: Colors.green,
-                ),
+                child: Icon(Icons.check_circle, size: 50, color: Colors.green),
               ),
               SizedBox(height: 20),
               Text(
@@ -107,10 +220,7 @@ class GroupsController extends GetxController {
               Text(
                 'Your group has been created and is ready to use.',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey[700],
-                ),
+                style: TextStyle(fontSize: 14, color: Colors.grey[700]),
               ),
               SizedBox(height: 24),
               SizedBox(

@@ -1,7 +1,5 @@
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/services/network_service/network_client.dart';
-import 'package:gokul_ramk/core/utils/constants/imagepath.dart';
-import 'package:gokul_ramk/features/trainer/community/groups/model/groups_model.dart';
 import 'package:gokul_ramk/features/trainer/community/posts/model/posts_model.dart';
 import 'package:gokul_ramk/features/trainer/community/posts/repository/post_repository.dart';
 
@@ -23,28 +21,6 @@ class CommunityController extends GetxController {
     final networkClient = Get.find<NetworkClient>();
     postRepository = PostRepository(networkClient: networkClient);
     loadMorePosts();
-  }
-
-  var groups = <CommunityGroup>[
-    CommunityGroup(
-      title: "Yoga & Mindfulness 🧘",
-      imagePath: Imagepath.yogaGroup,
-      members: "100k+ Members",
-    ),
-    CommunityGroup(
-      title: "Strength & Bodybuilding 💪",
-      imagePath: Imagepath.strengthGroup,
-      members: "100k+ Members",
-    ),
-    CommunityGroup(
-      title: "Weight Loss Journey 🔥",
-      imagePath: Imagepath.weightLossGroup,
-      members: "100k+ Members",
-    ),
-  ].obs;
-
-  void toggleJoin(int index) {
-    groups[index] = groups[index].copyWith(isJoined: !groups[index].isJoined);
   }
 
   void changeTab(int index) {

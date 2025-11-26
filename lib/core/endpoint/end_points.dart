@@ -37,4 +37,10 @@ class Urls {
 
   // Group endpoints
   static const String createGroup = "$baseUrl/group";
+  static const String getGroups = "$baseUrl/group";
+  static String joinGroup(String groupId) => "$baseUrl/group/$groupId/join";
+  static String leaveGroup(String groupId) => "$baseUrl/group/$groupId/leave";
+
+  // Trainer endpoints
+  static const String trainerProfileMe = "$baseUrl/trainer";
 }
