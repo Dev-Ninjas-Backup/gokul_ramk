@@ -5,7 +5,7 @@ import 'package:gokul_ramk/features/trainer/community/posts/create_post/screen/t
 import 'package:gokul_ramk/features/trainer/community/posts/widget/post_card_widget.dart';
 
 class PostScreen extends StatefulWidget {
-  PostScreen({super.key});
+  const PostScreen({super.key});
 
   @override
   State<PostScreen> createState() => _PostScreenState();
