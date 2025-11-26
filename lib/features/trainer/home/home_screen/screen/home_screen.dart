@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gokul_ramk/features/trainer/home/home_screen/meal_screen/screen/create_meal_screen.dart';
 import 'package:gokul_ramk/features/trainer/program/screen/create_program.dart';
 
 import '../../../../../core/common/styles/global_text_style.dart';
@@ -136,6 +137,66 @@ class HomeScreen extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () {
                       Get.to(CreateProgramScreen());
+                    },
+                    child: Text("Start Now"),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 12,),
+                       // Create meal
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.green[50],
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "Create Meal",
+                    style: getTextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+
+                  SizedBox(height: 12),
+                  ElevatedButton(
+                    onPressed: () {
+                      Get.to(MealCreateScreen());
+                    },
+                    child: Text("Start Now"),
+                  ),
+                ],
+              ),
+            ),            SizedBox(height: 12,),
+
+                                  // Create meal
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.green[50],
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "Create Meal Plan",
+                    style: getTextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+
+                  SizedBox(height: 12),
+                  ElevatedButton(
+                    onPressed: () {
+                    //  Get.to(CreateProgramScreen());
                     },
                     child: Text("Start Now"),
                   ),
