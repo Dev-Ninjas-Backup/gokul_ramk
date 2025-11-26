@@ -31,5 +31,9 @@ class Urls {
   //user get post
   static const String getPost="$baseUrl/post";
 
+  //trainer meal plan
+  static const String createMeal="$baseUrl/meal-plan/create-meal";
+  static const String uploadFile="$baseUrl/upload";
+
 
 }
