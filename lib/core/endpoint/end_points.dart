@@ -25,11 +25,16 @@ class Urls {
   static const String workOuts = "$baseUrl/workouts";
   static const String featureWorkout = "$baseUrl/workouts/feature-workouts";
   //user shop
-  static const String productcategories="$baseUrl/product-category";
-  static const String products="$baseUrl/product";
+  static const String productcategories = "$baseUrl/product-category";
+  static const String products = "$baseUrl/product";
 
   //user get post
-  static const String getPost="$baseUrl/post";
+  static const String getPost = "$baseUrl/post";
 
+  // Post comments endpoints
+  static String getPostComments(String postId) => "$getPost/$postId/comment";
+  static String addPostComment(String postId) => "$getPost/$postId/comment";
 
+  // Group endpoints
+  static const String createGroup = "$baseUrl/group";
 }
