@@ -190,7 +190,9 @@ class BookingSessionCard extends StatelessWidget {
                             session.status.toUpperCase() == 'CONFIRMED'
                         ? onMarkComplete
                         : () {
-                            Get.to(() => BookingDetailsScreen());
+                            Get.to(
+                              () => BookingDetailsScreen(bookingId: session.id),
+                            );
                           },
                     child: Container(
                       padding: EdgeInsets.symmetric(vertical: 8, horizontal: 3),
