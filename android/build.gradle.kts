@@ -2,6 +2,8 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        // Facebook SDK repository
+        maven(url = "https://repo.maven.apache.org/maven2")
     }
 }
 

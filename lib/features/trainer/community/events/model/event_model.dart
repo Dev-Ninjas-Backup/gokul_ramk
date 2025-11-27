@@ -4,8 +4,28 @@ enum EventFormat { ONLINE, ONSITE }
 
 enum EventStatus { DRAFT, UPCOMING, ACTIVE, COMPLETED, CANCELLED, ENDED }
 
+enum ParticipantStatus {
+  PENDING,
+  APPROVED,
+  REJECTED,
+  JOINED,
+  COMPLETED,
+  WITHDRAWN,
+}
+
+class EventCreator {
+  final String id;
+  final String fullname;
+
+  EventCreator({required this.id, required this.fullname});
+
+  factory EventCreator.fromJson(Map<String, dynamic> json) {
+    return EventCreator(id: json['id'] ?? '', fullname: json['fullname'] ?? '');
+  }
+}
+
 class EventModel {
-  final String? id;
+  final String id;
   final String title;
   final String description;
   final EventType type;
@@ -14,10 +34,21 @@ class EventModel {
   final String? location;
   final DateTime startDate;
   final DateTime endDate;
+  final DateTime? registrationDeadline;
   final String? coverImage;
+  final List<String>? images;
+  final String creatorId;
+  final String? hostId;
+  final String? challengeCategory;
+  final int? targetValue;
+  final String? targetUnit;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final EventCreator? creator;
+  final EventCreator? host;
 
   EventModel({
-    this.id,
+    required this.id,
     required this.title,
     required this.description,
     required this.type,
@@ -26,12 +57,23 @@ class EventModel {
     this.location,
     required this.startDate,
     required this.endDate,
+    this.registrationDeadline,
     this.coverImage,
+    this.images,
+    required this.creatorId,
+    this.hostId,
+    this.challengeCategory,
+    this.targetValue,
+    this.targetUnit,
+    required this.createdAt,
+    required this.updatedAt,
+    this.creator,
+    this.host,
   });
 
   factory EventModel.fromJson(Map<String, dynamic> json) {
     return EventModel(
-      id: json['id'] as String?,
+      id: json['id'] ?? '',
       title: json['title'] ?? '',
       description: json['description'] ?? '',
       type: _parseEventType(json['type']),
@@ -44,12 +86,36 @@ class EventModel {
       endDate: json['endDate'] != null
           ? DateTime.parse(json['endDate'].toString())
           : DateTime.now(),
+      registrationDeadline: json['registrationDeadline'] != null
+          ? DateTime.parse(json['registrationDeadline'].toString())
+          : null,
       coverImage: json['coverImage'] as String?,
+      images: json['images'] != null
+          ? List<String>.from(json['images'] as List)
+          : null,
+      creatorId: json['creatorId'] ?? '',
+      hostId: json['hostId'] as String?,
+      challengeCategory: json['challengeCategory'] as String?,
+      targetValue: json['targetValue'] as int?,
+      targetUnit: json['targetUnit'] as String?,
+      createdAt: json['createdAt'] != null
+          ? DateTime.parse(json['createdAt'].toString())
+          : DateTime.now(),
+      updatedAt: json['updatedAt'] != null
+          ? DateTime.parse(json['updatedAt'].toString())
+          : DateTime.now(),
+      creator: json['creator'] != null
+          ? EventCreator.fromJson(json['creator'] as Map<String, dynamic>)
+          : null,
+      host: json['host'] != null
+          ? EventCreator.fromJson(json['host'] as Map<String, dynamic>)
+          : null,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'title': title,
       'description': description,
       'type': _eventTypeToString(type),
@@ -58,7 +124,16 @@ class EventModel {
       'location': location,
       'startDate': startDate.toIso8601String(),
       'endDate': endDate.toIso8601String(),
-      if (coverImage != null) 'coverImage': coverImage,
+      'registrationDeadline': registrationDeadline?.toIso8601String(),
+      'coverImage': coverImage,
+      'images': images,
+      'creatorId': creatorId,
+      'hostId': hostId,
+      'challengeCategory': challengeCategory,
+      'targetValue': targetValue,
+      'targetUnit': targetUnit,
+      'createdAt': createdAt.toIso8601String(),
+      'updatedAt': updatedAt.toIso8601String(),
     };
   }
 
@@ -72,7 +147,18 @@ class EventModel {
     String? location,
     DateTime? startDate,
     DateTime? endDate,
+    DateTime? registrationDeadline,
     String? coverImage,
+    List<String>? images,
+    String? creatorId,
+    String? hostId,
+    String? challengeCategory,
+    int? targetValue,
+    String? targetUnit,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    EventCreator? creator,
+    EventCreator? host,
   }) {
     return EventModel(
       id: id ?? this.id,
@@ -84,7 +170,18 @@ class EventModel {
       location: location ?? this.location,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
+      registrationDeadline: registrationDeadline ?? this.registrationDeadline,
       coverImage: coverImage ?? this.coverImage,
+      images: images ?? this.images,
+      creatorId: creatorId ?? this.creatorId,
+      hostId: hostId ?? this.hostId,
+      challengeCategory: challengeCategory ?? this.challengeCategory,
+      targetValue: targetValue ?? this.targetValue,
+      targetUnit: targetUnit ?? this.targetUnit,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      creator: creator ?? this.creator,
+      host: host ?? this.host,
     );
   }
 
@@ -139,12 +236,32 @@ class EventApiResponse {
   EventApiResponse({required this.success, required this.message, this.data});
 
   factory EventApiResponse.fromJson(Map<String, dynamic> json) {
+    // Handle data field - it can be a Map (event data) or String (error message)
+    EventModel? eventData;
+    if (json['data'] != null && json['data'] is Map<String, dynamic>) {
+      try {
+        eventData = EventModel.fromJson(json['data'] as Map<String, dynamic>);
+      } catch (e) {
+        print('Error parsing event data: $e');
+      }
+    }
+
+    // Extract message - use 'data' field as fallback if it's a string error message
+    String messageText = _parseMessage(json['message']);
+    if (messageText.isEmpty && json['data'] is String) {
+      messageText = json['data'] as String;
+    }
+
     return EventApiResponse(
       success: json['success'] ?? false,
-      message: json['message'] ?? '',
-      data: json['data'] != null
-          ? EventModel.fromJson(json['data'] as Map<String, dynamic>)
-          : null,
+      message: messageText,
+      data: eventData,
     );
+  }
+
+  static String _parseMessage(dynamic message) {
+    if (message == null) return '';
+    if (message is String) return message;
+    return message.toString();
   }
 }

@@ -97,7 +97,21 @@ class EventsController extends GetxController {
       lastDate: DateTime(2100),
     );
     if (picked != null) {
-      startDate.value = picked;
+      // Set time to 9:00 AM by default
+      startDate.value = DateTime(picked.year, picked.month, picked.day, 9, 0);
+      print('Start date set to: ${startDate.value}');
+
+      // Auto-set end date to next day at 5:00 PM if not already set
+      if (endDate.value == null) {
+        endDate.value = DateTime(
+          picked.year,
+          picked.month,
+          picked.day + 1,
+          17,
+          0,
+        );
+        print('End date auto-set to: ${endDate.value}');
+      }
     }
   }
 
@@ -109,7 +123,18 @@ class EventsController extends GetxController {
       lastDate: DateTime(2100),
     );
     if (picked != null) {
-      endDate.value = picked;
+      // Ensure end time is after start date
+      if (startDate.value != null &&
+          picked.year == startDate.value!.year &&
+          picked.month == startDate.value!.month &&
+          picked.day == startDate.value!.day) {
+        // If same day, set end time to 5:00 PM
+        endDate.value = DateTime(picked.year, picked.month, picked.day, 17, 0);
+      } else {
+        // If different day, set end time to 5:00 PM
+        endDate.value = DateTime(picked.year, picked.month, picked.day, 17, 0);
+      }
+      print('End date set to: ${endDate.value}');
     }
   }
 
@@ -126,6 +151,7 @@ class EventsController extends GetxController {
           description: eventDescription.text.trim(),
           type: EventType.EVENT,
           format: format,
+          status: selectedStatus.value ?? 'DRAFT',
           startDate: startDate.value!,
           endDate: endDate.value!,
           location: eventLocation.text.trim().isEmpty
@@ -134,15 +160,23 @@ class EventsController extends GetxController {
           coverImageFile: selectedImage.value,
         );
 
-        if (response != null && response.success) {
-          _showSuccessDialog();
+        if (response != null && response.success && response.data != null) {
+          _showSuccessDialog(response.data!);
           _clearForm();
         } else {
-          Get.snackbar('Error', response?.message ?? 'Failed to create event');
+          Get.snackbar(
+            'Error',
+            response?.message ?? 'Failed to create event',
+            snackPosition: SnackPosition.BOTTOM,
+          );
         }
       } catch (e) {
         print('Error creating event: $e');
-        Get.snackbar('Error', 'Failed to create event: $e');
+        Get.snackbar(
+          'Error',
+          'Failed to create event: $e',
+          snackPosition: SnackPosition.BOTTOM,
+        );
       } finally {
         isCreatingEvent.value = false;
       }
@@ -193,70 +227,145 @@ class EventsController extends GetxController {
     selectedStatus.value = 'DRAFT';
   }
 
-  void _showSuccessDialog() {
+  void _showSuccessDialog(EventModel event) {
     Get.dialog(
       Dialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: Padding(
           padding: EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 80,
-                height: 80,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.green[100],
-                ),
-                child: Icon(Icons.check_circle, size: 50, color: Colors.green),
-              ),
-              SizedBox(height: 20),
-              Text(
-                'Event Created Successfully!',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-              SizedBox(height: 12),
-              Text(
-                'Your event has been created and is ready.',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 14, color: Colors.grey[700]),
-              ),
-              SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF148CBB),
-                    padding: EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.green[100],
                   ),
-                  onPressed: () {
-                    Get.back(); // Close dialog
-                    Get.back(); // Go back to previous screen
-                  },
-                  child: Text(
-                    'Done',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
+                  child: Icon(
+                    Icons.check_circle,
+                    size: 50,
+                    color: Colors.green,
                   ),
                 ),
-              ),
-            ],
+                SizedBox(height: 20),
+                Text(
+                  'Event Created Successfully!',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                SizedBox(height: 16),
+                Container(
+                  padding: EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[100],
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildDetailRow('Title', event.title),
+                      SizedBox(height: 8),
+                      _buildDetailRow(
+                        'Format',
+                        event.format.toString().split('.').last,
+                      ),
+                      SizedBox(height: 8),
+                      if (event.location != null)
+                        _buildDetailRow('Location', event.location!),
+                      if (event.location != null) SizedBox(height: 8),
+                      _buildDetailRow(
+                        'Start Date',
+                        _formatDateTime(event.startDate),
+                      ),
+                      SizedBox(height: 8),
+                      _buildDetailRow(
+                        'End Date',
+                        _formatDateTime(event.endDate),
+                      ),
+                      SizedBox(height: 8),
+                      _buildDetailRow(
+                        'Status',
+                        event.status.toString().split('.').last,
+                      ),
+                      SizedBox(height: 8),
+                      _buildDetailRow('Event ID', event.id),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 24),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFF148CBB),
+                      padding: EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    onPressed: () {
+                      Get.back(); // Close dialog
+                      Get.back(); // Go back to previous screen
+                    },
+                    child: Text(
+                      'Done',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
       barrierDismissible: false,
     );
+  }
+
+  Widget _buildDetailRow(String label, String value) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          flex: 2,
+          child: Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: Colors.grey[700],
+            ),
+          ),
+        ),
+        Expanded(
+          flex: 3,
+          child: Text(
+            value,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              color: Colors.black,
+            ),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 2,
+          ),
+        ),
+      ],
+    );
+  }
+
+  String _formatDateTime(DateTime dateTime) {
+    return '${dateTime.day}/${dateTime.month}/${dateTime.year} ${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
   }
 
   void clearImage() {
