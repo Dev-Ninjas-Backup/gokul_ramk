@@ -8,7 +8,7 @@ import 'package:gokul_ramk/features/trainer/community/events/controller/event_co
 import '../../../program/widgets/text_field.dart';
 
 class CreateEventScreen extends StatefulWidget {
-  CreateEventScreen({super.key});
+  const CreateEventScreen({super.key});
 
   @override
   State<CreateEventScreen> createState() => _CreateEventScreenState();
@@ -139,54 +139,6 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                 "Write a description about this event",
                 maxLines: 3,
                 controller: controller.eventDescription,
-              ),
-
-              SizedBox(height: 20),
-              Text(
-                "Event Status",
-                style: getTextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 8),
-              Obx(
-                () => Container(
-                  width: double.maxFinite,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.grey.shade300),
-                  ),
-                  child: DropdownButton<String>(
-                    value: controller.selectedStatus.value,
-                    hint: Text('Select event status'),
-                    underline: SizedBox.shrink(),
-                    isExpanded: true,
-                    icon: Icon(Icons.arrow_drop_down, size: 18),
-                    items: controller.statusOptions
-                        .map(
-                          (status) => DropdownMenuItem(
-                            value: status,
-                            child: Text(
-                              status,
-                              style: getTextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.fontColor,
-                              ),
-                            ),
-                          ),
-                        )
-                        .toList(),
-                    onChanged: (value) {
-                      if (value != null) {
-                        controller.selectedStatus.value = value;
-                      }
-                    },
-                  ),
-                ),
               ),
 
               SizedBox(height: 20),

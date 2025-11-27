@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names, avoid_print
+
 enum EventType { EVENT, CHALLENGE }
 
 enum EventFormat { ONLINE, ONSITE }
@@ -46,6 +48,7 @@ class EventModel {
   final DateTime updatedAt;
   final EventCreator? creator;
   final EventCreator? host;
+  final int participantCount;
 
   EventModel({
     required this.id,
@@ -69,6 +72,7 @@ class EventModel {
     required this.updatedAt,
     this.creator,
     this.host,
+    this.participantCount = 0,
   });
 
   factory EventModel.fromJson(Map<String, dynamic> json) {
@@ -110,6 +114,7 @@ class EventModel {
       host: json['host'] != null
           ? EventCreator.fromJson(json['host'] as Map<String, dynamic>)
           : null,
+      participantCount: _parseParticipantCount(json['_count']),
     );
   }
 
@@ -134,6 +139,9 @@ class EventModel {
       'targetUnit': targetUnit,
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
+      '_count': {
+        'participants': participantCount,
+      },
     };
   }
 
@@ -159,6 +167,7 @@ class EventModel {
     DateTime? updatedAt,
     EventCreator? creator,
     EventCreator? host,
+    int? participantCount,
   }) {
     return EventModel(
       id: id ?? this.id,
@@ -182,6 +191,7 @@ class EventModel {
       updatedAt: updatedAt ?? this.updatedAt,
       creator: creator ?? this.creator,
       host: host ?? this.host,
+      participantCount: participantCount ?? this.participantCount,
     );
   }
 
@@ -225,6 +235,14 @@ class EventModel {
 
   static String _eventStatusToString(EventStatus status) {
     return status.toString().split('.').last;
+  }
+
+  static int _parseParticipantCount(dynamic count) {
+    if (count is Map<String, dynamic>) {
+      final participants = count['participants'];
+      if (participants is int) return participants;
+    }
+    return 0;
   }
 }
 
