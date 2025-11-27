@@ -123,9 +123,7 @@ class SignupController extends GetxController {
       } else {
         showEasyLoadingError(message: "Signup failed");
       }
-      
     }
-    
   }
 
   // Future<void> otpRequestMethod() async {
@@ -160,15 +158,18 @@ class SignupController extends GetxController {
     }
     if (validateSignup()) {
       final NetworkResponse response = await authServiceController
-          .requestVerifyEmail(email: emailOrPhone["email"], otp: pinController.text);
-      if (response.isSuccess == true && response.statusCode == 200|| response.statusCode==201) {
+          .requestVerifyEmail(
+            email: emailOrPhone["email"],
+            otp: pinController.text,
+          );
+      if (response.isSuccess == true && response.statusCode == 200 ||
+          response.statusCode == 201) {
         // ignore: use_build_context_synchronously
         SuccessDialogEmail.show(context);
       } else {
         showEasyLoadingError(message: "Verification failed");
       }
     }
-    
   }
 
   Future<void> signUpMethod() async {

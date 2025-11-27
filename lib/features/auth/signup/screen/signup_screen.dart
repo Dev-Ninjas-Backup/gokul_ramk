@@ -108,9 +108,9 @@ class SignupScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: (){
-                  EasyLoading.show();
-                  controller.signUpMethod();
+                  onPressed: () {
+                    EasyLoading.show();
+                    controller.signUpMethod();
                   },
 
                   style: ElevatedButton.styleFrom(

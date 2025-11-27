@@ -39,8 +39,7 @@ class AuthServiceController extends GetxController {
     }
   }
 
-
-//send otp
+  //send otp
   Future<NetworkResponse> requestRsendotp({required String email}) async {
     try {
       return await networkClient.postRequest(
@@ -49,16 +48,12 @@ class AuthServiceController extends GetxController {
       );
     } catch (e) {
       throw Exception("Error :$e");
-    }
-    finally {
+    } finally {
       EasyLoading.dismiss();
     }
   }
 
-
-
-
- Future<NetworkResponse> requestVerifyEmail({
+  Future<NetworkResponse> requestVerifyEmail({
     required String email,
     required String otp,
   }) async {
@@ -69,13 +64,10 @@ class AuthServiceController extends GetxController {
       );
     } catch (e) {
       throw Exception("Error : $e");
+    } finally {
+      EasyLoading.dismiss();
     }
-    finally{
-    
-    
-    EasyLoading.dismiss();}
   }
-
 
   Future<NetworkResponse> login({
     required Map<String, dynamic> emailOrphone,
@@ -103,11 +95,9 @@ class AuthServiceController extends GetxController {
       );
     } catch (e) {
       throw Exception("Error :$e");
-    }
-    finally {
+    } finally {
       EasyLoading.dismiss();
     }
-    
   }
 
   Future<NetworkResponse> requestVerifyOtp({
@@ -121,8 +111,7 @@ class AuthServiceController extends GetxController {
       );
     } catch (e) {
       throw Exception("Error : $e");
-    }
-    finally {
+    } finally {
       EasyLoading.dismiss();
     }
   }
@@ -138,8 +127,7 @@ class AuthServiceController extends GetxController {
       );
     } catch (e) {
       throw Exception("Error : $e");
-    }
-    finally {
+    } finally {
       EasyLoading.dismiss();
     }
   }

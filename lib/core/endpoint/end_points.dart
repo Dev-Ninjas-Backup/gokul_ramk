@@ -38,6 +38,7 @@ class Urls {
   static const String getMeal="$baseUrl/meal-plan/meal";
 
 
+
   // Post comments endpoints
   static String getPostComments(String postId) => "$getPost/$postId/comment";
   static String addPostComment(String postId) => "$getPost/$postId/comment";
@@ -51,4 +52,8 @@ class Urls {
   // Trainer endpoints
   static const String trainerProfileMe = "$baseUrl/trainer";
 
+
+  // Events endpoints
+  static const String createEvent = "$baseUrl/events";
+  static const String getEvents = "$baseUrl/events";
 }
