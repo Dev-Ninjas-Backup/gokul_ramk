@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,6 +13,7 @@ class EventsController extends GetxController {
   final ImagePicker _imagePicker = ImagePicker();
 
   var events = <Map<String, dynamic>>[].obs;
+  var eventModels = <EventModel>[].obs;
   var options = ['ONLINE', 'ONSITE'].obs;
   var statusOptions = [
     'DRAFT',
@@ -35,6 +38,11 @@ class EventsController extends GetxController {
   var endDate = Rxn<DateTime>();
   var isCreatingEvent = false.obs;
 
+  // Pagination
+  var currentPage = 1.obs;
+  var pageLimit = 10.obs;
+  var isLoadingEvents = false.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -42,10 +50,32 @@ class EventsController extends GetxController {
     eventRepository = EventRepository(networkClient: networkClient);
     selectedFormat.value = 'ONLINE'; // Default format
     selectedStatus.value = 'DRAFT'; // Default status
-    loadEvents();
+    fetchEvents();
+  }
+
+  Future<void> fetchEvents({int page = 1, int limit = 10}) async {
+    if (isLoadingEvents.value) return;
+    
+    try {
+      isLoadingEvents.value = true;
+      final fetchedEvents = await eventRepository.getEvents(
+        page: page,
+        limit: limit,
+      );
+      eventModels.value = fetchedEvents;
+      currentPage.value = page;
+      print('Fetched ${fetchedEvents.length} events');
+    } catch (e) {
+      print('Error fetching events: $e');
+      Get.snackbar('Error', 'Failed to load events');
+    } finally {
+      isLoadingEvents.value = false;
+    }
   }
 
   void loadEvents() {
+    // This method is kept for backward compatibility but now uses API data
+    // Real events are loaded in fetchEvents()
     events.value = [
       {
         "title": "Virtual Zumba Party",
@@ -151,7 +181,6 @@ class EventsController extends GetxController {
           description: eventDescription.text.trim(),
           type: EventType.EVENT,
           format: format,
-          status: selectedStatus.value ?? 'DRAFT',
           startDate: startDate.value!,
           endDate: endDate.value!,
           location: eventLocation.text.trim().isEmpty

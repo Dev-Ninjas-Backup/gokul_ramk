@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:io';
 import 'package:gokul_ramk/core/endpoint/end_points.dart';
 import 'package:gokul_ramk/core/services/network_service/network_client.dart';
@@ -15,7 +17,6 @@ class EventRepository {
     required EventFormat format,
     required DateTime startDate,
     required DateTime endDate,
-    required String status,
     String? location,
     File? coverImageFile,
   }) async {
@@ -42,7 +43,7 @@ class EventRepository {
         'format': _eventFormatToString(format),
         'startDate': startDate.toUtc().toIso8601String(),
         'endDate': endDate.toUtc().toIso8601String(),
-        'status': status,
+        'status': 'DRAFT',
         if (location != null && location.isNotEmpty) 'location': location,
         if (coverImageUrl != null) 'coverImage': coverImageUrl,
       };
