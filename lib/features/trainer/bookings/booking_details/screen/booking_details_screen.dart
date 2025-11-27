@@ -1,112 +1,158 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
 import 'package:gokul_ramk/core/common/widgets/custom_app_bar_title.dart';
 import 'package:gokul_ramk/core/utils/constants/colors.dart';
 import 'package:gokul_ramk/core/utils/constants/imagepath.dart';
+import 'package:gokul_ramk/features/trainer/bookings/booking_details/controller/booking_details_controller.dart';
 import 'package:gokul_ramk/features/trainer/bookings/booking_details/widgets/bottom_reschedule_button.dart';
 import 'package:gokul_ramk/features/trainer/bookings/booking_details/widgets/infotiile_widget.dart';
 import 'package:gokul_ramk/features/trainer/bookings/booking_details/widgets/map.dart';
 
 class BookingDetailsScreen extends StatelessWidget {
-  const BookingDetailsScreen({super.key});
+  final String bookingId;
+
+  const BookingDetailsScreen({super.key, required this.bookingId});
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(BookingDetailsController());
+
+    // Fetch booking details when screen loads
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.fetchBookingDetails(bookingId);
+    });
+
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CustomAppBarTitle(title: 'Booking Details'),
-              SizedBox(height: 20),
+        child: Obx(() {
+          if (controller.isLoading.value) {
+            return Center(
+              child: CircularProgressIndicator(color: AppColors.primaryColor),
+            );
+          }
 
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Column(
-                    children: [
-                      CircleAvatar(
-                        radius: 40,
-                        backgroundImage: AssetImage(Imagepath.trainer),
-                      ),
-                      SizedBox(height: 12),
-                      Text(
-                        "Alex Carter",
-                        style: getTextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.primaryFontColor,
-                        ),
-                      ),
-                      SizedBox(height: 4),
-                      Text(
-                        "Goal: Weight Loss",
-                        style: getTextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                          color: AppColors.primaryFontColor,
-                        ),
-                      ),
-                      SizedBox(height: 4),
-                      
-                    ],
-                  ),
-                ],
+          final booking = controller.booking.value;
+          if (booking == null) {
+            return Center(
+              child: Text(
+                'Booking not found',
+                style: getTextStyle(fontSize: 16),
               ),
+            );
+          }
 
-              SizedBox(height: 20),
-              Divider(),
+          return SingleChildScrollView(
+            padding: EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CustomAppBarTitle(title: 'Booking Details'),
+                SizedBox(height: 20),
 
-              Text(
-                "Session Info",
-                style: getTextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-              ),
-              SizedBox(height: 8),
-              infoTile("Session Type", "Personal Training – Strength"),
-              infoTile("Date & Time", "Sept 3, 2025, 6:00 PM – 7:00 PM"),
-              infoTile("Duration", "60 mins"),
-              infoTile("Mode", "In-person"),
-              infoTile("Assigned Program", "8-Week Strength Builder"),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      children: [
+                        CircleAvatar(
+                          radius: 40,
+                          backgroundImage: AssetImage(Imagepath.trainer),
+                        ),
+                        SizedBox(height: 12),
+                        Text(
+                          booking.user.fullname,
+                          style: getTextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.primaryFontColor,
+                          ),
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          booking.user.email,
+                          style: getTextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14,
+                            color: AppColors.primaryFontColor,
+                          ),
+                        ),
+                        SizedBox(height: 4),
+                        if (booking.user.phone != null)
+                          Text(
+                            "Phone: ${booking.user.phone}",
+                            style: getTextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14,
+                              color: AppColors.primaryFontColor,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ],
+                ),
 
-              SizedBox(height: 20),
-              Divider(),
+                SizedBox(height: 20),
+                Divider(),
 
-              LocationMap(latitude: 18, longitude: 18),
-
-              SizedBox(height: 24),
-
-              BottomRescheduleButton(),
-              SizedBox(height: 32),
-              GestureDetector(
-                child: Container(
-                  height: 54,
-
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: AppColors.primaryButtonColor,
+                Text(
+                  "Session Info",
+                  style: getTextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
                   ),
-                  child: Center(
-                    child: Text(
-                      'Mark Complete',
-                      style: getTextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.secondaryButtonColor,
+                ),
+                SizedBox(height: 8),
+                infoTile("Session Mode", booking.mode),
+                infoTile("Date & Time", booking.formattedDate),
+                infoTile("Duration", "${booking.duration} mins"),
+                infoTile("Price", "${booking.currency} ${booking.price}"),
+                infoTile(
+                  "Advance Payment",
+                  "${booking.currency} ${booking.advancePayment}",
+                ),
+                if (booking.assignedProgram != null)
+                  infoTile("Assigned Program", booking.assignedProgram!),
+                infoTile("Status", booking.status),
+                if (booking.notes != null) infoTile("Notes", booking.notes!),
+
+                SizedBox(height: 20),
+                Divider(),
+
+                LocationMap(latitude: 18, longitude: 18),
+
+                SizedBox(height: 24),
+
+                BottomRescheduleButton(),
+                SizedBox(height: 32),
+                GestureDetector(
+                  child: Container(
+                    height: 54,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: AppColors.primaryButtonColor,
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Mark Complete',
+                        style: getTextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.secondaryButtonColor,
+                        ),
                       ),
                     ),
                   ),
+                  onTap: () {
+                    controller.markComplete(bookingId);
+                  },
                 ),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          ),
-        ),
+              ],
+            ),
+          );
+        }),
       ),
     );
   }
