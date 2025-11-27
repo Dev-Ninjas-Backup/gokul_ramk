@@ -56,7 +56,7 @@ class NetworkClient {
         return NetworkResponse(
           statusCode: response.statusCode,
           isSuccess: false,
-          errorMessage: responseBody['message'] ?? _defaultErrorMsg,
+          errorMessage: _extractErrorMessage(responseBody['message']),
         );
       }
     } on Exception catch (e) {
@@ -106,7 +106,8 @@ class NetworkClient {
         return NetworkResponse(
           statusCode: response.statusCode,
           isSuccess: false,
-          errorMessage: responseBody['message'] ?? _defaultErrorMsg,
+          responseData: responseBody,
+          errorMessage: _extractErrorMessage(responseBody['message']),
         );
       }
     } on Exception catch (e) {
@@ -156,7 +157,7 @@ class NetworkClient {
         return NetworkResponse(
           statusCode: response.statusCode,
           isSuccess: false,
-          errorMessage: responseBody['message'] ?? _defaultErrorMsg,
+          errorMessage: _extractErrorMessage(responseBody['message']),
         );
       }
     } on Exception catch (e) {
@@ -202,7 +203,7 @@ class NetworkClient {
         return NetworkResponse(
           statusCode: response.statusCode,
           isSuccess: false,
-          errorMessage: responseBody['message'] ?? _defaultErrorMsg,
+          errorMessage: _extractErrorMessage(responseBody['message']),
         );
       }
     } on Exception catch (e) {
@@ -214,68 +215,101 @@ class NetworkClient {
     }
   }
 
-
-
-
   // ADD THIS METHOD ONLY — keep all your existing get/post/patch/delete
-// In NetworkClient class — REPLACE your uploadFile method with this
-Future<NetworkResponse> uploadFile({
-  required String url,
-  required File file,
-  String fieldName = 'file',
-  Map<String, String>? extraFields,
-}) async {
-  try {
-    final token = await sharedPreferencesHelper.getAccessToken() ?? '';
+  // In NetworkClient class — REPLACE your uploadFile method with this
+  Future<NetworkResponse> uploadFile({
+    required String url,
+    required File file,
+    String fieldName = 'file',
+    Map<String, String>? extraFields,
+  }) async {
+    try {
+      final token = await sharedPreferencesHelper.getAccessToken() ?? '';
 
-    var request = http.MultipartRequest('POST', Uri.parse(url));
-    request.headers['authorization'] = token;
+      var request = http.MultipartRequest('POST', Uri.parse(url));
+      request.headers['authorization'] = token;
+      request.headers['accept'] = 'application/json';
 
-    if (extraFields != null) request.fields.addAll(extraFields);
+      if (extraFields != null) request.fields.addAll(extraFields);
 
-    // ←←← THIS IS THE MAGIC FIX ←←←
-    String mimeType = 'application/octet-stream'; // fallback
-    final extension = file.path.split('.').last.toLowerCase();
+      // Detect MIME type
+      String mimeType = 'application/octet-stream'; // fallback
+      final extension = file.path.split('.').last.toLowerCase();
 
-    if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'].contains(extension)) {
-      mimeType = 'image/$extension';
-      if (extension == 'jpg') mimeType = 'image/jpeg';
-    } else if (['mp4', 'mov', 'avi', 'mkv', 'webm', 'm4v'].contains(extension)) {
-      mimeType = 'video/$extension';
-      if (extension == 'mov' || extension == 'm4v') mimeType = 'video/mp4';
-    }
+      if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'].contains(extension)) {
+        mimeType = 'image/$extension';
+        if (extension == 'jpg') mimeType = 'image/jpeg';
+      } else if ([
+        'mp4',
+        'mov',
+        'avi',
+        'mkv',
+        'webm',
+        'm4v',
+      ].contains(extension)) {
+        mimeType = 'video/$extension';
+        if (extension == 'mov' || extension == 'm4v') mimeType = 'video/mp4';
+      }
 
-    request.files.add(await http.MultipartFile.fromPath(
-      fieldName,
-      file.path,
-      filename: file.path.split(Platform.pathSeparator).last,
-      contentType: MediaType.parse(mimeType), // ← THIS LINE IS CRITICAL
-    ));
-
-    var streamedResponse = await request.send();
-    var response = await http.Response.fromStream(streamedResponse);
-
-    _logResponse(response: response);
-
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      return NetworkResponse(
-        statusCode: response.statusCode,
-        isSuccess: true,
-        responseData: jsonDecode(response.body),
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          fieldName,
+          file.path,
+          filename: file.path.split(Platform.pathSeparator).last,
+          contentType: MediaType.parse(mimeType),
+        ),
       );
-    } else {
-      final body = jsonDecode(response.body);
+
+      _logger.i('Uploading file to: $url with fields: $extraFields');
+
+      // Set timeout for multipart request (5 minutes)
+      var streamedResponse = await request.send().timeout(
+        const Duration(minutes: 5),
+      );
+
+      var response = await http.Response.fromStream(
+        streamedResponse,
+      ).timeout(const Duration(minutes: 5));
+
+      _logResponse(response: response);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final responseBody = jsonDecode(response.body);
+        return NetworkResponse(
+          statusCode: response.statusCode,
+          isSuccess: true,
+          responseData: responseBody,
+        );
+      } else {
+        try {
+          final responseBody = jsonDecode(response.body);
+          return NetworkResponse(
+            statusCode: response.statusCode,
+            isSuccess: false,
+            errorMessage: _extractErrorMessage(responseBody['message']),
+          );
+        } catch (e) {
+          return NetworkResponse(
+            statusCode: response.statusCode,
+            isSuccess: false,
+            errorMessage: 'Upload failed with status ${response.statusCode}',
+          );
+        }
+      }
+    } on SocketException catch (e) {
       return NetworkResponse(
-        statusCode: response.statusCode,
+        statusCode: -1,
         isSuccess: false,
-        errorMessage: body['message'] ?? 'Upload failed',
+        errorMessage: 'Network error: ${e.message}',
+      );
+    } catch (e) {
+      return NetworkResponse(
+        statusCode: -1,
+        isSuccess: false,
+        errorMessage: 'Upload error: ${e.toString()}',
       );
     }
-  } catch (e) {
-    return NetworkResponse(statusCode: -1, isSuccess: false, errorMessage: e.toString());
   }
-}
-
 
   void _logRequest({
     required String url,
@@ -301,5 +335,13 @@ Future<NetworkResponse> uploadFile({
     _logger.i(message);
   }
 
-
+  String _extractErrorMessage(dynamic message) {
+    if (message == null) return _defaultErrorMsg;
+    if (message is String) return message;
+    if (message is List) {
+      if (message.isEmpty) return _defaultErrorMsg;
+      return message.map((item) => item.toString()).join(', ');
+    }
+    return message.toString();
+  }
 }

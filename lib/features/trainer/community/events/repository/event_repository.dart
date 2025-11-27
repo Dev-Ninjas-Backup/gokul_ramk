@@ -15,49 +15,117 @@ class EventRepository {
     required EventFormat format,
     required DateTime startDate,
     required DateTime endDate,
+    required String status,
     String? location,
     File? coverImageFile,
   }) async {
     try {
-      Map<String, String> extraFields = {
+      String? coverImageUrl;
+
+      // Step 1: Upload cover image if provided
+      if (coverImageFile != null) {
+        coverImageUrl = await _uploadCoverImage(coverImageFile);
+        if (coverImageUrl == null) {
+          print('Error: Failed to upload cover image');
+          return EventApiResponse(
+            success: false,
+            message: 'Failed to upload cover image',
+          );
+        }
+      }
+
+      // Step 2: Create event with the uploaded image URL
+      final Map<String, dynamic> eventData = {
         'title': title,
         'description': description,
         'type': _eventTypeToString(type),
         'format': _eventFormatToString(format),
-        'startDate': startDate.toIso8601String(),
-        'endDate': endDate.toIso8601String(),
-        'status': 'DRAFT',
-        if (location != null) 'location': location,
+        'startDate': startDate.toUtc().toIso8601String(),
+        'endDate': endDate.toUtc().toIso8601String(),
+        'status': status,
+        if (location != null && location.isNotEmpty) 'location': location,
+        if (coverImageUrl != null) 'coverImage': coverImageUrl,
       };
 
-      NetworkResponse response;
-
-      if (coverImageFile != null) {
-        // Upload with file
-        response = await networkClient.uploadFile(
-          url: Urls.createEvent,
-          file: coverImageFile,
-          fieldName: 'coverImage',
-          extraFields: extraFields,
-        );
-      } else {
-        // Create without file (coverImage optional)
-        response = await networkClient.postRequest(
-          url: Urls.createEvent,
-          body: extraFields,
-        );
-      }
+      final response = await networkClient.postRequest(
+        url: Urls.createEvent,
+        body: eventData,
+      );
 
       if (response.isSuccess && response.responseData != null) {
         final data = response.responseData;
 
         if (data is Map<String, dynamic>) {
           return EventApiResponse.fromJson(data);
+        } else {
+          return EventApiResponse(
+            success: false,
+            message: 'Invalid response format',
+          );
         }
+      } else if (!response.isSuccess && response.responseData != null) {
+        // Handle error responses that have response data
+        final data = response.responseData;
+        if (data is Map<String, dynamic>) {
+          return EventApiResponse.fromJson(data);
+        }
+      }
+
+      return EventApiResponse(
+        success: false,
+        message: response.errorMessage ?? 'Failed to create event',
+      );
+    } catch (e) {
+      print('Error creating event: $e');
+      return EventApiResponse(
+        success: false,
+        message: 'Error: ${e.toString()}',
+      );
+    }
+  }
+
+  Future<String?> _uploadCoverImage(File imageFile) async {
+    try {
+      final response = await networkClient.uploadFile(
+        url: Urls.uploadFile,
+        file: imageFile,
+        fieldName: 'file',
+      );
+
+      if (response.isSuccess && response.responseData != null) {
+        final data = response.responseData;
+
+        // Ensure data is a Map
+        if (data is! Map<String, dynamic>) {
+          print('Error: Upload response is not a valid map');
+          return null;
+        }
+
+        if (!data.containsKey('file')) {
+          print('Error: Upload response missing "file" field');
+          return null;
+        }
+
+        final fileData = data['file'];
+        if (fileData is! Map<String, dynamic>) {
+          print('Error: file field is not a valid map');
+          return null;
+        }
+
+        if (!fileData.containsKey('url')) {
+          print('Error: file object missing "url" field');
+          return null;
+        }
+
+        final relativePath = fileData['url'] as String;
+        // Combine baseUrl with the relative path
+        return '${Urls.baseUrl}$relativePath';
+      } else {
+        print('Error: Upload failed - ${response.errorMessage}');
       }
       return null;
     } catch (e) {
-      print('Error creating event: $e');
+      print('Error uploading cover image: $e');
       return null;
     }
   }

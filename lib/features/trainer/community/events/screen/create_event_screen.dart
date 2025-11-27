@@ -143,6 +143,54 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
 
               SizedBox(height: 20),
               Text(
+                "Event Status",
+                style: getTextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 8),
+              Obx(
+                () => Container(
+                  width: double.maxFinite,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.grey.shade300),
+                  ),
+                  child: DropdownButton<String>(
+                    value: controller.selectedStatus.value,
+                    hint: Text('Select event status'),
+                    underline: SizedBox.shrink(),
+                    isExpanded: true,
+                    icon: Icon(Icons.arrow_drop_down, size: 18),
+                    items: controller.statusOptions
+                        .map(
+                          (status) => DropdownMenuItem(
+                            value: status,
+                            child: Text(
+                              status,
+                              style: getTextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.fontColor,
+                              ),
+                            ),
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (value) {
+                      if (value != null) {
+                        controller.selectedStatus.value = value;
+                      }
+                    },
+                  ),
+                ),
+              ),
+
+              SizedBox(height: 20),
+              Text(
                 "Event Format",
                 style: getTextStyle(fontSize: 12, fontWeight: FontWeight.bold),
               ),
@@ -231,16 +279,17 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                       children: [
                         Icon(Icons.calendar_today, color: Colors.grey),
                         SizedBox(width: 12),
-                        Text(
-                          controller.startDate.value != null
-                              ? "${controller.startDate.value!.toLocal()}"
-                                    .split('.')[0]
-                              : "Select start date",
-                          style: getTextStyle(
-                            fontSize: 14,
-                            color: controller.startDate.value != null
-                                ? Colors.black
-                                : Colors.grey,
+                        Expanded(
+                          child: Text(
+                            controller.startDate.value != null
+                                ? _formatDateTime(controller.startDate.value!)
+                                : "Select start date",
+                            style: getTextStyle(
+                              fontSize: 14,
+                              color: controller.startDate.value != null
+                                  ? Colors.black
+                                  : Colors.grey,
+                            ),
                           ),
                         ),
                       ],
@@ -269,17 +318,17 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                       children: [
                         Icon(Icons.calendar_today, color: Colors.grey),
                         SizedBox(width: 12),
-                        Text(
-                          controller.endDate.value != null
-                              ? "${controller.endDate.value!.toLocal()}".split(
-                                  '.',
-                                )[0]
-                              : "Select end date",
-                          style: getTextStyle(
-                            fontSize: 14,
-                            color: controller.endDate.value != null
-                                ? Colors.black
-                                : Colors.grey,
+                        Expanded(
+                          child: Text(
+                            controller.endDate.value != null
+                                ? _formatDateTime(controller.endDate.value!)
+                                : "Select end date",
+                            style: getTextStyle(
+                              fontSize: 14,
+                              color: controller.endDate.value != null
+                                  ? Colors.black
+                                  : Colors.grey,
+                            ),
                           ),
                         ),
                       ],
@@ -342,6 +391,10 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
         ),
       ),
     );
+  }
+
+  String _formatDateTime(DateTime dateTime) {
+    return '${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year} ${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
   }
 
   @override

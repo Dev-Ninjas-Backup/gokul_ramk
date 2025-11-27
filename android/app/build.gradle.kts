@@ -31,6 +31,9 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        
+        // Add Facebook configuration
+        manifestPlaceholders["FACEBOOK_APP_ID"] = "2025749648181196"
     }
 
     buildTypes {
@@ -40,6 +43,11 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
+}
+
+dependencies {
+    // Facebook SDK
+    implementation("com.facebook.android:facebook-android-sdk:latest.release")
 }
 
 flutter {
