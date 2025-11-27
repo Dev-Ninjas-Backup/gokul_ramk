@@ -37,6 +37,10 @@ class FeaturedTrainerCard extends StatelessWidget {
               height: 140,
               width: double.infinity,
               fit: BoxFit.cover,
+
+              errorBuilder: (context, error, stackTrace) {
+                return Center(child: Icon(Icons.broken_image,size: 140,));
+              },
             ),
           ),
 
