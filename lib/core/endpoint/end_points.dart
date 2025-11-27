@@ -34,6 +34,8 @@ class Urls {
   //trainer meal plan
   static const String createMeal="$baseUrl/meal-plan/create-meal";
   static const String uploadFile="$baseUrl/upload";
+  static const String createMealPlan="$baseUrl/meal-plan/create-plan";
+  static const String getMeal="$baseUrl/meal-plan/meal";
 
 
   // Post comments endpoints
@@ -48,4 +50,5 @@ class Urls {
 
   // Trainer endpoints
   static const String trainerProfileMe = "$baseUrl/trainer";
+
 }
