@@ -18,9 +18,48 @@ class BookingSessionListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
+      if (controller.isLoadingSessions.value && controller.sessions.isEmpty) {
+        return Center(
+          child: CircularProgressIndicator(color: AppColors.primaryColor),
+        );
+      }
+
+      if (controller.sessions.isEmpty) {
+        return Center(
+          child: Text('No bookings yet', style: getTextStyle(fontSize: 16)),
+        );
+      }
+
       return ListView.builder(
-        itemCount: controller.sessions.length,
+        itemCount:
+            controller.sessions.length +
+            (controller.hasMoreSessions.value ? 1 : 0),
         itemBuilder: (context, index) {
+          if (index == controller.sessions.length) {
+            return Padding(
+              padding: EdgeInsets.symmetric(vertical: 16),
+              child: GestureDetector(
+                onTap: controller.loadMoreSessions,
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                  margin: EdgeInsets.symmetric(horizontal: 16),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: AppColors.primaryColor),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Load More',
+                    style: getTextStyle(
+                      color: AppColors.primaryColor,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+            );
+          }
+
           final session = controller.sessions[index];
           return BookingSessionCard(
             session: session,
@@ -41,6 +80,19 @@ class BookingSessionCard extends StatelessWidget {
     required this.session,
     required this.onMarkComplete,
   });
+
+  String _getUserName() {
+    return session.user.fullname;
+  }
+
+  String _getSessionType() {
+    return session.mode.toUpperCase();
+  }
+
+  String _getFormattedStatus() {
+    String status = session.status.replaceAll('_', ' ');
+    return status[0].toUpperCase() + status.substring(1).toLowerCase();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +123,7 @@ class BookingSessionCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    session.name,
+                    _getUserName(),
                     style: getTextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -83,7 +135,7 @@ class BookingSessionCard extends StatelessWidget {
                     style: getTextStyle(fontWeight: FontWeight.w500),
                   ),
                   Text(
-                    "Status: ${session.status.name.capitalizeFirst}",
+                    "Status: ${_getFormattedStatus()}",
                     style: getTextStyle(),
                   ),
                   SizedBox(height: 6),
@@ -94,7 +146,7 @@ class BookingSessionCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
-                      session.sessionType,
+                      _getSessionType(),
                       style: getTextStyle(
                         color: AppColors.primaryColor.withValues(alpha: .9),
                         fontWeight: FontWeight.w500,
@@ -133,7 +185,9 @@ class BookingSessionCard extends StatelessWidget {
                   ),
                   SizedBox(height: 18),
                   GestureDetector(
-                    onTap: session.status == SessionStatus.upcoming
+                    onTap:
+                        session.status.toUpperCase() == 'PENDING' ||
+                            session.status.toUpperCase() == 'CONFIRMED'
                         ? onMarkComplete
                         : () {
                             Get.to(() => BookingDetailsScreen());
@@ -146,7 +200,8 @@ class BookingSessionCard extends StatelessWidget {
                       ),
                       alignment: Alignment.center,
                       child: Text(
-                        session.status == SessionStatus.upcoming
+                        session.status.toUpperCase() == 'PENDING' ||
+                                session.status.toUpperCase() == 'CONFIRMED'
                             ? "Mark Complete"
                             : "View Details",
                         style: getTextStyle(
