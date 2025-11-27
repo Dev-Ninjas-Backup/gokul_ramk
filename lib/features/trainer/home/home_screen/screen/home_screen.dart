@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gokul_ramk/features/trainer/home/home_screen/meal_plan_screen/screen/create_meal_plan_screen.dart';
 import 'package:gokul_ramk/features/trainer/home/home_screen/meal_screen/screen/create_meal_screen.dart';
 import 'package:gokul_ramk/features/trainer/program/screen/create_program.dart';
 
@@ -196,7 +197,7 @@ class HomeScreen extends StatelessWidget {
                   SizedBox(height: 12),
                   ElevatedButton(
                     onPressed: () {
-                    //  Get.to(CreateProgramScreen());
+                      Get.to(CreateMealPlanScreen());
                     },
                     child: Text("Start Now"),
                   ),
