@@ -55,7 +55,7 @@ class EventsController extends GetxController {
 
   Future<void> fetchEvents({int page = 1, int limit = 10}) async {
     if (isLoadingEvents.value) return;
-    
+
     try {
       isLoadingEvents.value = true;
       final fetchedEvents = await eventRepository.getEvents(
@@ -340,6 +340,7 @@ class EventsController extends GetxController {
                     ),
                     onPressed: () {
                       Get.back(); // Close dialog
+                      fetchEvents(); // Refresh events list
                       Get.back(); // Go back to previous screen
                     },
                     child: Text(

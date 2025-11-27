@@ -9,8 +9,20 @@ class EventsScreen extends StatelessWidget {
   const EventsScreen({super.key});
 
   String _formatDate(DateTime dateTime) {
-    final months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    final months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
     final days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     return '${days[dateTime.weekday % 7]}, ${months[dateTime.month - 1]} ${dateTime.day}';
   }
@@ -28,9 +40,7 @@ class EventsScreen extends StatelessWidget {
     return Obx(() {
       // Show loading indicator if fetching events
       if (controller.isLoadingEvents.value) {
-        return Center(
-          child: CircularProgressIndicator(),
-        );
+        return Center(child: CircularProgressIndicator());
       }
 
       // Show empty state if no events
@@ -113,7 +123,11 @@ class EventsScreen extends StatelessWidget {
                                   color: Colors.green.shade50,
                                 ),
                                 child: Text(
-                                  event.format.toString().split('.').last.toLowerCase(),
+                                  event.format
+                                      .toString()
+                                      .split('.')
+                                      .last
+                                      .toLowerCase(),
                                   style: getTextStyle(
                                     color: Colors.green,
                                     fontWeight: FontWeight.bold,
