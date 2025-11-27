@@ -192,29 +192,44 @@ class UserHomeScreen extends StatelessWidget {
               // Trainer profile cards row
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: List.generate(
-                    4,
-                    (index) => Padding(
-                      padding: const EdgeInsets.only(right: 12),
-                      child: SizedBox(
-                        width: 260,
-                        child: FeaturedTrainerCard(
-                          imageUrl:
-                              "https://img.mensxp.com/media/content/2018/Dec/signs-your-nutrition-guru-or-gym-trainer-doesn-rsquo-t-know-anything-about-fitness1400-1544774850.jpg",
-                          name: "Trainer ${index + 1}",
-                          tagline: "Helping you push past limits.",
-                          specialty: "Strength & Conditioning",
-                          onTapViewProfile: () {
-                            debugPrint('view profile tapped');
-                            Get.toNamed(AppRoute.getViewTrainerProfileScreen());
-                          },
+                child: Obx(
+                  () => Row(
+                    children: List.generate(controller.trainers.length, (
+                      index,
+                    ) {
+                      final trainer = controller.trainers[index];
+
+                      // Safe handling for optional fields
+                      final imageUrl = trainer.image ?? '';
+                      final name = trainer.name;
+                      final bio = trainer.bio ?? 'No Bio';
+                      final specialty = trainer.specializations.isNotEmpty
+                          ? trainer.specializations.join(', ')
+                          : 'No Specialization';
+
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 12),
+                        child: SizedBox(
+                          width: 260,
+                          child: FeaturedTrainerCard(
+                            imageUrl: imageUrl,
+                            name: name,
+                            tagline: bio,
+                            specialty: specialty,
+                            onTapViewProfile: () {
+                              debugPrint('View profile tapped: $name');
+                              Get.toNamed(
+                                AppRoute.getViewTrainerProfileScreen(),
+                              );
+                            },
+                          ),
                         ),
-                      ),
-                    ),
+                      );
+                    }),
                   ),
                 ),
               ),
+
               const SizedBox(height: 24),
               Text(
                 "Featured Workouts",

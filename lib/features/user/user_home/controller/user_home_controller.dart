@@ -1,7 +1,10 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/services/network_service/network_client.dart';
 import 'package:gokul_ramk/features/user/user_home/model/feature_workout_model.dart';
+import 'package:gokul_ramk/features/user/user_home/model/trainer_model.dart';
 import 'package:gokul_ramk/features/user/user_home/model/user_home_model.dart';
 import 'package:gokul_ramk/features/user/user_home/model/workout_model.dart';
 import 'package:gokul_ramk/features/user/user_home/service/user_home_service.dart';
@@ -41,6 +44,26 @@ class UserHomeController extends GetxController {
     }
   }
 
+  var trainers = <FeatureTrainerModel>[].obs;
+
+  void fetchTrainerMethod() async {
+    isLoading(true);
+    try {
+      final trainerList = await service.fetchTrainer();
+      trainers.assignAll(trainerList);
+
+      print("================1 ${trainerList.length}");
+            print("================1 ${trainerList[0].bio}");
+                        print("================2 ${trainers[1].bio}");
+
+
+    } catch (e) {
+      debugPrint("Error fetching trziners: $e");
+    } finally {
+      isLoading(false);
+    }
+  }
+
   var workoutList = <WorkOutModel>[].obs;
   void fetchWorkoutListMethod() async {
     if (selectedCategory.value.isEmpty) return;
@@ -63,8 +86,10 @@ class UserHomeController extends GetxController {
   var featureWorkoutList = <Workout>[].obs;
   void fetchFeatureWorkoutMethod() async {
     isLoading(true);
-    try { 
-      final list = await service.fetchFeatureWorkout(selectedFeaturedWorkout.value);
+    try {
+      final list = await service.fetchFeatureWorkout(
+        selectedFeaturedWorkout.value,
+      );
       featureWorkoutList.assignAll(list);
     } catch (e) {
       debugPrint(e.toString());
@@ -78,6 +103,7 @@ class UserHomeController extends GetxController {
     fetchCategoriesMethod();
     fetchWorkoutListMethod();
     fetchFeatureWorkoutMethod();
+    fetchTrainerMethod();
     super.onInit();
   }
 

@@ -56,4 +56,8 @@ class Urls {
   // Events endpoints
   static const String createEvent = "$baseUrl/events";
   static const String getEvents = "$baseUrl/events";
+
+
+  //trainer
+  static const String getTrainer="$baseUrl/trainer/all-trainers";
 }
