@@ -1,8 +1,11 @@
+// ignore_for_file: avoid_print
+
 import 'dart:io';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/services/network_service/network_client.dart';
 import 'package:gokul_ramk/features/trainer/community/posts/service/post_service.dart';
+import 'package:gokul_ramk/features/trainer/community/posts/controller/trainer_community_controller.dart';
 import 'package:image_picker/image_picker.dart';
 
 class TrainerCreatePostController extends GetxController {
@@ -58,6 +61,14 @@ class TrainerCreatePostController extends GetxController {
         titleController.value = '';
         contentController.value = '';
         pickedImage.value = null;
+
+        // Refresh the posts list
+        try {
+          final communityController = Get.find<CommunityController>();
+          await communityController.refreshPosts();
+        } catch (e) {
+          print('Error refreshing posts: $e');
+        }
       } else {
         EasyLoading.showError(
           "Failed to create post: ${response.responseData?['message'] ?? 'Unknown error'}",

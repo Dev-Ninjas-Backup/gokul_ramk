@@ -139,9 +139,7 @@ class EventModel {
       'targetUnit': targetUnit,
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
-      '_count': {
-        'participants': participantCount,
-      },
+      '_count': {'participants': participantCount},
     };
   }
 

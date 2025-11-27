@@ -1,4 +1,4 @@
-import 'package:get/get_navigation/src/routes/get_route.dart';
+import 'package:get/get.dart';
 
 import 'package:gokul_ramk/features/auth/forgot_password/screen/create_password_screen.dart';
 import 'package:gokul_ramk/features/auth/signup/more_trainer_information/screen/tell_about_trainer_screen.dart';
@@ -18,6 +18,7 @@ import 'package:gokul_ramk/features/auth/signup/more_user_information_screen/scr
 import 'package:gokul_ramk/features/auth/signup/more_user_information_screen/screen/tell_us_about_yourself_screen2.dart';
 import 'package:gokul_ramk/features/auth/signup/screen/signup_screen.dart';
 import 'package:gokul_ramk/features/trainer/community/events/screen/create_event_screen.dart';
+import 'package:gokul_ramk/features/trainer/community/challenges/screen/create_challenge_screen.dart';
 import 'package:gokul_ramk/features/trainer/home/home_screen/screen/home_screen.dart';
 import 'package:gokul_ramk/features/trainer/my_clients/client_profile/sceen/client_profile_screen.dart';
 import 'package:gokul_ramk/features/trainer/profile/add_product/screen/add_product_screen.dart';
@@ -94,6 +95,7 @@ class AppRoute {
   static String addProducts = "/addProducts";
   static String productDetails = "/productDetails";
   static String createEvent = '/tainer/createEvent';
+  static String createChallenge = '/trainer/createChallenge';
 
   static String getSplashScreen() => splashScreen;
   static String getOnboardingScreen() => onboardingScreen;
@@ -113,6 +115,7 @@ class AppRoute {
   static String getTrainerTellAboutScreen() => trainerTellAboutScreen;
   static String getProgramDetailScreen() => programDetailScreen;
   static String getCreateEvent() => createEvent;
+  static String getCreateChallenge() => createChallenge;
 
   //user
   static String getUserNavBarScreen() => userNavBarScreen;
@@ -213,9 +216,16 @@ class AppRoute {
     GetPage(name: trainerNavBarScreen, page: () => NavBarScreen()),
     GetPage(name: trainerHomeScreen, page: () => HomeScreen()),
     GetPage(name: clientProfileScreen, page: () => ClientProfileScreen()),
-    GetPage(name: bookingDetailsScreen, page: () => BookingDetailsScreen()),
+    GetPage(
+      name: bookingDetailsScreen,
+      page: () {
+        final bookingId = Get.parameters['bookingId'] ?? '';
+        return BookingDetailsScreen(bookingId: bookingId);
+      },
+    ),
     GetPage(name: addProducts, page: () => AddProductScreen()),
     GetPage(name: productDetails, page: () => ProductDetailsScreen()),
     GetPage(name: createEvent, page: () => CreateEventScreen()),
+    GetPage(name: createChallenge, page: () => CreateChallengeScreen()),
   ];
 }
