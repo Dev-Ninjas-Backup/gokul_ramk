@@ -2,16 +2,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
+import 'package:gokul_ramk/core/models/enums/user_role.dart';
 import 'package:gokul_ramk/core/utils/constants/icon_path.dart';
-import 'package:gokul_ramk/features/user/user_community/community_challenges/screen/challenges_screen.dart';
-import 'package:gokul_ramk/features/user/user_community/community_events/screen/event_screen.dart';
-import 'package:gokul_ramk/features/user/user_community/community_groups/screen/groups_screen.dart';
-import 'package:gokul_ramk/features/user/user_community/community_posts/controller/user_community_controller.dart';
-import 'package:gokul_ramk/features/user/user_community/community_posts/screen/post_screen.dart';
+import 'package:gokul_ramk/features/trainer/community/challenges/screen/challenges_screen.dart';
+import 'package:gokul_ramk/features/trainer/community/events/screen/event_screen.dart';
+import 'package:gokul_ramk/features/trainer/community/groups/screen/groups_screen.dart';
+import 'package:gokul_ramk/features/trainer/community/posts/screen/post_screen.dart';
 
 class UserCommunityScreen extends StatelessWidget {
   UserCommunityScreen({super.key});
-  final controller = Get.put(UserCommunityController());
+
+  // Using a simple state variable to track selected tab
+  final RxInt selectedTab = 0.obs;
+
   @override
   Widget build(BuildContext context) {
     final tabs = ["Posts", "Groups", "Events", "Challenges"];
@@ -56,14 +59,14 @@ class UserCommunityScreen extends StatelessWidget {
                         label: Text(
                           tabs[index],
                           style: getTextStyle(
-                            color: controller.selectedTab.value == index
+                            color: selectedTab.value == index
                                 ? Colors.white
                                 : Colors.black,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        selected: controller.selectedTab.value == index,
-                        onSelected: (_) => controller.changeTab(index),
+                        selected: selectedTab.value == index,
+                        onSelected: (_) => selectedTab.value = index,
                         selectedColor: Colors.black,
                         backgroundColor: Colors.white,
                         showCheckmark: false,
@@ -71,7 +74,7 @@ class UserCommunityScreen extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                           side: BorderSide(
-                            color: controller.selectedTab.value == index
+                            color: selectedTab.value == index
                                 ? Colors.black
                                 : Colors.grey.shade300,
                             width: 2,
@@ -87,13 +90,13 @@ class UserCommunityScreen extends StatelessWidget {
               // Tab content
               Expanded(
                 child: Obx(() {
-                  switch (controller.selectedTab.value) {
+                  switch (selectedTab.value) {
                     case 1: // Groups
-                      return UserGroupsTab();
+                      return GroupsTab();
                     case 2:
-                      return UserEventsScreen();
+                      return EventsScreen(userRole: UserRole.user);
                     case 3:
-                      return UserChallengesScreen();
+                      return ChallengesScreen(userRole: UserRole.user);
                     default:
                       return PostScreen();
                   }

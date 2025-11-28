@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:gokul_ramk/core/models/enums/user_role.dart';
 import 'package:gokul_ramk/core/services/network_service/network_client.dart';
 import 'package:gokul_ramk/features/trainer/community/events/model/event_model.dart';
 import 'package:gokul_ramk/features/trainer/community/events/repository/event_repository.dart';
@@ -11,6 +12,9 @@ import 'package:gokul_ramk/features/trainer/community/events/repository/event_re
 class EventsController extends GetxController {
   late EventRepository eventRepository;
   final ImagePicker _imagePicker = ImagePicker();
+
+  // Track user role
+  var userRole = Rxn<UserRole>();
 
   var events = <Map<String, dynamic>>[].obs;
   var eventModels = <EventModel>[].obs;
@@ -50,6 +54,8 @@ class EventsController extends GetxController {
     eventRepository = EventRepository(networkClient: networkClient);
     selectedFormat.value = 'ONLINE'; // Default format
     selectedStatus.value = 'DRAFT'; // Default status
+    // Set user role from arguments if passed, default to trainer
+    userRole.value = Get.arguments ?? UserRole.trainer;
     fetchEvents();
   }
 

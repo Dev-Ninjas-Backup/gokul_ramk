@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
+import 'package:gokul_ramk/core/models/enums/user_role.dart';
 import 'package:gokul_ramk/core/utils/constants/icon_path.dart';
 import 'package:gokul_ramk/features/trainer/community/challenges/screen/challenges_screen.dart';
 import 'package:gokul_ramk/features/trainer/community/events/screen/event_screen.dart';
@@ -10,8 +11,10 @@ import 'package:gokul_ramk/features/trainer/community/posts/controller/trainer_c
 import 'package:gokul_ramk/features/trainer/community/posts/screen/post_screen.dart';
 
 class TrainerCommunityScreen extends StatelessWidget {
-  TrainerCommunityScreen({super.key});
+  TrainerCommunityScreen({super.key, this.userRole = UserRole.trainer});
   final controller = Get.put(CommunityController());
+  final UserRole userRole;
+
   @override
   Widget build(BuildContext context) {
     final tabs = ["Posts", "Groups", "Events", "Challenges"];
@@ -91,9 +94,9 @@ class TrainerCommunityScreen extends StatelessWidget {
                     case 1: // Groups
                       return GroupsTab();
                     case 2:
-                      return EventsScreen();
+                      return EventsScreen(userRole: userRole);
                     case 3:
-                      return ChallengesScreen();
+                      return ChallengesScreen(userRole: userRole);
                     default:
                       return PostScreen();
                   }

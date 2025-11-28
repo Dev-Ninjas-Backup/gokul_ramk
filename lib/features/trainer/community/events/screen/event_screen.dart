@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
+import 'package:gokul_ramk/core/models/enums/user_role.dart';
 import 'package:gokul_ramk/routes/app_routes.dart';
 
 import '../controller/event_controller.dart';
 
 class EventsScreen extends StatelessWidget {
-  const EventsScreen({super.key});
+  const EventsScreen({super.key, this.userRole = UserRole.trainer});
+
+  final UserRole userRole;
 
   String _formatDate(DateTime dateTime) {
     final months = [
@@ -195,10 +198,17 @@ class EventsScreen extends StatelessWidget {
                         padding: const EdgeInsets.all(8.0),
                         child: ElevatedButton(
                           onPressed: () {
-                            // Handle host event action
+                            // Handle action based on role
+                            if (userRole == UserRole.trainer) {
+                              // Handle host event action
+                            } else {
+                              // Handle join event action
+                            }
                           },
                           child: Text(
-                            "Host Event",
+                            userRole == UserRole.trainer
+                                ? "Host Event"
+                                : "Join Event",
                             style: getTextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
@@ -216,19 +226,21 @@ class EventsScreen extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Align(
               alignment: Alignment.bottomRight,
-              child: GestureDetector(
-                onTap: () {
-                  Get.toNamed(AppRoute.createEvent);
-                },
-                child: Container(
-                  padding: EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.blue.withValues(alpha: 0.6),
-                  ),
-                  child: Icon(Icons.add),
-                ),
-              ),
+              child: userRole == UserRole.trainer
+                  ? GestureDetector(
+                      onTap: () {
+                        Get.toNamed(AppRoute.createEvent);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.blue.withValues(alpha: 0.6),
+                        ),
+                        child: Icon(Icons.add),
+                      ),
+                    )
+                  : SizedBox.shrink(),
             ),
           ),
         ],

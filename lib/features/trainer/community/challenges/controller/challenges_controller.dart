@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:gokul_ramk/core/models/enums/user_role.dart';
 import 'package:gokul_ramk/core/services/network_service/network_client.dart';
 import 'package:gokul_ramk/features/trainer/community/events/model/event_model.dart';
 import 'package:gokul_ramk/features/trainer/community/challenges/repository/challenge_repository.dart';
@@ -11,6 +12,9 @@ import 'package:gokul_ramk/features/trainer/community/challenges/repository/chal
 class ChallengesController extends GetxController {
   late ChallengeRepository challengeRepository;
   final ImagePicker _imagePicker = ImagePicker();
+
+  // Track user role
+  var userRole = Rxn<UserRole>();
 
   var events = <Map<String, dynamic>>[].obs;
   var challengeModels = <EventModel>[].obs;
@@ -62,6 +66,8 @@ class ChallengesController extends GetxController {
     selectedFormat.value = 'ONLINE'; // Default format
     selectedStatus.value = 'DRAFT'; // Default status
     selectedCategory.value = 'WORKOUT'; // Default category
+    // Set user role from arguments if passed, default to trainer
+    userRole.value = Get.arguments ?? UserRole.trainer;
     fetchChallenges();
   }
 
