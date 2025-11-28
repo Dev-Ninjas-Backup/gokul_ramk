@@ -1,12 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
+import 'package:gokul_ramk/core/models/enums/user_role.dart';
 import 'package:gokul_ramk/routes/app_routes.dart';
 
 import '../controller/event_controller.dart';
 
-class EventsScreen extends StatelessWidget {
-  const EventsScreen({super.key});
+class EventsScreen extends StatefulWidget {
+  const EventsScreen({super.key, this.userRole = UserRole.trainer});
+
+  final UserRole userRole;
+
+  @override
+  State<EventsScreen> createState() => _EventsScreenState();
+}
+
+class _EventsScreenState extends State<EventsScreen> {
+  late EventsController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = Get.put(EventsController());
+    // Ensure events are loaded when screen is first opened
+    if (controller.eventModels.isEmpty && !controller.isLoadingEvents.value) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        controller.fetchEvents();
+      });
+    }
+  }
 
   String _formatDate(DateTime dateTime) {
     final months = [
@@ -35,8 +57,6 @@ class EventsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(EventsController());
-
     return Obx(() {
       // Show loading indicator if fetching events
       if (controller.isLoadingEvents.value) {
@@ -195,10 +215,17 @@ class EventsScreen extends StatelessWidget {
                         padding: const EdgeInsets.all(8.0),
                         child: ElevatedButton(
                           onPressed: () {
-                            // Handle host event action
+                            // Handle action based on role
+                            if (widget.userRole == UserRole.trainer) {
+                              // Handle host event action
+                            } else {
+                              // Handle join event action
+                            }
                           },
                           child: Text(
-                            "Host Event",
+                            widget.userRole == UserRole.trainer
+                                ? "Host Event"
+                                : "Join Event",
                             style: getTextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
@@ -216,19 +243,21 @@ class EventsScreen extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Align(
               alignment: Alignment.bottomRight,
-              child: GestureDetector(
-                onTap: () {
-                  Get.toNamed(AppRoute.createEvent);
-                },
-                child: Container(
-                  padding: EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.blue.withValues(alpha: 0.6),
-                  ),
-                  child: Icon(Icons.add),
-                ),
-              ),
+              child: widget.userRole == UserRole.trainer
+                  ? GestureDetector(
+                      onTap: () {
+                        Get.toNamed(AppRoute.createEvent);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.blue.withValues(alpha: 0.6),
+                        ),
+                        child: Icon(Icons.add),
+                      ),
+                    )
+                  : SizedBox.shrink(),
             ),
           ),
         ],

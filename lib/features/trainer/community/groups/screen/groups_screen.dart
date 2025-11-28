@@ -14,6 +14,23 @@ class GroupsTab extends StatefulWidget {
 }
 
 class _GroupsTabState extends State<GroupsTab> {
+  late GroupsController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize controller and load groups if not already loaded
+    controller = Get.put(GroupsController());
+    if (controller.groups.isEmpty && !controller.isLoadingGroups.value) {
+      // Ensure groups are loaded on first view
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (controller.groups.isEmpty) {
+          controller.refreshGroups();
+        }
+      });
+    }
+  }
+
   void _showLeaveGroupDialog(
     BuildContext context,
     GroupsController controller,
@@ -111,8 +128,6 @@ class _GroupsTabState extends State<GroupsTab> {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(GroupsController());
-
     return Obx(
       () => CustomScrollView(
         slivers: [

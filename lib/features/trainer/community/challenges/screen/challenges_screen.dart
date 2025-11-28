@@ -1,12 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
+import 'package:gokul_ramk/core/models/enums/user_role.dart';
 import 'package:gokul_ramk/routes/app_routes.dart';
 
 import '../controller/challenges_controller.dart';
 
-class ChallengesScreen extends StatelessWidget {
-  const ChallengesScreen({super.key});
+class ChallengesScreen extends StatefulWidget {
+  const ChallengesScreen({super.key, this.userRole = UserRole.trainer});
+
+  final UserRole userRole;
+
+  @override
+  State<ChallengesScreen> createState() => _ChallengesScreenState();
+}
+
+class _ChallengesScreenState extends State<ChallengesScreen> {
+  late ChallengesController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = Get.put(ChallengesController());
+    // Ensure challenges are loaded when screen is first opened
+    if (controller.challengeModels.isEmpty &&
+        !controller.isLoadingChallenges.value) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        controller.fetchChallenges();
+      });
+    }
+  }
 
   String _formatDate(DateTime dateTime) {
     final months = [
@@ -35,8 +58,6 @@ class ChallengesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(ChallengesController());
-
     return Obx(() {
       // Show loading indicator if fetching challenges
       if (controller.isLoadingChallenges.value) {
@@ -234,10 +255,17 @@ class ChallengesScreen extends StatelessWidget {
                         padding: const EdgeInsets.all(8.0),
                         child: ElevatedButton(
                           onPressed: () {
-                            // Handle host challenge action
+                            // Handle action based on role
+                            if (widget.userRole == UserRole.trainer) {
+                              // Handle host challenge action
+                            } else {
+                              // Handle join challenge action
+                            }
                           },
                           child: Text(
-                            "Host Challenge",
+                            widget.userRole == UserRole.trainer
+                                ? "Host Challenge"
+                                : "Join Challenge",
                             style: getTextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
@@ -255,19 +283,21 @@ class ChallengesScreen extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Align(
               alignment: Alignment.bottomRight,
-              child: GestureDetector(
-                onTap: () {
-                  Get.toNamed(AppRoute.createChallenge);
-                },
-                child: Container(
-                  padding: EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.blue.withValues(alpha: 0.6),
-                  ),
-                  child: Icon(Icons.add),
-                ),
-              ),
+              child: widget.userRole == UserRole.trainer
+                  ? GestureDetector(
+                      onTap: () {
+                        Get.toNamed(AppRoute.createChallenge);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.blue.withValues(alpha: 0.6),
+                        ),
+                        child: Icon(Icons.add),
+                      ),
+                    )
+                  : SizedBox.shrink(),
             ),
           ),
         ],

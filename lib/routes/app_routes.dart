@@ -17,8 +17,8 @@ import 'package:gokul_ramk/features/auth/signup/more_user_information_screen/scr
 import 'package:gokul_ramk/features/auth/signup/more_user_information_screen/screen/tell_us_about_yourself_screen1.dart';
 import 'package:gokul_ramk/features/auth/signup/more_user_information_screen/screen/tell_us_about_yourself_screen2.dart';
 import 'package:gokul_ramk/features/auth/signup/screen/signup_screen.dart';
-import 'package:gokul_ramk/features/trainer/community/events/screen/create_event_screen.dart';
 import 'package:gokul_ramk/features/trainer/community/challenges/screen/create_challenge_screen.dart';
+import 'package:gokul_ramk/features/trainer/community/events/screen/create_event_screen.dart';
 import 'package:gokul_ramk/features/trainer/home/home_screen/screen/home_screen.dart';
 import 'package:gokul_ramk/features/trainer/my_clients/client_profile/sceen/client_profile_screen.dart';
 import 'package:gokul_ramk/features/trainer/profile/add_product/screen/add_product_screen.dart';
@@ -31,8 +31,6 @@ import 'package:gokul_ramk/features/user/shop/shipping/screen/order_confirmation
 import 'package:gokul_ramk/features/user/shop/shipping/screen/review_order_screen.dart';
 import 'package:gokul_ramk/features/user/shop/shipping/screen/shipping_information_screen.dart';
 import 'package:gokul_ramk/features/user/user_chat/screen/chat_screen.dart';
-import 'package:gokul_ramk/features/user/user_community/community_challenges/screen/challenge_complete_screen.dart';
-import 'package:gokul_ramk/features/user/user_community/community_groups/screen/create_group.dart';
 import 'package:gokul_ramk/features/user/user_home/book_trainer/screen/bookings_screen.dart';
 import 'package:gokul_ramk/features/user/bookmark/screen/user_bookmark_screen.dart';
 import 'package:gokul_ramk/features/user/bottom_navbar/screen/user_custom_navbar.dart';
@@ -206,11 +204,7 @@ class AppRoute {
     ),
     GetPage(name: userChatScreen, page: () => ChatScreen()),
     GetPage(name: programDetailScreen, page: () => ProgramDetailsScreen()),
-    GetPage(name: userCreateGroupScreen, page: () => UserCreateGroupScreen()),
-    GetPage(
-      name: completeChallengeScreen,
-      page: () => ChallengeCompleteScreen(),
-    ),
+    // User community routes removed - using trainer community instead
 
     // Trainer
     GetPage(name: trainerNavBarScreen, page: () => NavBarScreen()),
