@@ -4,6 +4,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:gokul_ramk/core/endpoint/end_points.dart';
+import 'package:gokul_ramk/core/services/network_service/network_client.dart';
 import 'package:gokul_ramk/features/trainer/profile/add_product/model/category_model.dart';
 import 'package:gokul_ramk/features/trainer/profile/add_product/post_request_service/add_product_request_service.dart';
 import 'package:gokul_ramk/features/trainer/profile/add_product/post_request_service/category_request_service.dart';
@@ -23,12 +25,17 @@ class AddProductController extends GetxController {
 
   final ImagePicker _picker = ImagePicker();
   var selectedImages = <File>[].obs;
+  var uploadedImageUrls = <String>[].obs;
   var index = 0.obs;
   var selectedImagePath = ''.obs;
+  var isUploadingImages = false.obs;
+
+  late NetworkClient networkClient;
 
   @override
   void onInit() {
     super.onInit();
+    networkClient = Get.find<NetworkClient>();
     fetchCategories();
   }
 
@@ -104,9 +111,79 @@ class AddProductController extends GetxController {
     }
   }
 
+  // Upload multiple images and get URLs
+  Future<bool> _uploadProductImages() async {
+    if (selectedImages.isEmpty) {
+      EasyLoading.showError('No images to upload');
+      return false;
+    }
+
+    try {
+      isUploadingImages.value = true;
+      EasyLoading.show(status: 'Uploading images...');
+
+      final response = await networkClient.uploadMultipleFiles(
+        url: Urls.uploadMultiple,
+        files: selectedImages,
+        fieldName: 'files',
+      );
+
+      if (!response.isSuccess || response.responseData == null) {
+        EasyLoading.showError('Failed to upload images');
+        return false;
+      }
+
+      final responseData = response.responseData;
+      if (responseData is! Map<String, dynamic>) {
+        EasyLoading.showError('Invalid upload response format');
+        return false;
+      }
+
+      // Extract URLs from response: { "files": [ { "url": "..." }, ... ] }
+      final filesList = responseData['files'];
+      if (filesList is! List) {
+        EasyLoading.showError('No files in upload response');
+        return false;
+      }
+
+      uploadedImageUrls.clear();
+      for (final fileData in filesList) {
+        if (fileData is Map<String, dynamic> && fileData.containsKey('url')) {
+          final urlPath = fileData['url'] as String;
+          // Check if URL is already complete (starts with http)
+          final fullUrl = urlPath.startsWith('http')
+              ? urlPath
+              : '${Urls.baseUrl}$urlPath';
+          uploadedImageUrls.add(fullUrl);
+        }
+      }
+
+      if (uploadedImageUrls.isEmpty) {
+        EasyLoading.showError('No valid image URLs received');
+        return false;
+      }
+
+      print('✅ Successfully uploaded ${uploadedImageUrls.length} images');
+      return true;
+    } catch (e) {
+      print('Error uploading images: $e');
+      EasyLoading.showError('Error uploading images: $e');
+      return false;
+    } finally {
+      isUploadingImages.value = false;
+    }
+  }
+
   Future<void> postCreateProduct() async {
     await validation();
     try {
+      // Step 1: Upload images and get URLs
+      final imagesUploaded = await _uploadProductImages();
+      if (!imagesUploaded) {
+        return; // Error message already shown by _uploadProductImages
+      }
+
+      // Step 2: Create product with uploaded image URLs
       EasyLoading.show(status: 'Creating product...');
       final response = await AddProductRequestService.createProduct(
         name: nameController.text.trim(),
@@ -114,7 +191,8 @@ class AddProductController extends GetxController {
         price: double.tryParse(priceController.text.trim()) ?? 0.0,
         categoryId: selectedCategory.value?.id ?? '',
         stock: int.tryParse(stockController.text.trim()) ?? 0,
-        thumbnailImages: selectedImages,
+        thumbnailImages: uploadedImageUrls
+            .toList(), // Pass uploaded URLs as list
         ingredients: ingredientToJson(),
         keyBenefits: benefitToList(),
       );
@@ -163,6 +241,7 @@ class AddProductController extends GetxController {
     stockController.clear();
     descriptionController.clear();
     selectedImages.clear();
+    uploadedImageUrls.clear();
     ingredients.clear();
     keyBenefits.clear();
     if (categories.isNotEmpty) {

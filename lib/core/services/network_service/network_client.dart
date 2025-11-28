@@ -311,6 +311,100 @@ class NetworkClient {
     }
   }
 
+  // Upload multiple files and return list of URLs
+  Future<NetworkResponse> uploadMultipleFiles({
+    required String url,
+    required List<File> files,
+    String fieldName = 'files',
+  }) async {
+    try {
+      final token = await sharedPreferencesHelper.getAccessToken() ?? '';
+
+      var request = http.MultipartRequest('POST', Uri.parse(url));
+      request.headers['authorization'] = token;
+      request.headers['accept'] = 'application/json';
+
+      // Add all files to the request
+      for (final file in files) {
+        String mimeType = 'application/octet-stream'; // fallback
+        final extension = file.path.split('.').last.toLowerCase();
+
+        if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'].contains(extension)) {
+          mimeType = 'image/$extension';
+          if (extension == 'jpg') mimeType = 'image/jpeg';
+        } else if ([
+          'mp4',
+          'mov',
+          'avi',
+          'mkv',
+          'webm',
+          'm4v',
+        ].contains(extension)) {
+          mimeType = 'video/$extension';
+          if (extension == 'mov' || extension == 'm4v') mimeType = 'video/mp4';
+        }
+
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            fieldName,
+            file.path,
+            filename: file.path.split(Platform.pathSeparator).last,
+            contentType: MediaType.parse(mimeType),
+          ),
+        );
+      }
+
+      _logger.i('Uploading ${files.length} files to: $url');
+
+      // Set timeout for multipart request (5 minutes)
+      var streamedResponse = await request.send().timeout(
+        const Duration(minutes: 5),
+      );
+
+      var response = await http.Response.fromStream(
+        streamedResponse,
+      ).timeout(const Duration(minutes: 5));
+
+      _logResponse(response: response);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final responseBody = jsonDecode(response.body);
+        return NetworkResponse(
+          statusCode: response.statusCode,
+          isSuccess: true,
+          responseData: responseBody,
+        );
+      } else {
+        try {
+          final responseBody = jsonDecode(response.body);
+          return NetworkResponse(
+            statusCode: response.statusCode,
+            isSuccess: false,
+            errorMessage: _extractErrorMessage(responseBody['message']),
+          );
+        } catch (e) {
+          return NetworkResponse(
+            statusCode: response.statusCode,
+            isSuccess: false,
+            errorMessage: 'Upload failed with status ${response.statusCode}',
+          );
+        }
+      }
+    } on SocketException catch (e) {
+      return NetworkResponse(
+        statusCode: -1,
+        isSuccess: false,
+        errorMessage: 'Network error: ${e.message}',
+      );
+    } catch (e) {
+      return NetworkResponse(
+        statusCode: -1,
+        isSuccess: false,
+        errorMessage: 'Upload error: ${e.toString()}',
+      );
+    }
+  }
+
   void _logRequest({
     required String url,
     Map<String, String>? headers,

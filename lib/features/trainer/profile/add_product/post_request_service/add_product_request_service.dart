@@ -18,7 +18,8 @@ class AddProductRequestService {
     required double price,
     required String categoryId,
     required int stock,
-    required List<File> thumbnailImages, // up to 5 images
+    required List<dynamic>
+    thumbnailImages, // Can be File objects or String URLs
     double? rating,
     Map<String, dynamic>? ingredients,
     List<String>? keyBenefits,
@@ -53,25 +54,33 @@ class AddProductRequestService {
         }
       }
 
-      // Add image files (up to 5)
+      // Add thumbnail URLs or File objects (up to 5)
       for (var i = 0; i < thumbnailImages.length && i < 5; i++) {
-        String ext = path.extension(thumbnailImages[i].path).toLowerCase();
-        String mimeSubtype;
+        final item = thumbnailImages[i];
 
-        if (ext == '.png') {
-          mimeSubtype = 'png';
-        } else if (ext == '.jpg' || ext == '.jpeg') {
-          mimeSubtype = 'jpeg';
-        } else {
-          mimeSubtype = 'octet-stream';
+        if (item is String) {
+          // If it's a URL string, add as field
+          request.fields['thumbnail_urls[$i]'] = item;
+        } else if (item is File) {
+          // If it's a File, add as multipart file
+          String ext = path.extension(item.path).toLowerCase();
+          String mimeSubtype;
+
+          if (ext == '.png') {
+            mimeSubtype = 'png';
+          } else if (ext == '.jpg' || ext == '.jpeg') {
+            mimeSubtype = 'jpeg';
+          } else {
+            mimeSubtype = 'octet-stream';
+          }
+
+          var imageFile = await http.MultipartFile.fromPath(
+            'thumbnail', // field name as per API docs
+            item.path,
+            contentType: MediaType('image', mimeSubtype),
+          );
+          request.files.add(imageFile);
         }
-
-        var imageFile = await http.MultipartFile.fromPath(
-          'thumbnail', // field name as per API docs
-          thumbnailImages[i].path,
-          contentType: MediaType('image', mimeSubtype),
-        );
-        request.files.add(imageFile);
       }
 
       // Add authorization header if needed
