@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'package:gokul_ramk/core/endpoint/end_points.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:gokul_ramk/core/services/network_service/network_client.dart';
 import 'availability_controller.dart';
@@ -101,7 +100,9 @@ class TellAboutTrainerController extends GetxController {
         : bioController.text.trim();
 
     final finalImageUrl = selectedImage.value != null
-        ? Urls.baseUrl + imageUrl.value
+        // ? Urls.baseUrl + imageUrl.value
+                ?imageUrl.value
+
         : " ";
 
     return {
