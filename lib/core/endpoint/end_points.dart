@@ -34,6 +34,7 @@ class Urls {
   //trainer meal plan
   static const String createMeal = "$baseUrl/meal-plan/create-meal";
   static const String uploadFile = "$baseUrl/upload";
+  static const String uploadMultiple = "$baseUrl/upload/multiple";
   static const String createMealPlan = "$baseUrl/meal-plan/create-plan";
   static const String getMeal = "$baseUrl/meal-plan/meal";
 
@@ -54,9 +55,8 @@ class Urls {
   static const String createEvent = "$baseUrl/events";
   static const String getEvents = "$baseUrl/events";
 
-
   //trainer
-  static const String getTrainer="$baseUrl/trainer/all-trainers";
+  static const String getTrainer = "$baseUrl/trainer/all-trainers";
 
   // Bookings endpoints
   static const String getBookings = "$baseUrl/bookings";
