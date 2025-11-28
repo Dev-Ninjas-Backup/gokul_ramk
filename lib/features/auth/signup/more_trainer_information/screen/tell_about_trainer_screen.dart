@@ -40,22 +40,6 @@ class TellAboutTrainerScreen extends StatelessWidget {
                       child: Stack(
                         clipBehavior: Clip.none,
                         children: [
-                          // CircleAvatar(
-                          //   radius: 50,
-                          //   backgroundImage:
-                          //       // NetworkImage(Get.arguments[1] ?? ""),
-                          //       Image.network(controller.imageUrl).image,
-                          // ),
-                          // Positioned(
-                          //   right: -5,
-                          //   bottom: 15,
-                          //   child: Image.asset(
-                          //     "assets/icons/edit2.png",
-                          //     height: 30,
-                          //     width: 30,
-                          //     color: Colors.black,
-                          //   ),
-                          // ),
                           Obx(() {
                             final String currentNetworkImage =
                                 Get.arguments?[1] as String? ?? '';
@@ -83,6 +67,34 @@ class TellAboutTrainerScreen extends StatelessWidget {
                                   : null,
                             );
                           }),
+
+                          //                           Obx(() {
+                          //   final String currentNetworkImage =
+                          //       Get.arguments?[1] as String? ?? '';
+                          //   final File? localImageFile = controller.selectedImage.value;
+
+                          //   return CircleAvatar(
+                          //     radius: 50,
+                          //     backgroundColor: Colors.grey.shade200,
+                          //     backgroundImage: localImageFile != null
+                          //         ? FileImage(localImageFile)
+                          //         : currentNetworkImage.isNotEmpty
+                          //             ? NetworkImage(currentNetworkImage)
+                          //             : controller.imageUrl.value.isNotEmpty
+                          //                 ? NetworkImage(controller.imageUrl.value)
+                          //                 : null,
+                          //     child: (localImageFile == null &&
+                          //             currentNetworkImage.isEmpty &&
+                          //             controller.imageUrl.value.isEmpty)
+                          //         ? const Icon(
+                          //             Icons.person,
+                          //             size: 60,
+                          //             color: Colors.grey,
+                          //           )
+                          //         : null,
+                          //   );
+                          // })
+                          // ,
 
                           // Edit Icon (tap to pick from gallery)
                           Positioned(
