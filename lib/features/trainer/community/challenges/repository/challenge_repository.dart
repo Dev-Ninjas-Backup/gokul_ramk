@@ -123,9 +123,13 @@ class ChallengeRepository {
           return null;
         }
 
-        final relativePath = fileData['url'] as String;
-        // Combine baseUrl with the relative path
-        return '${Urls.baseUrl}$relativePath';
+        final urlPath = fileData['url'] as String;
+        // If URL is already complete (starts with http), use as-is
+        if (urlPath.startsWith('http')) {
+          return urlPath;
+        }
+        // Otherwise combine baseUrl with the relative path
+        return '${Urls.baseUrl}$urlPath';
       } else {
         print('Error: Upload failed - ${response.errorMessage}');
       }

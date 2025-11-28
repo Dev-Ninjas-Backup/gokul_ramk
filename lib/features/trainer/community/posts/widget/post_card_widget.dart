@@ -207,10 +207,13 @@ class _PostCardWidgetState extends State<PostCardWidget> {
               borderRadius: BorderRadius.circular(12),
               child: Image.network(
                 widget.post.image,
+                height: 300,
+                width: double.infinity,
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) {
                   return Container(
-                    height: 200,
+                    height: 300,
+                    width: double.infinity,
                     color: Colors.grey[300],
                     child: Center(child: Icon(Icons.image_not_supported)),
                   );
@@ -300,9 +303,9 @@ class _PostCardWidgetState extends State<PostCardWidget> {
                       padding: EdgeInsets.symmetric(horizontal: 12),
                       child: Column(
                         children: [
-                          ...displayedComments
-                              .map((comment) => CommentWidget(comment: comment))
-                              ,
+                          ...displayedComments.map(
+                            (comment) => CommentWidget(comment: comment),
+                          ),
                           if (_hasMoreComments())
                             Padding(
                               padding: EdgeInsets.symmetric(vertical: 12),
