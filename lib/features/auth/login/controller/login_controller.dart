@@ -109,10 +109,15 @@ class LoginController extends GetxController {
       );
       if (response.isSuccess == true) {
         final access_token = response.responseData?["access_token"];
-        final role = response.responseData?["user"]["role"];
+        final user = response.responseData?["user"] as Map<String, dynamic>?;
+        final role = user?["role"];
+        final userId = user?["id"] as String?;
 
         await sharedPreferencesHelperController.saveToken(access_token);
         await sharedPreferencesHelperController.saveSelectedRole(role);
+        if (userId != null && userId.isNotEmpty) {
+          await sharedPreferencesHelperController.saveUserId(userId);
+        }
 
         if (role == "TRAINER") {
           Get.offAllNamed(AppRoute.trainerNavBarScreen);

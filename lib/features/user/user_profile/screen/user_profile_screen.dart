@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
+import 'package:gokul_ramk/core/services/local_service/shared_preferences_helper.dart';
 import 'package:gokul_ramk/core/utils/constants/icon_path.dart';
 import 'package:gokul_ramk/features/user/user_profile/controller/user_profile_controller.dart';
 import 'package:gokul_ramk/features/user/user_profile/widget/settings_tile.dart';
@@ -12,6 +13,9 @@ class UserProfileScreen extends StatelessWidget {
   UserProfileScreen({super.key});
 
   final UserProfileController controller = Get.put(UserProfileController());
+  final SharedPreferencesHelperController sharedPreferencesHelper = Get.put(
+    SharedPreferencesHelperController(),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -184,6 +188,7 @@ class UserProfileScreen extends StatelessWidget {
                     backgroundColor: Color(0xFFFF4D4F),
                   ),
                   onPressed: () {
+                    sharedPreferencesHelper.clearAllData();
                     Get.offAllNamed(AppRoute.loginScreen);
                   },
                   child: Text('Logout'),
