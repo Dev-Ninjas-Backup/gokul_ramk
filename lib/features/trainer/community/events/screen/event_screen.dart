@@ -213,25 +213,43 @@ class _EventsScreenState extends State<EventsScreen> {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            // Handle action based on role
-                            if (widget.userRole == UserRole.trainer) {
-                              // Handle host event action
-                            } else {
-                              // Handle join event action
-                            }
-                          },
-                          child: Text(
-                            widget.userRole == UserRole.trainer
-                                ? "Host Event"
-                                : "Join Event",
-                            style: getTextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
+                        child: Obx(() {
+                          final isJoining = controller.joiningEventIds.contains(
+                            event.id,
+                          );
+                          return ElevatedButton(
+                            onPressed: isJoining
+                                ? null
+                                : () {
+                                    if (widget.userRole == UserRole.trainer) {
+                                      // Handle host event action
+                                    } else {
+                                      // Join event action
+                                      controller.joinEvent(event.id);
+                                    }
+                                  },
+                            child: isJoining
+                                ? SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.white,
+                                      ),
+                                      strokeWidth: 2,
+                                    ),
+                                  )
+                                : Text(
+                                    widget.userRole == UserRole.trainer
+                                        ? "Host Event"
+                                        : "Join Event",
+                                    style: getTextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                          );
+                        }),
                       ),
                     ],
                   ),

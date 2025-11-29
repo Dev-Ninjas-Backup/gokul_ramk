@@ -47,6 +47,9 @@ class EventsController extends GetxController {
   var pageLimit = 10.obs;
   var isLoadingEvents = false.obs;
 
+  // Join event state
+  var joiningEventIds = <String>{}.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -407,6 +410,45 @@ class EventsController extends GetxController {
   void clearImage() {
     selectedImage.value = null;
     selectedImageName.value = '';
+  }
+
+  Future<void> joinEvent(String eventId) async {
+    try {
+      joiningEventIds.add(eventId);
+
+      final response = await eventRepository.joinEvent(eventId: eventId);
+
+      if (response != null && response.success) {
+        Get.snackbar(
+          'Success',
+          'Successfully joined the event!',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+        // Refresh events to update participant count
+        await fetchEvents();
+      } else {
+        Get.snackbar(
+          'Error',
+          response?.message ?? 'Failed to join event',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
+    } catch (e) {
+      print('Error joining event: $e');
+      Get.snackbar(
+        'Error',
+        'Failed to join event: $e',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    } finally {
+      joiningEventIds.remove(eventId);
+    }
   }
 
   @override

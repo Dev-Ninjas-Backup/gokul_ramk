@@ -173,6 +173,45 @@ class EventRepository {
     }
   }
 
+  Future<EventApiResponse?> joinEvent({required String eventId}) async {
+    try {
+      final response = await networkClient.postRequest(
+        url: Urls.joinEvent(eventId),
+        body: {},
+      );
+
+      if (response.isSuccess && response.responseData != null) {
+        final data = response.responseData;
+
+        if (data is Map<String, dynamic>) {
+          return EventApiResponse.fromJson(data);
+        } else {
+          return EventApiResponse(
+            success: false,
+            message: 'Invalid response format',
+          );
+        }
+      } else if (!response.isSuccess && response.responseData != null) {
+        // Handle error responses that have response data
+        final data = response.responseData;
+        if (data is Map<String, dynamic>) {
+          return EventApiResponse.fromJson(data);
+        }
+      }
+
+      return EventApiResponse(
+        success: false,
+        message: response.errorMessage ?? 'Failed to join event',
+      );
+    } catch (e) {
+      print('Error joining event: $e');
+      return EventApiResponse(
+        success: false,
+        message: 'Error: ${e.toString()}',
+      );
+    }
+  }
+
   static String _eventTypeToString(EventType type) {
     return type.toString().split('.').last;
   }
