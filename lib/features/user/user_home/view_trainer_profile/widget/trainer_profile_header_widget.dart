@@ -4,7 +4,7 @@ import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
 import 'package:gokul_ramk/features/user/user_home/view_trainer_profile/controller/view_trainer_profile_controller.dart';
 
 class TrainerProfileHeaderWidget extends StatelessWidget {
-  final String imageUrl, name, location;
+  final String imageUrl, name, location, nationality;
   final bool fromMyTrainer;
 
   final ratingController = Get.put(ViewTrainerProfileController());
@@ -15,6 +15,7 @@ class TrainerProfileHeaderWidget extends StatelessWidget {
     required this.name,
     required this.location,
     required this.fromMyTrainer,
+    required this.nationality,
   });
 
   @override
@@ -42,7 +43,14 @@ class TrainerProfileHeaderWidget extends StatelessWidget {
             name,
             style: getTextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
-          Text(location, style: getTextStyle(color: Colors.grey.shade600)),
+          Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(location, style: getTextStyle(color: Colors.grey.shade600)),
+              Text(", "),
+              Text(nationality, style: getTextStyle(color: Colors.grey.shade600)),
+            ],
+          ),
           const SizedBox(height: 12),
 
           // ⭐ Rating System

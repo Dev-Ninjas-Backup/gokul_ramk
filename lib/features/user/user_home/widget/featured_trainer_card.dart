@@ -14,7 +14,7 @@ class FeaturedTrainerCard extends StatelessWidget {
     required this.name,
     required this.tagline,
     required this.specialty,
-    required this.onTapViewProfile
+    required this.onTapViewProfile,
   });
 
   @override
@@ -39,7 +39,7 @@ class FeaturedTrainerCard extends StatelessWidget {
               fit: BoxFit.cover,
 
               errorBuilder: (context, error, stackTrace) {
-                return Center(child: Icon(Icons.broken_image,size: 140,));
+                return Center(child: Icon(Icons.broken_image, size: 140));
               },
             ),
           ),
@@ -82,6 +82,7 @@ class FeaturedTrainerCard extends StatelessWidget {
                       backgroundColor: Colors.black,
                     ),
                     onPressed: onTapViewProfile,
+
                     child: const Text("View Profile"),
                   ),
                 ),
