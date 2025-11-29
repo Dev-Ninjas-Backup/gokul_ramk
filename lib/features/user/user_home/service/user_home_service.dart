@@ -46,9 +46,7 @@ class CategoryService {
     }
   }
 
-  Future<List<Workout>> fetchFeatureWorkout(
-    String workoutType,
-  ) async {
+  Future<List<Workout>> fetchFeatureWorkout(String workoutType) async {
     final String url = "${Urls.featureWorkout}?workoutType=$workoutType";
     final response = await client.getRequest(url: url);
     if (response.isSuccess &&
@@ -79,5 +77,20 @@ class CategoryService {
     }
   }
 
+Future<FeatureTrainerModel> fetchTrainerDetails(String trainerID) async {
+  final String url = "${Urls.baseUrl}/user/$trainerID";
+
+  final response = await client.getRequest(url: url);
+
+  if (response.isSuccess &&
+      (response.statusCode == 200 || response.statusCode == 201)) {
+      
+    final Map<String, dynamic> data = response.responseData!['data'];
+
+    return FeatureTrainerModel.fromJson(data);
+  } else {
+    throw response.errorMessage ?? "Failed to fetch trainer details";
+  }
+}
 
 }

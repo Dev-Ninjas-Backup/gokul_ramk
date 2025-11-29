@@ -53,12 +53,23 @@ class UserHomeController extends GetxController {
       trainers.assignAll(trainerList);
 
       print("================1 ${trainerList.length}");
-            print("================1 ${trainerList[0].bio}");
-                        print("================2 ${trainers[1].bio}");
-
-
+      print("================1 ${trainerList[0].bio}");
+      print("================2 ${trainers[1].bio}");
     } catch (e) {
       debugPrint("Error fetching trziners: $e");
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  var trainerDetails = Rx<FeatureTrainerModel?>(null);
+
+  void fetchTrainerDetailsMethod(String id) async {
+    isLoading(true);
+    try {
+      trainerDetails.value = await service.fetchTrainerDetails(id);
+    } catch (e) {
+      debugPrint("Error fetching trainer: $e");
     } finally {
       isLoading(false);
     }

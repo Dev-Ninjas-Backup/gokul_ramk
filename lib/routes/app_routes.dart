@@ -119,7 +119,7 @@ class AppRoute {
   static String getUserNavBarScreen() => userNavBarScreen;
   static String getUserNotificationScreen() => userNotificationScreen;
   static String getUserBookmarkScreen() => userBookmarkScreen;
-  static String getViewTrainerProfileScreen() => viewTrainerProfileScreen;
+   static String getViewTrainerProfileScreen() => viewTrainerProfileScreen;
   static String getbookTrainerScreen() => bookTrainerScreen;
   static String getClientProfileScreen() => clientProfileScreen;
   static String getUserSessionsScreen() => userSessionsScreen;
@@ -183,7 +183,10 @@ class AppRoute {
     GetPage(name: userBookmarkScreen, page: () => UserBookmarkScreen()),
     GetPage(
       name: viewTrainerProfileScreen,
-      page: () => ViewTrainerProfileScreen(),
+      page: () {
+        final id = Get.parameters['trainerId'] ?? '';
+        return ViewTrainerProfileScreen(trainerId: id);
+      },
     ),
     GetPage(name: bookTrainerScreen, page: () => BookTrainerScreen()),
     GetPage(name: userSessionsScreen, page: () => SessionsScreen()),
