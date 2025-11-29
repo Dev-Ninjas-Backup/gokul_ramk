@@ -7,6 +7,7 @@ class SharedPreferencesHelperController extends GetxController {
   static const String _accessTokenKey = 'access_token';
   static const String _selectedRoleKey = 'role';
   static const String _emailOrPhoneKey = 'email_or_phone';
+  static const String _userIdKey = 'user_id';
 
   // Save access token
   Future<void> saveToken(String token) async {
@@ -64,6 +65,17 @@ class SharedPreferencesHelperController extends GetxController {
     await prefs.remove(_accessTokenKey); // Clear the token
     await prefs.remove(_selectedRoleKey); // Clear the role
     await prefs.remove('success'); // Clear the login status
+    await prefs.remove(_userIdKey);
+  }
+
+  Future<void> saveUserId(String userId) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_userIdKey, userId);
+  }
+
+  Future<String?> getUserId() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_userIdKey);
   }
 
   //save role

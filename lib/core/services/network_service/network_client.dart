@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
@@ -25,9 +27,13 @@ class NetworkClient {
   // get request method
 
   Future<NetworkResponse> getRequest({required String url}) async {
+    final token = await sharedPreferencesHelper.getAccessToken();
+    if (url.contains('bookmark')) {
+      print('🔐 [NetworkClient] Bookmark request - Token: $token');
+    }
     Map<String, String> commonHeaders = {
       'Content-Type': 'application/json',
-      'authorization': await sharedPreferencesHelper.getAccessToken() ?? '',
+      'authorization': token ?? '',
     };
     try {
       Uri uri = Uri.parse(url);
@@ -45,6 +51,9 @@ class NetworkClient {
           responseData: responseBody,
         );
       } else if (response.statusCode == 401 || response.statusCode == 403) {
+        if (url.contains('bookmark')) {
+          print('🔐 [NetworkClient] Bookmark 401/403 - Unauthorized');
+        }
         onUnAuthorize();
         return NetworkResponse(
           statusCode: response.statusCode,
