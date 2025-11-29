@@ -70,4 +70,24 @@ class BookmarkRepository {
       return null;
     }
   }
+
+  Future<bool> removeBookmark(String workoutId) async {
+    try {
+      final response = await _networkClient.postRequest(
+        url: '${Urls.baseUrl}/bookmark/$workoutId',
+        body: {},
+      );
+
+      if (response.isSuccess && response.responseData != null) {
+        final data = response.responseData as Map<String, dynamic>;
+        final success = data['success'] == true;
+        print('Bookmark removed: $success');
+        return success;
+      }
+      return false;
+    } catch (e) {
+      print('Error removing bookmark: $e');
+      return false;
+    }
+  }
 }

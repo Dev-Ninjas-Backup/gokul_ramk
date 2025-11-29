@@ -53,6 +53,9 @@ class UserBookmarkScreen extends StatelessWidget {
                             workout?.coverImage ??
                             'https://via.placeholder.com/150',
                         isBookmarked: true,
+                        workoutId: bookmark.workoutId,
+                        onRemove: () =>
+                            controller.removeBookmark(bookmark.workoutId),
                       );
                     },
                   );

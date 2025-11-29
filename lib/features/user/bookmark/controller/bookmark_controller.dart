@@ -48,4 +48,21 @@ class BookmarkController extends GetxController {
         )
         .toList();
   }
+
+  Future<void> removeBookmark(String workoutId) async {
+    try {
+      final success = await BookmarkRepository().removeBookmark(workoutId);
+
+      if (success) {
+        bookmarks.removeWhere((bookmark) => bookmark.workoutId == workoutId);
+        print('✅ Bookmark removed successfully');
+      } else {
+        errorMessage.value = 'Failed to remove bookmark';
+        print('❌ Failed to remove bookmark');
+      }
+    } catch (e) {
+      errorMessage.value = 'Error removing bookmark: $e';
+      print('❌ Error: $e');
+    }
+  }
 }
