@@ -418,15 +418,21 @@ class EventsController extends GetxController {
 
       final response = await eventRepository.joinEvent(eventId: eventId);
 
-      if (response != null && response.success) {
+      if (response != null && response.success && response.data != null) {
+        final participant = response.data!;
+        
+        // Show success message with participant status
         Get.snackbar(
           'Success',
-          'Successfully joined the event!',
+          'Successfully joined the event! Status: ${participant.status.toString().split('.').last}',
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.green,
           colorText: Colors.white,
+          duration: Duration(seconds: 3),
         );
+        
         // Refresh events to update participant count
+        await Future.delayed(Duration(milliseconds: 500));
         await fetchEvents();
       } else {
         Get.snackbar(
@@ -435,6 +441,7 @@ class EventsController extends GetxController {
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.red,
           colorText: Colors.white,
+          duration: Duration(seconds: 3),
         );
       }
     } catch (e) {
@@ -445,6 +452,7 @@ class EventsController extends GetxController {
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.red,
         colorText: Colors.white,
+        duration: Duration(seconds: 3),
       );
     } finally {
       joiningEventIds.remove(eventId);
