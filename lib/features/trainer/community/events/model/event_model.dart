@@ -6,15 +6,6 @@ enum EventFormat { ONLINE, ONSITE }
 
 enum EventStatus { DRAFT, UPCOMING, ACTIVE, COMPLETED, CANCELLED, ENDED }
 
-enum ParticipantStatus {
-  PENDING,
-  APPROVED,
-  REJECTED,
-  JOINED,
-  COMPLETED,
-  WITHDRAWN,
-}
-
 class EventCreator {
   final String id;
   final String fullname;

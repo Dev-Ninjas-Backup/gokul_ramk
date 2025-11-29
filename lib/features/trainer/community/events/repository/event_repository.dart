@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:gokul_ramk/core/endpoint/end_points.dart';
 import 'package:gokul_ramk/core/services/network_service/network_client.dart';
 import 'package:gokul_ramk/features/trainer/community/events/model/event_model.dart';
+import 'package:gokul_ramk/features/trainer/community/events/model/event_participant_model.dart';
 
 class EventRepository {
   final NetworkClient networkClient;
@@ -173,7 +174,7 @@ class EventRepository {
     }
   }
 
-  Future<EventApiResponse?> joinEvent({required String eventId}) async {
+  Future<ParticipantApiResponse?> joinEvent({required String eventId}) async {
     try {
       final response = await networkClient.postRequest(
         url: Urls.joinEvent(eventId),
@@ -184,9 +185,9 @@ class EventRepository {
         final data = response.responseData;
 
         if (data is Map<String, dynamic>) {
-          return EventApiResponse.fromJson(data);
+          return ParticipantApiResponse.fromJson(data);
         } else {
-          return EventApiResponse(
+          return ParticipantApiResponse(
             success: false,
             message: 'Invalid response format',
           );
@@ -195,17 +196,17 @@ class EventRepository {
         // Handle error responses that have response data
         final data = response.responseData;
         if (data is Map<String, dynamic>) {
-          return EventApiResponse.fromJson(data);
+          return ParticipantApiResponse.fromJson(data);
         }
       }
 
-      return EventApiResponse(
+      return ParticipantApiResponse(
         success: false,
         message: response.errorMessage ?? 'Failed to join event',
       );
     } catch (e) {
       print('Error joining event: $e');
-      return EventApiResponse(
+      return ParticipantApiResponse(
         success: false,
         message: 'Error: ${e.toString()}',
       );

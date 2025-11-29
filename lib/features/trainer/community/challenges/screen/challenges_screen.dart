@@ -253,25 +253,43 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            // Handle action based on role
-                            if (widget.userRole == UserRole.trainer) {
-                              // Handle host challenge action
-                            } else {
-                              // Handle join challenge action
-                            }
-                          },
-                          child: Text(
-                            widget.userRole == UserRole.trainer
-                                ? "Host Challenge"
-                                : "Join Challenge",
-                            style: getTextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
+                        child: Obx(() {
+                          final isJoining = controller.joiningChallengeIds.contains(
+                            challenge.id,
+                          );
+                          return ElevatedButton(
+                            onPressed: isJoining
+                                ? null
+                                : () {
+                                    if (widget.userRole == UserRole.trainer) {
+                                      // Handle host challenge action
+                                    } else {
+                                      // Join challenge action
+                                      controller.joinChallenge(challenge.id);
+                                    }
+                                  },
+                            child: isJoining
+                                ? SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.white,
+                                      ),
+                                      strokeWidth: 2,
+                                    ),
+                                  )
+                                : Text(
+                                    widget.userRole == UserRole.trainer
+                                        ? "Host Challenge"
+                                        : "Join Challenge",
+                                    style: getTextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                          );
+                        }),
                       ),
                     ],
                   ),

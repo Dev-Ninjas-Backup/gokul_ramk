@@ -252,7 +252,7 @@ class _GroupsTabState extends State<GroupsTab> {
                                   ),
                                   child: IconButton(
                                     icon: Icon(
-                                      Icons.close,
+                                      Icons.logout,
                                       size: 20,
                                       color: Colors.red,
                                     ),

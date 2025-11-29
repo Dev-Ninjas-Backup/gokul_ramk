@@ -58,6 +58,9 @@ class ChallengesController extends GetxController {
   var pageLimit = 10.obs;
   var isLoadingChallenges = false.obs;
 
+  // Join challenge state
+  var joiningChallengeIds = <String>{}.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -419,6 +422,53 @@ class ChallengesController extends GetxController {
   void clearImage() {
     selectedImage.value = null;
     selectedImageName.value = '';
+  }
+
+  Future<void> joinChallenge(String challengeId) async {
+    try {
+      joiningChallengeIds.add(challengeId);
+
+      final response = await challengeRepository.joinChallenge(challengeId: challengeId);
+
+      if (response != null && response.success && response.data != null) {
+        final participant = response.data!;
+        
+        // Show success message with participant status
+        Get.snackbar(
+          'Success',
+          'Successfully joined the challenge! Status: ${participant.status.toString().split('.').last}',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+          duration: Duration(seconds: 3),
+        );
+        
+        // Refresh challenges to update participant count
+        await Future.delayed(Duration(milliseconds: 500));
+        await fetchChallenges();
+      } else {
+        Get.snackbar(
+          'Error',
+          response?.message ?? 'Failed to join challenge',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          duration: Duration(seconds: 3),
+        );
+      }
+    } catch (e) {
+      print('Error joining challenge: $e');
+      Get.snackbar(
+        'Error',
+        'Failed to join challenge: $e',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        duration: Duration(seconds: 3),
+      );
+    } finally {
+      joiningChallengeIds.remove(challengeId);
+    }
   }
 
   @override

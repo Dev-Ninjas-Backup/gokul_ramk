@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:gokul_ramk/core/endpoint/end_points.dart';
 import 'package:gokul_ramk/core/services/network_service/network_client.dart';
 import 'package:gokul_ramk/features/trainer/community/events/model/event_model.dart';
+import 'package:gokul_ramk/features/trainer/community/events/model/event_participant_model.dart';
 
 class ChallengeRepository {
   final NetworkClient networkClient;
@@ -176,6 +177,45 @@ class ChallengeRepository {
     } catch (e) {
       print('Error fetching challenges: $e');
       return [];
+    }
+  }
+
+  Future<ParticipantApiResponse?> joinChallenge({required String challengeId}) async {
+    try {
+      final response = await networkClient.postRequest(
+        url: Urls.joinEvent(challengeId),
+        body: {'type': 'CHALLENGE'},
+      );
+
+      if (response.isSuccess && response.responseData != null) {
+        final data = response.responseData;
+
+        if (data is Map<String, dynamic>) {
+          return ParticipantApiResponse.fromJson(data);
+        } else {
+          return ParticipantApiResponse(
+            success: false,
+            message: 'Invalid response format',
+          );
+        }
+      } else if (!response.isSuccess && response.responseData != null) {
+        // Handle error responses that have response data
+        final data = response.responseData;
+        if (data is Map<String, dynamic>) {
+          return ParticipantApiResponse.fromJson(data);
+        }
+      }
+
+      return ParticipantApiResponse(
+        success: false,
+        message: response.errorMessage ?? 'Failed to join challenge',
+      );
+    } catch (e) {
+      print('Error joining challenge: $e');
+      return ParticipantApiResponse(
+        success: false,
+        message: 'Error: ${e.toString()}',
+      );
     }
   }
 
