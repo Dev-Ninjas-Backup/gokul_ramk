@@ -160,4 +160,47 @@ class TrainerService {
       return [];
     }
   }
+
+  Future<ProgramModel?> getProgramDetails(String programId) async {
+    try {
+      String? token = await sharedPreference.getAccessToken();
+
+      var url = Uri.parse(Urls.getProgramDetails(programId));
+
+      if (kDebugMode) {
+        print('=== 📋 FETCH PROGRAM DETAILS DEBUG INFO ===');
+        print('🔹 URL: $url');
+      }
+
+      final response = await http.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token ?? '',
+        },
+      );
+
+      if (kDebugMode) {
+        print('🔹 Status Code: ${response.statusCode}');
+        print('🔹 Response Body: ${response.body}');
+        print('==========================================\n');
+      }
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final Map<String, dynamic> responseData = jsonDecode(response.body);
+
+        if (kDebugMode) {
+          print('✅ Program details fetched successfully');
+        }
+
+        return ProgramModel.fromJson(responseData);
+      }
+      return null;
+    } catch (e) {
+      if (kDebugMode) {
+        print('❌ Error fetching program details: $e');
+      }
+      return null;
+    }
+  }
 }

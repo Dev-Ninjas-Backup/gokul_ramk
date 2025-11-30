@@ -1,3 +1,33 @@
+class TrainerInfo {
+  final String id;
+  final String fullname;
+  final String? phone;
+  final String email;
+
+  TrainerInfo({
+    required this.id,
+    required this.fullname,
+    this.phone,
+    required this.email,
+  });
+
+  factory TrainerInfo.fromJson(Map<String, dynamic> json) {
+    return TrainerInfo(
+      id: json['id'] as String? ?? '',
+      fullname: json['fullname'] as String? ?? '',
+      phone: json['phone'] as String?,
+      email: json['email'] as String? ?? '',
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'fullname': fullname,
+    'phone': phone,
+    'email': email,
+  };
+}
+
 class ProgramModel {
   final String id;
   final String trainerId;
@@ -16,6 +46,7 @@ class ProgramModel {
   final DateTime updatedAt;
   final List<dynamic> workoutDays;
   final Map<String, dynamic>? count;
+  final TrainerInfo? trainer;
 
   ProgramModel({
     required this.id,
@@ -35,6 +66,7 @@ class ProgramModel {
     required this.updatedAt,
     required this.workoutDays,
     this.count,
+    this.trainer,
   });
 
   factory ProgramModel.fromJson(Map<String, dynamic> json) {
@@ -60,6 +92,9 @@ class ProgramModel {
           : DateTime.now(),
       workoutDays: json['workoutDays'] as List<dynamic>? ?? [],
       count: json['_count'] as Map<String, dynamic>?,
+      trainer: json['trainer'] != null
+          ? TrainerInfo.fromJson(json['trainer'] as Map<String, dynamic>)
+          : null,
     );
   }
 
@@ -81,5 +116,6 @@ class ProgramModel {
     'updatedAt': updatedAt.toIso8601String(),
     'workoutDays': workoutDays,
     '_count': count,
+    'trainer': trainer?.toJson(),
   };
 }
