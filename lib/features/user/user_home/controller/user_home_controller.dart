@@ -45,12 +45,27 @@ class UserHomeController extends GetxController {
   }
 
   var trainers = <FeatureTrainerModel>[].obs;
+  var yogaTrainers = <FeatureTrainerModel>[].obs;
+    var strength = <FeatureTrainerModel>[].obs;
+
+
 
   void fetchTrainerMethod() async {
     isLoading(true);
     try {
       final trainerList = await service.fetchTrainer();
       trainers.assignAll(trainerList);
+
+    yogaTrainers.assignAll(
+      trainerList.where((trainer) =>
+          trainer.specializations.contains("Yoga")).toList(),
+    );
+
+    strength.assignAll(
+      trainerList.where((trainer) =>
+          trainer.specializations.contains("Strength")).toList(),
+    );
+
 
       print("================1 ${trainerList.length}");
       print("================1 ${trainerList[0].bio}");
