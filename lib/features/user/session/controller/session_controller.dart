@@ -1,6 +1,9 @@
 // ignore_for_file: avoid_print
 
+
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:gokul_ramk/core/services/network_service/network_client.dart';
 import 'package:gokul_ramk/features/user/session/neutrition_tab/model/comunity_food_model.dart';
 import 'package:gokul_ramk/features/user/session/neutrition_tab/model/meal_model.dart';
 import 'package:gokul_ramk/features/user/session/neutrition_tab/model/meal_plan_model.dart';
@@ -8,9 +11,22 @@ import 'package:gokul_ramk/features/user/session/neutrition_tab/model/nutition_m
 import 'package:gokul_ramk/features/user/session/neutrition_tab/model/nutrition_goal_food_model.dart';
 import 'package:gokul_ramk/features/user/session/neutrition_tab/repository/meal_plan_repository.dart';
 import 'package:gokul_ramk/features/user/session/neutrition_tab/repository/meal_repository.dart';
+
+import 'package:gokul_ramk/features/user/session/service/discover_service.dart';
+import 'package:gokul_ramk/features/user/session/trainers_tab/model/top_trainer_model.dart';
 import 'package:gokul_ramk/features/user/session/trainers_tab/model/trainer_tab_model.dart';
 
 class SessionController extends GetxController {
+  final DiscoverService service = DiscoverService(
+    client: NetworkClient(
+      onUnAuthorize: () {
+        if (kDebugMode) {
+          print("unauthorized");
+        }
+      },
+    ),
+  );
+
   var selectedCategory = "Sessions".obs;
 
   final categories = ["Sessions", "Trainers", "Nutrition"];
@@ -98,32 +114,24 @@ class SessionController extends GetxController {
     ),
   ];
 
-  List topTrainers = <TrainerTabModel>[
-    TrainerTabModel(
-      name: "Sophia",
-      role: "Strength Coach",
-      image: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
-      specialty: "Strength & Conditioning",
-      rating: 4.8,
-      reviews: 200,
-    ),
-    TrainerTabModel(
-      name: "Liam",
-      role: "Yoga Specialist",
-      image: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
-      specialty: "Yoga",
-      rating: 4.7,
-      reviews: 180,
-    ),
-    TrainerTabModel(
-      name: "Ava",
-      role: "Nutrition & Recovery",
-      image: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
-      specialty: "Nutrition",
-      rating: 4.9,
-      reviews: 150,
-    ),
-  ].obs;
+  var topTrainers = <TopTrainer>[].obs;
+  var isLoading = false.obs;
+
+  void fetchTrainerMethod() async {
+    isLoading(true);
+    try {
+      final trainerList = await service.fetchTopTrainer();
+      topTrainers.assignAll(trainerList);
+
+      print("================hhhhh ${trainerList.length}");
+      print("================hhhhhh ${trainerList[0].fullname}");
+      print("================hhhhh ${topTrainers[1].images}");
+    } catch (e) {
+      debugPrint("Error fetching trziners: $e");
+    } finally {
+      isLoading(false);
+    }
+  }
 
   List strengthTrainers = <TrainerTabModel>[
     TrainerTabModel(
@@ -233,5 +241,8 @@ class SessionController extends GetxController {
     } finally {
       isLoadingMealPlans.value = false;
     }
+    fetchTrainerMethod();
+
+    super.onInit();
   }
 }
