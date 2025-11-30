@@ -420,7 +420,7 @@ class EventsController extends GetxController {
 
       if (response != null && response.success && response.data != null) {
         final participant = response.data!;
-        
+
         // Show success message with participant status
         Get.snackbar(
           'Success',
@@ -430,7 +430,7 @@ class EventsController extends GetxController {
           colorText: Colors.white,
           duration: Duration(seconds: 3),
         );
-        
+
         // Refresh events to update participant count
         await Future.delayed(Duration(milliseconds: 500));
         await fetchEvents();

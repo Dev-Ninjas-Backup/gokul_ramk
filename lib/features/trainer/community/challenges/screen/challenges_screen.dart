@@ -254,9 +254,8 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Obx(() {
-                          final isJoining = controller.joiningChallengeIds.contains(
-                            challenge.id,
-                          );
+                          final isJoining = controller.joiningChallengeIds
+                              .contains(challenge.id);
                           return ElevatedButton(
                             onPressed: isJoining
                                 ? null

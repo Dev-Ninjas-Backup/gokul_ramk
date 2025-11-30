@@ -1,25 +1,37 @@
+// ignore_for_file: avoid_print
+
 import 'package:get/get.dart';
 import 'package:gokul_ramk/features/user/session/neutrition_tab/plan_detail/model/nutrition_plan_model.dart';
+import 'package:gokul_ramk/features/user/session/neutrition_tab/plan_detail/repository/nutrition_plan_repository.dart';
 
 class NutritionPlanController extends GetxController {
-  final plan = NutritionPlanModel(
-    title: "Lean Muscle Gain – 4 Weeks",
-    duration: "4 Weeks",
-    difficulty: "Intermediate",
-    description:
-        "A structured nutrition plan designed to maximize muscle growth while keeping fat gain minimal. Perfect balance of protein, carbs, and recovery meals.",
-    weeklyBreakdown: [
-      "Week 1 - Foundation: higher protein meals, focus on calorie surplus.",
-      "Week 2 - Strength fueling: carb cycling added.",
-      "Week 3 - Progressive overload support: calorie bump + nutrient timing.",
-      "Week 4 - Peak growth: recovery optimization with balanced macros.",
-    ],
-    dailyMeals: [
-      "Breakfast: Protein Pancakes with Peanut Butter & Berries",
-      "Lunch: Grilled Chicken Wrap + Brown Rice",
-      "Snack: Greek Yogurt + Mixed Nuts",
-      "Dinner: Salmon & Quinoa Bowl with Steamed Veggies",
-      "Post-Workout: Whey Protein Shake + Banana",
-    ],
-  ).obs;
+  late final NutritionPlanRepository repository;
+
+  var plan = Rx<NutritionPlanModel?>(null);
+  var isLoading = false.obs;
+  var errorMessage = ''.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    repository = NutritionPlanRepository();
+    final planId = Get.arguments;
+    if (planId != null) {
+      fetchPlanDetail(planId);
+    }
+  }
+
+  Future<void> fetchPlanDetail(String planId) async {
+    try {
+      isLoading.value = true;
+      errorMessage.value = '';
+      final planData = await repository.fetchPlanDetail(planId);
+      plan.value = planData;
+    } catch (e) {
+      errorMessage.value = e.toString();
+      print('Error fetching plan detail: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
 }

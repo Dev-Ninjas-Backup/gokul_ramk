@@ -4,7 +4,6 @@ import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
 import 'package:gokul_ramk/core/common/widgets/custom_app_bar_title.dart';
 import 'package:gokul_ramk/features/user/session/neutrition_tab/meal_detail/controller/meal_detail_controller.dart';
 import 'package:gokul_ramk/features/user/session/neutrition_tab/meal_detail/widget/ingredient_item_widget.dart';
-import 'package:gokul_ramk/features/user/session/neutrition_tab/meal_detail/widget/meal_tag_widget.dart';
 import 'package:gokul_ramk/features/user/session/neutrition_tab/meal_detail/widget/nutrition_info_card.dart';
 import 'package:gokul_ramk/features/user/session/neutrition_tab/meal_detail/widget/similar_meal_widget.dart';
 import 'package:gokul_ramk/features/user/session/neutrition_tab/meal_detail/widget/step_item_widget.dart';
@@ -14,13 +13,39 @@ class MealDetailScreen extends StatelessWidget {
 
   MealDetailScreen({super.key});
 
-  final String name = Get.arguments;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Obx(() {
-        final meal = controller.meal.value;
+        if (controller.isLoading.value) {
+          return Center(child: CircularProgressIndicator());
+        }
+
+        if (controller.errorMessage.value.isNotEmpty) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Error: ${controller.errorMessage.value}',
+                  style: getTextStyle(color: Colors.red),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () => Get.back(),
+                  child: Text('Go Back'),
+                ),
+              ],
+            ),
+          );
+        }
+
+        if (controller.meal.value == null) {
+          return Center(child: Text('No meal data available'));
+        }
+
+        final meal = controller.meal.value!;
         return SingleChildScrollView(
           child: SafeArea(
             child: Padding(
@@ -28,7 +53,7 @@ class MealDetailScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CustomAppBarTitle(title: name),
+                  CustomAppBarTitle(title: meal.title),
                   const SizedBox(height: 20),
                   // Image
                   Container(
@@ -51,13 +76,6 @@ class MealDetailScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 12),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: meal.tags
-                              .map((t) => MealTagWidget(text: t))
-                              .toList(),
-                        ),
-                        const SizedBox(height: 20),
 
                         // Nutrition Section
                         Column(
@@ -85,7 +103,7 @@ class MealDetailScreen extends StatelessWidget {
                                 Expanded(
                                   child: NutritionInfoCard(
                                     label: "Vitamins",
-                                    value: meal.vitamins,
+                                    value: meal.vitamins.join(", "),
                                     highlight: true,
                                   ),
                                 ),
@@ -129,7 +147,7 @@ class MealDetailScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 20),
 
-                        // Steps
+                        // Preparation Steps
                         Text(
                           "Preparation Steps-",
                           style: getTextStyle(
@@ -140,7 +158,7 @@ class MealDetailScreen extends StatelessWidget {
                         const SizedBox(height: 8),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: meal.steps
+                          children: meal.preparation
                               .asMap()
                               .entries
                               .map(
@@ -155,24 +173,40 @@ class MealDetailScreen extends StatelessWidget {
                         Row(
                           children: [
                             Expanded(
-                              child: ElevatedButton(
-                                onPressed: () {},
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.green.withValues(
-                                    alpha: 0.1,
+                              child: Obx(
+                                () => ElevatedButton(
+                                  onPressed: controller.isCreatingMealPlan.value
+                                      ? null
+                                      : () => controller.createMealPlan(),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.green.withValues(
+                                      alpha: 0.1,
+                                    ),
+                                    foregroundColor: Colors.green.shade700,
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 14,
+                                    ),
                                   ),
-                                  foregroundColor: Colors.green.shade700,
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 14,
-                                  ),
-                                ),
-                                child: Text(
-                                  "Add to Meal Plan",
-                                  style: getTextStyle(
-                                    fontSize: 16,
-                                    color: Colors.green,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                                  child: controller.isCreatingMealPlan.value
+                                      ? SizedBox(
+                                          height: 20,
+                                          width: 20,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                            valueColor:
+                                                AlwaysStoppedAnimation<Color>(
+                                                  Colors.green,
+                                                ),
+                                          ),
+                                        )
+                                      : Text(
+                                          "Add to Meal Plan",
+                                          style: getTextStyle(
+                                            fontSize: 16,
+                                            color: Colors.green,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
                                 ),
                               ),
                             ),
@@ -209,24 +243,51 @@ class MealDetailScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 12),
-                        SizedBox(
-                          height: 290,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ListView(
-                              scrollDirection: Axis.horizontal,
-                              children: controller.similarMeals
-                                  .map(
-                                    (m) => SimilarMealWidget(
-                                      title: m["title"]!,
-                                      image: m["image"]!,
-                                      desc: m["desc"]!,
+                        Obx(() {
+                          if (controller.isLoadingSimilarMeals.value) {
+                            return SizedBox(
+                              height: 290,
+                              child: Center(child: CircularProgressIndicator()),
+                            );
+                          }
+                          if (controller.similarMeals.isEmpty) {
+                            return SizedBox(
+                              height: 290,
+                              child: Center(
+                                child: Text('No similar meals available'),
+                              ),
+                            );
+                          }
+                          return SizedBox(
+                            height: 290,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ListView.separated(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: controller.similarMeals.length,
+                                separatorBuilder: (_, __) =>
+                                    const SizedBox(width: 12),
+                                itemBuilder: (context, index) {
+                                  final similarMeal =
+                                      controller.similarMeals[index];
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Get.offNamed(
+                                        Get.currentRoute,
+                                        arguments: similarMeal.id,
+                                      );
+                                    },
+                                    child: SimilarMealWidget(
+                                      title: similarMeal.title,
+                                      image: similarMeal.image,
+                                      desc: similarMeal.description,
                                     ),
-                                  )
-                                  .toList(),
+                                  );
+                                },
+                              ),
                             ),
-                          ),
-                        ),
+                          );
+                        }),
                         const SizedBox(height: 40),
                       ],
                     ),

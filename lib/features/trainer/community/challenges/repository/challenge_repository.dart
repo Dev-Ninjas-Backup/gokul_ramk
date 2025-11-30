@@ -180,7 +180,9 @@ class ChallengeRepository {
     }
   }
 
-  Future<ParticipantApiResponse?> joinChallenge({required String challengeId}) async {
+  Future<ParticipantApiResponse?> joinChallenge({
+    required String challengeId,
+  }) async {
     try {
       final response = await networkClient.postRequest(
         url: Urls.joinEvent(challengeId),

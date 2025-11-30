@@ -1,4 +1,4 @@
-class MealDetailModel {
+class MealModel {
   final String id;
   final String title;
   final String description;
@@ -6,14 +6,14 @@ class MealDetailModel {
   final int calories;
   final int protein;
   final int carbs;
-  final int fats;
+  final int fat;
   final List<String> vitamins;
   final List<String> ingredients;
   final List<String> preparation;
   final String createdAt;
   final String updatedAt;
 
-  MealDetailModel({
+  MealModel({
     required this.id,
     required this.title,
     required this.description,
@@ -21,7 +21,7 @@ class MealDetailModel {
     required this.calories,
     required this.protein,
     required this.carbs,
-    required this.fats,
+    required this.fat,
     required this.vitamins,
     required this.ingredients,
     required this.preparation,
@@ -29,8 +29,8 @@ class MealDetailModel {
     required this.updatedAt,
   });
 
-  factory MealDetailModel.fromJson(Map<String, dynamic> json) {
-    return MealDetailModel(
+  factory MealModel.fromJson(Map<String, dynamic> json) {
+    return MealModel(
       id: json['id'] ?? '',
       title: json['title'] ?? '',
       description: json['description'] ?? '',
@@ -38,7 +38,7 @@ class MealDetailModel {
       calories: json['calories'] ?? 0,
       protein: json['protein'] ?? 0,
       carbs: json['carbs'] ?? 0,
-      fats: json['fat'] ?? 0,
+      fat: json['fat'] ?? 0,
       vitamins: List<String>.from(json['vitamins'] ?? []),
       ingredients: List<String>.from(json['ingredients'] ?? []),
       preparation: List<String>.from(json['preparation'] ?? []),
@@ -56,7 +56,7 @@ class MealDetailModel {
       'calories': calories,
       'protein': protein,
       'carbs': carbs,
-      'fats': fats,
+      'fat': fat,
       'vitamins': vitamins,
       'ingredients': ingredients,
       'preparation': preparation,
