@@ -387,7 +387,7 @@ class _ProgramDetailsScreenState extends State<ProgramDetailsScreen> {
                         ),
                       _buildDetailRow(
                         "Created",
-                        "${program.createdAt.toString().split('.')[0]}",
+                        program.createdAt.toString().split('.')[0],
                       ),
                       SizedBox(height: 24),
 
@@ -396,7 +396,6 @@ class _ProgramDetailsScreenState extends State<ProgramDetailsScreen> {
                       //   width: double.infinity,
                       //   child: ElevatedButton(
                       //     onPressed: () {
-                      //       // TODO: Implement enroll/purchase logic
                       //       ScaffoldMessenger.of(context).showSnackBar(
                       //         SnackBar(
                       //           content: Text(

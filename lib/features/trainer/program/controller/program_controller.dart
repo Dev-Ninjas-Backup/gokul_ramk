@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:gokul_ramk/features/trainer/profile/trainer_profile/controller/trainer_profile_controller.dart';
 import '../model/categories_model.dart';
 import '../model/excercise_model.dart';
 import '../services/program_services.dart';
@@ -82,7 +83,6 @@ class ProgramController extends GetxController {
       final response = await service.fetchAllExercises();
       allExercises.assignAll(response);
 
-
       // Print readable list of exercise names
       if (kDebugMode) {
         print(
@@ -92,9 +92,8 @@ class ProgramController extends GetxController {
 
       if (selectedExercise.value == null && allExercises.isNotEmpty) {
         selectExercise(allExercises.first);
-      }
-      else{
-      debugPrint("No Exercises=================");
+      } else {
+        debugPrint("No Exercises=================");
       }
     } catch (e) {
       debugPrint("Error fetching exercises: $e");
@@ -130,7 +129,35 @@ class ProgramController extends GetxController {
 
   void changeDay(int day) => selectedDay.value = day;
 
-  // =================== Submit Program ===================
+  // =================== Clear Form Fields ===================
+  void clearFormFields() {
+    nameC.clear();
+    descriptionC.clear();
+    durationC.clear();
+    sessionsPerWeekC.clear();
+    priceC.clear();
+    maxParticipantsC.clear();
+    exerciseIdC.clear();
+    setsC.clear();
+    repsC.clear();
+    workoutDurationC.clear();
+
+    thumbnailFile.value = null;
+    introVideoFile.value = null;
+    thumbnailUrl.value = "";
+    videoUrl.value = "";
+
+    selectedDay.value = 0;
+    if (categories.isNotEmpty) {
+      selectedCategoryId.value = categories.first.id;
+    }
+    if (allExercises.isNotEmpty) {
+      selectExercise(allExercises.first);
+    }
+
+    if (kDebugMode) print("✨ Form fields cleared");
+  }
+
   Future<void> submitProgram() async {
     if (thumbnailFile.value == null) return debugPrint("Add thumbnail image");
     if (introVideoFile.value == null) return debugPrint("Add intro video");
@@ -175,16 +202,48 @@ class ProgramController extends GetxController {
 
       final success = await service.createProgram(body);
       if (success) {
-        Get.back(); // close dialog
-        Get.snackbar(
-          "Success! 🎉",
-          "Program created!",
-          backgroundColor: Colors.green,
+        Get.back(); // close loading dialog
+
+        // Show success dialog
+        Get.defaultDialog(
+          title: "Success!",
+          middleText: "Your program has been created successfully!",
+          textConfirm: "Continue",
+          confirmTextColor: Colors.white,
+          onConfirm: () {
+            Get.back(); // close success dialog
+
+            // Refresh the program list in TrainerProfileController
+            try {
+              TrainerProfileController trainerProfileController;
+
+              if (Get.isRegistered<TrainerProfileController>()) {
+                trainerProfileController = Get.find<TrainerProfileController>();
+              } else {
+                trainerProfileController = Get.put(TrainerProfileController());
+              }
+
+              trainerProfileController.fetchPrograms();
+              if (kDebugMode) print("✅ Programs list refreshed after creation");
+            } catch (e) {
+              if (kDebugMode) print("❌ Error refreshing programs: $e");
+            }
+
+            // Clear form fields
+            clearFormFields();
+
+            // Navigate back to previous screen
+            Get.back();
+          },
+          barrierDismissible: false,
         );
+        return; // Exit here to prevent finally block from closing the success dialog
       }
+    } catch (e) {
+      if (kDebugMode) print("❌ Error creating program: $e");
+      Get.back(); // close loading dialog on error
     } finally {
       isLoading(false);
-      if (Get.isDialogOpen == true) Get.back();
     }
   }
 
