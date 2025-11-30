@@ -60,36 +60,50 @@ class BookingSessionController extends GetxController {
     await fetchSessions();
   }
 
-  void markComplete(int index) {
+  Future<void> markComplete(int index) async {
     if (index >= 0 && index < sessions.length) {
       final session = sessions[index];
-      // Update only the UI status
-      sessions[index] = BookingSessionModel(
-        id: session.id,
-        userId: session.userId,
-        trainerId: session.trainerId,
-        mode: session.mode,
-        duration: session.duration,
-        scheduledDate: session.scheduledDate,
-        scheduledTime: session.scheduledTime,
-        endTime: session.endTime,
-        location: session.location,
-        notes: session.notes,
-        status: 'COMPLETED',
-        price: session.price,
-        currency: session.currency,
-        advancePayment: session.advancePayment,
-        assignedProgram: session.assignedProgram,
-        cancelledAt: session.cancelledAt,
-        cancelledBy: session.cancelledBy,
-        cancellationReason: session.cancellationReason,
-        completedAt: DateTime.now(),
-        createdAt: session.createdAt,
-        updatedAt: DateTime.now(),
-        user: session.user,
-        trainer: session.trainer,
-        payment: session.payment,
-      );
+      try {
+        final result = await bookingRepository.markBookingComplete(session.id);
+        final success = result['success'] as bool;
+        final message = result['message'] as String;
+
+        if (success) {
+          // Update only the UI status
+          sessions[index] = BookingSessionModel(
+            id: session.id,
+            userId: session.userId,
+            trainerId: session.trainerId,
+            mode: session.mode,
+            duration: session.duration,
+            scheduledDate: session.scheduledDate,
+            scheduledTime: session.scheduledTime,
+            endTime: session.endTime,
+            location: session.location,
+            notes: session.notes,
+            status: 'COMPLETED',
+            price: session.price,
+            currency: session.currency,
+            advancePayment: session.advancePayment,
+            assignedProgram: session.assignedProgram,
+            cancelledAt: session.cancelledAt,
+            cancelledBy: session.cancelledBy,
+            cancellationReason: session.cancellationReason,
+            completedAt: DateTime.now(),
+            createdAt: session.createdAt,
+            updatedAt: DateTime.now(),
+            user: session.user,
+            trainer: session.trainer,
+            payment: session.payment,
+          );
+          Get.snackbar('Success', message);
+        } else {
+          Get.snackbar('Error', message);
+        }
+      } catch (e) {
+        print('Error marking complete: $e');
+        Get.snackbar('Error', 'An error occurred: $e');
+      }
     }
   }
 }

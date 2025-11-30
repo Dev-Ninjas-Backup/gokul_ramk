@@ -62,5 +62,6 @@ class Urls {
 
   // Bookings endpoints
   static const String getBookings = "$baseUrl/bookings";
-  static const String getTopTrainer="$baseUrl/trainer/top-trainers";
+  static String completeBooking(String id) => "$getBookings/$id/complete";
+  static const String getTopTrainer = "$baseUrl/trainer/top-trainers";
 }

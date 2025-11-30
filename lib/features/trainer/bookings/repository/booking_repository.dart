@@ -70,4 +70,18 @@ class BookingRepository {
       return null;
     }
   }
+
+  Future<Map<String, dynamic>> markBookingComplete(String bookingId) async {
+    try {
+      final url = Urls.completeBooking(bookingId);
+      final response = await networkClient.patchRequest(url: url, body: {});
+      return {
+        'success': response.isSuccess,
+        'message': response.errorMessage ?? 'Booking marked as completed',
+      };
+    } catch (e) {
+      print('Error marking booking complete: $e');
+      return {'success': false, 'message': e.toString()};
+    }
+  }
 }

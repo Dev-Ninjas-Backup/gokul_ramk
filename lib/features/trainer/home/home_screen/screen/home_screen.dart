@@ -144,8 +144,8 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 12,),
-                       // Create meal
+            SizedBox(height: 12),
+            // Create meal
             Container(
               width: double.infinity,
               padding: EdgeInsets.all(16),
@@ -173,9 +173,10 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ],
               ),
-            ),            SizedBox(height: 12,),
+            ),
+            SizedBox(height: 12),
 
-                                  // Create meal
+            // Create meal
             Container(
               width: double.infinity,
               padding: EdgeInsets.all(16),
