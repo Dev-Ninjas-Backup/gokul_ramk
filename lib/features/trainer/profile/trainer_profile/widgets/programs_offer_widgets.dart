@@ -72,104 +72,112 @@ class ProgramsOfferedWidget extends StatelessWidget {
             ),
             itemBuilder: (context, index) {
               final program = displayPrograms[index];
-              return Container(
-                padding: EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: AppColors.background,
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.grey.shade300),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: .02),
-                      blurRadius: 4,
-                      offset: Offset(2, 6),
-                      spreadRadius: 2,
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Program thumbnail or placeholder
-                    Container(
-                      width: double.infinity,
-                      height: 80,
-                      decoration: BoxDecoration(
-                        color: Colors.blue.shade50,
-                        borderRadius: BorderRadius.circular(8),
+              return GestureDetector(
+                onTap: () {
+                  Get.toNamed(
+                    AppRoute.getTrainerProgramDetailsScreen(),
+                    parameters: {'programId': program.id},
+                  );
+                },
+                child: Container(
+                  padding: EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: AppColors.background,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.grey.shade300),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: .02),
+                        blurRadius: 4,
+                        offset: Offset(2, 6),
+                        spreadRadius: 2,
                       ),
-                      child:
-                          program.thumbnailUrl != null &&
-                              program.thumbnailUrl!.isNotEmpty
-                          ? Image.network(
-                              program.thumbnailUrl!,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Center(
-                                  child: Icon(
-                                    Icons.image,
-                                    color: Colors.blue.shade300,
-                                  ),
-                                );
-                              },
-                            )
-                          : Center(
-                              child: Icon(
-                                Icons.image,
-                                color: Colors.blue.shade300,
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Program thumbnail or placeholder
+                      Container(
+                        width: double.infinity,
+                        height: 80,
+                        decoration: BoxDecoration(
+                          color: Colors.blue.shade50,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child:
+                            program.thumbnailUrl != null &&
+                                program.thumbnailUrl!.isNotEmpty
+                            ? Image.network(
+                                program.thumbnailUrl!,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Center(
+                                    child: Icon(
+                                      Icons.image,
+                                      color: Colors.blue.shade300,
+                                    ),
+                                  );
+                                },
+                              )
+                            : Center(
+                                child: Icon(
+                                  Icons.image,
+                                  color: Colors.blue.shade300,
+                                ),
                               ),
+                      ),
+                      SizedBox(height: 12),
+
+                      // Program title
+                      Text(
+                        program.name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: getTextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      SizedBox(height: 6),
+
+                      // Program description
+                      Text(
+                        program.description,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: getTextStyle(
+                          fontSize: 12,
+                          color: AppColors.secondaryFontColor,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      SizedBox(height: 8),
+
+                      // Program duration and price
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "${program.duration} weeks",
+                            style: getTextStyle(
+                              fontSize: 11,
+                              color: Color(0xFF888888),
+                              fontWeight: FontWeight.w500,
                             ),
-                    ),
-                    SizedBox(height: 12),
-
-                    // Program title
-                    Text(
-                      program.name,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: getTextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    SizedBox(height: 6),
-
-                    // Program description
-                    Text(
-                      program.description,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: getTextStyle(
-                        fontSize: 12,
-                        color: AppColors.secondaryFontColor,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    SizedBox(height: 8),
-
-                    // Program duration and price
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "${program.duration} weeks",
-                          style: getTextStyle(
-                            fontSize: 11,
-                            color: Color(0xFF888888),
-                            fontWeight: FontWeight.w500,
                           ),
-                        ),
-                        Text(
-                          "\$${program.price}",
-                          style: getTextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xFF4CAF50),
+                          Text(
+                            "\$${program.price}",
+                            style: getTextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xFF4CAF50),
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               );
             },

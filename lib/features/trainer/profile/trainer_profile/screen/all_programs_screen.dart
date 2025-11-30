@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
 import 'package:gokul_ramk/core/utils/constants/colors.dart';
 import 'package:gokul_ramk/features/trainer/profile/trainer_profile/controller/trainer_profile_controller.dart';
+import 'package:gokul_ramk/routes/app_routes.dart' as app_route;
 
 class AllProgramsScreen extends StatelessWidget {
   const AllProgramsScreen({super.key});
@@ -44,6 +45,10 @@ class AllProgramsScreen extends StatelessWidget {
                 final program = controller.programs[index];
                 return GestureDetector(
                   onTap: () {
+                    Get.toNamed(
+                      app_route.AppRoute.getTrainerProgramDetailsScreen(),
+                      parameters: {'programId': program.id},
+                    );
                   },
                   child: Container(
                     margin: EdgeInsets.only(bottom: 12),

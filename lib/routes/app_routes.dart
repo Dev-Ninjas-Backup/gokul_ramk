@@ -24,6 +24,8 @@ import 'package:gokul_ramk/features/trainer/my_clients/client_profile/sceen/clie
 import 'package:gokul_ramk/features/trainer/profile/add_product/screen/add_product_screen.dart';
 import 'package:gokul_ramk/features/trainer/profile/product_details/screen/product_details_screen.dart';
 import 'package:gokul_ramk/features/trainer/profile/trainer_profile/screen/all_programs_screen.dart';
+import 'package:gokul_ramk/features/trainer/profile/trainer_profile/screen/program_details_screen.dart'
+    as trainer_program;
 import 'package:gokul_ramk/features/user/shop/cart/screen/cart_screen.dart';
 import 'package:gokul_ramk/features/user/shop/categories/screen/categories_screen.dart';
 import 'package:gokul_ramk/features/user/shop/product_detail/screen/product_detail_screen.dart';
@@ -96,6 +98,7 @@ class AppRoute {
   static String createEvent = '/tainer/createEvent';
   static String createChallenge = '/trainer/createChallenge';
   static String allProgramsScreen = '/trainer/allProgramsScreen';
+  static String trainerProgramDetailsScreen = '/trainer/programDetailsScreen';
 
   static String getSplashScreen() => splashScreen;
   static String getOnboardingScreen() => onboardingScreen;
@@ -144,6 +147,7 @@ class AppRoute {
   static String getAddProducts() => addProducts;
   static String getProductDetails() => productDetails;
   static String getallProgramsScreen() => allProgramsScreen;
+  static String getTrainerProgramDetailsScreen() => trainerProgramDetailsScreen;
 
   static List<GetPage> routes = [
     GetPage(name: splashScreen, page: () => SplashScreen()),
@@ -228,5 +232,12 @@ class AppRoute {
     GetPage(name: createEvent, page: () => CreateEventScreen()),
     GetPage(name: createChallenge, page: () => CreateChallengeScreen()),
     GetPage(name: allProgramsScreen, page: () => AllProgramsScreen()),
+    GetPage(
+      name: trainerProgramDetailsScreen,
+      page: () {
+        final programId = Get.parameters['programId'] ?? '';
+        return trainer_program.ProgramDetailsScreen(programId: programId);
+      },
+    ),
   ];
 }

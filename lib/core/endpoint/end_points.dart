@@ -67,4 +67,6 @@ class Urls {
 
   // Programs endpoints
   static const String getMyPrograms = "$baseUrl/programs/my-programs";
+  static String getProgramDetails(String programId) =>
+      "$baseUrl/programs/$programId";
 }
