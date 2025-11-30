@@ -15,7 +15,7 @@ class ProgramService {
 
     if (response.isSuccess) {
       final String relative = response.responseData!['file']['url'];
-      return _base + relative;
+      return relative;
     } else {
       Get.snackbar(
         "Upload Failed",
