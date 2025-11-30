@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:gokul_ramk/features/trainer/bookings/my_bookings/screen/my_bookings_screen.dart';
 import 'package:gokul_ramk/features/trainer/bottom_navbar/controller/navbar_controller.dart';
 import 'package:gokul_ramk/features/trainer/community/posts/screen/trainer_community_screen.dart';
-import 'package:gokul_ramk/features/trainer/my_clients/my_clients_screen/screen/my_clients_screen.dart';
 import 'package:gokul_ramk/features/trainer/profile/trainer_profile/screen/trainer_profile_screen.dart';
 
 import '../../home/home_screen/screen/home_screen.dart';
@@ -18,7 +17,7 @@ class NavBarScreen extends StatelessWidget {
 
     final List<Widget> pages = [
       const HomeScreen(),
-      const MyClientsScreen(),
+      // const MyClientsScreen(),
       const MyBookingsScreen(),
 
       TrainerCommunityScreen(),
@@ -27,7 +26,7 @@ class NavBarScreen extends StatelessWidget {
 
     final List<String> icons = [
       IconPath.homeIcon,
-      IconPath.programIcon,
+      // IconPath.programIcon,
       IconPath.calendarIcon,
       IconPath.groupIcon,
       IconPath.peopleIcon,
