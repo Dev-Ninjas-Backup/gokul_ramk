@@ -6,6 +6,7 @@ import 'package:gokul_ramk/core/services/local_service/shared_preferences_helper
 import 'package:gokul_ramk/core/services/network_service/network_client.dart';
 import 'package:gokul_ramk/features/trainer/profile/my_products/model/product_model.dart';
 import 'package:gokul_ramk/features/trainer/profile/trainer_profile/model/trainer_model.dart';
+import 'package:gokul_ramk/features/trainer/profile/trainer_profile/model/program_model.dart';
 import 'package:http/http.dart' as http;
 
 class TrainerService {
@@ -100,6 +101,61 @@ class TrainerService {
     } catch (e) {
       if (kDebugMode) {
         print('❌ Error fetching recent products: $e');
+      }
+      return [];
+    }
+  }
+
+  Future<List<ProgramModel>> getMyPrograms() async {
+    try {
+      String? token = await sharedPreference.getAccessToken();
+
+      var url = Uri.parse(Urls.getMyPrograms);
+
+      if (kDebugMode) {
+        print('=== 📋 FETCH MY PROGRAMS DEBUG INFO ===');
+        print('🔹 URL: $url');
+      }
+
+      final response = await http.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token ?? '',
+        },
+      );
+
+      if (kDebugMode) {
+        print('🔹 Status Code: ${response.statusCode}');
+        print('🔹 Response Body: ${response.body}');
+        print('==========================================\n');
+      }
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final List<dynamic> responseData = jsonDecode(response.body);
+
+        final programs = responseData
+            .map((item) {
+              try {
+                return ProgramModel.fromJson(item as Map<String, dynamic>);
+              } catch (e) {
+                if (kDebugMode) print('Error parsing program: $e');
+                return null;
+              }
+            })
+            .whereType<ProgramModel>()
+            .toList();
+
+        if (kDebugMode) {
+          print('✅ Programs fetched successfully: ${programs.length}');
+        }
+
+        return programs;
+      }
+      return [];
+    } catch (e) {
+      if (kDebugMode) {
+        print('❌ Error fetching programs: $e');
       }
       return [];
     }

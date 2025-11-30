@@ -1,47 +1,18 @@
 // trainer_profile_controller.dart
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:gokul_ramk/core/utils/constants/icon_path.dart';
 import 'package:gokul_ramk/features/trainer/profile/my_products/model/product_model.dart';
 import 'package:gokul_ramk/features/trainer/profile/trainer_profile/model/trainer_model.dart';
+import 'package:gokul_ramk/features/trainer/profile/trainer_profile/model/program_model.dart';
 
 import '../service/trainer_profile_service.dart';
-
-class Program {
-  final String title;
-  final String description;
-  final String icon;
-
-  Program({required this.title, required this.description, required this.icon});
-}
 
 class TrainerProfileController extends GetxController {
   TrainerService trainerService = TrainerService();
   // Basic Info
 
-  // Programs Offered
-  var programs = <Program>[
-    Program(
-      title: "Weight Loss Program",
-      description: "Comprehensive fat burning and nutrition plan",
-      icon: IconPath.weightLoss,
-    ),
-    Program(
-      title: "Muscle Gain",
-      description: "Strength building and muscle development",
-      icon: IconPath.musclGain,
-    ),
-    Program(
-      title: "Cardio Routine",
-      description: "High-intensity cardiovascular training",
-      icon: IconPath.cardio,
-    ),
-    Program(
-      title: "Yoga Sessions",
-      description: "Flexibility and mindfulness practice",
-      icon: IconPath.yoga,
-    ),
-  ].obs;
+  // Programs Offered - Using API response
+  var programs = <ProgramModel>[].obs;
 
   // ✅ Products
   var products = <Product>[].obs;
@@ -59,6 +30,7 @@ class TrainerProfileController extends GetxController {
     super.onInit();
     fetchTrainerProfile();
     fetchRecentProducts();
+    fetchPrograms();
   }
 
   var isLoading = false.obs;
@@ -81,6 +53,16 @@ class TrainerProfileController extends GetxController {
       products.value = recentProducts;
     } catch (e) {
       if (kDebugMode) print("Error fetching products: $e");
+    }
+  }
+
+  void fetchPrograms() async {
+    try {
+      final myPrograms = await trainerService.getMyPrograms();
+      programs.value = myPrograms;
+      if (kDebugMode) print("Programs fetched: ${programs.length}");
+    } catch (e) {
+      if (kDebugMode) print("Error fetching programs: $e");
     }
   }
 }

@@ -23,6 +23,7 @@ import 'package:gokul_ramk/features/trainer/home/home_screen/screen/home_screen.
 import 'package:gokul_ramk/features/trainer/my_clients/client_profile/sceen/client_profile_screen.dart';
 import 'package:gokul_ramk/features/trainer/profile/add_product/screen/add_product_screen.dart';
 import 'package:gokul_ramk/features/trainer/profile/product_details/screen/product_details_screen.dart';
+import 'package:gokul_ramk/features/trainer/profile/trainer_profile/screen/all_programs_screen.dart';
 import 'package:gokul_ramk/features/user/shop/cart/screen/cart_screen.dart';
 import 'package:gokul_ramk/features/user/shop/categories/screen/categories_screen.dart';
 import 'package:gokul_ramk/features/user/shop/product_detail/screen/product_detail_screen.dart';
@@ -94,6 +95,7 @@ class AppRoute {
   static String productDetails = "/productDetails";
   static String createEvent = '/tainer/createEvent';
   static String createChallenge = '/trainer/createChallenge';
+  static String allProgramsScreen = '/trainer/allProgramsScreen';
 
   static String getSplashScreen() => splashScreen;
   static String getOnboardingScreen() => onboardingScreen;
@@ -119,7 +121,7 @@ class AppRoute {
   static String getUserNavBarScreen() => userNavBarScreen;
   static String getUserNotificationScreen() => userNotificationScreen;
   static String getUserBookmarkScreen() => userBookmarkScreen;
-   static String getViewTrainerProfileScreen() => viewTrainerProfileScreen;
+  static String getViewTrainerProfileScreen() => viewTrainerProfileScreen;
   static String getbookTrainerScreen() => bookTrainerScreen;
   static String getClientProfileScreen() => clientProfileScreen;
   static String getUserSessionsScreen() => userSessionsScreen;
@@ -141,6 +143,7 @@ class AppRoute {
   static String getUserCreateGroupScreen() => userCreateGroupScreen;
   static String getAddProducts() => addProducts;
   static String getProductDetails() => productDetails;
+  static String getallProgramsScreen() => allProgramsScreen;
 
   static List<GetPage> routes = [
     GetPage(name: splashScreen, page: () => SplashScreen()),
@@ -224,5 +227,6 @@ class AppRoute {
     GetPage(name: productDetails, page: () => ProductDetailsScreen()),
     GetPage(name: createEvent, page: () => CreateEventScreen()),
     GetPage(name: createChallenge, page: () => CreateChallengeScreen()),
+    GetPage(name: allProgramsScreen, page: () => AllProgramsScreen()),
   ];
 }
