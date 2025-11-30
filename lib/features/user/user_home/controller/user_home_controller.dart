@@ -90,6 +90,27 @@ class UserHomeController extends GetxController {
     }
   }
 
+
+
+
+//  var toptrainerDetails = Rx<TopTrainer?>(null);
+
+//   void fetchTopTrainerDetailsMethod(String id) async {
+//     isLoading(true);
+//     try {
+//       trainerDetails.value = await service.fetchTopTrainerDetails(id);
+//     } catch (e) {
+//       debugPrint("Error fetching trainer: $e");
+//     } finally {
+//       isLoading(false);
+//     }
+//   }
+
+
+
+
+
+
   var workoutList = <WorkOutModel>[].obs;
   void fetchWorkoutListMethod() async {
     if (selectedCategory.value.isEmpty) return;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
+import 'package:gokul_ramk/features/user/session/trainers_tab/widget/yoga_trainer_view_profile1.dart';
 import 'package:gokul_ramk/features/user/user_home/controller/user_home_controller.dart';
 
 class TrainerProfileCard extends StatelessWidget {
@@ -100,7 +101,13 @@ class TrainerProfileCard extends StatelessWidget {
                       const SizedBox(width: 8),
                       Expanded(
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Get.to(
+                              ViewTrainerYogaProfileScreen(
+                                trainerId: controller.yogaTrainers[index].id,
+                              ),
+                            );
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.blue.withValues(alpha: 0.1),
                           ),
