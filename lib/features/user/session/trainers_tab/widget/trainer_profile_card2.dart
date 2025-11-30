@@ -3,10 +3,10 @@ import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
 import 'package:gokul_ramk/features/user/user_home/controller/user_home_controller.dart';
 
-class TrainerProfileCard extends StatelessWidget {
+class TrainerProfileCard2 extends StatelessWidget {
   final int index;
   //final TrainerTabModel trainer;
-  const TrainerProfileCard({super.key, required this.index});
+  const TrainerProfileCard2({super.key, required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class TrainerProfileCard extends StatelessWidget {
                 top: Radius.circular(12),
               ),
               child: Image.network(
-                controller.yogaTrainers[index].image.toString(),
+                controller.strength[index].image.toString(),
                 height: 160,
                 width: double.infinity,
                 fit: BoxFit.cover,
@@ -49,7 +49,7 @@ class TrainerProfileCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    controller.yogaTrainers[index].name,
+                    controller.strength[index].name,
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -57,7 +57,7 @@ class TrainerProfileCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    "Specialty: ${controller.yogaTrainers[index].specializations[0]}",
+                    "Specialty: ${controller.strength[index].specializations[0]}",
                     style: const TextStyle(
                       fontSize: 12,
                       color: Colors.green,
@@ -69,7 +69,7 @@ class TrainerProfileCard extends StatelessWidget {
                     children: [
                       const Icon(Icons.star, color: Colors.orange, size: 18),
                       Text(
-                        "${controller.yogaTrainers[index].avgRating} (${controller.yogaTrainers[index].totalReviews} reviews)",
+                        "${controller.strength[index].avgRating} (${controller.yogaTrainers[index].totalReviews} reviews)",
                         style: const TextStyle(
                           fontSize: 14,
                           color: Colors.black,

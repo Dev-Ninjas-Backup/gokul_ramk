@@ -3,11 +3,15 @@ import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
 import 'package:gokul_ramk/features/user/session/controller/session_controller.dart';
 import 'package:gokul_ramk/features/user/session/trainers_tab/widget/trainer_profile_card.dart';
+import 'package:gokul_ramk/features/user/session/trainers_tab/widget/trainer_profile_card2.dart';
+import 'package:gokul_ramk/features/user/user_home/controller/user_home_controller.dart';
 import '../widget/top_trainer_item.dart';
 
 class TrainerTab extends StatelessWidget {
   TrainerTab({super.key});
   final SessionController controller = Get.put(SessionController());
+
+  final homeController=Get.find<UserHomeController>();
 
   @override
   Widget build(BuildContext context) {
@@ -44,14 +48,7 @@ class TrainerTab extends StatelessWidget {
               "Strength & Conditioning Trainers",
               style: getTextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            Text(
-              "See all",
-              style: getTextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: Colors.blue,
-              ),
-            ),
+
           ],
         ),
         const SizedBox(height: 12),
@@ -59,13 +56,13 @@ class TrainerTab extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           child: Row(
             children: List.generate(
-              controller.strengthTrainers.length,
+              homeController.strength.length,
               (index) => Padding(
                 padding: const EdgeInsets.only(right: 8),
                 child: SizedBox(
                   width: 280,
-                  child: TrainerProfileCard(
-                    trainer: controller.strengthTrainers[index],
+                  child: TrainerProfileCard2(index: index,
+                
                   ),
                 ),
               ),
@@ -83,14 +80,7 @@ class TrainerTab extends StatelessWidget {
               "Yoga Trainers",
               style: getTextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            Text(
-              "See all",
-              style: getTextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: Colors.blue,
-              ),
-            ),
+
           ],
         ),
         const SizedBox(height: 12),
@@ -98,13 +88,13 @@ class TrainerTab extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           child: Row(
             children: List.generate(
-              controller.strengthTrainers.length,
+              homeController.yogaTrainers.length,
               (index) => Padding(
                 padding: const EdgeInsets.only(right: 8),
                 child: SizedBox(
                   width: 280,
                   child: TrainerProfileCard(
-                    trainer: controller.strengthTrainers[index],
+                  index: index,
                   ),
                 ),
               ),
