@@ -92,5 +92,20 @@ Future<FeatureTrainerModel> fetchTrainerDetails(String trainerID) async {
     throw response.errorMessage ?? "Failed to fetch trainer details";
   }
 }
+// Future<TopTrainer> fetchTopTrainerDetails(String trainerID) async {
+//   final String url = "${Urls.baseUrl}/user/$trainerID";
+
+//   final response = await client.getRequest(url: url);
+
+//   if (response.isSuccess &&
+//       (response.statusCode == 200 || response.statusCode == 201)) {
+      
+//     final Map<String, dynamic> data = response.responseData!['data'];
+
+//     return TopTrainer.fromJson(data);
+//   } else {
+//     throw response.errorMessage ?? "Failed to fetch trainer details";
+//   }
+// }
 
 }

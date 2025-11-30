@@ -14,7 +14,6 @@ import 'package:gokul_ramk/features/user/session/neutrition_tab/repository/meal_
 
 import 'package:gokul_ramk/features/user/session/service/discover_service.dart';
 import 'package:gokul_ramk/features/user/session/trainers_tab/model/top_trainer_model.dart';
-import 'package:gokul_ramk/features/user/session/trainers_tab/model/trainer_tab_model.dart';
 
 class SessionController extends GetxController {
   final DiscoverService service = DiscoverService(
@@ -133,26 +132,26 @@ class SessionController extends GetxController {
     }
   }
 
-  List strengthTrainers = <TrainerTabModel>[
-    TrainerTabModel(
-      name: "Alex Carter",
-      role: "Strength & Conditioning",
-      image:
-          "https://venketfitness.com/assets/VEN06242-min-2048x1365-CZSgI9qf.jpg",
-      specialty: "Strength & Conditioning",
-      rating: 4.9,
-      reviews: 320,
-    ),
-    TrainerTabModel(
-      name: "Ava Thompson",
-      role: "Strength & Conditioning",
-      image:
-          "https://venketfitness.com/assets/VEN06242-min-2048x1365-CZSgI9qf.jpg",
-      specialty: "Strength & Conditioning",
-      rating: 4.8,
-      reviews: 210,
-    ),
-  ].obs;
+  // List strengthTrainers = <TrainerTabModel>[
+  //   TrainerTabModel(
+  //     name: "Alex Carter",
+  //     role: "Strength & Conditioning",
+  //     image:
+  //         "https://venketfitness.com/assets/VEN06242-min-2048x1365-CZSgI9qf.jpg",
+  //     specialty: "Strength & Conditioning",
+  //     rating: 4.9,
+  //     reviews: 320,
+  //   ),
+  //   TrainerTabModel(
+  //     name: "Ava Thompson",
+  //     role: "Strength & Conditioning",
+  //     image:
+  //         "https://venketfitness.com/assets/VEN06242-min-2048x1365-CZSgI9qf.jpg",
+  //     specialty: "Strength & Conditioning",
+  //     rating: 4.8,
+  //     reviews: 210,
+  //   ),
+  // ].obs;
 
   final List<Map<String, dynamic>> workoutList = [
     {
