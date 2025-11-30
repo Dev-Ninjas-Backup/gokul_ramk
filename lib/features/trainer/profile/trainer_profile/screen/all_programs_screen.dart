@@ -44,7 +44,6 @@ class AllProgramsScreen extends StatelessWidget {
                 final program = controller.programs[index];
                 return GestureDetector(
                   onTap: () {
-                    // TODO: Navigate to program details screen
                   },
                   child: Container(
                     margin: EdgeInsets.only(bottom: 12),
@@ -90,8 +89,9 @@ class AllProgramsScreen extends StatelessWidget {
                                     },
                                     loadingBuilder:
                                         (context, child, loadingProgress) {
-                                          if (loadingProgress == null)
+                                          if (loadingProgress == null) {
                                             return child;
+                                          }
                                           return Center(
                                             child: CircularProgressIndicator(
                                               value:
