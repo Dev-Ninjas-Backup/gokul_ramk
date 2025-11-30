@@ -1,4 +1,4 @@
-class NutritionPlanModel {
+class MealPlanModel {
   final String id;
   final String title;
   final String description;
@@ -12,8 +12,9 @@ class NutritionPlanModel {
   final String createdAt;
   final String updatedAt;
   final String createdById;
+  final List<MealInPlanModel> meals;
 
-  NutritionPlanModel({
+  MealPlanModel({
     required this.id,
     required this.title,
     required this.description,
@@ -27,10 +28,11 @@ class NutritionPlanModel {
     required this.createdAt,
     required this.updatedAt,
     required this.createdById,
+    required this.meals,
   });
 
-  factory NutritionPlanModel.fromJson(Map<String, dynamic> json) {
-    return NutritionPlanModel(
+  factory MealPlanModel.fromJson(Map<String, dynamic> json) {
+    return MealPlanModel(
       id: json['id'] ?? '',
       title: json['title'] ?? '',
       description: json['description'] ?? '',
@@ -44,6 +46,11 @@ class NutritionPlanModel {
       createdAt: json['createdAt'] ?? '',
       updatedAt: json['updatedAt'] ?? '',
       createdById: json['createdById'] ?? '',
+      meals:
+          (json['meals'] as List?)
+              ?.map((meal) => MealInPlanModel.fromJson(meal))
+              .toList() ??
+          [],
     );
   }
 
@@ -62,6 +69,31 @@ class NutritionPlanModel {
       'createdAt': createdAt,
       'updatedAt': updatedAt,
       'createdById': createdById,
+      'meals': meals.map((meal) => meal.toJson()).toList(),
     };
+  }
+}
+
+class MealInPlanModel {
+  final String title;
+  final String image;
+  final String description;
+
+  MealInPlanModel({
+    required this.title,
+    required this.image,
+    required this.description,
+  });
+
+  factory MealInPlanModel.fromJson(Map<String, dynamic> json) {
+    return MealInPlanModel(
+      title: json['title'] ?? '',
+      image: json['image'] ?? '',
+      description: json['description'] ?? '',
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {'title': title, 'image': image, 'description': description};
   }
 }

@@ -1,4 +1,4 @@
-// ignore_for_file: constant_identifier_names
+// ignore_for_file: constant_identifier_names, avoid_print
 
 enum ParticipantStatus {
   PENDING,
@@ -119,10 +119,7 @@ class ParticipantUser {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'fullname': fullname,
-    };
+    return {'id': id, 'fullname': fullname};
   }
 }
 
@@ -235,23 +232,29 @@ class ParticipantApiResponse {
   final String message;
   final EventParticipant? data;
 
-  ParticipantApiResponse({required this.success, required this.message, this.data});
+  ParticipantApiResponse({
+    required this.success,
+    required this.message,
+    this.data,
+  });
 
   factory ParticipantApiResponse.fromJson(Map<String, dynamic> json) {
     // Handle data field - it can be a Map (participant data) or String (error message)
     EventParticipant? participantData;
     if (json['data'] != null && json['data'] is Map<String, dynamic>) {
       try {
-        participantData = EventParticipant.fromJson(json['data'] as Map<String, dynamic>);
+        participantData = EventParticipant.fromJson(
+          json['data'] as Map<String, dynamic>,
+        );
       } catch (e) {
         print('Error parsing participant data: $e');
       }
     }
-    
+
     // If data is directly in the root level (not wrapped in 'data' field)
-    if (participantData == null && 
-        json.containsKey('id') && 
-        json.containsKey('userId') && 
+    if (participantData == null &&
+        json.containsKey('id') &&
+        json.containsKey('userId') &&
         json.containsKey('eventId')) {
       try {
         participantData = EventParticipant.fromJson(json);
@@ -279,4 +282,3 @@ class ParticipantApiResponse {
     return message.toString();
   }
 }
-

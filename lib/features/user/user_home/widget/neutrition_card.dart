@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
 
 class NeutritionCard extends StatelessWidget {
   const NeutritionCard({super.key});
@@ -35,27 +34,27 @@ class NeutritionCard extends StatelessWidget {
                 ),
                 SizedBox(height: 8),
                 Text(
-                  'Since you trained upper body today, try this recovery smoothie 🍓.',
+                  'Since you trained upper body today, try this recovery smoothie.',
                   style: TextStyle(fontSize: 16),
                 ),
-                const SizedBox(height: 4),
-                SizedBox(
-                  height: 38,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green[400],
-                    ),
-                    child: Text(
-                      '+ Add to Meal Plan',
-                      style: getTextStyle(
-                        fontSize: 14,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
+                // const SizedBox(height: 4),
+                // SizedBox(
+                //   height: 38,
+                //   child: ElevatedButton(
+                //     onPressed: () {},
+                //     style: ElevatedButton.styleFrom(
+                //       backgroundColor: Colors.green[400],
+                //     ),
+                //     child: Text(
+                //       '+ Add to Meal Plan',
+                //       style: getTextStyle(
+                //         fontSize: 14,
+                //         color: Colors.white,
+                //         fontWeight: FontWeight.bold,
+                //       ),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),

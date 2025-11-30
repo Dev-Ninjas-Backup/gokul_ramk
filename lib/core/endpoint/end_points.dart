@@ -37,6 +37,7 @@ class Urls {
   static const String uploadMultiple = "$baseUrl/upload/multiple";
   static const String createMealPlan = "$baseUrl/meal-plan/create-plan";
   static const String getMeal = "$baseUrl/meal-plan/meal";
+  static const String getMealPlan = "$baseUrl/meal-plan/plan";
 
   // Post comments endpoints
   static String getPostComments(String postId) => "$getPost/$postId/comment";

@@ -1,9 +1,17 @@
+// ignore_for_file: avoid_print
+
+
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/services/network_service/network_client.dart';
 import 'package:gokul_ramk/features/user/session/neutrition_tab/model/comunity_food_model.dart';
+import 'package:gokul_ramk/features/user/session/neutrition_tab/model/meal_model.dart';
+import 'package:gokul_ramk/features/user/session/neutrition_tab/model/meal_plan_model.dart';
 import 'package:gokul_ramk/features/user/session/neutrition_tab/model/nutition_model.dart';
 import 'package:gokul_ramk/features/user/session/neutrition_tab/model/nutrition_goal_food_model.dart';
+import 'package:gokul_ramk/features/user/session/neutrition_tab/repository/meal_plan_repository.dart';
+import 'package:gokul_ramk/features/user/session/neutrition_tab/repository/meal_repository.dart';
+
 import 'package:gokul_ramk/features/user/session/service/discover_service.dart';
 import 'package:gokul_ramk/features/user/session/trainers_tab/model/top_trainer_model.dart';
 import 'package:gokul_ramk/features/user/session/trainers_tab/model/trainer_tab_model.dart';
@@ -22,6 +30,22 @@ class SessionController extends GetxController {
   var selectedCategory = "Sessions".obs;
 
   final categories = ["Sessions", "Trainers", "Nutrition"];
+
+  // Meal repository
+  late final MealRepository mealRepository;
+
+  // Observable list for fetched meals
+  var meals = <MealModel>[].obs;
+  var isLoadingMeals = false.obs;
+  var mealError = ''.obs;
+
+  // Meal Plan repository
+  late final MealPlanRepository mealPlanRepository;
+
+  // Observable list for fetched meal plans
+  var mealPlans = <MealPlanModel>[].obs;
+  var isLoadingMealPlans = false.obs;
+  var mealPlanError = ''.obs;
 
   List communityFoodList = <ComunityFoodModel>[
     ComunityFoodModel(
@@ -183,6 +207,40 @@ class SessionController extends GetxController {
 
   @override
   void onInit() {
+    super.onInit();
+    mealRepository = MealRepository();
+    mealPlanRepository = MealPlanRepository();
+    fetchMeals();
+    fetchMealPlans();
+  }
+
+  Future<void> fetchMeals({int limit = 10, int page = 1}) async {
+    try {
+      isLoadingMeals.value = true;
+      mealError.value = '';
+      meals.value = await mealRepository.fetchMeals(limit: limit, page: page);
+    } catch (e) {
+      mealError.value = e.toString();
+      print('Error fetching meals: $e');
+    } finally {
+      isLoadingMeals.value = false;
+    }
+  }
+
+  Future<void> fetchMealPlans({int limit = 10, int page = 1}) async {
+    try {
+      isLoadingMealPlans.value = true;
+      mealPlanError.value = '';
+      mealPlans.value = await mealPlanRepository.fetchMealPlans(
+        limit: limit,
+        page: page,
+      );
+    } catch (e) {
+      mealPlanError.value = e.toString();
+      print('Error fetching meal plans: $e');
+    } finally {
+      isLoadingMealPlans.value = false;
+    }
     fetchTrainerMethod();
 
     super.onInit();

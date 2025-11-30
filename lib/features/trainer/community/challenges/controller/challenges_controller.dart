@@ -428,11 +428,13 @@ class ChallengesController extends GetxController {
     try {
       joiningChallengeIds.add(challengeId);
 
-      final response = await challengeRepository.joinChallenge(challengeId: challengeId);
+      final response = await challengeRepository.joinChallenge(
+        challengeId: challengeId,
+      );
 
       if (response != null && response.success && response.data != null) {
         final participant = response.data!;
-        
+
         // Show success message with participant status
         Get.snackbar(
           'Success',
@@ -442,7 +444,7 @@ class ChallengesController extends GetxController {
           colorText: Colors.white,
           duration: Duration(seconds: 3),
         );
-        
+
         // Refresh challenges to update participant count
         await Future.delayed(Duration(milliseconds: 500));
         await fetchChallenges();
