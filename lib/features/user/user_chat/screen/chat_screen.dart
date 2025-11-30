@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
@@ -130,7 +132,7 @@ class ChatScreen extends StatelessWidget {
                     ),
 
               controller.firstMsgSent.value ? SizedBox.shrink() : Spacer(),
-              
+
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Row(
@@ -144,6 +146,33 @@ class ChatScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 5),
+                    if (controller.imagePath.value.isNotEmpty)
+                      Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Image.file(
+                              File(controller.imagePath.value),
+                              width: 50,
+                              height: 50,
+                            ),
+                          ),
+
+                          Positioned(
+                            top: -6,
+                            right: -3,
+                            child: GestureDetector(
+                              onTap: () {
+                                print('tappppped');
+                                controller.imagePath.value = '';
+                              },
+                              child: Icon(Icons.cancel, size: 18),
+                            ),
+                          ),
+                        ],
+                      ),
+
                     Expanded(
                       child: TextField(
                         controller: controller.messageController,

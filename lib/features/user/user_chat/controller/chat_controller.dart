@@ -11,7 +11,7 @@ class ChatController extends GetxController {
 
   final TextEditingController messageController = TextEditingController();
   final RxString selectedMessage = ''.obs;
-  var imagePath = '';
+  var imagePath = ''.obs;
   RxBool firstMsgSent = false.obs;
 
   var messages = <Map<String, dynamic>>[].obs;
@@ -47,7 +47,7 @@ class ChatController extends GetxController {
     final ImagePicker picker = ImagePicker();
     final XFile? image = await picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
-      imagePath = image.path;
+      imagePath.value = image.path;
       // You can handle upload or show preview here
     }
   }
@@ -87,4 +87,6 @@ class ChatController extends GetxController {
       },
     ]);
   }
+
+ 
 }
