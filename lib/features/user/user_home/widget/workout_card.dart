@@ -10,6 +10,7 @@ class WorkoutCard extends StatelessWidget {
   final String difficulty;
   final bool isBookmarked;
   final bool? large;
+  final VoidCallback? onBookmarkTap;
 
   const WorkoutCard({
     super.key,
@@ -19,6 +20,7 @@ class WorkoutCard extends StatelessWidget {
     required this.difficulty,
     this.isBookmarked = false,
     this.large = false,
+    this.onBookmarkTap,
   });
 
   @override
@@ -91,9 +93,12 @@ class WorkoutCard extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Icon(
-                        isBookmarked ? Icons.bookmark : Icons.bookmark_border,
-                        color: Colors.white,
+                      GestureDetector(
+                        onTap: onBookmarkTap,
+                        child: Icon(
+                          isBookmarked ? Icons.bookmark : Icons.bookmark_border,
+                          color: isBookmarked?Colors.blue :Colors.white,
+                        ),
                       ),
                     ],
                   ),
