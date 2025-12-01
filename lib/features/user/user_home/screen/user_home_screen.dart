@@ -16,10 +16,13 @@ import 'package:gokul_ramk/features/user/user_home/widget/stats_card.dart';
 import 'package:gokul_ramk/features/user/user_home/widget/workout_card.dart';
 import 'package:gokul_ramk/routes/app_routes.dart';
 
+import '../../bookmark/controller/bookmark_controller.dart';
+
 class UserHomeScreen extends StatelessWidget {
   UserHomeScreen({super.key});
   final UserHomeController controller = Get.put(UserHomeController());
   final UserNavBarController navBarController = Get.put(UserNavBarController());
+  final BookmarkController bookmarkController = Get.put(BookmarkController());
 
   @override
   Widget build(BuildContext context) {
@@ -165,6 +168,12 @@ class UserHomeScreen extends StatelessWidget {
                         subtitle: workout.duration.toString(),
                         image: workout.coverImage.toString(),
                         difficulty: workout.difficulty.toString(),
+                        onBookmarkTap: () {
+                          bookmarkController.removeBookmark(
+                            controller.workoutList[index].id.toString(),
+                            
+                          );
+                        },
                       ),
                     );
                   },
@@ -218,8 +227,13 @@ class UserHomeScreen extends StatelessWidget {
                             tagline: bio,
                             specialty: specialty,
                             onTapViewProfile: () {
-                               Get.to(() => ViewTrainerProfileScreen(trainerId: trainer.id));}
+                              Get.to(
+                                () => ViewTrainerProfileScreen(
+                                  trainerId: trainer.id,
 
+                                ),
+                              );
+                            },
                           ),
                         ),
                       );

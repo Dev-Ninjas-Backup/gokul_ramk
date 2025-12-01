@@ -56,6 +56,8 @@ class BookmarkController extends GetxController {
       if (success) {
         bookmarks.removeWhere((bookmark) => bookmark.workoutId == workoutId);
         print('✅ Bookmark removed successfully');
+              await fetchBookmarks();
+
       } else {
         errorMessage.value = 'Failed to remove bookmark';
         print('❌ Failed to remove bookmark');
