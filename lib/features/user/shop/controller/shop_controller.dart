@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/services/network_service/network_client.dart';
 import 'package:gokul_ramk/features/user/shop/model/produt_categories_model.dart';
@@ -89,25 +90,48 @@ void fetchProductMethod() async {
   }
 }
 
+  // Future<void> addToCartMethod(String productId) async {
+  //   try {
+  //     isLoading.value = true;
 
-  // var products = <ShopProductModel>[
-  //   ShopProductModel(
-  //     title: "Whey Protein Isolate (2lbs)",
-  //     description: "Vanilla, 25g protein per scoop.",
-  //     price: 39.99,
-  //     image:
-  //         "https://www.teamcp.co.nz/wp-content/uploads/2021/07/protiencpowder-600x433.png",
-  //     rating: 4.8,
-  //     reviews: 320,
-  //   ),
-  //   ShopProductModel(
-  //     title: "Whey Protein Isolate (2lbs)",
-  //     description: "Vanilla, 25g protein per scoop.",
-  //     price: 39.99,
-  //     image:
-  //         "https://www.teamcp.co.nz/wp-content/uploads/2021/07/protiencpowder-600x433.png",
-  //     rating: 4.8,
-  //     reviews: 320,
-  //   ),
-  // ].obs;
+  //     bool success = await service.addToCart(
+  //       productId: productId,
+  //       quantity: quantity.value,
+  //     );
+
+  //     if (success) {
+
+  //       EasyLoading.show(status: "Success Added to cart");
+  //     } else {
+  //       EasyLoading.showError("Error" "Failed to add to cart");
+  //     }
+  //   } catch (e) {
+  //     Get.snackbar("Exception", e.toString());
+  //   } finally {
+  //     isLoading.value = false;
+  //   }
+  // }
+
+
+  Future<void> addToCartMethod(String productId) async {
+    try {
+      isLoading.value = true;
+
+      // Call service (returns void)
+      await service.addToCart(
+        productId: productId,
+        quantity: quantity.value,
+      );
+
+      // Show success message (assume service throws on error)
+      EasyLoading.showSuccess("Added to cart successfully");
+
+    } catch (e) {
+      // Show error if service fails
+      EasyLoading.showError("Failed to add to cart");
+      Get.snackbar("Exception", e.toString());
+    } finally {
+      isLoading.value = false;
+    }
+  }
 }
