@@ -29,7 +29,7 @@ class ShopService {
   Future<List<ShopProductModel>> fetchShopProduct() async {
     // final String url = Urls.products;
     try {
-      final String url = "https://wellfitsync.com/product";
+      final String url = Urls.products;
       final response = await client.getRequest(url: url);
       if (kDebugMode) {
         print("=========reerfdsafdfaewsdv rg========${response.responseData}");
@@ -52,4 +52,68 @@ class ShopService {
       return [];
     }
   }
+
+
+  //cart add
+//  Future<void> addToCart({
+//     required String productId,
+//     required int quantity,
+//   }) async {
+//    // final String url = Urls.addCart;
+
+//     try {
+//       final response = await client.postRequest(
+//         url: "https://wellfitsync.com/cart/add",
+//         body: {
+//           "productId": productId,
+//           "quantity": quantity,
+//         },
+//       );
+
+//       if (response.isSuccess &&
+//           (response.statusCode == 200 || response.statusCode == 201)) {
+//         return true;
+//       }
+
+//       return false;
+//     } catch (e) {
+//       if (kDebugMode) {
+//         print("Error addToCart: $e");
+//       }
+//       return false;
+//     }
+//   }
+
+
+Future<void> addToCart({
+  required String productId,
+  required int quantity,
+}) async {
+  try {
+    final response = await client.postRequest(
+      url: "https://wellfitsync.com/cart/add",
+      body: {
+        "productId": productId,
+        "quantity": quantity,
+      },
+    );
+
+    if (response.isSuccess &&
+        (response.statusCode == 200 || response.statusCode == 201)) {
+      if (kDebugMode) {
+        print("Cart added successfully");
+      }
+    } else {
+      if (kDebugMode) {
+        print("Failed to add to cart");
+      }
+    }
+  } catch (e) {
+    if (kDebugMode) {
+      print("Error addToCart: $e");
+    }
+  }
+}
+
+  
 }

@@ -79,10 +79,11 @@ class ShopScreen extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               Obx(() {
-
-              if (kDebugMode) {
-                print("=============================${controller.products.length}");
-              }
+                if (kDebugMode) {
+                  print(
+                    "=============================${controller.products.length}",
+                  );
+                }
                 return Column(
                   children: controller.products
                       .map(
@@ -94,7 +95,19 @@ class ShopScreen extends StatelessWidget {
                               arguments: product.name,
                             );
                           },
-                          onAddToCart: () {},
+
+                          onAddToCart: () {
+                            if (!controller.isLoading.value &&
+                                product.id != null) {
+                              if (kDebugMode) {
+                                print(
+                                "cart hit========${product.id!}===========",
+                              );
+                              }
+                              controller.addToCartMethod(product.id!);
+                            }
+                          },
+
                           onBuyNow: () {},
                         ),
                       )
