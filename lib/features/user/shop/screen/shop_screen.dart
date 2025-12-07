@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
 import 'package:gokul_ramk/core/utils/constants/icon_path.dart';
+import 'package:gokul_ramk/features/user/shop/cart/controller/cart_controller.dart';
 import 'package:gokul_ramk/features/user/shop/widget/categories_item_widget.dart';
 import 'package:gokul_ramk/features/user/shop/widget/shop_banner_widget.dart';
 import 'package:gokul_ramk/features/user/shop/widget/shop_product_widget.dart';
@@ -13,6 +14,7 @@ class ShopScreen extends StatelessWidget {
   ShopScreen({super.key});
 
   final ShopController controller = Get.put(ShopController());
+  final CartController cartController = Get.put(CartController());
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +39,7 @@ class ShopScreen extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       Get.toNamed(AppRoute.getUserCartScreen());
+                      cartController.getcart();
                     },
                     child: Image.asset(IconPath.shopIcon),
                   ),
@@ -101,8 +104,8 @@ class ShopScreen extends StatelessWidget {
                                 product.id != null) {
                               if (kDebugMode) {
                                 print(
-                                "cart hit========${product.id!}===========",
-                              );
+                                  "cart hit========${product.id!}===========",
+                                );
                               }
                               controller.addToCartMethod(product.id!);
                             }
