@@ -39,7 +39,9 @@ class ShopScreen extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       Get.toNamed(AppRoute.getUserCartScreen());
+
                       cartController.getcart();
+                    //  cartController.total;
                     },
                     child: Image.asset(IconPath.shopIcon),
                   ),

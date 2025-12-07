@@ -37,9 +37,7 @@ class CartScreen extends StatelessWidget {
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
-                      return CartItemTile(
-                        index: index,
-                      );
+                      return CartItemTile(index: index);
                     },
                   ),
                 ),
@@ -99,13 +97,17 @@ class CartScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 10),
-                OrderSummaryTile(
-                  title: "Subtotal",
-                  value: "\$${controller.subtotal.toStringAsFixed(0)}",
+                Obx(
+                  () => OrderSummaryTile(
+                    title: "Subtotal",
+                    value: "\$${controller.subtotal.toStringAsFixed(0)}",
+                  ),
                 ),
-                OrderSummaryTile(
-                  title: "Shipping Cost",
-                  value: "\$${controller.shippingCost.toStringAsFixed(0)}",
+                Obx(
+                  () => OrderSummaryTile(
+                    title: "Shipping Cost",
+                    value: "\$${controller.shippingCost.toStringAsFixed(0)}",
+                  ),
                 ),
                 Obx(
                   () => OrderSummaryTile(
@@ -115,10 +117,12 @@ class CartScreen extends StatelessWidget {
                   ),
                 ),
                 const Divider(),
-                OrderSummaryTile(
-                  title: "Total",
-                  value: "\$${controller.total.toStringAsFixed(0)}",
-                  isTotal: true,
+                Obx(
+                  () => OrderSummaryTile(
+                    title: "Total",
+                    value: "\$${controller.total.toStringAsFixed(0)}",
+                    isTotal: true,
+                  ),
                 ),
 
                 const SizedBox(height: 20),
