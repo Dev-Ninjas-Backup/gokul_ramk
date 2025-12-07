@@ -39,7 +39,7 @@ class CartController extends GetxController {
   }
 
   var promoDiscount = 0.0.obs;
-  final shippingCost = 5.0;
+  final shippingCost = 5.0.obs;
 
   /// Calculate subtotal: sum of all items' price * quantity
   double get subtotal {
@@ -51,7 +51,7 @@ class CartController extends GetxController {
   }
 
   /// Total after discount and shipping
-  double get total => subtotal + shippingCost - promoDiscount.value;
+  double get total => subtotal + shippingCost.value - promoDiscount.value;
 
   /// Increase quantity of a specific item
   void increaseItemQty(CartItem2 item) {
