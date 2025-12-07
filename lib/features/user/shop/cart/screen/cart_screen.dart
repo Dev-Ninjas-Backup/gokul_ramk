@@ -30,19 +30,20 @@ class CartScreen extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 20),
+
                 Obx(
                   () => ListView.builder(
-                    itemCount: controller.cartItems.length,
+                    itemCount: controller.cartList.length,
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
                       return CartItemTile(
                         index: index,
-                        item: controller.cartItems[index],
                       );
                     },
                   ),
                 ),
+
                 const SizedBox(height: 20),
 
                 // PROMO CODE
