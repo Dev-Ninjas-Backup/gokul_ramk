@@ -286,6 +286,12 @@ class UserHomeScreen extends StatelessWidget {
                         subtitle: featureWorkout.duration.toString(),
                         difficulty: featureWorkout.difficulty.toString(),
                         image: featureWorkout.coverImage.toString(),
+
+                        onBookmarkTap: () {
+                          bookmarkController.removeBookmark(
+                            controller.featureWorkoutList[index].id.toString(),
+                          );
+                        },
                       ),
                     );
                   },
