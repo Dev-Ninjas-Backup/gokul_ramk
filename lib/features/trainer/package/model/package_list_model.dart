@@ -36,7 +36,8 @@ class PackageListItem {
       ownerId: json['ownerId'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),
       updatedAt: DateTime.parse(json['updatedAt'] as String),
-      programs: (json['programs'] as List<dynamic>?)
+      programs:
+          (json['programs'] as List<dynamic>?)
               ?.map((p) => PackageProgram.fromJson(p as Map<String, dynamic>))
               .toList() ??
           [],
@@ -79,10 +80,6 @@ class PackageProgram {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'packageId': packageId,
-      'programId': programId,
-    };
+    return {'id': id, 'packageId': packageId, 'programId': programId};
   }
 }

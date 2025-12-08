@@ -42,6 +42,21 @@ class CreatePackageScreen extends StatelessWidget {
             color: Colors.black,
           ),
         ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Get.toNamed('/trainer/allPackagesScreen');
+            },
+            child: Text(
+              "All Packages",
+              style: getTextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: Colors.blue,
+              ),
+            ),
+          ),
+        ],
       ),
       body: Obx(() {
         if (controller.isLoading.value) {

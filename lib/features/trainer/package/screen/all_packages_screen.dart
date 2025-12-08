@@ -211,26 +211,16 @@ class AllPackagesScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Icon(
-          icon,
-          color: iconColor,
-          size: 20,
-        ),
+        Icon(icon, color: iconColor, size: 20),
         SizedBox(height: 4),
         Text(
           label,
-          style: getTextStyle(
-            fontSize: 10,
-            color: Colors.grey.shade600,
-          ),
+          style: getTextStyle(fontSize: 10, color: Colors.grey.shade600),
         ),
         SizedBox(height: 2),
         Text(
           value,
-          style: getTextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.bold,
-          ),
+          style: getTextStyle(fontSize: 12, fontWeight: FontWeight.bold),
         ),
       ],
     );
@@ -251,10 +241,7 @@ class AllPackagesScreen extends StatelessWidget {
           ),
           content: Text(
             'Are you sure you want to delete this package? This action cannot be undone.',
-            style: getTextStyle(
-              fontSize: 14,
-              color: Colors.grey.shade700,
-            ),
+            style: getTextStyle(fontSize: 14, color: Colors.grey.shade700),
           ),
           actions: [
             TextButton(

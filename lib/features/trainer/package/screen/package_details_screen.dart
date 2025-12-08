@@ -447,10 +447,7 @@ class PackageDetailsScreen extends StatelessWidget {
           ),
           content: Text(
             'Are you sure you want to delete this package? This action cannot be undone.',
-            style: getTextStyle(
-              fontSize: 14,
-              color: Colors.grey.shade700,
-            ),
+            style: getTextStyle(fontSize: 14, color: Colors.grey.shade700),
           ),
           actions: [
             TextButton(
@@ -469,7 +466,9 @@ class PackageDetailsScreen extends StatelessWidget {
             TextButton(
               onPressed: () {
                 Get.back(); // Close dialog
-                controller.deletePackage(controller.packageDetails.value?.id ?? '');
+                controller.deletePackage(
+                  controller.packageDetails.value?.id ?? '',
+                );
               },
               child: Text(
                 'Delete',
