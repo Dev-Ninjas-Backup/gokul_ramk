@@ -40,11 +40,13 @@ class UserHomeScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "Good morning, Adib 👋",
-                          style: getTextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
+                        Obx(
+                          () => Text(
+                            "Good morning, ${controller.fullName} 👋",
+                            style: getTextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                         Text(
@@ -171,7 +173,6 @@ class UserHomeScreen extends StatelessWidget {
                         onBookmarkTap: () {
                           bookmarkController.removeBookmark(
                             controller.workoutList[index].id.toString(),
-                            
                           );
                         },
                       ),
@@ -230,7 +231,6 @@ class UserHomeScreen extends StatelessWidget {
                               Get.to(
                                 () => ViewTrainerProfileScreen(
                                   trainerId: trainer.id,
-
                                 ),
                               );
                             },

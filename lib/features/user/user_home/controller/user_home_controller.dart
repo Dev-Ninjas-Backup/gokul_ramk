@@ -46,9 +46,7 @@ class UserHomeController extends GetxController {
 
   var trainers = <FeatureTrainerModel>[].obs;
   var yogaTrainers = <FeatureTrainerModel>[].obs;
-    var strength = <FeatureTrainerModel>[].obs;
-
-
+  var strength = <FeatureTrainerModel>[].obs;
 
   void fetchTrainerMethod() async {
     isLoading(true);
@@ -56,16 +54,17 @@ class UserHomeController extends GetxController {
       final trainerList = await service.fetchTrainer();
       trainers.assignAll(trainerList);
 
-    yogaTrainers.assignAll(
-      trainerList.where((trainer) =>
-          trainer.specializations.contains("Yoga")).toList(),
-    );
+      yogaTrainers.assignAll(
+        trainerList
+            .where((trainer) => trainer.specializations.contains("Yoga"))
+            .toList(),
+      );
 
-    strength.assignAll(
-      trainerList.where((trainer) =>
-          trainer.specializations.contains("Strength")).toList(),
-    );
-
+      strength.assignAll(
+        trainerList
+            .where((trainer) => trainer.specializations.contains("Strength"))
+            .toList(),
+      );
 
       print("================1 ${trainerList.length}");
       print("================1 ${trainerList[0].bio}");
@@ -90,26 +89,40 @@ class UserHomeController extends GetxController {
     }
   }
 
+  //get profile name
 
+  RxString fullName = ''.obs;
 
+  Future<void> fetchUserProfile() async {
+    try {
+      isLoading.value = true;
+      final response = await service.client.getRequest(
+        url: "https://wellfitsync.com/user/profile/me",
+      );
 
-//  var toptrainerDetails = Rx<TopTrainer?>(null);
+      if (response.isSuccess &&
+          ((response.statusCode == 200) || (response.statusCode == 201))) {
+        fullName.value = response.responseData!['data']['fullname'] ?? '';
+      }
+    } catch (e) {
+      print('Error: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
 
-//   void fetchTopTrainerDetailsMethod(String id) async {
-//     isLoading(true);
-//     try {
-//       trainerDetails.value = await service.fetchTopTrainerDetails(id);
-//     } catch (e) {
-//       debugPrint("Error fetching trainer: $e");
-//     } finally {
-//       isLoading(false);
-//     }
-//   }
+  //  var toptrainerDetails = Rx<TopTrainer?>(null);
 
-
-
-
-
+  //   void fetchTopTrainerDetailsMethod(String id) async {
+  //     isLoading(true);
+  //     try {
+  //       trainerDetails.value = await service.fetchTopTrainerDetails(id);
+  //     } catch (e) {
+  //       debugPrint("Error fetching trainer: $e");
+  //     } finally {
+  //       isLoading(false);
+  //     }
+  //   }
 
   var workoutList = <WorkOutModel>[].obs;
   void fetchWorkoutListMethod() async {
@@ -151,6 +164,7 @@ class UserHomeController extends GetxController {
     fetchWorkoutListMethod();
     fetchFeatureWorkoutMethod();
     fetchTrainerMethod();
+    fetchUserProfile();
     super.onInit();
   }
 

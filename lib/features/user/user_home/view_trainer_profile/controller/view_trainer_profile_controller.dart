@@ -4,11 +4,7 @@ import 'package:gokul_ramk/core/endpoint/end_points.dart';
 import 'package:gokul_ramk/core/services/network_service/network_client.dart';
 import 'package:gokul_ramk/routes/app_routes.dart';
 
-
 class ViewTrainerProfileController extends GetxController {
-
-
-
   var rating = 4.obs;
   var clients = 200.obs;
 
@@ -19,12 +15,10 @@ class ViewTrainerProfileController extends GetxController {
 
   @override
   void onInit() {
-
     super.onInit();
 
     // Initialize NetworkClient with onUnAuthorize callback
     networkClient = NetworkClient(onUnAuthorize: handleUnAuthorized);
-
   }
 
   Future<void> checkOnboarding() async {
@@ -66,13 +60,4 @@ class ViewTrainerProfileController extends GetxController {
       print("User Unauthorized - logout flow here");
     }
   }
-
-
-
-
-
-
-
-
-
 }
