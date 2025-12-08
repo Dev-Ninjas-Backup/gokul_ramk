@@ -113,7 +113,7 @@ class CartScreen extends StatelessWidget {
                   () => OrderSummaryTile(
                     title: "Discount",
                     value:
-                        "(-) ${controller.promoDiscount.value.toStringAsFixed(0)}",
+                        "(-) ${controller.promoDiscount.value.toStringAsFixed(0)} %",
                   ),
                 ),
                 const Divider(),
