@@ -3,7 +3,7 @@ import 'package:gokul_ramk/core/services/network_service/network_client.dart';
 import '../model/package_list_model.dart';
 
 class AllPackagesController extends GetxController {
-  final NetworkClient _networkClient = Get.find<NetworkClient>();
+  late final NetworkClient _networkClient;
 
   final RxList<PackageListItem> packageList = <PackageListItem>[].obs;
   final RxBool isLoading = false.obs;
@@ -12,6 +12,7 @@ class AllPackagesController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    _networkClient = Get.find<NetworkClient>();
     fetchAllPackages();
   }
 
