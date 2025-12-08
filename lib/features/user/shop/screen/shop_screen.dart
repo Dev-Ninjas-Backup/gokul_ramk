@@ -40,7 +40,7 @@ class ShopScreen extends StatelessWidget {
                     onTap: () {
                       Get.toNamed(AppRoute.getUserCartScreen());
 
-                      cartController.getcart();
+                      cartController.getCart();
                     //  cartController.total;
                     },
                     child: Image.asset(IconPath.shopIcon),

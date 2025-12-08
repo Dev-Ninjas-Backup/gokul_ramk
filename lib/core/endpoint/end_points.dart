@@ -75,4 +75,8 @@ class Urls {
       //cart
       static String addCart="$baseUrl/cart/add";
       static String getCart="$baseUrl/cart";
+
+      //copun
+      static String coupon="$baseUrl/coupon";
+      
 }
