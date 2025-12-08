@@ -22,6 +22,7 @@ import 'package:gokul_ramk/features/trainer/community/events/screen/create_event
 import 'package:gokul_ramk/features/trainer/home/home_screen/screen/home_screen.dart';
 import 'package:gokul_ramk/features/trainer/my_clients/client_profile/sceen/client_profile_screen.dart';
 import 'package:gokul_ramk/features/trainer/package/screen/create_package_screen.dart';
+import 'package:gokul_ramk/features/trainer/package/screen/package_details_screen.dart';
 import 'package:gokul_ramk/features/trainer/profile/add_product/screen/add_product_screen.dart';
 import 'package:gokul_ramk/features/trainer/profile/product_details/screen/product_details_screen.dart';
 import 'package:gokul_ramk/features/trainer/profile/trainer_profile/screen/all_programs_screen.dart';
@@ -101,6 +102,7 @@ class AppRoute {
   static String allProgramsScreen = '/trainer/allProgramsScreen';
   static String trainerProgramDetailsScreen = '/trainer/programDetailsScreen';
   static String createPackageScreen = '/trainer/createPackageScreen';
+  static String packageDetailsScreen = '/trainer/packageDetailsScreen';
 
   static String getSplashScreen() => splashScreen;
   static String getOnboardingScreen() => onboardingScreen;
@@ -151,6 +153,7 @@ class AppRoute {
   static String getallProgramsScreen() => allProgramsScreen;
   static String getTrainerProgramDetailsScreen() => trainerProgramDetailsScreen;
   static String getCreatePackageScreen() => createPackageScreen;
+  static String getPackageDetailsScreen() => packageDetailsScreen;
 
   static List<GetPage> routes = [
     GetPage(name: splashScreen, page: () => SplashScreen()),
@@ -243,5 +246,12 @@ class AppRoute {
       },
     ),
     GetPage(name: createPackageScreen, page: () => CreatePackageScreen()),
+    GetPage(
+      name: packageDetailsScreen,
+      page: () {
+        final packageId = Get.parameters['packageId'] ?? '';
+        return PackageDetailsScreen(packageId: packageId);
+      },
+    ),
   ];
 }

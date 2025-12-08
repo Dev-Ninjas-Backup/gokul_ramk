@@ -117,17 +117,36 @@ class CreatePackageScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    "Select Programs",
-                    style: getTextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  Row(
+                    children: [
+                      Text(
+                        "Select Programs",
+                        style: getTextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(width: 4),
+                      Text(
+                        "*",
+                        style: getTextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ],
                   ),
                   Obx(
                     () => Text(
                       "${controller.selectedProgramIds.length} selected",
-                      style: getTextStyle(fontSize: 12, color: Colors.grey),
+                      style: getTextStyle(
+                        fontSize: 12,
+                        color: controller.selectedProgramIds.isEmpty
+                            ? Colors.red
+                            : Colors.green,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ],
@@ -151,77 +170,103 @@ class CreatePackageScreen extends StatelessWidget {
                     itemCount: controller.programList.length,
                     itemBuilder: (context, index) {
                       final program = controller.programList[index];
-                      final isSelected = controller.selectedProgramIds.contains(
-                        program.id,
-                      );
 
-                      return Card(
-                        margin: const EdgeInsets.only(bottom: 8),
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          side: BorderSide(
-                            color: isSelected ? Colors.blue : Colors.grey[300]!,
-                            width: isSelected ? 2 : 1,
-                          ),
-                        ),
-                        child: ListTile(
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 8,
-                          ),
-                          leading: Checkbox(
-                            value: isSelected,
-                            onChanged: (_) {
-                              controller.toggleProgramSelection(program.id);
-                            },
-                          ),
-                          title: Text(
-                            program.name,
-                            style: getTextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
+                      return Obx(() {
+                        final isSelected = controller.selectedProgramIds
+                            .contains(program.id);
+
+                        return GestureDetector(
+                          onTap: () {
+                            Get.toNamed(
+                              '/trainer/programDetailsScreen',
+                              parameters: {'programId': program.id},
+                            );
+                          },
+                          child: Card(
+                            margin: const EdgeInsets.only(bottom: 8),
+                            elevation: isSelected ? 4 : 0,
+                            color: isSelected ? Colors.blue[50] : Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              side: BorderSide(
+                                color: isSelected
+                                    ? Colors.blue
+                                    : Colors.grey[300]!,
+                                width: isSelected ? 2 : 1,
+                              ),
                             ),
-                          ),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(height: 4),
-                              Text(
-                                program.description,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: getTextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey,
+                            child: ListTile(
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 8,
+                              ),
+                              leading: GestureDetector(
+                                onTap: () {
+                                  controller.toggleProgramSelection(program.id);
+                                },
+                                child: Checkbox(
+                                  value: isSelected,
+                                  onChanged: (_) {
+                                    controller.toggleProgramSelection(
+                                      program.id,
+                                    );
+                                  },
                                 ),
                               ),
-                              SizedBox(height: 4),
-                              Row(
+                              title: Text(
+                                program.name,
+                                style: getTextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: isSelected
+                                      ? Colors.blue
+                                      : Colors.black,
+                                ),
+                              ),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  _buildProgramTag(
-                                    "${program.durationWeeks} weeks",
-                                    Colors.blue[50]!,
+                                  SizedBox(height: 4),
+                                  Text(
+                                    program.description,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: getTextStyle(
+                                      fontSize: 12,
+                                      color: Colors.grey,
+                                    ),
                                   ),
-                                  SizedBox(width: 8),
-                                  _buildProgramTag(
-                                    "${program.sessionsPerWeek}x/week",
-                                    Colors.green[50]!,
-                                  ),
-                                  SizedBox(width: 8),
-                                  _buildProgramTag(
-                                    "\$${program.price}",
-                                    Colors.orange[50]!,
+                                  SizedBox(height: 4),
+                                  Row(
+                                    children: [
+                                      _buildProgramTag(
+                                        "${program.durationWeeks} weeks",
+                                        isSelected
+                                            ? Colors.blue[100]!
+                                            : Colors.blue[50]!,
+                                      ),
+                                      SizedBox(width: 8),
+                                      _buildProgramTag(
+                                        "${program.sessionsPerWeek}x/week",
+                                        isSelected
+                                            ? Colors.green[100]!
+                                            : Colors.green[50]!,
+                                      ),
+                                      SizedBox(width: 8),
+                                      _buildProgramTag(
+                                        "\$${program.price}",
+                                        isSelected
+                                            ? Colors.orange[100]!
+                                            : Colors.orange[50]!,
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
-                            ],
+                            ),
                           ),
-                          onTap: () {
-                            controller.toggleProgramSelection(program.id);
-                          },
-                        ),
-                      );
+                        );
+                      });
                     },
                   ),
                 ),
