@@ -12,8 +12,7 @@ class CartItemTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-  final item=controller.cartList[index];
+    final item = controller.cartList[index];
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
@@ -54,8 +53,14 @@ class CartItemTile extends StatelessWidget {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      IconButton(onPressed: (){},
-                       // onPressed: () => controller.removeItem(item),
+                      IconButton(
+                        onPressed: () async {
+                          await controller.deteleCart(
+                            item.product!.id.toString(),
+                          );
+                          await controller.getCart();
+                        },
+                        // onPressed: () => controller.removeItem(item),
                         icon: const Icon(Icons.delete, color: Colors.red),
                       ),
                     ],

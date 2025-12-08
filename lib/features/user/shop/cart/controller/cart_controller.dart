@@ -1,4 +1,7 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/foundation.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/endpoint/end_points.dart';
 import 'package:gokul_ramk/core/services/network_service/network_client.dart';
@@ -14,71 +17,172 @@ class CartController extends GetxController {
     ),
   );
 
+  @override
+  void onInit() {
+    fetchCoupons();
+    super.onInit();
+  }
+
+  /// LOADING STATE
   var isLoading = false.obs;
 
+  /// CART LIST
   RxList<CartItem2> cartList = <CartItem2>[].obs;
-  Future<void> getcart() async {
-    final response = await service.client.getRequest(
-      url: Urls.getCart,
-    );
 
-    if (response.isSuccess &&
-        (response.statusCode == 200 || response.statusCode == 201)) {
-      final data = response.responseData as Map<String, dynamic>;
-      final List list = data['items'];
-      for (var json in list) {
-        CartItem2 item = CartItem2.fromJson(json);
-        cartList.add(item);
+  /// FETCH CART ITEMS
+  Future<void> getCart() async {
+    try {
+      isLoading.value = true;
+
+      final response = await service.client.getRequest(url: Urls.getCart);
+
+      if (response.isSuccess &&
+          (response.statusCode == 200 || response.statusCode == 201)) {
+        final data = response.responseData as Map<String, dynamic>;
+        final List list = data['items'];
+
+        cartList.clear(); // Prevent duplicates
+        cartList.addAll(list.map((e) => CartItem2.fromJson(e)));
+
+        if (kDebugMode) {
+          print("Cart fetched = ${cartList.length}");
+        }
+      } else {
+        throw Exception(response.errorMessage ?? "Failed to fetch cart items");
       }
-      if (kDebugMode) {
-        print("======cart list=======${cartList.length}");
-      }
-    } else {
-      throw Exception(response.errorMessage ?? "Failed to fetch cart items");
+    } catch (e) {
+      EasyLoading.showError("Error fetching cart: $e");
+    } finally {
+      isLoading.value = false;
     }
   }
 
+  /// UPDATE ITEM QUANTITY ON SERVER
+  Future<void> updateCart(String id, int quantity) async {
+    final body = {"quantity": quantity};
+
+    try {
+      final response = await service.client.patchRequest(
+        url: "https://wellfitsync.com/cart/$id",
+        body: body,
+      );
+
+      if (response.isSuccess &&
+          (response.statusCode == 200 || response.statusCode == 201)) {
+        print("Cart updated successfully");
+      } else {
+        EasyLoading.showError(
+          "Failed to update cart: ${response.errorMessage}",
+        );
+      }
+    } catch (e) {
+      EasyLoading.showError("Error updating cart: $e");
+    }
+  }
+
+  //delete product cart
+  Future<void> deteleCart(String id) async {
+    // final body = {"quantity": quantity};
+
+    try {
+      final response = await service.client.deleteRequest(
+        "https://wellfitsync.com/cart/$id",
+      );
+
+      if (response.isSuccess &&
+          (response.statusCode == 200 || response.statusCode == 201)) {
+        EasyLoading.showInfo("Cart detete successfully");
+      } else {
+        EasyLoading.showError(
+          "Failed to delete cart: ${response.errorMessage}",
+        );
+      }
+    } catch (e) {
+      EasyLoading.showError("Error delete cart: $e");
+    }
+  }
+
+  /// APPLY PROMO CODE
   var promoDiscount = 0.0.obs;
   final shippingCost = 5.0.obs;
 
-  /// Calculate subtotal: sum of all items' price * quantity
+  /// SUBTOTAL = sum(price * qty)
   double get subtotal {
-    double sum = 0.0;
-    for (var item in cartList) {
-      sum += (item.product?.price ?? 0) * (item.quantity ?? 0);
-    }
-    return sum;
+    return cartList.fold(
+      0.0,
+      (sum, item) => sum + ((item.product?.price ?? 0) * (item.quantity ?? 0)),
+    );
   }
 
-  /// Total after discount and shipping
+  /// TOTAL = subtotal + shipping - discount
   double get total => subtotal + shippingCost.value - promoDiscount.value;
 
-  /// Increase quantity of a specific item
-  void increaseItemQty(CartItem2 item) {
-    item.quantity = (item.quantity ?? 0) + 1;
+  /// INCREASE ITEM QUANTITY (API + UI)
+  void increaseItemQty(CartItem2 item) async {
+    final newQty = (item.quantity ?? 0) + 1;
+
+    await updateCart(item.product!.id.toString(), newQty);
+
+    item.quantity = newQty;
     cartList.refresh();
   }
 
-  /// Decrease quantity of a specific item
-  void decreaseItemQty(CartItem2 item) {
+  /// DECREASE ITEM QUANTITY (API + UI)
+  void decreaseItemQty(CartItem2 item) async {
     if ((item.quantity ?? 0) > 1) {
-      item.quantity = item.quantity! - 1;
+      final newQty = item.quantity! - 1;
+
+      await updateCart(item.product!.id.toString(), newQty);
+
+      item.quantity = newQty;
       cartList.refresh();
     }
   }
 
-  /// Remove a specific item from cart
-  // void removeItem(CartItem2 item) {
-  //   cartList.remove(item);
-  //   cartList.refresh();
-  // }
+  //get copun
 
-  /// Apply promo code
-  void applyPromoCode(String code) {
-    if (code.trim().toUpperCase() == "DISCOUNT10") {
-      promoDiscount.value = 10.0;
-    } else {
-      promoDiscount.value = 0.0;
+  RxList<Map<String, dynamic>> coupons = <Map<String, dynamic>>[].obs;
+  Future<void> fetchCoupons() async {
+    final response = await service.client.getRequest(url: Urls.coupon);
+
+    if (response.isSuccess &&
+        (response.statusCode == 200 || response.statusCode == 201)) {
+      coupons.value = List<Map<String, dynamic>>.from(
+        response.responseData!['data'],
+      );
+      print("=============================number of code = ${coupons.length}");
     }
+  }
+
+  //apply promo code
+
+  void applyPromoCode(String code) {
+    code = code.trim().toUpperCase();
+
+    // find coupon
+    final coupon = coupons.firstWhere(
+      (c) => c['coupon'].toString().toUpperCase() == code,
+      orElse: () => {},
+    );
+
+    // if not exists
+    if (coupon.isEmpty) {
+      promoDiscount.value = 0.0;
+      EasyLoading.showError("Please Enter a Valid Coupon");
+
+      return;
+    }
+
+    // check expiration
+    final expireDate = DateTime.parse(coupon['expireAt']);
+    if (expireDate.isBefore(DateTime.now())) {
+      promoDiscount.value = 0.0;
+      EasyLoading.showError("Expired Coupon");
+      return;
+    }
+
+    // apply rate
+    promoDiscount.value = (coupon['rate'] as num).toDouble();
+    EasyLoading.showInfo("Discount Added");
   }
 }
