@@ -1,42 +1,49 @@
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/services/network_service/network_client.dart';
-import '../model/package_details_model.dart';
+import '../model/package_list_model.dart';
 
-class PackageDetailsController extends GetxController {
+class AllPackagesController extends GetxController {
   final NetworkClient _networkClient = Get.find<NetworkClient>();
 
+  final RxList<PackageListItem> packageList = <PackageListItem>[].obs;
   final RxBool isLoading = false.obs;
   final RxString errorMessage = ''.obs;
-  final Rx<PackageDetails?> packageDetails = Rx<PackageDetails?>(null);
 
-  Future<void> fetchPackageDetails(String packageId) async {
+  @override
+  void onInit() {
+    super.onInit();
+    fetchAllPackages();
+  }
+
+  Future<void> fetchAllPackages() async {
     try {
       isLoading.value = true;
       errorMessage.value = '';
 
       final response = await _networkClient.getRequest(
-        url: 'https://wellfitsync.com/package/$packageId',
+        url: 'https://wellfitsync.com/package',
       );
 
       if (response.isSuccess) {
-        final dynamic responseData = response.responseData;
-        Map<String, dynamic> packageJson = {};
+        final dynamic data = response.responseData;
 
-        if (responseData is Map<String, dynamic>) {
-          if (responseData['data'] is Map<String, dynamic>) {
-            packageJson = responseData['data'] as Map<String, dynamic>;
-          } else {
-            packageJson = responseData;
+        List<dynamic> packagesData = [];
+        if (data is Map<String, dynamic>) {
+          if (data['data'] is List<dynamic>) {
+            packagesData = data['data'] as List<dynamic>;
           }
+        } else if (data is List<dynamic>) {
+          packagesData = data;
         }
 
-        if (packageJson.isNotEmpty) {
-          final details = PackageDetails.fromJson(packageJson);
-          packageDetails.value = details;
-        }
+        final packages = packagesData
+            .map((p) => PackageListItem.fromJson(p as Map<String, dynamic>))
+            .toList();
+
+        packageList.assignAll(packages);
       } else {
         errorMessage.value =
-            response.errorMessage ?? 'Failed to fetch package details';
+            response.errorMessage ?? 'Failed to fetch packages';
       }
     } catch (e) {
       errorMessage.value = 'Error: ${e.toString()}';
@@ -55,9 +62,9 @@ class PackageDetailsController extends GetxController {
       );
 
       if (response.isSuccess) {
+        // Remove the deleted package from the list
+        packageList.removeWhere((item) => item.id == packageId);
         Get.snackbar('Success', 'Package deleted successfully');
-        Get.back();
-        Get.back(); // Go back twice - from details to all packages, then to previous screen
         return true;
       } else {
         errorMessage.value =

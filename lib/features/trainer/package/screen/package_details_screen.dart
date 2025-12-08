@@ -50,6 +50,27 @@ class PackageDetailsScreen extends StatelessWidget {
             color: Colors.black,
           ),
         ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Get.toNamed('/trainer/allPackagesScreen');
+            },
+            child: Text(
+              "See All",
+              style: getTextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: Colors.blue,
+              ),
+            ),
+          ),
+          IconButton(
+            onPressed: () {
+              _showDeleteConfirmation(context);
+            },
+            icon: const Icon(Icons.delete_outline, color: Colors.red),
+          ),
+        ],
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
@@ -409,5 +430,59 @@ class PackageDetailsScreen extends StatelessWidget {
 
   String _formatDate(DateTime date) {
     return "${date.day}/${date.month}/${date.year}";
+  }
+
+  void _showDeleteConfirmation(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: Text(
+            'Delete Package',
+            style: getTextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+          content: Text(
+            'Are you sure you want to delete this package? This action cannot be undone.',
+            style: getTextStyle(
+              fontSize: 14,
+              color: Colors.grey.shade700,
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Get.back(); // Close dialog
+              },
+              child: Text(
+                'Cancel',
+                style: getTextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.grey,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Get.back(); // Close dialog
+                controller.deletePackage(controller.packageDetails.value?.id ?? '');
+              },
+              child: Text(
+                'Delete',
+                style: getTextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.red,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
