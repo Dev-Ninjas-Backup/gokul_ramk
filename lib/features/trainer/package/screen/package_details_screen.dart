@@ -64,12 +64,7 @@ class PackageDetailsScreen extends StatelessWidget {
               ),
             ),
           ),
-          IconButton(
-            onPressed: () {
-              _showDeleteConfirmation(context);
-            },
-            icon: const Icon(Icons.delete_outline, color: Colors.red),
-          ),
+          
         ],
       ),
       body: Obx(() {
