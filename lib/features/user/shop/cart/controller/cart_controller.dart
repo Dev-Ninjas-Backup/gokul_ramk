@@ -106,6 +106,10 @@ class CartController extends GetxController {
   var promoDiscount = 0.0.obs;
   final shippingCost = 5.0.obs;
 
+  double get discountAmount {
+  return subtotal * (promoDiscount.value / 100);
+}
+
   /// SUBTOTAL = sum(price * qty)
   double get subtotal {
     return cartList.fold(
@@ -115,7 +119,7 @@ class CartController extends GetxController {
   }
 
   /// TOTAL = subtotal + shipping - discount
-  double get total => subtotal + shippingCost.value - promoDiscount.value;
+  double get total => subtotal + shippingCost.value - discountAmount;
 
   /// INCREASE ITEM QUANTITY (API + UI)
   void increaseItemQty(CartItem2 item) async {
