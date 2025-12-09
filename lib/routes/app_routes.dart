@@ -185,7 +185,7 @@ class AppRoute {
     GetPage(name: userNavBarScreen, page: () => UserNavBarScreen()),
     GetPage(
       name: userNotificationScreen,
-      page: () => UsereNotificationScreen(),
+      page: () => NotificationScreen(),
     ),
     GetPage(name: userBookmarkScreen, page: () => UserBookmarkScreen()),
     GetPage(
