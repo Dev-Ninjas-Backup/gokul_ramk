@@ -128,6 +128,59 @@ class NetworkClient {
     }
   }
 
+  // PUT request method
+  Future<NetworkResponse> putRequest({
+    required String url,
+    Map<String, dynamic>? body,
+  }) async {
+    Map<String, String> commonHeaders = {
+      'content-type': 'application/json',
+      'authorization': await sharedPreferencesHelper.getAccessToken() ?? '',
+    };
+
+    try {
+      Uri uri = Uri.parse(url);
+      _logRequest(url: url, headers: commonHeaders, body: body);
+
+      final http.Response response = await http.put(
+        uri,
+        headers: commonHeaders,
+        body: body != null ? jsonEncode(body) : null,
+      );
+
+      _logResponse(response: response);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final responseBody = jsonDecode(response.body);
+        return NetworkResponse(
+          statusCode: response.statusCode,
+          isSuccess: true,
+          responseData: responseBody,
+        );
+      } else if (response.statusCode == 401 || response.statusCode == 403) {
+        onUnAuthorize();
+        return NetworkResponse(
+          statusCode: response.statusCode,
+          isSuccess: false,
+          errorMessage: 'UnAuthorized',
+        );
+      } else {
+        final responseBody = jsonDecode(response.body);
+        return NetworkResponse(
+          statusCode: response.statusCode,
+          isSuccess: false,
+          errorMessage: _extractErrorMessage(responseBody['message']),
+        );
+      }
+    } catch (e) {
+      return NetworkResponse(
+        statusCode: -1,
+        isSuccess: false,
+        errorMessage: e.toString(),
+      );
+    }
+  }
+
   //patch request method
 
   Future<NetworkResponse> patchRequest({
