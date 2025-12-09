@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:gokul_ramk/features/trainer/home/home_screen/meal_plan_screen/screen/create_meal_plan_screen.dart';
 import 'package:gokul_ramk/features/trainer/home/home_screen/meal_screen/screen/create_meal_screen.dart';
 import 'package:gokul_ramk/features/trainer/program/screen/create_program.dart';
+import 'package:gokul_ramk/features/trainer/package/screen/create_package_screen.dart';
 
 import '../../../../../core/common/styles/global_text_style.dart';
 import '../../../../../core/utils/constants/icon_path.dart';
@@ -138,6 +139,40 @@ class HomeScreen extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () {
                       Get.to(CreateProgramScreen());
+                    },
+                    child: Text("Start Now"),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 12),
+            // Create Package
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.blue[50],
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "Create Package",
+                    style: getTextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 6),
+                  Text(
+                    "Bundle multiple programs into a package for your clients.",
+                    style: getTextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 12),
+                  ElevatedButton(
+                    onPressed: () {
+                      Get.to(CreatePackageScreen());
                     },
                     child: Text("Start Now"),
                   ),

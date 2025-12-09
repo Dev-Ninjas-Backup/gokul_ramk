@@ -137,7 +137,7 @@ class TellAboutTrainerController extends GetxController {
         if (uploadRes.isSuccess) {
           // assume upload returns { "url": "https://..." }
           final data = uploadRes.responseData;
-          if (data is Map && data!['file']['url'] != null) {
+          if (data is Map && data['file']['url'] != null) {
             imageUrl.value = data['file']['url'];
           }
         } else {
