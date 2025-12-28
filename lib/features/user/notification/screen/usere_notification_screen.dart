@@ -7,7 +7,7 @@ import 'package:gokul_ramk/features/user/notification/model/user_notification_mo
 import 'package:timeago/timeago.dart' as timeago;
 
 class NotificationScreen extends StatelessWidget {
-  final NotificationController controller = Get.put(NotificationController());
+  final NotificationController controller = Get.find<NotificationController>();
 
   NotificationScreen({super.key});
 
@@ -22,45 +22,50 @@ class NotificationScreen extends StatelessWidget {
       body: Column(
         children: [
           // Category selector
-          SizedBox(
-            height: 50,
-            child: Obx(
-              () => ListView.builder(
+          Obx(() {
+            final selected = controller.selectedCategory.value;
+
+            return SizedBox(
+              height: 50, // height of your category bar
+              child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
-                itemCount: controller.categories.length,
-                itemBuilder: (context, index) {
-                  final cat = controller.categories[index];
-                  final isSelected = controller.selectedCategory.value == cat;
-                  return GestureDetector(
-                    onTap: () => controller.changeCategory(cat),
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 8,
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        color: isSelected ? Colors.black : Colors.grey[300],
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Center(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                  children: List.generate(controller.categories.length, (
+                    index,
+                  ) {
+                    final cat = controller.categories[index];
+                    final isSelected = selected == cat;
+
+                    return GestureDetector(
+                      onTap: () => controller.changeCategory(cat),
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(
+                          horizontal: 5,
+                          vertical: 8,
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        decoration: BoxDecoration(
+                          color: isSelected ? Colors.black : Colors.grey[300],
+                          borderRadius: BorderRadius.circular(20),
+                        ),
                         child: Text(
                           cat.capitalize!,
                           style: TextStyle(
-                            color: isSelected ? Colors.white : Colors.grey[900],
+                            color: isSelected ? Colors.white : Colors.black,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  }),
+                ),
               ),
-            ),
-          ),
+            );
+          }),
 
           // Notification List
           Expanded(
@@ -138,7 +143,7 @@ class NotificationScreen extends StatelessWidget {
                     Text(
                       item.message ?? "",
                       maxLines: isExpanded ? null : 1,
-                    //  overflow: TextOverflow.ellipsis,
+                      //  overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontWeight: item.isRead == false
                             ? FontWeight.bold
