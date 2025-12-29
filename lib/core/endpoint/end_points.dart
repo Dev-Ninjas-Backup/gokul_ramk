@@ -70,13 +70,12 @@ class Urls {
   static String getProgramDetails(String programId) =>
       "$baseUrl/programs/$programId";
 
-      
+  //cart
+  static String addCart = "$baseUrl/cart/add";
+  static String getCart = "$baseUrl/cart";
 
-      //cart
-      static String addCart="$baseUrl/cart/add";
-      static String getCart="$baseUrl/cart";
-
-      //copun
-      static String coupon="$baseUrl/coupon";
-      
+  //coupon
+  static String coupon = "$baseUrl/coupon";
+  static String exercise = "$baseUrl/workout-exercises";
+  static String getWorkout = "$baseUrl/workouts";
 }
