@@ -1,10 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../controller/create_package_controller.dart';
 
 class CreatePackageScreen extends StatelessWidget {
   const CreatePackageScreen({super.key});
+
+  Future<void> _launchURL(String url) async {
+    try {
+      if (await canLaunchUrl(Uri.parse(url))) {
+        await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+      } else {
+        Get.snackbar("Error", "Could not launch URL");
+      }
+    } catch (e) {
+      Get.snackbar("Error", "Failed to open URL: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +26,7 @@ class CreatePackageScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Create Workout Package",
+          "Request Workout Template",
           style: getTextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -272,7 +285,7 @@ class CreatePackageScreen extends StatelessWidget {
                     child: controller.isLoading.value
                         ? CircularProgressIndicator(color: Colors.white)
                         : Text(
-                            "Create Workout Package",
+                            "Request Template",
                             style: getTextStyle(
                               color: Colors.white,
                               fontSize: 16,
