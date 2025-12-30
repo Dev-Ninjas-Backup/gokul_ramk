@@ -139,14 +139,14 @@ class ChatScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(12.0),
                 child: Row(
                   children: [
-                    GestureDetector(
-                      onTap: () => controller.pickImage(),
-                      child: CircleAvatar(
-                        radius: 20,
-                        backgroundColor: Colors.grey.shade200,
-                        child: Icon(Icons.add),
-                      ),
-                    ),
+                    // GestureDetector(
+                    //   onTap: () => controller.pickImage(),
+                    //   child: CircleAvatar(
+                    //     radius: 20,
+                    //     backgroundColor: Colors.grey.shade200,
+                    //     child: Icon(Icons.add),
+                    //   ),
+                    // ),
                     const SizedBox(width: 5),
                     if (controller.imagePath.value.isNotEmpty)
                       Stack(
@@ -178,6 +178,7 @@ class ChatScreen extends StatelessWidget {
                     Expanded(
                       child: TextField(
                         controller: controller.messageController,
+                        enabled: !controller.isLoading.value,
                         decoration: InputDecoration(
                           hintText: "Write your message",
                           border: OutlineInputBorder(
@@ -193,18 +194,39 @@ class ChatScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 8),
-                    GestureDetector(
-                      onTap: () {
-                        controller.firstMsgSent.value = true;
-                        controller.sendMessage(
-                          controller.messageController.text,
-                        );
-                      },
-                      child: CircleAvatar(
-                        radius: 24,
-                        backgroundColor: Colors.teal,
-                        child: Icon(Icons.send, color: Colors.white),
-                      ),
+                    Obx(
+                      () => controller.isLoading.value
+                          ? Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SizedBox(
+                                width: 40,
+                                height: 40,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    Colors.teal,
+                                  ),
+                                ),
+                              ),
+                            )
+                          : GestureDetector(
+                              onTap: () {
+                                if (controller
+                                    .messageController
+                                    .text
+                                    .isNotEmpty) {
+                                  controller.firstMsgSent.value = true;
+                                  controller.sendMessage(
+                                    controller.messageController.text,
+                                  );
+                                }
+                              },
+                              child: CircleAvatar(
+                                radius: 24,
+                                backgroundColor: Colors.teal,
+                                child: Icon(Icons.send, color: Colors.white),
+                              ),
+                            ),
                     ),
                   ],
                 ),
