@@ -28,9 +28,43 @@ class TrainerService {
   Future<Trainer?> getProfile() async {
     final response = await client.getRequest(url: Urls.trainerProfile);
 
+    if (kDebugMode) {
+      print(
+        '🔹 TrainerService.getProfile - raw response: ${response.responseData}',
+      );
+      print('🔹 Status Code: ${response.statusCode}');
+    }
+
     if (response.isSuccess &&
         (response.statusCode == 200 || response.statusCode == 201)) {
-      return Trainer.fromJson(response.responseData!['data']);
+      final resp = response.responseData;
+
+      // Try to handle different response shapes:
+      // - { data: { ... } }
+      // - { data: { data: { ... } } }
+      // - directly the object map
+      Map<String, dynamic>? dataMap;
+
+      if (resp is Map<String, dynamic>) {
+        if (resp.containsKey('data')) {
+          final d = resp['data'];
+          if (d is Map<String, dynamic>) {
+            dataMap = d;
+          } else if (d is List &&
+              d.isNotEmpty &&
+              d[0] is Map<String, dynamic>) {
+            dataMap = d[0] as Map<String, dynamic>;
+          }
+        } else {
+          dataMap = resp;
+        }
+      }
+
+      if (dataMap != null) {
+        if (kDebugMode)
+          print('✅ TrainerService.getProfile - parsed data: $dataMap');
+        return Trainer.fromJson(dataMap);
+      }
     }
     return null;
   }

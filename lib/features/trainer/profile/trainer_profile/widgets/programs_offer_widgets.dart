@@ -10,7 +10,9 @@ class ProgramsOfferedWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(TrainerProfileController());
+    final controller = Get.isRegistered<TrainerProfileController>()
+        ? Get.find<TrainerProfileController>()
+        : Get.put(TrainerProfileController());
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

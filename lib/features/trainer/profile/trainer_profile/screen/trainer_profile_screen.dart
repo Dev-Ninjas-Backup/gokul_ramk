@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/services/local_service/shared_preferences_helper.dart';
 import 'package:gokul_ramk/features/trainer/profile/trainer_profile/widgets/about_me_widget.dart';
@@ -17,9 +18,10 @@ class TrainerProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final SharedPreferencesHelperController sharedPreferencesHelperController =
         Get.put(SharedPreferencesHelperController());
-    final TrainerProfileController trainerProfileController = Get.put(
-      TrainerProfileController(),
-    );
+    final TrainerProfileController trainerProfileController =
+        Get.isRegistered<TrainerProfileController>()
+        ? Get.find<TrainerProfileController>()
+        : Get.put(TrainerProfileController());
 
     return Scaffold(
       body: SafeArea(
@@ -31,7 +33,10 @@ class TrainerProfileScreen extends StatelessWidget {
                 Align(
                   alignment: Alignment.topRight,
                   child: GestureDetector(
-                    onTap: () {
+                    onTap: () async {
+                      EasyLoading.show(status: 'Loading...');
+                      await trainerProfileController.fetchTrainerProfile();
+                      EasyLoading.dismiss();
                       final trainer =
                           trainerProfileController.trainerProfileData.value;
                       Get.toNamed(
@@ -40,6 +45,7 @@ class TrainerProfileScreen extends StatelessWidget {
                           trainer?.fullname ?? "",
                           trainer?.images ?? "",
                           trainer?.bio ?? "",
+                          trainer?.specializations ?? [],
                         ],
                       );
                     },
