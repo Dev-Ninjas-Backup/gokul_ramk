@@ -105,50 +105,78 @@ class BookingDetailsScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 8),
                 infoTile("Session Mode", booking.mode),
+                infoTile("Booking Type", booking.bookingType ?? booking.mode),
                 infoTile("Date & Time", booking.formattedDate),
                 infoTile("Duration", "${booking.duration} mins"),
-                infoTile("Price", "${booking.currency} ${booking.price}"),
                 infoTile(
-                  "Advance Payment",
-                  "${booking.currency} ${booking.advancePayment}",
+                  "Time",
+                  "${booking.scheduledTime} - ${booking.endTime}",
                 ),
+                infoTile("Price", "${booking.currency} ${booking.price}"),
+                if (booking.advancePayment != "0" &&
+                    booking.advancePayment.isNotEmpty)
+                  infoTile(
+                    "Advance Payment",
+                    "${booking.currency} ${booking.advancePayment}",
+                  ),
+                if (booking.location != null && booking.location!.isNotEmpty)
+                  infoTile("Location", booking.location!),
                 if (booking.assignedProgram != null)
                   infoTile("Assigned Program", booking.assignedProgram!),
                 infoTile("Status", booking.status),
-                if (booking.notes != null) infoTile("Notes", booking.notes!),
+                if (booking.meetingLink != null &&
+                    booking.meetingLink!.isNotEmpty)
+                  infoTile("Meeting Link", booking.meetingLink!),
+                if (booking.notes != null && booking.notes!.isNotEmpty)
+                  infoTile("Notes", booking.notes!),
 
                 SizedBox(height: 20),
                 Divider(),
 
-                LocationMap(latitude: 18, longitude: 18),
-
-                SizedBox(height: 24),
-
-                BottomRescheduleButton(),
-                SizedBox(height: 32),
-                GestureDetector(
-                  child: Container(
-                    height: 54,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: AppColors.primaryButtonColor,
-                    ),
-                    child: Center(
-                      child: Text(
-                        'Mark Complete',
-                        style: getTextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.secondaryButtonColor,
-                        ),
-                      ),
-                    ),
+                Text(
+                  "Trainer Info",
+                  style: getTextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
                   ),
-                  onTap: () {
-                    controller.markComplete(bookingId);
-                  },
                 ),
+                SizedBox(height: 8),
+                infoTile("Trainer Name", booking.trainer.fullname),
+                infoTile("Email", booking.trainer.email),
+                if (booking.trainer.phone != null)
+                  infoTile("Phone", booking.trainer.phone!),
+
+                // SizedBox(height: 20),
+                // Divider(),
+
+                // LocationMap(latitude: 18, longitude: 18),
+                // SizedBox(height: 24),
+
+                // BottomRescheduleButton(),
+                // SizedBox(height: 32),
+                // GestureDetector(
+                //   child: Container(
+                //     height: 54,
+                //     width: double.infinity,
+                //     decoration: BoxDecoration(
+                //       borderRadius: BorderRadius.circular(20),
+                //       color: AppColors.primaryButtonColor,
+                //     ),
+                //     child: Center(
+                //       child: Text(
+                //         'Mark Complete',
+                //         style: getTextStyle(
+                //           fontSize: 18,
+                //           fontWeight: FontWeight.w600,
+                //           color: AppColors.secondaryButtonColor,
+                //         ),
+                //       ),
+                //     ),
+                //   ),
+                //   onTap: () {
+                //     controller.markComplete(bookingId);
+                //   },
+                // ),
               ],
             ),
           );

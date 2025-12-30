@@ -1,3 +1,5 @@
+import 'package:gokul_ramk/features/trainer/message/screen/message_screen.dart';
+import 'package:gokul_ramk/features/trainer/message/screen/message_detail_screen.dart';
 import 'package:get/get.dart';
 
 import 'package:gokul_ramk/features/auth/forgot_password/screen/create_password_screen.dart';
@@ -105,6 +107,10 @@ class AppRoute {
   static String createPackageScreen = '/trainer/createPackageScreen';
   static String packageDetailsScreen = '/trainer/packageDetailsScreen';
   static String allPackagesScreen = '/trainer/allPackagesScreen';
+
+  // Message routes
+  static String messageScreen = '/message';
+  static String messageDetailScreen = '/message/detail';
 
   static String getSplashScreen() => splashScreen;
   static String getOnboardingScreen() => onboardingScreen;
@@ -253,5 +259,9 @@ class AppRoute {
       },
     ),
     GetPage(name: allPackagesScreen, page: () => AllPackagesScreen()),
+
+    // Message routes
+    GetPage(name: messageScreen, page: () => MessageScreen()),
+    GetPage(name: messageDetailScreen, page: () => MessageDetailScreen()),
   ];
 }

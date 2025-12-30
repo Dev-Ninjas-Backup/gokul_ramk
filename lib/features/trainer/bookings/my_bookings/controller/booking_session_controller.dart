@@ -69,34 +69,9 @@ class BookingSessionController extends GetxController {
         final message = result['message'] as String;
 
         if (success) {
-          // Update only the UI status
-          sessions[index] = BookingSessionModel(
-            id: session.id,
-            userId: session.userId,
-            trainerId: session.trainerId,
-            mode: session.mode,
-            duration: session.duration,
-            scheduledDate: session.scheduledDate,
-            scheduledTime: session.scheduledTime,
-            endTime: session.endTime,
-            location: session.location,
-            notes: session.notes,
-            status: 'COMPLETED',
-            price: session.price,
-            currency: session.currency,
-            advancePayment: session.advancePayment,
-            assignedProgram: session.assignedProgram,
-            cancelledAt: session.cancelledAt,
-            cancelledBy: session.cancelledBy,
-            cancellationReason: session.cancellationReason,
-            completedAt: DateTime.now(),
-            createdAt: session.createdAt,
-            updatedAt: DateTime.now(),
-            user: session.user,
-            trainer: session.trainer,
-            payment: session.payment,
-          );
           Get.snackbar('Success', message);
+          // Refresh the sessions list
+          await refreshSessions();
         } else {
           Get.snackbar('Error', message);
         }
@@ -104,6 +79,25 @@ class BookingSessionController extends GetxController {
         print('Error marking complete: $e');
         Get.snackbar('Error', 'An error occurred: $e');
       }
+    }
+  }
+
+  Future<void> markConfirm(String bookingId) async {
+    try {
+      final result = await bookingRepository.markBookingConfirm(bookingId);
+      final success = result['success'] as bool;
+      final message = result['message'] as String;
+
+      if (success) {
+        Get.snackbar('Success', message);
+        // Refresh the sessions list
+        await refreshSessions();
+      } else {
+        Get.snackbar('Error', message);
+      }
+    } catch (e) {
+      print('Error marking confirm: $e');
+      Get.snackbar('Error', 'An error occurred: $e');
     }
   }
 }

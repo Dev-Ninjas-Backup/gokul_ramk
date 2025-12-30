@@ -84,4 +84,18 @@ class BookingRepository {
       return {'success': false, 'message': e.toString()};
     }
   }
+
+  Future<Map<String, dynamic>> markBookingConfirm(String bookingId) async {
+    try {
+      final url = Urls.confirmBooking(bookingId);
+      final response = await networkClient.patchRequest(url: url, body: {});
+      return {
+        'success': response.isSuccess,
+        'message': response.errorMessage ?? 'Booking marked as confirmed',
+      };
+    } catch (e) {
+      print('Error marking booking confirm: $e');
+      return {'success': false, 'message': e.toString()};
+    }
+  }
 }
