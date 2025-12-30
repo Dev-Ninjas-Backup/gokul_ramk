@@ -217,7 +217,7 @@ class ShippingInformationScreen extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text('Express Delivery'),
-                                Text('\$9.99 (2-3 Days))'),
+                                Text('\$5 (2-3 Days))'),
                               ],
                             ),
                           ),

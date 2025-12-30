@@ -63,7 +63,7 @@ class CartController extends GetxController {
 
     try {
       final response = await service.client.patchRequest(
-        url: "https://wellfitsync.com/cart/$id",
+        url: "${Urls.baseUrl}/cart/$id",
         body: body,
       );
 
@@ -86,7 +86,7 @@ class CartController extends GetxController {
 
     try {
       final response = await service.client.deleteRequest(
-        "https://wellfitsync.com/cart/$id",
+        "${Urls.baseUrl}/cart/$id",
       );
 
       if (response.isSuccess &&
@@ -104,7 +104,7 @@ class CartController extends GetxController {
 
   /// APPLY PROMO CODE
   var promoDiscount = 0.0.obs;
-  final shippingCost = 5.0.obs;
+  final shippingCost = 0.0.obs;
 
   double get discountAmount {
   return subtotal * (promoDiscount.value / 100);
