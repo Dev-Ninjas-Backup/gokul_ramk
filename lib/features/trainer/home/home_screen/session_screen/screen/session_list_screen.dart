@@ -14,9 +14,11 @@ class SessionListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text('Sessions'),
         backgroundColor: Colors.white,
+        elevation: 0,
         centerTitle: true,
       ),
       body: Obx(() {
@@ -30,73 +32,123 @@ class SessionListScreen extends StatelessWidget {
         return ListView.separated(
           padding: const EdgeInsets.all(16),
           itemCount: controller.sessions.length,
-          separatorBuilder: (_, __) => const SizedBox(height: 8),
+          separatorBuilder: (_, __) => const SizedBox(height: 12),
           itemBuilder: (context, index) {
             final SessionModel s = controller.sessions[index];
-            return Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.grey.shade300),
-                // boxShadow: [
-                //   BoxShadow(
-                //     color: Colors.black.withValues(alpha: 0.1),
-                //     blurRadius: 4,
-                //     offset: const Offset(0, 2),
-                //   ),
-                // ],
-              ),
-              child: ListTile(
-                title: Text(
-                  s.title,
-                  style: getTextStyle(fontWeight: FontWeight.bold),
-                ),
-                subtitle: Text(s.description),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.edit),
-                      onPressed: () {
-                        Get.to(() => EditSessionScreen(sessionId: s.id));
-                      },
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.delete, color: Colors.red),
-                      onPressed: () {
-                        Get.defaultDialog(
-                          title: 'Delete Session',
-                          middleText: 'Confirm delete this session?',
-                          textCancel: 'Cancel',
-                          textConfirm: 'Delete',
-                          confirmTextColor: Colors.white,
-                          onConfirm: () async {
-                            Get.back();
-                            final res = await SessionService.deleteSessionById(
-                              s.id,
-                            );
-                            if (res.isSuccess) {
-                              Get.snackbar('Success', 'Session deleted');
-                              controller.fetchSessions(
-                                page: controller.page.value,
-                              );
-                            } else {
-                              Get.snackbar(
-                                'Error',
-                                res.errorMessage ?? 'Delete failed',
-                              );
-                            }
-                          },
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            );
+            return _buildSessionCard(s);
           },
         );
       }),
+    );
+  }
+
+  // Custom Card using Row and Column to prevent overflow
+  Widget _buildSessionCard(SessionModel s) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: Colors.grey.shade300),
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.02),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  s.title,
+                  style: getTextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  s.description,
+                  style: getTextStyle(
+                    color: Colors.grey.shade600,
+                    fontSize: 13,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(width: 12),
+
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildIconButton(
+                icon: Icons.edit_outlined,
+                color: Colors.blue,
+                onTap: () => Get.to(() => EditSessionScreen(sessionId: s.id)),
+              ),
+              const SizedBox(height: 8),
+              _buildIconButton(
+                icon: Icons.delete_outline,
+                color: Colors.red,
+                onTap: () => _confirmDelete(s),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Reusable Icon Button
+  Widget _buildIconButton({
+    required IconData icon,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(20),
+      child: Container(
+        padding: const EdgeInsets.all(8),
+        child: Icon(icon, color: color, size: 20),
+      ),
+    );
+  }
+
+  // Delete Confirmation Dialog
+  void _confirmDelete(SessionModel s) {
+    Get.defaultDialog(
+      title: 'Delete Session',
+      middleText: 'Are you sure you want to delete "${s.title}"?',
+      textCancel: 'Cancel',
+      textConfirm: 'Delete',
+      confirmTextColor: Colors.white,
+      buttonColor: Colors.red,
+      onConfirm: () async {
+        Get.back(); // close dialog
+        final res = await SessionService.deleteSessionById(s.id);
+        if (res.isSuccess) {
+          Get.snackbar('Success', 'Session deleted successfully');
+          controller.fetchSessions(page: controller.page.value);
+        } else {
+          Get.snackbar(
+            'Error',
+            res.errorMessage ?? 'Delete failed',
+            snackPosition: SnackPosition.BOTTOM,
+          );
+        }
+      },
     );
   }
 }
