@@ -26,7 +26,7 @@ class NotificationScreen extends StatelessWidget {
             final selected = controller.selectedCategory.value;
 
             return SizedBox(
-              height: 50, // height of your category bar
+              height: 50, 
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.symmetric(horizontal: 10),
