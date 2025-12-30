@@ -43,8 +43,12 @@ class NetworkClient {
         headers: commonHeaders,
       );
       _logResponse(response: response);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        final responseBody = jsonDecode(response.body);
+      if (response.statusCode == 200 ||
+          response.statusCode == 201 ||
+          response.statusCode == 204) {
+        final responseBody = response.body.isNotEmpty
+            ? jsonDecode(response.body)
+            : null;
         return NetworkResponse(
           statusCode: response.statusCode,
           isSuccess: true,
@@ -61,11 +65,15 @@ class NetworkClient {
           errorMessage: 'Un Authorize',
         );
       } else {
-        final responseBody = jsonDecode(response.body);
+        final responseBody = response.body.isNotEmpty
+            ? jsonDecode(response.body)
+            : null;
         return NetworkResponse(
           statusCode: response.statusCode,
           isSuccess: false,
-          errorMessage: _extractErrorMessage(responseBody['message']),
+          errorMessage: _extractErrorMessage(
+            responseBody != null ? responseBody['message'] : null,
+          ),
         );
       }
     } on Exception catch (e) {
@@ -96,8 +104,12 @@ class NetworkClient {
         body: body != null ? utf8.encode(jsonEncode(body)) : null,
       );
       _logResponse(response: response);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        final responseBody = jsonDecode(response.body);
+      if (response.statusCode == 200 ||
+          response.statusCode == 201 ||
+          response.statusCode == 204) {
+        final responseBody = response.body.isNotEmpty
+            ? jsonDecode(response.body)
+            : null;
         return NetworkResponse(
           statusCode: response.statusCode,
           isSuccess: true,
@@ -111,12 +123,16 @@ class NetworkClient {
           errorMessage: 'Un Authorize',
         );
       } else {
-        final responseBody = jsonDecode(response.body);
+        final responseBody = response.body.isNotEmpty
+            ? jsonDecode(response.body)
+            : null;
         return NetworkResponse(
           statusCode: response.statusCode,
           isSuccess: false,
           responseData: responseBody,
-          errorMessage: _extractErrorMessage(responseBody['message']),
+          errorMessage: _extractErrorMessage(
+            responseBody != null ? responseBody['message'] : null,
+          ),
         );
       }
     } on Exception catch (e) {
@@ -150,8 +166,12 @@ class NetworkClient {
 
       _logResponse(response: response);
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        final responseBody = jsonDecode(response.body);
+      if (response.statusCode == 200 ||
+          response.statusCode == 201 ||
+          response.statusCode == 204) {
+        final responseBody = response.body.isNotEmpty
+            ? jsonDecode(response.body)
+            : null;
         return NetworkResponse(
           statusCode: response.statusCode,
           isSuccess: true,
@@ -165,11 +185,15 @@ class NetworkClient {
           errorMessage: 'UnAuthorized',
         );
       } else {
-        final responseBody = jsonDecode(response.body);
+        final responseBody = response.body.isNotEmpty
+            ? jsonDecode(response.body)
+            : null;
         return NetworkResponse(
           statusCode: response.statusCode,
           isSuccess: false,
-          errorMessage: _extractErrorMessage(responseBody['message']),
+          errorMessage: _extractErrorMessage(
+            responseBody != null ? responseBody['message'] : null,
+          ),
         );
       }
     } catch (e) {
@@ -200,8 +224,12 @@ class NetworkClient {
         body: body != null ? utf8.encode(jsonEncode(body)) : null,
       );
       _logResponse(response: response);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        final responseBody = jsonDecode(response.body);
+      if (response.statusCode == 200 ||
+          response.statusCode == 201 ||
+          response.statusCode == 204) {
+        final responseBody = response.body.isNotEmpty
+            ? jsonDecode(response.body)
+            : null;
         return NetworkResponse(
           statusCode: response.statusCode,
           isSuccess: true,
@@ -215,11 +243,15 @@ class NetworkClient {
           errorMessage: 'Un Authorize',
         );
       } else {
-        final responseBody = jsonDecode(response.body);
+        final responseBody = response.body.isNotEmpty
+            ? jsonDecode(response.body)
+            : null;
         return NetworkResponse(
           statusCode: response.statusCode,
           isSuccess: false,
-          errorMessage: _extractErrorMessage(responseBody['message']),
+          errorMessage: _extractErrorMessage(
+            responseBody != null ? responseBody['message'] : null,
+          ),
         );
       }
     } on Exception catch (e) {
@@ -246,8 +278,12 @@ class NetworkClient {
         headers: commonHeaders,
       );
       _logResponse(response: response);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        final responseBody = jsonDecode(response.body);
+      if (response.statusCode == 200 ||
+          response.statusCode == 201 ||
+          response.statusCode == 204) {
+        final responseBody = response.body.isNotEmpty
+            ? jsonDecode(response.body)
+            : null;
         return NetworkResponse(
           statusCode: response.statusCode,
           isSuccess: true,
@@ -261,11 +297,15 @@ class NetworkClient {
           errorMessage: 'Un Authorize',
         );
       } else {
-        final responseBody = jsonDecode(response.body);
+        final responseBody = response.body.isNotEmpty
+            ? jsonDecode(response.body)
+            : null;
         return NetworkResponse(
           statusCode: response.statusCode,
           isSuccess: false,
-          errorMessage: _extractErrorMessage(responseBody['message']),
+          errorMessage: _extractErrorMessage(
+            responseBody != null ? responseBody['message'] : null,
+          ),
         );
       }
     } on Exception catch (e) {

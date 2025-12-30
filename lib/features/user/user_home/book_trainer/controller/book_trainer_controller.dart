@@ -11,6 +11,9 @@ class BookTrainerController extends GetxController {
 
   var selectedDates = <DateTime>[].obs;
 
+  // Booking mode: ONLINE, ONSITE, OFFSIDE
+  var mode = 'ONLINE'.obs;
+
   void onDateSelected(DateTime date) {
     if (selectedDates.any(
       (d) => d.year == date.year && d.month == date.month && d.day == date.day,
@@ -28,6 +31,13 @@ class BookTrainerController extends GetxController {
     if (selectedDates.isEmpty) return "";
     final formatter = DateFormat("E, MMM d"); // Example: Sat, Mar 16
     return selectedDates.map((d) => formatter.format(d)).join(", ");
+  }
+
+  /// Return first selected date formatted as yyyy-MM-dd for booking payload
+  String get scheduledDate {
+    if (selectedDates.isEmpty) return '';
+    final formatter = DateFormat('yyyy-MM-dd');
+    return formatter.format(selectedDates.first);
   }
 
   /// 👇 Make startTime reactive
