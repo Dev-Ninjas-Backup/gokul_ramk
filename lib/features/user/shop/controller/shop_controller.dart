@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/services/network_service/network_client.dart';
+import 'package:gokul_ramk/features/user/shop/model/order_response_model.dart';
 import 'package:gokul_ramk/features/user/shop/model/produt_categories_model.dart';
 import 'package:gokul_ramk/features/user/shop/model/shop_product_model.dart';
 import 'package:gokul_ramk/features/user/shop/service/shop_service.dart';
@@ -62,6 +63,7 @@ class ShopController extends GetxController {
   void onInit() {
     fetchProductCategoriesMethod();
     fetchProductMethod();
+    fetchOrders();
 
     super.onInit();
   }
@@ -179,4 +181,20 @@ class ShopController extends GetxController {
       isLoading(false);
     }
   }
+  RxList<OrderModel> orders = <OrderModel>[].obs;
+ Future<void> fetchOrders() async {
+    try {
+      isLoading(true);
+      final response = await service.fetchMyOrders();
+      orders.assignAll(response.orders ?? []);
+    } catch (e) {
+      Get.snackbar("Error", "Failed to load orders");
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  
+
+
 }

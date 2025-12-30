@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
 import 'package:gokul_ramk/core/utils/constants/icon_path.dart';
 import 'package:gokul_ramk/features/user/shop/cart/controller/cart_controller.dart';
+import 'package:gokul_ramk/features/user/shop/shipping/screen/my_order.dart';
 import 'package:gokul_ramk/features/user/shop/widget/categories_item_widget.dart';
 import 'package:gokul_ramk/features/user/shop/widget/shop_banner_widget.dart';
 import 'package:gokul_ramk/features/user/shop/widget/shop_product_widget.dart';
@@ -36,14 +37,29 @@ class ShopScreen extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      Get.toNamed(AppRoute.getUserCartScreen());
+                  Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Get.toNamed(AppRoute.getUserCartScreen());
 
-                      cartController.getCart();
-                    //  cartController.total;
-                    },
-                    child: Image.asset(IconPath.shopIcon),
+                          cartController.getCart();
+                          //  cartController.total;
+                        },
+                        child: Image.asset(IconPath.shopIcon),
+                      ),
+                      SizedBox(width: 12),
+
+                      GestureDetector(
+                        onTap: () {
+                          Get.to(MyOrdersScreen());
+
+                      //    cartController.getCart();
+                          //  cartController.total;
+                        },
+                        child: Icon(Icons.my_library_add),
+                      ),
+                    ],
                   ),
                 ],
               ),
