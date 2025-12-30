@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/services/local_service/shared_preferences_helper.dart';
+import 'package:gokul_ramk/features/auth/signup/more_trainer_information/controller/tell_about_trainer_controller.dart';
 import 'package:gokul_ramk/features/trainer/profile/trainer_profile/widgets/about_me_widget.dart';
 import 'package:gokul_ramk/features/trainer/profile/trainer_profile/widgets/my_product_widget.dart';
 import 'package:gokul_ramk/features/trainer/profile/trainer_profile/widgets/programs_offer_widgets.dart';
@@ -36,6 +37,12 @@ class TrainerProfileScreen extends StatelessWidget {
                     onTap: () async {
                       EasyLoading.show(status: 'Loading...');
                       await trainerProfileController.fetchTrainerProfile();
+
+                      // Delete the controller to ensure it re-initializes and fetches fresh data from server
+                      if (Get.isRegistered<TellAboutTrainerController>()) {
+                        Get.delete<TellAboutTrainerController>();
+                      }
+
                       EasyLoading.dismiss();
                       final trainer =
                           trainerProfileController.trainerProfileData.value;

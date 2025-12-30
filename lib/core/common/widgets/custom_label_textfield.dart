@@ -6,6 +6,7 @@ class CustomLabelTextField extends StatelessWidget {
   final TextEditingController editingController;
   final IconData? icon;
   final int? maxLine;
+  final TextInputType? keyboardType;
   const CustomLabelTextField({
     super.key,
     required this.label,
@@ -13,6 +14,7 @@ class CustomLabelTextField extends StatelessWidget {
     required this.hintText,
     this.icon,
     this.maxLine,
+    this.keyboardType,
   });
 
   @override
@@ -23,11 +25,14 @@ class CustomLabelTextField extends StatelessWidget {
       children: [
         Text(label),
         TextField(
-        maxLines: maxLine??1,
+          maxLines: maxLine ?? 1,
           controller: editingController,
+          keyboardType: keyboardType,
           decoration: InputDecoration(
             hintText: hintText,
-            prefixIcon:icon!=null ? Icon(icon, color: Colors.grey.shade400) :null,
+            prefixIcon: icon != null
+                ? Icon(icon, color: Colors.grey.shade400)
+                : null,
           ),
         ),
       ],

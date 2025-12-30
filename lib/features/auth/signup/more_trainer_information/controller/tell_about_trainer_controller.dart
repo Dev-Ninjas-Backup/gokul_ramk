@@ -21,6 +21,7 @@ class TellAboutTrainerController extends GetxController {
   final areaOfServiceController = TextEditingController();
   final bioController = TextEditingController();
   final fullNameController = TextEditingController();
+  final hourlyRateController = TextEditingController();
 
   var specializationsList = <String>[].obs;
   var sessionType = RxnString();
@@ -49,6 +50,9 @@ class TellAboutTrainerController extends GetxController {
     bioController.text = currentBio.value;
 
     // get or create availability controller
+    if (Get.isRegistered<AvailabilityController>()) {
+      Get.delete<AvailabilityController>();
+    }
     availabilityController = Get.put(AvailabilityController());
     getTrainerProfile();
   }
@@ -62,6 +66,10 @@ class TellAboutTrainerController extends GetxController {
     areaOfServiceController.dispose();
     bioController.dispose();
     fullNameController.dispose();
+    hourlyRateController.dispose();
+    if (Get.isRegistered<AvailabilityController>()) {
+      Get.delete<AvailabilityController>();
+    }
     super.onClose();
   }
 
@@ -77,16 +85,42 @@ class TellAboutTrainerController extends GetxController {
         if (body['success'] == true && body['data'] != null) {
           final data = body['data'];
 
-          fullName.value = data['fullname'] ?? '';
-          fullNameController.text = fullName.value;
+          String serverName = data['fullname'] ?? '';
+          // Only update text field if user hasn't changed it yet
+          if (fullNameController.text == fullName.value) {
+            fullNameController.text = serverName;
+          }
+          fullName.value = serverName;
 
-          imageUrl.value = data['images'] ?? '';
-          currentBio.value = data['bio'] ?? '';
-          bioController.text = currentBio.value;
+          if (data['images'] != null && data['images'].toString().isNotEmpty) {
+            imageUrl.value = data['images'];
+          }
 
+          if (data['bio'] != null) {
+            String serverBio = data['bio'];
+            // Only update bio field if user hasn't started typing
+            if (bioController.text == currentBio.value) {
+              bioController.text = serverBio;
+            }
+            currentBio.value = serverBio;
+          }
+
+          // Force update text fields from server data so they don't appear empty
           country.text = data['nationality'] ?? '';
           city.text = data['city'] ?? '';
           areaOfServiceController.text = data['areaOfService'] ?? '';
+
+          if (data['hourlyRate'] != null) {
+            // Parse and format hourly rate (e.g., show "50" instead of "50.0")
+            double rate = double.tryParse(data['hourlyRate'].toString()) ?? 0.0;
+            if (rate > 0) {
+              hourlyRateController.text = (rate % 1 == 0)
+                  ? rate.toInt().toString()
+                  : rate.toString();
+            } else {
+              hourlyRateController.text = '';
+            }
+          }
 
           if (data['sessionType'] != null) {
             String sType = data['sessionType'].toString();
@@ -105,29 +139,82 @@ class TellAboutTrainerController extends GetxController {
             );
           }
 
-          if (data['availabilities'] != null) {
-            var availData = data['availabilities'];
+          var availData = data['availabilities'] ?? data['availability'];
+          if (availData != null) {
             List<dynamic> list = [];
             if (availData is Map) list.add(availData);
             if (availData is List) list = availData;
 
+            if (kDebugMode) {
+              print("Fetching Availability: ${list.length} slots found");
+              print("Raw Availability Data: $list");
+            }
             availabilityController.slots.clear();
             for (var item in list) {
+              // Ensure item is a Map before accessing keys
+              if (item is! Map) continue;
               try {
-                String dayStr = item['day']?.toString().toLowerCase() ?? '';
+                // Trim and lowercase to avoid mismatch issues
+                String dayStr =
+                    item['day']?.toString().trim().toLowerCase() ?? '';
                 DayOfWeek? dayEnum;
                 for (var d in DayOfWeek.values) {
-                  if (d.name == dayStr) {
+                  String enumName = d.name.toLowerCase();
+                  // Check match in both directions (Mon vs Monday or Monday vs Mon)
+                  if (enumName == dayStr ||
+                      (dayStr.length >= 3 && enumName.startsWith(dayStr)) ||
+                      (enumName.length >= 3 && dayStr.startsWith(enumName))) {
                     dayEnum = d;
                     break;
                   }
                 }
 
-                if (dayEnum != null &&
-                    item['startDate'] != null &&
-                    item['endDate'] != null) {
-                  DateTime start = DateTime.parse(item['startDate']).toLocal();
-                  DateTime end = DateTime.parse(item['endDate']).toLocal();
+                // Handle various key names for start/end time (startDate, startTime, start_time)
+                var startVal =
+                    item['startDate'] ??
+                    item['startTime'] ??
+                    item['start_time'] ??
+                    item['start_date'] ??
+                    item['start'];
+                var endVal =
+                    item['endDate'] ??
+                    item['endTime'] ??
+                    item['end_time'] ??
+                    item['end_date'] ??
+                    item['end'];
+
+                // Fallback: Derive day from startDate if string match failed
+                if (dayEnum == null && startVal != null) {
+                  try {
+                    String s = startVal.toString();
+                    // Check if it looks like a date (has dashes)
+                    if (s.contains('-')) {
+                      DateTime dt = DateTime.parse(s);
+                      // weekday 1 (Mon) to 7 (Sun)
+                      // Assuming DayOfWeek enum is ordered Mon-Sun
+                      if (dt.weekday >= 1 &&
+                          dt.weekday <= 7 &&
+                          DayOfWeek.values.length >= 7) {
+                        dayEnum = DayOfWeek.values[dt.weekday - 1];
+                      }
+                    }
+                  } catch (_) {}
+                }
+
+                // Check if we have at least a day and start time
+                if (dayEnum != null && startVal != null) {
+                  String s = startVal.toString();
+                  String e =
+                      endVal?.toString() ??
+                      s; // Fallback end time to start time if missing
+
+                  // If strictly time format like HH:mm:ss (no date), prepend dummy date to avoid parse error
+                  if (!s.contains('T') && !s.contains('-')) s = "2024-01-01 $s";
+                  if (!e.contains('T') && !e.contains('-')) e = "2024-01-01 $e";
+
+                  // Parse as Local time (Server sends UTC, we convert to Local)
+                  DateTime start = DateTime.parse(s).toLocal();
+                  DateTime end = DateTime.parse(e).toLocal();
                   availabilityController.slots.add(
                     AvailabilitySlot(
                       days: {dayEnum},
@@ -137,9 +224,12 @@ class TellAboutTrainerController extends GetxController {
                   );
                 }
               } catch (e) {
-                if (kDebugMode) print("Error parsing availability: $e");
+                if (kDebugMode)
+                  print("Error parsing availability item $item: $e");
               }
             }
+            // Force refresh to ensure UI updates
+            availabilityController.slots.refresh();
           }
         }
       }
@@ -216,7 +306,7 @@ class TellAboutTrainerController extends GetxController {
       };
     }).toList();
 
-    return {
+    final Map<String, dynamic> payload = {
       "fullname": fullnameVal,
       "nationality": country.text.trim(),
       "images": finalImageUrl,
@@ -226,11 +316,16 @@ class TellAboutTrainerController extends GetxController {
       "specializations": specializationsList.toList(),
       // API expects uppercase enum values
       "sessionType": session,
-      "hourlyRate": 0,
+      "hourlyRate": double.tryParse(hourlyRateController.text.trim()) ?? 0,
       "currency": "USD",
-      // send availability as a list of objects with required fields
-      "availability": availabilityWithLocation,
     };
+
+    // Only send availability if it has items to avoid server 500 error on empty list
+    if (availabilityWithLocation.isNotEmpty) {
+      payload["availabilities"] = availabilityWithLocation;
+    }
+
+    return payload;
   }
 
   /// Submit profile: uploads image (if selected) then posts the payload
