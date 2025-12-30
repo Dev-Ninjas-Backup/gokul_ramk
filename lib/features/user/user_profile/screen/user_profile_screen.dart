@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
+import 'dart:io';
+
+import 'package:image_picker/image_picker.dart';
 import 'package:gokul_ramk/core/services/local_service/shared_preferences_helper.dart';
+import 'package:gokul_ramk/features/user/user_profile/service/user_profile_service.dart';
 import 'package:gokul_ramk/core/utils/constants/icon_path.dart';
 import 'package:gokul_ramk/features/user/user_profile/controller/user_profile_controller.dart';
+import 'package:gokul_ramk/features/user/user_profile/screen/personal_details_screen.dart';
+import 'package:gokul_ramk/features/user/user_profile/screen/fitness_info_screen.dart';
+import 'package:gokul_ramk/features/user/user_profile/screen/medical_info_view.dart';
+import 'package:gokul_ramk/features/user/bookings/screen/bookings_screen.dart';
 import 'package:gokul_ramk/features/user/user_profile/widget/settings_tile.dart';
 import 'package:gokul_ramk/features/user/user_profile/widget/user_profile_header.dart';
 import 'package:gokul_ramk/features/user/user_profile/widget/user_profile_stat_card.dart';
@@ -19,6 +27,9 @@ class UserProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.fetchProfile();
+    });
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -40,9 +51,62 @@ class UserProfileScreen extends StatelessWidget {
               // Profile Header
               Obx(
                 () => UserProfileHeader(
-                  name: controller.userName.value,
-                  onEdit: () {
-                    // Handle edit profile
+                  name: controller.userName.value.isNotEmpty
+                      ? controller.userName.value
+                      : 'No Name',
+                  email: controller.userEmail.value.isNotEmpty
+                      ? controller.userEmail.value
+                      : 'No Email',
+                  imageUrl: controller.userImage.value,
+                  onEdit: () async {
+                    try {
+                      final ImagePicker picker = ImagePicker();
+                      final XFile? picked = await picker.pickImage(
+                        source: ImageSource.gallery,
+                        imageQuality: 80,
+                      );
+                      if (picked == null) return;
+
+                      // show loading
+                      Get.dialog(
+                        const Center(child: CircularProgressIndicator()),
+                        barrierDismissible: false,
+                      );
+
+                      final file = File(picked.path);
+
+                      final uploadedUrl =
+                          await UserProfileService.uploadProfileImage(file);
+
+                      if (uploadedUrl == null) {
+                        if (Get.isDialogOpen ?? false) Get.back();
+                        Get.snackbar('Upload Failed', 'Could not upload image');
+                        return;
+                      }
+
+                      // Patch user profile with new image URL
+                      final res = await UserProfileService.updateProfile({
+                        'images': uploadedUrl,
+                      });
+
+                      if (res.isSuccess) {
+                        // Update local controller state so UI reflects change
+                        await controller.updateProfile({'images': uploadedUrl});
+                        // Optionally refetch full profile
+                        await controller.fetchProfile();
+                        if (Get.isDialogOpen ?? false) Get.back();
+                        Get.snackbar('Success', 'Profile picture updated');
+                      } else {
+                        if (Get.isDialogOpen ?? false) Get.back();
+                        Get.snackbar(
+                          'Update Failed',
+                          res.errorMessage ?? 'Try again',
+                        );
+                      }
+                    } catch (e) {
+                      if (Get.isDialogOpen ?? false) Get.back();
+                      Get.snackbar('Error', e.toString());
+                    }
                   },
                 ),
               ),
@@ -92,7 +156,9 @@ class UserProfileScreen extends StatelessWidget {
                     SettingsTile(
                       icon: Icon(Icons.person_outline, color: Colors.grey),
                       title: "Personal Details",
-                      onTap: () {},
+                      onTap: () {
+                        Get.to(() => const PersonalDetailsScreen());
+                      },
                     ),
                     const Divider(height: 1),
                     SettingsTile(
@@ -101,7 +167,9 @@ class UserProfileScreen extends StatelessWidget {
                         color: Colors.grey,
                       ),
                       title: "Fitness Info",
-                      onTap: () {},
+                      onTap: () {
+                        Get.to(() => const FitnessInfoScreen());
+                      },
                     ),
                     const Divider(height: 1),
                     SettingsTile(
@@ -116,7 +184,20 @@ class UserProfileScreen extends StatelessWidget {
                         color: Colors.grey,
                       ),
                       title: "Medical Info",
-                      onTap: () {},
+                      onTap: () {
+                        Get.to(() => const MedicalInfoScreen());
+                      },
+                    ),
+                    const Divider(height: 1),
+                    SettingsTile(
+                      icon: Icon(
+                        Icons.airplane_ticket_outlined,
+                        color: Colors.grey,
+                      ),
+                      title: "My Bookings",
+                      onTap: () {
+                        Get.to(() => BookingsScreen());
+                      },
                     ),
                     const Divider(height: 1),
                     SettingsTile(

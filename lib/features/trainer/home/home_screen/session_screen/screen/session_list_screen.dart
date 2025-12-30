@@ -5,6 +5,7 @@ import '../controller/session_list_controller.dart';
 import '../service/session_service.dart';
 import '../model/session_model.dart';
 import 'edit_session_screen.dart';
+import 'session_detail_screen.dart';
 
 class SessionListScreen extends StatelessWidget {
   final controller = Get.put(SessionListController());
@@ -62,28 +63,32 @@ class SessionListScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  s.title,
-                  style: getTextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
+            child: InkWell(
+              onTap: () => Get.to(() => SessionDetailScreen(sessionId: s.id)),
+              borderRadius: BorderRadius.circular(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    s.title,
+                    style: getTextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  s.description,
-                  style: getTextStyle(
-                    color: Colors.grey.shade600,
-                    fontSize: 13,
+                  const SizedBox(height: 4),
+                  Text(
+                    s.description,
+                    style: getTextStyle(
+                      color: Colors.grey.shade600,
+                      fontSize: 13,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
+                ],
+              ),
             ),
           ),
 

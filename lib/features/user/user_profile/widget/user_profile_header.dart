@@ -4,12 +4,16 @@ import 'package:gokul_ramk/core/utils/constants/icon_path.dart';
 
 class UserProfileHeader extends StatelessWidget {
   final String name;
+  final String email;
   final VoidCallback onEdit;
+  final String? imageUrl;
 
   const UserProfileHeader({
     super.key,
     required this.name,
+    required this.email,
     required this.onEdit,
+    this.imageUrl,
   });
 
   @override
@@ -21,9 +25,11 @@ class UserProfileHeader extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 45,
-              backgroundImage: NetworkImage(
-                "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
-              ), // replace with NetworkImage if needed
+              backgroundImage: imageUrl != null && imageUrl!.isNotEmpty
+                  ? NetworkImage(imageUrl!)
+                  : const NetworkImage(
+                      "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
+                    ),
             ),
             GestureDetector(
               onTap: onEdit,

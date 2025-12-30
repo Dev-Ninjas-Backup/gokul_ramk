@@ -18,16 +18,13 @@
 //   final controller = Get.put(ViewTrainerProfileController());
 //     final homecontroller = Get.find<UserHomeController>();
 
-
 //   ViewTrainerProfileScreen({required this.trainerId,super.key});
 
 //   final String arguments = Get.arguments ?? '';
 
-
 //   @override
 //   Widget build(BuildContext context) {
 //     homecontroller.fetchTrainerDetailsMethod(trainerId);
-
 
 //   final trainerDetails=homecontroller.trainerDetails.value;
 //     bool formMytrainer = arguments == 'myTrainer';
@@ -159,15 +156,9 @@
 //   }
 // }
 
-
-
-
-
-
-
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gokul_ramk/routes/app_routes.dart';
 import 'package:gokul_ramk/core/common/widgets/custom_app_bar_title.dart';
 import 'package:gokul_ramk/features/user/user_home/controller/user_home_controller.dart';
 import 'package:gokul_ramk/features/user/user_home/view_trainer_profile/controller/view_trainer_profile_controller.dart';
@@ -181,10 +172,7 @@ import '../widget/trainer_profile_header_widget.dart';
 class ViewTrainerProfileScreen extends StatelessWidget {
   final String trainerId;
 
-  ViewTrainerProfileScreen({
-    required this.trainerId,
-    super.key,
-  });
+  ViewTrainerProfileScreen({required this.trainerId, super.key});
 
   final profileController = Get.put(ViewTrainerProfileController());
   final homeController = Get.find<UserHomeController>();
@@ -209,9 +197,7 @@ class ViewTrainerProfileScreen extends StatelessWidget {
           final trainer = homeController.trainerDetails.value;
 
           if (trainer == null) {
-            return const Center(
-              child: Text("Trainer details not found"),
-            );
+            return const Center(child: Text("Trainer details not found"));
           }
 
           return SingleChildScrollView(
@@ -227,7 +213,7 @@ class ViewTrainerProfileScreen extends StatelessWidget {
                   imageUrl: trainer.image ?? "",
                   name: trainer.name,
                   location: trainer.city ?? "Not specified",
-                  nationality: trainer.nationality??"Not specified",
+                  nationality: trainer.nationality ?? "Not specified",
                   fromMyTrainer: fromMyTrainer,
                 ),
                 const SizedBox(height: 20),
@@ -269,6 +255,12 @@ class ViewTrainerProfileScreen extends StatelessWidget {
                       child: ElevatedButton(
                         onPressed: () {
                           profileController.checkOnboarding();
+                          // Navigate to booking screen and pass the trainer id so the booking screen
+                          // can pre-fill the trainerId automatically.
+                          Get.toNamed(
+                            AppRoute.bookTrainerScreen,
+                            arguments: trainer.id,
+                          );
                         },
                         child: Text(
                           fromMyTrainer ? 'Reschedule' : 'Book Trainer',
@@ -335,4 +327,3 @@ class ViewTrainerProfileScreen extends StatelessWidget {
     );
   }
 }
-
