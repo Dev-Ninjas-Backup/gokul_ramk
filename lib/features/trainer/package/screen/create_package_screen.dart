@@ -34,13 +34,15 @@ class CreatePackageScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          controller.isUpdateMode.value
-              ? "Update Workout"
-              : controller.templateFound.value
-              ? "Create Workout"
-              : "Request Workout Template",
-          style: getTextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        title: Obx(
+          () => Text(
+            controller.isUpdateMode.value
+                ? "Update Workout"
+                : controller.templateFound.value
+                ? "Create Workout"
+                : "Request Workout Template",
+            style: getTextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
         ),
         centerTitle: true,
         actions: [
@@ -87,37 +89,79 @@ class CreatePackageScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 16),
 
-                // Category Dropdown
-                Text(
-                  "Category",
-                  style: getTextStyle(fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: 8),
+                // Category Dropdown - Only for template request mode
                 if (controller.templateFound.value == false &&
                     controller.isUpdateMode.value == false)
-                  DropdownButtonFormField<String>(
-                    initialValue: controller.selectedCategoryId.value,
-                    items: controller.categoryList.map((category) {
-                      return DropdownMenuItem(
-                        value: category.id,
-                        child: Text(category.name ?? "Unknown"),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      controller.selectedCategoryId.value = value;
-                    },
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Category",
+                        style: getTextStyle(fontWeight: FontWeight.bold),
                       ),
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 14,
+                      SizedBox(height: 8),
+                      DropdownButtonFormField<String>(
+                        initialValue: controller.selectedCategoryId.value,
+                        items: controller.categoryList.map((category) {
+                          return DropdownMenuItem(
+                            value: category.id,
+                            child: Text(category.name ?? "Unknown"),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          controller.selectedCategoryId.value = value;
+                        },
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 14,
+                          ),
+                        ),
+                        hint: Text("Select Category"),
                       ),
-                    ),
-                    hint: Text("Select Category"),
+                      SizedBox(height: 16),
+                    ],
+                  )
+                else if (controller.templateFound.value == true &&
+                    controller.isUpdateMode.value == false)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Session",
+                        style: getTextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: 8),
+                      DropdownButtonFormField<String>(
+                        value: controller.selectedSessionId.value,
+                        items: controller.sessionsList.map((session) {
+                          return DropdownMenuItem<String>(
+                            value: session['id'],
+                            child: Text(session['title'] ?? "Unknown Session"),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          if (value != null) {
+                            controller.selectedSessionId.value = value;
+                          }
+                        },
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 14,
+                          ),
+                        ),
+                        hint: Text("Select Session"),
+                      ),
+                      SizedBox(height: 16),
+                    ],
                   ),
-                SizedBox(height: 16),
 
                 // Difficulty Dropdown
                 Text(
@@ -177,55 +221,58 @@ class CreatePackageScreen extends StatelessWidget {
                 ],
 
                 // Duration Field
-                if (controller.selectedWorkoutType.value == 'ONLINE') ...[
-                  Text(
-                    "Duration (minutes)",
-                    style: getTextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 8),
-                  TextField(
-                    controller: controller.durationController,
-                    readOnly: true,
-                    onTap: () => controller.pickDuration(context),
-                    decoration: InputDecoration(
-                      hintText: "Select Duration",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      suffixIcon: Icon(Icons.access_time, color: Colors.grey),
-                    ),
-                  ),
-                  SizedBox(height: 16),
-                ],
-
-                // Status Dropdown
                 Text(
-                  "Status",
+                  "Duration (minutes)",
                   style: getTextStyle(fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 8),
+                TextField(
+                  controller: controller.durationController,
+                  readOnly: true,
+                  onTap: () => controller.pickDuration(context),
+                  decoration: InputDecoration(
+                    hintText: "Select Duration",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    suffixIcon: Icon(Icons.access_time, color: Colors.grey),
+                  ),
+                ),
+                SizedBox(height: 16),
+
+                // Status Dropdown - Only for template request mode
                 if (controller.templateFound.value == false &&
                     controller.isUpdateMode.value == false)
-                  DropdownButtonFormField<String>(
-                    initialValue: controller.selectedStatus.value,
-                    items: controller.statusOptions.map((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                    onChanged: (newValue) {
-                      if (newValue != null) {
-                        controller.selectedStatus.value = newValue;
-                      }
-                    },
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Status",
+                        style: getTextStyle(fontWeight: FontWeight.bold),
                       ),
-                    ),
+                      SizedBox(height: 8),
+                      DropdownButtonFormField<String>(
+                        initialValue: controller.selectedStatus.value,
+                        items: controller.statusOptions.map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (newValue) {
+                          if (newValue != null) {
+                            controller.selectedStatus.value = newValue;
+                          }
+                        },
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                    ],
                   ),
-                SizedBox(height: 16),
 
                 // Cover Image Picker
                 Text(
@@ -251,9 +298,31 @@ class CreatePackageScreen extends StatelessWidget {
                                   ),
                                   fit: BoxFit.cover,
                                 )
-                              : null,
+                              : (controller.isUpdateMode.value &&
+                                        controller
+                                                .workoutToUpdate
+                                                .value
+                                                ?.coverImage !=
+                                            null
+                                    ? DecorationImage(
+                                        image: NetworkImage(
+                                          controller
+                                              .workoutToUpdate
+                                              .value!
+                                              .coverImage!,
+                                        ),
+                                        fit: BoxFit.cover,
+                                      )
+                                    : null),
                         ),
-                        child: controller.pickedImage.value == null
+                        child:
+                            (controller.pickedImage.value == null &&
+                                (controller.isUpdateMode.value == false ||
+                                    controller
+                                            .workoutToUpdate
+                                            .value
+                                            ?.coverImage ==
+                                        null))
                             ? Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [

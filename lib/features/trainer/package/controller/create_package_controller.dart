@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
@@ -26,6 +28,9 @@ class CreatePackageController extends GetxController {
   var templateFound = false.obs;
   var templateData = Rxn<Map<String, dynamic>>();
   var sessionId = Rxn<String>();
+  var sessionTitle = Rxn<String>();
+  var sessionsList = <Map<String, dynamic>>[].obs;
+  var selectedSessionId = Rxn<String>();
 
   // Update mode
   var isUpdateMode = false.obs;
@@ -140,8 +145,21 @@ class CreatePackageController extends GetxController {
 
       if (response.statusCode == 200) {
         final responseData = response.body;
-        if (responseData['id'] != null) {
+        if (responseData['data'] != null &&
+            responseData['data']['data'] is List) {
+          final sessions = responseData['data']['data'] as List;
+          sessionsList.value = List<Map<String, dynamic>>.from(
+            sessions.map((s) => Map<String, dynamic>.from(s as Map)),
+          );
+
+          if (sessionsList.isNotEmpty) {
+            selectedSessionId.value = sessionsList[0]['id'];
+            print("Sessions loaded: ${sessionsList.length} sessions available");
+          }
+        } else if (responseData['id'] != null) {
           sessionId.value = responseData['id'];
+          sessionTitle.value = responseData['title'] ?? "Session";
+          selectedSessionId.value = responseData['id'];
           print("Session ID retrieved: ${sessionId.value}");
         }
       }
@@ -349,8 +367,17 @@ class CreatePackageController extends GetxController {
       print("Update Workout Response: ${response.statusCode}");
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        Get.snackbar("Success", "Workout updated successfully");
-        Get.back();
+        Get.snackbar(
+          "Success",
+          "Workout updated successfully",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+          duration: Duration(seconds: 2),
+        );
+        Future.delayed(Duration(seconds: 2), () {
+          Get.offNamedUntil('/workout-list', (route) => false);
+        });
       } else {
         Get.snackbar(
           "Error",
@@ -415,6 +442,7 @@ class CreatePackageController extends GetxController {
       var uploadResponse = await http.Response.fromStream(streamedResponse);
 
       print("Upload Response: ${uploadResponse.statusCode}");
+      print("Upload Response Body: ${uploadResponse.body}");
 
       if (uploadResponse.statusCode != 200 &&
           uploadResponse.statusCode != 201) {
@@ -431,16 +459,19 @@ class CreatePackageController extends GetxController {
         if (responseData['url'] != null) {
           coverImageUrl = responseData['url'];
         } else if (responseData['file'] != null &&
+            responseData['file'] is Map &&
             responseData['file']['url'] != null) {
           coverImageUrl = responseData['file']['url'];
         }
       }
 
       if (coverImageUrl.isEmpty) {
-        Get.snackbar("Error", "Failed to retrieve image URL");
+        Get.snackbar("Error", "Failed to retrieve image URL from server");
         isLoading.value = false;
         return;
       }
+
+      print("Image uploaded successfully. URL: $coverImageUrl");
 
       // 2. Create workout with the new schema
       final body = {
@@ -449,7 +480,7 @@ class CreatePackageController extends GetxController {
         "duration": selectedDurationInMinutes.value,
         "description": descriptionController.text,
         "coverImage": coverImageUrl,
-        "sessionId": sessionId.value ?? "",
+        "sessionId": selectedSessionId.value ?? "",
       };
 
       print("Creating workout: $body");
@@ -465,8 +496,17 @@ class CreatePackageController extends GetxController {
       print("Create Workout Response: ${response.statusCode}");
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        Get.snackbar("Success", "Workout created successfully");
-        Get.back();
+        Get.snackbar(
+          "Success",
+          "Workout created successfully",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+          duration: Duration(seconds: 2),
+        );
+        Future.delayed(Duration(seconds: 2), () {
+          Get.offNamedUntil('/workout-list', (route) => false);
+        });
       } else {
         Get.snackbar(
           "Error",
@@ -540,13 +580,34 @@ class CreatePackageController extends GetxController {
       print(
         "Validation Response Status Code: ${validationResponse.statusCode}",
       );
+      print("Validation Response Body: ${validationResponse.body}");
 
       // Check if API validation passed
       if (validationResponse.statusCode != 200 &&
           validationResponse.statusCode != 201) {
-        Get.snackbar(
-          "Error",
-          "Failed to create package: ${validationResponse.statusText}",
+        String errorMessage = "Failed to create package";
+        final responseBody = validationResponse.body;
+
+        // Extract detailed error message from response
+        if (responseBody is Map<String, dynamic>) {
+          if (responseBody['message'] != null) {
+            errorMessage = responseBody['message'];
+          } else if (responseBody['error'] != null) {
+            errorMessage = responseBody['error'];
+          } else if (responseBody['errors'] != null) {
+            // Handle validation errors array
+            final errors = responseBody['errors'];
+            if (errors is List && errors.isNotEmpty) {
+              errorMessage = errors
+                  .map((e) => e is String ? e : e['message'] ?? e.toString())
+                  .join(', ');
+            }
+          }
+        }
+
+        _showErrorDialog(
+          title: "Template Request Failed",
+          message: errorMessage,
         );
         isLoading.value = false;
         return;
@@ -653,22 +714,54 @@ class CreatePackageController extends GetxController {
 
       print("Final POST: ${Urls.requestTemplate}");
       print("Status Code: ${finalResponse.statusCode}");
+      print("Response Body: ${finalResponse.body}");
 
       if (finalResponse.statusCode == 200 || finalResponse.statusCode == 201) {
         final responseData = finalResponse.body;
         if (responseData['success'] == true) {
-          Get.snackbar("Success", "Workout template created successfully");
-          Get.back();
-        } else {
           Get.snackbar(
-            "Error",
-            responseData['message'] ?? "Failed to create package",
+            "Success",
+            "Workout template created successfully",
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.green,
+            colorText: Colors.white,
+            duration: Duration(seconds: 2),
+          );
+          Future.delayed(Duration(seconds: 2), () {
+            Get.offNamedUntil('/workout-list', (route) => false);
+          });
+        } else {
+          String errorMessage =
+              responseData['message'] ?? "Failed to create package";
+          _showErrorDialog(
+            title: "Template Request Failed",
+            message: errorMessage,
           );
         }
       } else {
-        Get.snackbar(
-          "Error",
-          "Failed to create package: ${finalResponse.statusText}",
+        String errorMessage = "Failed to create package";
+        final responseBody = finalResponse.body;
+
+        // Extract detailed error message from response
+        if (responseBody is Map<String, dynamic>) {
+          if (responseBody['message'] != null) {
+            errorMessage = responseBody['message'];
+          } else if (responseBody['error'] != null) {
+            errorMessage = responseBody['error'];
+          } else if (responseBody['errors'] != null) {
+            // Handle validation errors array
+            final errors = responseBody['errors'];
+            if (errors is List && errors.isNotEmpty) {
+              errorMessage = errors
+                  .map((e) => e is String ? e : e['message'] ?? e.toString())
+                  .join(', ');
+            }
+          }
+        }
+
+        _showErrorDialog(
+          title: "Template Request Failed",
+          message: errorMessage,
         );
       }
     } catch (e) {
@@ -700,6 +793,19 @@ class CreatePackageController extends GetxController {
         } catch (e) {
           Get.snackbar("Error", "Failed to open URL: $e");
         }
+      },
+    );
+  }
+
+  void _showErrorDialog({required String title, required String message}) {
+    Get.defaultDialog(
+      title: title,
+      middleText: message,
+      textConfirm: "OK",
+      confirmTextColor: Colors.white,
+      buttonColor: Colors.red,
+      onConfirm: () {
+        Get.back();
       },
     );
   }
