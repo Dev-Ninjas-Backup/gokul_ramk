@@ -78,17 +78,29 @@ class AvailabilityController extends GetxController {
   List<Map<String, dynamic>> toApiList() {
     final List<Map<String, dynamic>> result = [];
     for (final slot in slots) {
-      final start =
-          '${_two(slot.startTime.hour)}:${_two(slot.startTime.minute)}:00';
-      final end = '${_two(slot.endTime.hour)}:${_two(slot.endTime.minute)}:00';
-
       for (final d in slot.days) {
         final date = d.toDateInUpcomingWeek();
-        final dateStr = '${date.year}-${_two(date.month)}-${_two(date.day)}';
+
+        // Create DateTime with local time
+        final startDateTime = DateTime(
+          date.year,
+          date.month,
+          date.day,
+          slot.startTime.hour,
+          slot.startTime.minute,
+        );
+        final endDateTime = DateTime(
+          date.year,
+          date.month,
+          date.day,
+          slot.endTime.hour,
+          slot.endTime.minute,
+        );
+
         result.add({
           "day": d.apiName,
-          "startDate": '${dateStr}T$start.000Z',
-          "endDate": '${dateStr}T$end.000Z',
+          "startDate": startDateTime.toUtc().toIso8601String(),
+          "endDate": endDateTime.toUtc().toIso8601String(),
         });
       }
     }

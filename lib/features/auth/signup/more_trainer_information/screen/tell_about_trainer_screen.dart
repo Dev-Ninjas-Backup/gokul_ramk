@@ -161,6 +161,14 @@ class TellAboutTrainerScreen extends StatelessWidget {
                   hintText: 'Add your Area',
                 ),
 
+                const SizedBox(height: 16),
+                CustomLabelTextField(
+                  label: 'Hourly Rate (USD)',
+                  editingController: controller.hourlyRateController,
+                  hintText: 'Enter hourly rate',
+                  keyboardType: TextInputType.number,
+                ),
+
                 //Gender
                 const SizedBox(height: 16),
                 CustomLabelTextField(
@@ -187,7 +195,13 @@ class TellAboutTrainerScreen extends StatelessWidget {
                       child: Obx(
                         () => DropdownButton<String>(
                           isExpanded: true,
-                          value: controller.sessionType.value,
+                          value:
+                              [
+                                'Online',
+                                'Onsite',
+                              ].contains(controller.sessionType.value)
+                              ? controller.sessionType.value
+                              : null,
                           underline: const SizedBox(),
                           hint: const Text("Select your session type"),
                           items: ['Online', 'Onsite'].map((f) {
@@ -196,8 +210,9 @@ class TellAboutTrainerScreen extends StatelessWidget {
                               child: Text(f[0].toUpperCase() + f.substring(1)),
                             );
                           }).toList(),
-                          onChanged: (val) =>
-                              controller.sessionType.value = val,
+                          onChanged: (val) {
+                            if (val != null) controller.sessionType.value = val;
+                          },
                         ),
                       ),
                     ),
@@ -283,7 +298,9 @@ class TellAboutTrainerScreen extends StatelessWidget {
 
                 SizedBox(height: 16),
 
-                AvailabilityScreen(),
+                AvailabilityScreen(
+                  controller: controller.availabilityController,
+                ),
 
                 const SizedBox(height: 8),
                 ElevatedButton(

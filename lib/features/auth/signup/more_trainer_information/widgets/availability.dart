@@ -5,11 +5,12 @@ import 'package:get/get.dart';
 import '../controller/availability_controller.dart';
 
 class AvailabilityScreen extends StatelessWidget {
-  AvailabilityScreen({super.key});
-  final controller = Get.find<AvailabilityController>();
+  final AvailabilityController? controller;
+  const AvailabilityScreen({super.key, this.controller});
 
   @override
   Widget build(BuildContext context) {
+    final ctrl = controller ?? Get.find<AvailabilityController>();
     final RenderBox? renderBox = context.findRenderObject() as RenderBox?;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -21,9 +22,9 @@ class AvailabilityScreen extends StatelessWidget {
             spacing: 10,
             runSpacing: 8,
             children: DayOfWeek.values.map((d) {
-              final selected = controller.selectedDays.contains(d);
+              final selected = ctrl.selectedDays.contains(d);
               return GestureDetector(
-                onTap: () => controller.toggleDay(d),
+                onTap: () => ctrl.toggleDay(d),
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
                   padding: const EdgeInsets.symmetric(
@@ -50,31 +51,43 @@ class AvailabilityScreen extends StatelessWidget {
         const SizedBox(height: 16),
         Row(
           children: [
-            Expanded(child: _timePicker(context, renderBox, isStart: true)),
+            Expanded(
+              child: _timePicker(
+                context,
+                renderBox,
+                controller: ctrl,
+                isStart: true,
+              ),
+            ),
             const SizedBox(width: 16),
-            Expanded(child: _timePicker(context, renderBox, isStart: false)),
+            Expanded(
+              child: _timePicker(
+                context,
+                renderBox,
+                controller: ctrl,
+                isStart: false,
+              ),
+            ),
           ],
         ),
         const SizedBox(height: 12),
         Obx(
           () => ElevatedButton(
-            onPressed: controller.selectedDays.isEmpty
-                ? null
-                : controller.addOrUpdateSlot,
+            onPressed: ctrl.selectedDays.isEmpty ? null : ctrl.addOrUpdateSlot,
             child: const Text("Add Availability"),
           ),
         ),
         const SizedBox(height: 12),
         Obx(() {
-          if (controller.slots.isEmpty) {
+          if (ctrl.slots.isEmpty) {
             return const Text("No availability added yet");
           }
           return SizedBox(
-          height: 200,
+            height: 200,
             child: ListView.builder(
-              itemCount: controller.slots.length,
+              itemCount: ctrl.slots.length,
               itemBuilder: (context, i) {
-                final slot = controller.slots[i];
+                final slot = ctrl.slots[i];
                 final days = slot.days.map((d) => d.displayName).join(", ");
                 return Card(
                   margin: const EdgeInsets.symmetric(vertical: 6),
@@ -85,7 +98,7 @@ class AvailabilityScreen extends StatelessWidget {
                     ),
                     trailing: IconButton(
                       icon: const Icon(Icons.delete, color: Colors.redAccent),
-                      onPressed: () => controller.removeSlotAt(i),
+                      onPressed: () => ctrl.removeSlotAt(i),
                     ),
                   ),
                 );
@@ -100,9 +113,9 @@ class AvailabilityScreen extends StatelessWidget {
   Widget _timePicker(
     BuildContext context,
     RenderBox? renderBox, {
+    required AvailabilityController controller,
     required bool isStart,
   }) {
-    final controller = Get.find<AvailabilityController>();
     return Obx(() {
       final t = isStart ? controller.startTime.value : controller.endTime.value;
       return Column(
