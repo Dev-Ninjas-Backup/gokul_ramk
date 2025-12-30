@@ -6,6 +6,8 @@ import 'package:gokul_ramk/features/trainer/program/screen/create_program.dart';
 import 'package:gokul_ramk/features/trainer/package/screen/create_package_screen.dart';
 import 'package:gokul_ramk/features/trainer/home/home_screen/exercise_screen/screen/create_exercise_screen.dart';
 import 'package:gokul_ramk/features/trainer/home/home_screen/exercise_screen/screen/exercise_list_screen.dart';
+import 'package:gokul_ramk/features/trainer/home/home_screen/session_screen/screen/create_session_screen.dart';
+import 'package:gokul_ramk/features/trainer/home/home_screen/session_screen/screen/session_list_screen.dart';
 
 import '../../../../../core/common/styles/global_text_style.dart';
 import '../../../../../core/utils/constants/icon_path.dart';
@@ -335,6 +337,72 @@ class HomeScreen extends StatelessWidget {
                       Get.to(() => CreateMealPlanScreen());
                     },
                     child: Text("Start Now"),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 12),
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.blue[50],
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "Create Session",
+                    style: getTextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 6),
+                  Text(
+                    "Create a new training session",
+                    style: getTextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 12),
+                  ElevatedButton(
+                    onPressed: () {
+                      Get.to(() => CreateSessionScreen());
+                    },
+                    child: Text("Open"),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 12),
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.teal[50],
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "View Sessions",
+                    style: getTextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 6),
+                  Text(
+                    "Browse and manage sessions.",
+                    style: getTextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 12),
+                  ElevatedButton(
+                    onPressed: () {
+                      Get.to(() => SessionListScreen());
+                    },
+                    child: Text("Open"),
                   ),
                 ],
               ),
