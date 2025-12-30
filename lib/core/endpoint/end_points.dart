@@ -78,6 +78,10 @@ class Urls {
   static String coupon = "$baseUrl/coupon";
   static String exercise = "$baseUrl/workout-exercises";
   static String getWorkout = "$baseUrl/workouts";
+  static String createSession = "$baseUrl/session";
+  static String myPackage = "$baseUrl/package/my-package";
+  static String myProgram = "$baseUrl/programs/my-programs";
+  static String getCategories = "$baseUrl/categories";
 
   // Workout/Package endpoints
   static const String workoutTemplate =
