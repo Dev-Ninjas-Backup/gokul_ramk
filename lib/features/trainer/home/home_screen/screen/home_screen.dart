@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:gokul_ramk/features/trainer/home/home_screen/meal_plan_screen/screen/create_meal_plan_screen.dart';
 import 'package:gokul_ramk/features/trainer/home/home_screen/meal_screen/screen/create_meal_screen.dart';
 import 'package:gokul_ramk/features/trainer/program/screen/create_program.dart';
-import 'package:gokul_ramk/features/trainer/package/screen/create_package_screen.dart';
+import 'package:gokul_ramk/features/trainer/workout/screen/create_workout_screen.dart';
 import 'package:gokul_ramk/features/trainer/home/home_screen/exercise_screen/screen/create_exercise_screen.dart';
 import 'package:gokul_ramk/features/trainer/home/home_screen/exercise_screen/screen/exercise_list_screen.dart';
 import 'package:gokul_ramk/features/trainer/home/home_screen/session_screen/screen/create_session_screen.dart';
