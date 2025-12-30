@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
-import '../controller/create_package_controller.dart';
+import '../controller/create_workout_controller.dart';
 import '../model/workout_model.dart';
 import 'workout_list_screen.dart';
 

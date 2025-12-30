@@ -21,9 +21,9 @@ import 'package:gokul_ramk/features/trainer/community/challenges/screen/create_c
 import 'package:gokul_ramk/features/trainer/community/events/screen/create_event_screen.dart';
 import 'package:gokul_ramk/features/trainer/home/home_screen/screen/home_screen.dart';
 import 'package:gokul_ramk/features/trainer/my_clients/client_profile/sceen/client_profile_screen.dart';
-import 'package:gokul_ramk/features/trainer/package/screen/create_package_screen.dart';
-import 'package:gokul_ramk/features/trainer/package/screen/package_details_screen.dart';
-import 'package:gokul_ramk/features/trainer/package/screen/all_packages_screen.dart';
+import 'package:gokul_ramk/features/trainer/workout/screen/create_workout_screen.dart';
+import 'package:gokul_ramk/features/trainer/workout/screen/package_details_screen.dart';
+import 'package:gokul_ramk/features/trainer/workout/screen/all_packages_screen.dart';
 import 'package:gokul_ramk/features/trainer/profile/add_product/screen/add_product_screen.dart';
 import 'package:gokul_ramk/features/trainer/profile/product_details/screen/product_details_screen.dart';
 import 'package:gokul_ramk/features/trainer/profile/trainer_profile/screen/all_programs_screen.dart';
@@ -191,10 +191,7 @@ class AppRoute {
 
     //User
     GetPage(name: userNavBarScreen, page: () => UserNavBarScreen()),
-    GetPage(
-      name: userNotificationScreen,
-      page: () => NotificationScreen(),
-    ),
+    GetPage(name: userNotificationScreen, page: () => NotificationScreen()),
     GetPage(name: userBookmarkScreen, page: () => UserBookmarkScreen()),
     GetPage(
       name: viewTrainerProfileScreen,

@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
 import 'package:gokul_ramk/core/endpoint/end_points.dart';
 import '../model/workout_model.dart';
-import 'create_package_screen.dart';
+import 'create_workout_screen.dart';
 
 class WorkoutDetailsScreen extends StatelessWidget {
   final Workout workout;
