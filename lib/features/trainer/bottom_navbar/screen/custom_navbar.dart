@@ -4,6 +4,7 @@ import 'package:gokul_ramk/features/trainer/bookings/my_bookings/screen/my_booki
 import 'package:gokul_ramk/features/trainer/bottom_navbar/controller/navbar_controller.dart';
 import 'package:gokul_ramk/features/trainer/community/posts/screen/trainer_community_screen.dart';
 import 'package:gokul_ramk/features/trainer/profile/trainer_profile/screen/trainer_profile_screen.dart';
+import 'package:gokul_ramk/features/trainer/message/screen/message_screen.dart';
 
 import '../../home/home_screen/screen/home_screen.dart';
 import '../../../../core/utils/constants/icon_path.dart';
@@ -19,7 +20,7 @@ class NavBarScreen extends StatelessWidget {
       const HomeScreen(),
       // const MyClientsScreen(),
       const MyBookingsScreen(),
-
+      const MessageScreen(),
       TrainerCommunityScreen(),
       TrainerProfileScreen(),
     ];
@@ -28,6 +29,7 @@ class NavBarScreen extends StatelessWidget {
       IconPath.homeIcon,
       // IconPath.programIcon,
       IconPath.calendarIcon,
+      IconPath.messageIcon,
       IconPath.groupIcon,
       IconPath.peopleIcon,
     ];

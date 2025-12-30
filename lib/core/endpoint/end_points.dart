@@ -63,6 +63,7 @@ class Urls {
   // Bookings endpoints
   static const String getBookings = "$baseUrl/bookings";
   static String completeBooking(String id) => "$getBookings/$id/complete";
+  static String confirmBooking(String id) => "$getBookings/$id/confirm";
   static const String getTopTrainer = "$baseUrl/trainer/top-trainers";
 
   // Programs endpoints
@@ -96,4 +97,10 @@ class Urls {
   static const String packages = "$baseUrl/package";
   static String packageDetails(String packageId) =>
       "$baseUrl/package/$packageId";
+
+  // Message endpoints
+  static const String uniqueConversations =
+      "$baseUrl/message/unique-conversation";
+  static String conversation(String senderId, String receiverId) =>
+      "$baseUrl/message/conversation/$senderId/$receiverId";
 }

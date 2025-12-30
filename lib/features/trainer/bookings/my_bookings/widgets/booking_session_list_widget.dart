@@ -64,6 +64,7 @@ class BookingSessionListWidget extends StatelessWidget {
           return BookingSessionCard(
             session: session,
             onMarkComplete: () => controller.markComplete(index),
+            onMarkConfirm: (id) => controller.markConfirm(id),
           );
         },
       );
@@ -74,11 +75,13 @@ class BookingSessionListWidget extends StatelessWidget {
 class BookingSessionCard extends StatelessWidget {
   final BookingSessionModel session;
   final VoidCallback onMarkComplete;
+  final Function(String) onMarkConfirm;
 
   const BookingSessionCard({
     super.key,
     required this.session,
     required this.onMarkComplete,
+    required this.onMarkConfirm,
   });
 
   String _getUserName() {
@@ -158,64 +161,74 @@ class BookingSessionCard extends StatelessWidget {
               ),
             ),
             SizedBox(width: 8),
-            SizedBox(
-              width: 120,
-              child: Column(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Get.toNamed(AppRoute.userChatScreen);
+            PopupMenuButton(
+              onSelected: (value) {
+                if (value == 'message') {
+                  Get.toNamed(
+                    AppRoute.messageDetailScreen,
+                    arguments: {
+                      'conversationId': session.user.id,
+                      'partnerId': session.user.id,
+                      'partnerName': session.user.fullname,
+                      'partnerImage': null,
                     },
-                    child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 8),
-                      decoration: BoxDecoration(
-                        color: Colors.blue.shade50,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      alignment: Alignment.center,
-                      child: Text(
-                        "Message",
-                        style: getTextStyle(
-                          color: AppColors.primaryFontColor,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+                  );
+                } else if (value == 'complete') {
+                  onMarkComplete();
+                } else if (value == 'confirm') {
+                  onMarkConfirm(session.id);
+                } else if (value == 'details') {
+                  Get.to(() => BookingDetailsScreen(bookingId: session.id));
+                }
+              },
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  value: 'message',
+                  child: Row(
+                    children: [
+                      Icon(Icons.message, size: 18),
+                      SizedBox(width: 8),
+                      Text('Message'),
+                    ],
+                  ),
+                ),
+                if (session.status.toUpperCase() == 'PENDING')
+                  PopupMenuItem(
+                    value: 'confirm',
+                    child: Row(
+                      children: [
+                        Icon(Icons.check_circle, size: 18),
+                        SizedBox(width: 8),
+                        Text('Mark Confirm'),
+                      ],
                     ),
                   ),
-                  SizedBox(height: 18),
-                  GestureDetector(
-                    onTap:
-                        session.status.toUpperCase() == 'PENDING' ||
-                            session.status.toUpperCase() == 'CONFIRMED'
-                        ? onMarkComplete
-                        : () {
-                            Get.to(
-                              () => BookingDetailsScreen(bookingId: session.id),
-                            );
-                          },
-                    child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 3),
-                      decoration: BoxDecoration(
-                        color: Colors.blue.shade400,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      alignment: Alignment.center,
-                      child: Text(
-                        session.status.toUpperCase() == 'PENDING' ||
-                                session.status.toUpperCase() == 'CONFIRMED'
-                            ? "Mark Complete"
-                            : "View Details",
-                        style: getTextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+                if (session.status.toUpperCase() == 'PENDING' ||
+                    session.status.toUpperCase() == 'CONFIRMED')
+                  PopupMenuItem(
+                    value: 'complete',
+                    child: Row(
+                      children: [
+                        Icon(Icons.done_all, size: 18),
+                        SizedBox(width: 8),
+                        Text('Mark Complete'),
+                      ],
                     ),
                   ),
-                ],
-              ),
+                // if (session.status.toUpperCase() != 'PENDING' &&
+                //     session.status.toUpperCase() != 'CONFIRMED')
+                PopupMenuItem(
+                  value: 'details',
+                  child: Row(
+                    children: [
+                      Icon(Icons.info, size: 18),
+                      SizedBox(width: 8),
+                      Text('View Details'),
+                    ],
+                  ),
+                ),
+              ],
+              icon: Icon(Icons.more_vert, color: AppColors.primaryColor),
             ),
           ],
         ),

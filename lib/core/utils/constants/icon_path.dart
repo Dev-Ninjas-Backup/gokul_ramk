@@ -37,6 +37,7 @@ class IconPath {
   static const String agentIcon = 'assets/icons/ai_Chat.png';
   static const String favoriteIcon = 'assets/icons/favorite.png';
   static const String commentIcon = 'assets/icons/comment.png';
+  static const String messageIcon = 'assets/icons/message.png';
 
   static const String productSample = 'assets/icons/productSample.png';
   static const String cardio = 'assets/icons/cardio.png';

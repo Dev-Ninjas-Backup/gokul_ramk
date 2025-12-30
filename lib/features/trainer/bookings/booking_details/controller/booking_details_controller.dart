@@ -35,10 +35,24 @@ class BookingDetailsController extends GetxController {
     }
   }
 
-  void markComplete(String bookingId) {
-    // Implement API call to mark booking as complete
-    print('Marking booking $bookingId as complete');
-    Get.back();
+  Future<void> markComplete(String bookingId) async {
+    try {
+      final result = await bookingRepository.markBookingComplete(bookingId);
+      final success = result['success'] as bool;
+      final message = result['message'] as String;
+
+      if (success) {
+        Get.snackbar('Success', message);
+        Future.delayed(Duration(seconds: 1), () {
+          Get.back();
+        });
+      } else {
+        Get.snackbar('Error', message);
+      }
+    } catch (e) {
+      print('Error marking complete: $e');
+      Get.snackbar('Error', 'An error occurred: $e');
+    }
   }
 
   void reschedule(String bookingId) {
