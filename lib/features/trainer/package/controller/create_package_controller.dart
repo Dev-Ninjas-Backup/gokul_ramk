@@ -4,11 +4,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/services/local_service/shared_preferences_helper.dart';
+import 'package:gokul_ramk/core/endpoint/end_points.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:path/path.dart' as path;
+import 'package:url_launcher/url_launcher.dart';
 import '../model/category_model.dart';
+import '../model/workout_model.dart';
 
 class CreatePackageController extends GetxController {
   final nameController = TextEditingController();
@@ -18,6 +21,15 @@ class CreatePackageController extends GetxController {
   var isLoading = false.obs;
   var categoryList = <CategoryItem>[].obs;
   var selectedDurationInMinutes = 0.obs;
+
+  // Template state
+  var templateFound = false.obs;
+  var templateData = Rxn<Map<String, dynamic>>();
+  var sessionId = Rxn<String>();
+
+  // Update mode
+  var isUpdateMode = false.obs;
+  var workoutToUpdate = Rxn<Workout>();
 
   // Dropdown selections
   var selectedDifficulty = 'INTERMEDIATE'.obs;
@@ -45,7 +57,97 @@ class CreatePackageController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    getCategories();
+    // Check if this is update mode
+    if (workoutToUpdate.value != null) {
+      isUpdateMode.value = true;
+      _populateUpdateFields(workoutToUpdate.value!);
+    } else {
+      checkTemplate();
+      getSession();
+      getCategories();
+    }
+  }
+
+  void _populateUpdateFields(Workout workout) {
+    nameController.text = workout.name ?? "";
+    descriptionController.text = workout.description ?? "";
+    selectedDifficulty.value = workout.difficulty ?? "INTERMEDIATE";
+    selectedDurationInMinutes.value = workout.duration ?? 0;
+    _updateDurationText();
+    print("Update mode: Prefilled fields from workout ${workout.id}");
+  }
+
+  void populateUpdateFields(Workout workout) {
+    _populateUpdateFields(workout);
+  }
+
+  Future<void> checkTemplate() async {
+    try {
+      final SharedPreferencesHelperController sharedPreference = Get.put(
+        SharedPreferencesHelperController(),
+      );
+      String? token = await sharedPreference.getAccessToken();
+
+      final response = await GetConnect().get(
+        Urls.workoutTemplate,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token ?? '',
+        },
+      );
+
+      print("Template Check Response: ${response.statusCode}");
+
+      if (response.statusCode == 200) {
+        final responseData = response.body;
+        if (responseData['data'] != null) {
+          templateFound.value = true;
+          templateData.value = responseData['data'];
+          _populateFieldsFromTemplate(responseData['data']);
+          print("Template found and fields populated");
+        }
+      } else if (response.statusCode == 404) {
+        templateFound.value = false;
+        print("No template found");
+      }
+    } catch (e) {
+      print("Error checking template: $e");
+      templateFound.value = false;
+    }
+  }
+
+  void _populateFieldsFromTemplate(Map<String, dynamic> template) {
+    // Don't pre-fill fields, just mark template as found
+    print("Template found, ready for workout creation");
+  }
+
+  Future<void> getSession() async {
+    try {
+      final SharedPreferencesHelperController sharedPreference = Get.put(
+        SharedPreferencesHelperController(),
+      );
+      String? token = await sharedPreference.getAccessToken();
+
+      final response = await GetConnect().get(
+        Urls.session,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token ?? '',
+        },
+      );
+
+      print("Session API Response: ${response.statusCode}");
+
+      if (response.statusCode == 200) {
+        final responseData = response.body;
+        if (responseData['id'] != null) {
+          sessionId.value = responseData['id'];
+          print("Session ID retrieved: ${sessionId.value}");
+        }
+      }
+    } catch (e) {
+      print("Error fetching session: $e");
+    }
   }
 
   void pickDuration(BuildContext context) {
@@ -118,7 +220,7 @@ class CreatePackageController extends GetxController {
       String? token = await sharedPreference.getAccessToken();
 
       final response = await GetConnect().get(
-        'https://wellfitsync.com/categories',
+        Urls.categories,
         headers: {
           'Content-Type': 'application/json',
           'Authorization': token ?? '',
@@ -149,14 +251,132 @@ class CreatePackageController extends GetxController {
   }
 
   Future<void> createPackage() async {
-    if (pickedImage.value == null) {
-      Get.snackbar("Error", "Please select a cover image");
+    if (isUpdateMode.value) {
+      // Update mode
+      await _updateWorkout();
+    } else if (templateFound.value) {
+      // Create workout mode
+      await _createWorkout();
+    } else {
+      // Request template mode
+      await _requestTemplate();
+    }
+  }
+
+  Future<void> _updateWorkout() async {
+    if (nameController.text.trim().isEmpty) {
+      Get.snackbar("Error", "Please enter a workout name");
       return;
     }
 
+    if (descriptionController.text.trim().isEmpty) {
+      Get.snackbar("Error", "Please enter a description");
+      return;
+    }
 
-    if (selectedCategoryId.value == null) {
-      Get.snackbar("Error", "Please select a category");
+    isLoading.value = true;
+    try {
+      final SharedPreferencesHelperController sharedPreference = Get.put(
+        SharedPreferencesHelperController(),
+      );
+      String? token = await sharedPreference.getAccessToken();
+      String coverImageUrl = workoutToUpdate.value?.coverImage ?? "";
+
+      // If user picked a new image, upload it
+      if (pickedImage.value != null) {
+        var request = http.MultipartRequest('POST', Uri.parse(Urls.uploadFile));
+        request.headers['Authorization'] = token ?? '';
+
+        final file = pickedImage.value!;
+        final ext = path.extension(file.path).toLowerCase();
+        String mimeType = 'jpeg';
+        if (ext == '.png') {
+          mimeType = 'png';
+        }
+
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            'file',
+            file.path,
+            contentType: MediaType('image', mimeType),
+          ),
+        );
+
+        print("Uploading new image for workout update...");
+        var streamedResponse = await request.send();
+        var uploadResponse = await http.Response.fromStream(streamedResponse);
+
+        if (uploadResponse.statusCode != 200 &&
+            uploadResponse.statusCode != 201) {
+          Get.snackbar(
+            "Error",
+            "Image upload failed: ${uploadResponse.statusCode}",
+          );
+          isLoading.value = false;
+          return;
+        }
+
+        final responseData = jsonDecode(uploadResponse.body);
+        if (responseData is Map<String, dynamic>) {
+          if (responseData['url'] != null) {
+            coverImageUrl = responseData['url'];
+          } else if (responseData['file'] != null &&
+              responseData['file']['url'] != null) {
+            coverImageUrl = responseData['file']['url'];
+          }
+        }
+      }
+
+      // Update workout
+      final body = {
+        "name": nameController.text,
+        "difficulty": selectedDifficulty.value,
+        "duration": selectedDurationInMinutes.value,
+        "description": descriptionController.text,
+        "coverImage": coverImageUrl,
+      };
+
+      print("Updating workout ${workoutToUpdate.value?.id}: $body");
+      final response = await GetConnect().patch(
+        Urls.updateWorkout(workoutToUpdate.value?.id ?? ''),
+        body,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token ?? '',
+        },
+      );
+
+      print("Update Workout Response: ${response.statusCode}");
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Get.snackbar("Success", "Workout updated successfully");
+        Get.back();
+      } else {
+        Get.snackbar(
+          "Error",
+          "Failed to update workout: ${response.statusText}",
+        );
+      }
+    } catch (e) {
+      Get.snackbar("Error", "An error occurred: $e");
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> _createWorkout() async {
+    if (nameController.text.trim().isEmpty) {
+      Get.snackbar("Error", "Please enter a workout name");
+      return;
+    }
+
+    if (descriptionController.text.trim().isEmpty) {
+      Get.snackbar("Error", "Please enter a description");
+      return;
+    }
+
+    if (pickedImage.value == null) {
+      Get.snackbar("Error", "Please select a cover image");
       return;
     }
 
@@ -168,7 +388,194 @@ class CreatePackageController extends GetxController {
       String? token = await sharedPreference.getAccessToken();
       String coverImageUrl = "";
 
-      // 1. Upload Image using http package
+      // 1. Upload Image
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse('https://wellfitsync.com/upload'),
+      );
+      request.headers['Authorization'] = token ?? '';
+
+      final file = pickedImage.value!;
+      final ext = path.extension(file.path).toLowerCase();
+      String mimeType = 'jpeg';
+      if (ext == '.png') {
+        mimeType = 'png';
+      }
+
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'file',
+          file.path,
+          contentType: MediaType('image', mimeType),
+        ),
+      );
+
+      print("Uploading image for workout creation...");
+      var streamedResponse = await request.send();
+      var uploadResponse = await http.Response.fromStream(streamedResponse);
+
+      print("Upload Response: ${uploadResponse.statusCode}");
+
+      if (uploadResponse.statusCode != 200 &&
+          uploadResponse.statusCode != 201) {
+        Get.snackbar(
+          "Error",
+          "Image upload failed: ${uploadResponse.statusCode}",
+        );
+        isLoading.value = false;
+        return;
+      }
+
+      final responseData = jsonDecode(uploadResponse.body);
+      if (responseData is Map<String, dynamic>) {
+        if (responseData['url'] != null) {
+          coverImageUrl = responseData['url'];
+        } else if (responseData['file'] != null &&
+            responseData['file']['url'] != null) {
+          coverImageUrl = responseData['file']['url'];
+        }
+      }
+
+      if (coverImageUrl.isEmpty) {
+        Get.snackbar("Error", "Failed to retrieve image URL");
+        isLoading.value = false;
+        return;
+      }
+
+      // 2. Create workout with the new schema
+      final body = {
+        "name": nameController.text,
+        "difficulty": selectedDifficulty.value,
+        "duration": selectedDurationInMinutes.value,
+        "description": descriptionController.text,
+        "coverImage": coverImageUrl,
+        "sessionId": sessionId.value ?? "",
+      };
+
+      print("Creating workout: $body");
+      final response = await GetConnect().post(
+        Urls.createWorkout,
+        body,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token ?? '',
+        },
+      );
+
+      print("Create Workout Response: ${response.statusCode}");
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Get.snackbar("Success", "Workout created successfully");
+        Get.back();
+      } else {
+        Get.snackbar(
+          "Error",
+          "Failed to create workout: ${response.statusText}",
+        );
+      }
+    } catch (e) {
+      Get.snackbar("Error", "An error occurred: $e");
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> _requestTemplate() async {
+    if (nameController.text.trim().isEmpty) {
+      Get.snackbar("Error", "Please enter a workout name");
+      return;
+    }
+
+    if (descriptionController.text.trim().isEmpty) {
+      Get.snackbar("Error", "Please enter a description");
+      return;
+    }
+
+    if (pickedImage.value == null) {
+      Get.snackbar("Error", "Please select a cover image");
+      return;
+    }
+
+    if (selectedCategoryId.value == null) {
+      Get.snackbar("Error", "Please select a category");
+      return;
+    }
+
+    if (selectedWorkoutType.value == 'ONLINE' &&
+        selectedDurationInMinutes.value == 0) {
+      Get.snackbar("Error", "Please select a duration for online workouts");
+      return;
+    }
+
+    isLoading.value = true;
+    try {
+      final SharedPreferencesHelperController sharedPreference = Get.put(
+        SharedPreferencesHelperController(),
+      );
+      String? token = await sharedPreference.getAccessToken();
+
+      // 1. Validate request template API first (without image)
+      // This ensures the API is ready before uploading the image
+      final validationBody = {
+        "name": nameController.text,
+        "difficulty": selectedDifficulty.value,
+        "duration": selectedDurationInMinutes.value,
+        "description": descriptionController.text,
+        "status": selectedStatus.value,
+        "coverImage": "", // Placeholder for validation
+        "workoutType": selectedWorkoutType.value,
+        "categoryId": selectedCategoryId.value,
+      };
+
+      print("Validating request template API...");
+      final validationResponse = await GetConnect().post(
+        Urls.requestTemplate,
+        validationBody,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token ?? '',
+        },
+      );
+
+      print(
+        "Validation Response Status Code: ${validationResponse.statusCode}",
+      );
+
+      // Check if API validation passed
+      if (validationResponse.statusCode != 200 &&
+          validationResponse.statusCode != 201) {
+        Get.snackbar(
+          "Error",
+          "Failed to create package: ${validationResponse.statusText}",
+        );
+        isLoading.value = false;
+        return;
+      }
+
+      final validationData = validationResponse.body;
+      if (validationData['success'] != true) {
+        String? redirectUrl;
+        if (validationData['data'] != null &&
+            validationData['data'].toString().startsWith('http')) {
+          redirectUrl = validationData['data'];
+        } else if (validationData['message'] != null &&
+            validationData['message'].toString().startsWith('http')) {
+          redirectUrl = validationData['message'];
+        }
+
+        if (redirectUrl != null) {
+          _showStripeDialog(redirectUrl);
+        } else {
+          Get.snackbar(
+            "Error",
+            validationData['message'] ?? "Failed to create package",
+          );
+        }
+        isLoading.value = false;
+        return;
+      }
+
+      // 2. API validation passed, now upload image
       var request = http.MultipartRequest(
         'POST',
         Uri.parse('https://wellfitsync.com/upload'),
@@ -196,18 +603,8 @@ class CreatePackageController extends GetxController {
 
       print("Upload Response Body: ${uploadResponse.body}");
 
-      if (uploadResponse.statusCode == 200 ||
-          uploadResponse.statusCode == 201) {
-        final responseData = jsonDecode(uploadResponse.body);
-        if (responseData is Map<String, dynamic>) {
-          if (responseData['url'] != null) {
-            coverImageUrl = responseData['url'];
-          } else if (responseData['file'] != null &&
-              responseData['file']['url'] != null) {
-            coverImageUrl = responseData['file']['url'];
-          }
-        }
-      } else {
+      if (uploadResponse.statusCode != 200 &&
+          uploadResponse.statusCode != 201) {
         Get.snackbar(
           "Error",
           "Image upload failed: ${uploadResponse.statusCode}",
@@ -216,13 +613,25 @@ class CreatePackageController extends GetxController {
         return;
       }
 
+      String coverImageUrl = "";
+      final responseData = jsonDecode(uploadResponse.body);
+      if (responseData is Map<String, dynamic>) {
+        if (responseData['url'] != null) {
+          coverImageUrl = responseData['url'];
+        } else if (responseData['file'] != null &&
+            responseData['file']['url'] != null) {
+          coverImageUrl = responseData['file']['url'];
+        }
+      }
+
       if (coverImageUrl.isEmpty) {
         Get.snackbar("Error", "Failed to retrieve image URL from server");
         isLoading.value = false;
         return;
       }
 
-      final body = {
+      // 3. Now send final request with image URL
+      final finalBody = {
         "name": nameController.text,
         "difficulty": selectedDifficulty.value,
         "duration": selectedDurationInMinutes.value,
@@ -233,47 +642,33 @@ class CreatePackageController extends GetxController {
         "categoryId": selectedCategoryId.value,
       };
 
-      final response = await GetConnect().post(
-        'https://wellfitsync.com/workouts/request-template',
-        body,
+      final finalResponse = await GetConnect().post(
+        Urls.requestTemplate,
+        finalBody,
         headers: {
           'Content-Type': 'application/json',
           'Authorization': token ?? '',
         },
       );
 
-      print("POST: https://wellfitsync.com/workouts/request-template");
-      print("-----------------------------------");
-      print("Status Code: ${response.statusCode}");
+      print("Final POST: ${Urls.requestTemplate}");
+      print("Status Code: ${finalResponse.statusCode}");
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        final responseData = response.body;
+      if (finalResponse.statusCode == 200 || finalResponse.statusCode == 201) {
+        final responseData = finalResponse.body;
         if (responseData['success'] == true) {
           Get.snackbar("Success", "Workout template created successfully");
           Get.back();
         } else {
-          String? redirectUrl;
-          if (responseData['data'] != null &&
-              responseData['data'].toString().startsWith('http')) {
-            redirectUrl = responseData['data'];
-          } else if (responseData['message'] != null &&
-              responseData['message'].toString().startsWith('http')) {
-            redirectUrl = responseData['message'];
-          }
-
-          if (redirectUrl != null) {
-            _showStripeDialog(redirectUrl);
-          } else {
-            Get.snackbar(
-              "Error",
-              responseData['message'] ?? "Failed to create package",
-            );
-          }
+          Get.snackbar(
+            "Error",
+            responseData['message'] ?? "Failed to create package",
+          );
         }
       } else {
         Get.snackbar(
           "Error",
-          "Failed to create package: ${response.statusText}",
+          "Failed to create package: ${finalResponse.statusText}",
         );
       }
     } catch (e) {
@@ -293,6 +688,18 @@ class CreatePackageController extends GetxController {
       confirmTextColor: Colors.white,
       onConfirm: () async {
         Get.back();
+        try {
+          if (await canLaunchUrl(Uri.parse(url))) {
+            await launchUrl(
+              Uri.parse(url),
+              mode: LaunchMode.externalApplication,
+            );
+          } else {
+            Get.snackbar("Error", "Could not launch URL");
+          }
+        } catch (e) {
+          Get.snackbar("Error", "Failed to open URL: $e");
+        }
       },
     );
   }

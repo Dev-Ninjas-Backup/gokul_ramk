@@ -8,9 +8,10 @@ import 'package:gokul_ramk/features/trainer/profile/my_products/screen/my_produc
 import 'package:gokul_ramk/routes/app_routes.dart';
 
 class MyProductsWidget extends StatelessWidget {
-  final TrainerProfileController controller = Get.put(
-    TrainerProfileController(),
-  );
+  final TrainerProfileController controller =
+      Get.isRegistered<TrainerProfileController>()
+      ? Get.find<TrainerProfileController>()
+      : Get.put(TrainerProfileController());
 
   MyProductsWidget({super.key});
 

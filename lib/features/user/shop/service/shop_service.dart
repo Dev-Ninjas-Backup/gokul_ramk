@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:gokul_ramk/core/endpoint/end_points.dart';
 import 'package:gokul_ramk/core/services/network_service/network_client.dart';
+import 'package:gokul_ramk/features/user/shop/model/order_response_model.dart';
 import 'package:gokul_ramk/features/user/shop/model/shop_product_model.dart';
 
 import '../model/produt_categories_model.dart';
@@ -82,6 +83,59 @@ class ShopService {
     }
   }
 
+  Future<Map<String, dynamic>> createCartOrder({
+    required Map<String, dynamic> body,
+  }) async {
+    try {
+      final response = await client.postRequest(
+        url: "${Urls.baseUrl}/order/create-cart-order",
+        body: body,
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return response.responseData; // already Map<String, dynamic>
+      } else {
+        throw Exception("Order creation failed");
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<OrderResponseModel> fetchMyOrders() async {
+    const String url = "${Urls.baseUrl}/order/my";
+
+    final response = await client.getRequest(url: url);
+
+    if (response.isSuccess &&
+        (response.statusCode == 200 || response.statusCode == 201)) {
+      return OrderResponseModel.fromJson(response.responseData);
+    } else {
+      throw response.errorMessage ?? "Failed to load categories";
+    }
+  }
+
+  // Future<void> createCartOrder({required Map<String, dynamic> body}) async {
+  //   try {
+  //     final response = await client.postRequest(
+  //       url: "${Urls.baseUrl}/order/create-cart-order",
+  //       body: body,
+  //     );
+
+  //     if (response.statusCode == 200 || response.statusCode == 201) {
+  //       if (kDebugMode) {
+  //         print("Cart order successfully");
+  //       }
+  //     } else {
+  //       if (kDebugMode) {
+  //         print("Failed to add to order");
+  //       }
+  //     }
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
+
   //all cart
   //  Future<List<CartItemModel>> getCartItems() async {
   //     final response = await client.getRequest(
@@ -110,8 +164,4 @@ class ShopService {
   //     throw Exception(response.errorMessage ?? "Failed to fetch cart items");
   //   }
   // }
-
-
 }
-
-

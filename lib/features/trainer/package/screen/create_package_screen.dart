@@ -2,21 +2,65 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
 import '../controller/create_package_controller.dart';
+import '../model/workout_model.dart';
+import 'workout_list_screen.dart';
 
 class CreatePackageScreen extends StatelessWidget {
-  const CreatePackageScreen({super.key});
+  final Workout? workoutToUpdate;
+  final bool isUpdateMode;
+
+  const CreatePackageScreen({
+    super.key,
+    this.workoutToUpdate,
+    this.isUpdateMode = false,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(CreatePackageController());
+    final controller = Get.put(
+      CreatePackageController(),
+      tag: isUpdateMode ? 'update_${workoutToUpdate?.id}' : 'create',
+    );
+
+    // Set update mode data if provided
+    if (isUpdateMode && workoutToUpdate != null) {
+      controller.isUpdateMode.value = true;
+      controller.workoutToUpdate.value = workoutToUpdate;
+      // Prefill fields
+      Future.delayed(Duration.zero, () {
+        controller.populateUpdateFields(workoutToUpdate!);
+      });
+    }
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Create Workout Package",
+          controller.isUpdateMode.value
+              ? "Update Workout"
+              : controller.templateFound.value
+              ? "Create Workout"
+              : "Request Workout Template",
           style: getTextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
+        actions: [
+          if (!controller.isUpdateMode.value)
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: Center(
+                child: TextButton.icon(
+                  onPressed: () {
+                    Get.to(
+                      () => const WorkoutListScreen(),
+                      transition: Transition.rightToLeft,
+                    );
+                  },
+                  icon: const Icon(Icons.list),
+                  label: const Text("Workouts"),
+                ),
+              ),
+            ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -49,28 +93,30 @@ class CreatePackageScreen extends StatelessWidget {
                   style: getTextStyle(fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 8),
-                DropdownButtonFormField<String>(
-                  initialValue: controller.selectedCategoryId.value,
-                  items: controller.categoryList.map((category) {
-                    return DropdownMenuItem(
-                      value: category.id,
-                      child: Text(category.name ?? "Unknown"),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    controller.selectedCategoryId.value = value;
-                  },
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
+                if (controller.templateFound.value == false &&
+                    controller.isUpdateMode.value == false)
+                  DropdownButtonFormField<String>(
+                    initialValue: controller.selectedCategoryId.value,
+                    items: controller.categoryList.map((category) {
+                      return DropdownMenuItem(
+                        value: category.id,
+                        child: Text(category.name ?? "Unknown"),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      controller.selectedCategoryId.value = value;
+                    },
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 14,
+                      ),
                     ),
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 14,
-                    ),
+                    hint: Text("Select Category"),
                   ),
-                  hint: Text("Select Category"),
-                ),
                 SizedBox(height: 16),
 
                 // Difficulty Dropdown
@@ -100,32 +146,35 @@ class CreatePackageScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 16),
 
-                // Workout Type Dropdown
-                Text(
-                  "Workout Type",
-                  style: getTextStyle(fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: 8),
-                DropdownButtonFormField<String>(
-                  initialValue: controller.selectedWorkoutType.value,
-                  items: controller.workoutTypeOptions.map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                  onChanged: (newValue) {
-                    if (newValue != null) {
-                      controller.selectedWorkoutType.value = newValue;
-                    }
-                  },
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
+                // Workout Type Dropdown - Only for template request mode
+                if (controller.templateFound.value == false &&
+                    controller.isUpdateMode.value == false) ...[
+                  Text(
+                    "Workout Type",
+                    style: getTextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 8),
+                  DropdownButtonFormField<String>(
+                    initialValue: controller.selectedWorkoutType.value,
+                    items: controller.workoutTypeOptions.map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (newValue) {
+                      if (newValue != null) {
+                        controller.selectedWorkoutType.value = newValue;
+                      }
+                    },
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(height: 16),
+                  SizedBox(height: 16),
+                ],
 
                 // Duration Field
                 if (controller.selectedWorkoutType.value == 'ONLINE') ...[
@@ -155,25 +204,27 @@ class CreatePackageScreen extends StatelessWidget {
                   style: getTextStyle(fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 8),
-                DropdownButtonFormField<String>(
-                  initialValue: controller.selectedStatus.value,
-                  items: controller.statusOptions.map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                  onChanged: (newValue) {
-                    if (newValue != null) {
-                      controller.selectedStatus.value = newValue;
-                    }
-                  },
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
+                if (controller.templateFound.value == false &&
+                    controller.isUpdateMode.value == false)
+                  DropdownButtonFormField<String>(
+                    initialValue: controller.selectedStatus.value,
+                    items: controller.statusOptions.map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (newValue) {
+                      if (newValue != null) {
+                        controller.selectedStatus.value = newValue;
+                      }
+                    },
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
                   ),
-                ),
                 SizedBox(height: 16),
 
                 // Cover Image Picker
@@ -272,7 +323,11 @@ class CreatePackageScreen extends StatelessWidget {
                     child: controller.isLoading.value
                         ? CircularProgressIndicator(color: Colors.white)
                         : Text(
-                            "Create Workout Package",
+                            controller.isUpdateMode.value
+                                ? "Update Workout"
+                                : controller.templateFound.value
+                                ? "Create Workout"
+                                : "Request Template",
                             style: getTextStyle(
                               color: Colors.white,
                               fontSize: 16,

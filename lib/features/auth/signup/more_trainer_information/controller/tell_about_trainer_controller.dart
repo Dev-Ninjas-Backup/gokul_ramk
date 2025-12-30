@@ -40,6 +40,9 @@ class TellAboutTrainerController extends GetxController {
       fullName.value = args[0] as String? ?? '';
       imageUrl.value = args[1] as String? ?? '';
       currentBio.value = args[2] as String? ?? '';
+      if (args.length > 3 && args[3] is List) {
+        specializationsList.assignAll(List<String>.from(args[3]));
+      }
     }
 
     fullNameController.text = fullName.value;
@@ -47,6 +50,7 @@ class TellAboutTrainerController extends GetxController {
 
     // get or create availability controller
     availabilityController = Get.put(AvailabilityController());
+    getTrainerProfile();
   }
 
   @override
@@ -59,6 +63,91 @@ class TellAboutTrainerController extends GetxController {
     bioController.dispose();
     fullNameController.dispose();
     super.onClose();
+  }
+
+  Future<void> getTrainerProfile() async {
+    try {
+      final networkClient = Get.find<NetworkClient>();
+      final response = await networkClient.getRequest(
+        url: "https://wellfitsync.com/trainer",
+      );
+
+      if (response.isSuccess) {
+        final body = response.responseData;
+        if (body['success'] == true && body['data'] != null) {
+          final data = body['data'];
+
+          fullName.value = data['fullname'] ?? '';
+          fullNameController.text = fullName.value;
+
+          imageUrl.value = data['images'] ?? '';
+          currentBio.value = data['bio'] ?? '';
+          bioController.text = currentBio.value;
+
+          country.text = data['nationality'] ?? '';
+          city.text = data['city'] ?? '';
+          areaOfServiceController.text = data['areaOfService'] ?? '';
+
+          if (data['sessionType'] != null) {
+            String sType = data['sessionType'].toString();
+            if (sType.toUpperCase() == 'ONLINE') {
+              sessionType.value = 'Online';
+            } else if (sType.toUpperCase() == 'ONSITE') {
+              sessionType.value = 'Onsite';
+            } else {
+              sessionType.value = sType;
+            }
+          }
+
+          if (data['specializations'] != null) {
+            specializationsList.assignAll(
+              List<String>.from(data['specializations']),
+            );
+          }
+
+          if (data['availabilities'] != null) {
+            var availData = data['availabilities'];
+            List<dynamic> list = [];
+            if (availData is Map) list.add(availData);
+            if (availData is List) list = availData;
+
+            availabilityController.slots.clear();
+            for (var item in list) {
+              try {
+                String dayStr = item['day']?.toString().toLowerCase() ?? '';
+                DayOfWeek? dayEnum;
+                for (var d in DayOfWeek.values) {
+                  if (d.name == dayStr) {
+                    dayEnum = d;
+                    break;
+                  }
+                }
+
+                if (dayEnum != null &&
+                    item['startDate'] != null &&
+                    item['endDate'] != null) {
+                  DateTime start = DateTime.parse(item['startDate']).toLocal();
+                  DateTime end = DateTime.parse(item['endDate']).toLocal();
+                  availabilityController.slots.add(
+                    AvailabilitySlot(
+                      days: {dayEnum},
+                      startTime: TimeOfDay.fromDateTime(start),
+                      endTime: TimeOfDay.fromDateTime(end),
+                    ),
+                  );
+                }
+              } catch (e) {
+                if (kDebugMode) print("Error parsing availability: $e");
+              }
+            }
+          }
+        }
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print("Error fetching profile: $e");
+      }
+    }
   }
 
   Future<void> pickImageFromGallery() async {
@@ -99,11 +188,33 @@ class TellAboutTrainerController extends GetxController {
         ? currentBio.value
         : bioController.text.trim();
 
-    final finalImageUrl = selectedImage.value != null
-        // ? Urls.baseUrl + imageUrl.value
-                ?imageUrl.value
+    final finalImageUrl = imageUrl.value;
 
-        : " ";
+    // Ensure sessionType matches API enum values: ONLINE, ONSITE, OFFSIDE
+    final session = (sessionType.value ?? 'ONLINE').toString().toUpperCase();
+
+    // Build availability list and attach required fields (location, isBooked)
+    final List<Map<String, dynamic>> rawAvail = availabilityController
+        .toApiList();
+
+    String locationVal = areaOfServiceController.text.trim();
+    if (locationVal.isEmpty) {
+      locationVal = city.text.trim();
+    }
+    // Fallback if both are empty to satisfy API validation
+    if (locationVal.isEmpty) locationVal = "Online";
+
+    final List<Map<String, dynamic>> availabilityWithLocation = rawAvail.map((
+      entry,
+    ) {
+      return {
+        'day': entry['day'],
+        'startDate': entry['startDate'],
+        'endDate': entry['endDate'],
+        'location': locationVal,
+        'isBooked': false,
+      };
+    }).toList();
 
     return {
       "fullname": fullnameVal,
@@ -113,15 +224,17 @@ class TellAboutTrainerController extends GetxController {
       "areaOfService": areaOfServiceController.text.trim(),
       "bio": bioVal,
       "specializations": specializationsList.toList(),
-      "sessionType": sessionType.value ?? "Online",
+      // API expects uppercase enum values
+      "sessionType": session,
       "hourlyRate": 0,
       "currency": "USD",
-      "availability": availabilityController.toApiList(),
+      // send availability as a list of objects with required fields
+      "availability": availabilityWithLocation,
     };
   }
 
   /// Submit profile: uploads image (if selected) then posts the payload
-  Future<void> submitProfile() async {
+  Future<bool> submitProfile() async {
     try {
       EasyLoading.show(status: "Please wait...");
 
@@ -137,34 +250,53 @@ class TellAboutTrainerController extends GetxController {
         if (uploadRes.isSuccess) {
           // assume upload returns { "url": "https://..." }
           final data = uploadRes.responseData;
-          if (data is Map && data['file']['url'] != null) {
-            imageUrl.value = data['file']['url'];
+          if (data is Map) {
+            if (data['url'] != null) {
+              imageUrl.value = data['url'];
+            } else if (data['file'] is Map && data['file']['url'] != null) {
+              imageUrl.value = data['file']['url'];
+            }
           }
         } else {
           EasyLoading.showError(
             uploadRes.errorMessage ?? 'Image upload failed',
           );
-          return;
+          return false;
         }
       }
 
       // call trainer profile service endpoint
       final payload = buildPayload();
+      if (kDebugMode) {
+        print("Sending PATCH Payload: $payload");
+      }
+
       final res = await networkClient.patchRequest(
         url: "https://wellfitsync.com/trainer/profile",
         body: payload,
       );
 
+      if (kDebugMode) {
+        print("PATCH Response: ${res.responseData}");
+      }
+
       if (res.isSuccess) {
-        EasyLoading.showSuccess("Profile submitted");
-        // navigate or update state as needed
+        EasyLoading.showSuccess("Profile updated successfully");
+
+        // Update local observables
+        fullName.value = fullNameController.text;
+        currentBio.value = bioController.text;
+        return true;
       } else {
+        if (kDebugMode) {
+          print("Error Response Body: ${res.responseData}");
+        }
         EasyLoading.showError(res.errorMessage ?? 'Submission failed');
+        return false;
       }
     } catch (e) {
       EasyLoading.showError('An error occurred');
-    } finally {
-      EasyLoading.dismiss();
+      return false;
     }
   }
 }

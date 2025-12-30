@@ -9,7 +9,6 @@ import 'package:gokul_ramk/core/utils/constants/imagepath.dart';
 import 'package:gokul_ramk/features/user/shop/cart/controller/cart_controller.dart';
 import 'package:gokul_ramk/features/user/shop/cart/widget/order_summary_tile.dart';
 import 'package:gokul_ramk/features/user/shop/controller/shop_controller.dart';
-import 'package:gokul_ramk/routes/app_routes.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
 class ReviewOrderScreen extends StatelessWidget {
@@ -130,7 +129,7 @@ class ReviewOrderScreen extends StatelessWidget {
 
                 CustomLabelTextField(
                   label: 'Full Name',
-                  editingController: controller.shippingFullNameController,
+                  editingController: controller.deliveryFullNameController,
                   hintText: 'John Doe',
                 ),
 
@@ -143,13 +142,13 @@ class ReviewOrderScreen extends StatelessWidget {
                   ),
                   languageCode: "en",
                   onChanged: (phone) {
-                    debugPrint(controller.shippingPhone);
-                    controller.shippingPhone = phone.completeNumber;
+                    debugPrint(controller.deliveryPhone);
+                    controller.deliveryPhone = phone.completeNumber;
                   },
                 ),
                 CustomLabelTextField(
                   label: 'Delivery Address',
-                  editingController: controller.shippingAddressController,
+                  editingController: controller.deliveryAddressController,
                   hintText: 'NY, USA',
                 ),
                 const SizedBox(height: 4),
@@ -160,14 +159,14 @@ class ReviewOrderScreen extends StatelessWidget {
                     Expanded(
                       child: CustomLabelTextField(
                         label: 'City',
-                        editingController: controller.shippingCityController,
+                        editingController: controller.deliveryCityController,
                         hintText: 'NY, USA',
                       ),
                     ),
                     Expanded(
                       child: CustomLabelTextField(
                         label: 'State/Province',
-                        editingController: controller.shippingStateController,
+                        editingController: controller.deliveryStateController,
                         hintText: 'NY, USA',
                       ),
                     ),
@@ -182,7 +181,7 @@ class ReviewOrderScreen extends StatelessWidget {
                     Expanded(
                       child: CustomLabelTextField(
                         label: 'ZIP/Postal Code',
-                        editingController: controller.shippingZipController,
+                        editingController: controller.deliveryZipController,
                         hintText: 'NY, USA',
                       ),
                     ),
@@ -194,7 +193,7 @@ class ReviewOrderScreen extends StatelessWidget {
                           Text('Country'),
                           TextField(
                             readOnly: true,
-                            controller: controller.shippingCountryController,
+                            controller: controller.deliveryCountryController,
                             decoration: InputDecoration(
                               hintText: 'USA',
                               suffixIcon: Icon(
@@ -210,7 +209,7 @@ class ReviewOrderScreen extends StatelessWidget {
                                   debugPrint(
                                     'Select country: ${country.displayName}',
                                   );
-                                  controller.shippingCountryController.text =
+                                  controller.deliveryCountryController.text =
                                       country.displayNameNoCountryCode;
                                 },
                               );
@@ -252,8 +251,12 @@ class ReviewOrderScreen extends StatelessWidget {
 
                 const SizedBox(height: 16),
                 ElevatedButton(
-                  onPressed: () {
-                    Get.toNamed(AppRoute.getOrderConfirmationScreen());
+                  onPressed: () async{
+                 await   controller.createOrder(
+                     // ignore: await_only_futures
+                     await cartController.cartList[0].cartId.toString(),
+                    );
+   
                   },
                   child: Text('Place Order'),
                 ),

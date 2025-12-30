@@ -217,11 +217,10 @@ class ProgramController extends GetxController {
             try {
               TrainerProfileController trainerProfileController;
 
-              if (Get.isRegistered<TrainerProfileController>()) {
-                trainerProfileController = Get.find<TrainerProfileController>();
-              } else {
-                trainerProfileController = Get.put(TrainerProfileController());
-              }
+              trainerProfileController =
+                  Get.isRegistered<TrainerProfileController>()
+                  ? Get.find<TrainerProfileController>()
+                  : Get.put(TrainerProfileController());
 
               trainerProfileController.fetchPrograms();
               if (kDebugMode) print("✅ Programs list refreshed after creation");

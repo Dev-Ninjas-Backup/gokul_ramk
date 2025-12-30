@@ -82,4 +82,18 @@ class Urls {
   static String myPackage = "$baseUrl/package/my-package";
   static String myProgram = "$baseUrl/programs/my-programs";
   static String getCategories = "$baseUrl/categories";
+
+  // Workout/Package endpoints
+  static const String workoutTemplate =
+      "$baseUrl/workouts/template/my-template";
+  static const String session = "$baseUrl/session";
+  static const String createWorkout = "$baseUrl/workouts/create-workout";
+  static String updateWorkout(String id) => "$baseUrl/workouts/update/$id";
+  static String deleteWorkout(String id) => "$baseUrl/workouts/$id";
+  static const String requestTemplate = "$baseUrl/workouts/request-template";
+  static const String myWorkouts = "$baseUrl/workouts/myWorkout";
+  static const String allWorkouts = "$baseUrl/workouts";
+  static const String packages = "$baseUrl/package";
+  static String packageDetails(String packageId) =>
+      "$baseUrl/package/$packageId";
 }

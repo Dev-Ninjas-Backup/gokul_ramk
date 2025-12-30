@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:country_state_city_pro/country_state_city_pro.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/widgets/custom_label_textfield.dart';
 import 'package:gokul_ramk/core/utils/constants/icon_path.dart';
@@ -52,13 +51,13 @@ class TellAboutTrainerScreen extends StatelessWidget {
                                   ? FileImage(localImageFile) as ImageProvider
                                   : currentNetworkImage.isNotEmpty
                                   ? NetworkImage(currentNetworkImage)
-                                        as ImageProvider
-                                  : Image.network(
-                                      controller.imageUrl as String,
-                                    ).image,
+                                  : controller.imageUrl.value.isNotEmpty
+                                  ? NetworkImage(controller.imageUrl.value)
+                                  : null,
                               child:
                                   (localImageFile == null &&
-                                      currentNetworkImage.isEmpty)
+                                      currentNetworkImage.isEmpty &&
+                                      controller.imageUrl.value.isEmpty)
                                   ? const Icon(
                                       Icons.person,
                                       size: 60,
@@ -289,14 +288,41 @@ class TellAboutTrainerScreen extends StatelessWidget {
                 const SizedBox(height: 8),
                 ElevatedButton(
                   onPressed: () async {
-                    await controller.submitProfile();
+                    final success = await controller.submitProfile();
+                    if (success) {
+                      try {
+                        if (Get.isRegistered<TrainerProfileController>()) {
+                          // fetchTrainerProfile now returns Future<void>
+                          await Get.find<TrainerProfileController>()
+                              .fetchTrainerProfile();
+                        }
+                      } catch (e) {
+                        debugPrint("Error refreshing profile: $e");
+                      }
+                      // Pass updated name and image so UI can show them immediately
+                      final String updatedName =
+                          controller.fullNameController.text.trim().isNotEmpty
+                          ? controller.fullNameController.text.trim()
+                          : controller.fullName.value;
+                      final String updatedImage = controller.imageUrl.value;
+                      final String updatedBio =
+                          controller.bioController.text.trim().isNotEmpty
+                          ? controller.bioController.text.trim()
+                          : controller.currentBio.value;
+                      final List<String> updatedSpecializations = controller
+                          .specializationsList
+                          .toList();
 
-                    Get.find<TrainerProfileController>().fetchTrainerProfile();
-                    EasyLoading.show(status: 'Loading...');
-                    await Future.delayed(const Duration(seconds: 2));
-                    EasyLoading.dismiss();
-
-                    Get.off(() => TrainerProfileScreen());
+                      Get.off(
+                        () => TrainerProfileScreen(),
+                        arguments: [
+                          updatedName,
+                          updatedImage,
+                          updatedBio,
+                          updatedSpecializations,
+                        ],
+                      );
+                    }
                   },
 
                   child: Text('Submit'),

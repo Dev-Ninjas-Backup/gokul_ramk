@@ -33,7 +33,7 @@ class NetworkClient {
     }
     Map<String, String> commonHeaders = {
       'Content-Type': 'application/json',
-      'authorization': token ?? '',
+      'Authorization': token ?? '',
     };
     try {
       Uri uri = Uri.parse(url);
@@ -84,8 +84,8 @@ class NetworkClient {
     required Map<String, dynamic>? body,
   }) async {
     Map<String, String> commonHeaders = {
-      'content-type': 'application/json',
-      'authorization': await sharedPreferencesHelper.getAccessToken() ?? '',
+      'Content-Type': 'application/json',
+      'Authorization': await sharedPreferencesHelper.getAccessToken() ?? '',
     };
     try {
       Uri uri = Uri.parse(url);
@@ -93,7 +93,7 @@ class NetworkClient {
       final http.Response response = await http.post(
         uri,
         headers: commonHeaders,
-        body: jsonEncode(body),
+        body: body != null ? utf8.encode(jsonEncode(body)) : null,
       );
       _logResponse(response: response);
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -134,8 +134,8 @@ class NetworkClient {
     Map<String, dynamic>? body,
   }) async {
     Map<String, String> commonHeaders = {
-      'content-type': 'application/json',
-      'authorization': await sharedPreferencesHelper.getAccessToken() ?? '',
+      'Content-Type': 'application/json',
+      'Authorization': await sharedPreferencesHelper.getAccessToken() ?? '',
     };
 
     try {
@@ -145,7 +145,7 @@ class NetworkClient {
       final http.Response response = await http.put(
         uri,
         headers: commonHeaders,
-        body: body != null ? jsonEncode(body) : null,
+        body: body != null ? utf8.encode(jsonEncode(body)) : null,
       );
 
       _logResponse(response: response);
@@ -188,8 +188,8 @@ class NetworkClient {
     required Map<String, dynamic>? body,
   }) async {
     Map<String, String> commonHeaders = {
-      'content-type': 'application/json',
-      'authorization': await sharedPreferencesHelper.getAccessToken() ?? '',
+      'Content-Type': 'application/json',
+      'Authorization': await sharedPreferencesHelper.getAccessToken() ?? '',
     };
     try {
       Uri uri = Uri.parse(url);
@@ -197,7 +197,7 @@ class NetworkClient {
       final http.Response response = await http.patch(
         uri,
         headers: commonHeaders,
-        body: jsonEncode(body),
+        body: body != null ? utf8.encode(jsonEncode(body)) : null,
       );
       _logResponse(response: response);
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -235,8 +235,8 @@ class NetworkClient {
 
   Future<NetworkResponse> deleteRequest(String url) async {
     Map<String, String> commonHeaders = {
-      'content-type': 'application/json',
-      'authorization': await sharedPreferencesHelper.getAccessToken() ?? '',
+      'Content-Type': 'application/json',
+      'Authorization': await sharedPreferencesHelper.getAccessToken() ?? '',
     };
     try {
       Uri uri = Uri.parse(url);
@@ -289,7 +289,7 @@ class NetworkClient {
       final token = await sharedPreferencesHelper.getAccessToken() ?? '';
 
       var request = http.MultipartRequest('POST', Uri.parse(url));
-      request.headers['authorization'] = token;
+      request.headers['Authorization'] = token;
       request.headers['accept'] = 'application/json';
 
       if (extraFields != null) request.fields.addAll(extraFields);
@@ -383,7 +383,7 @@ class NetworkClient {
       final token = await sharedPreferencesHelper.getAccessToken() ?? '';
 
       var request = http.MultipartRequest('POST', Uri.parse(url));
-      request.headers['authorization'] = token;
+      request.headers['Authorization'] = token;
       request.headers['accept'] = 'application/json';
 
       // Add all files to the request

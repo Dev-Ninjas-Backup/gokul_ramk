@@ -100,27 +100,27 @@ class CartScreen extends StatelessWidget {
                 Obx(
                   () => OrderSummaryTile(
                     title: "Subtotal",
-                    value: "\$${controller.subtotal.toStringAsFixed(0)}",
+                    value: "\$${controller.subtotal.toStringAsFixed(2)}",
                   ),
                 ),
                 Obx(
                   () => OrderSummaryTile(
                     title: "Shipping Cost",
-                    value: "\$${controller.shippingCost.toStringAsFixed(0)}",
+                    value: "\$${controller.shippingCost.toStringAsFixed(2)}",
                   ),
                 ),
                 Obx(
                   () => OrderSummaryTile(
                     title: "Discount",
                     value:
-                        "(-) ${controller.promoDiscount.value.toStringAsFixed(0)} %",
+                        "(-) ${controller.promoDiscount.value.toStringAsFixed(2)} %",
                   ),
                 ),
                 const Divider(),
                 Obx(
                   () => OrderSummaryTile(
                     title: "Total",
-                    value: "\$${controller.total.toStringAsFixed(0)}",
+                    value: "\$${controller.total.toStringAsFixed(2)}",
                     isTotal: true,
                   ),
                 ),
