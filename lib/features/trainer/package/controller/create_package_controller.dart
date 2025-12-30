@@ -4,12 +4,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/services/local_service/shared_preferences_helper.dart';
+import 'package:gokul_ramk/core/endpoint/end_points.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:path/path.dart' as path;
 import 'package:url_launcher/url_launcher.dart';
 import '../model/category_model.dart';
+import '../model/workout_model.dart';
 
 class CreatePackageController extends GetxController {
   final nameController = TextEditingController();
@@ -24,6 +26,10 @@ class CreatePackageController extends GetxController {
   var templateFound = false.obs;
   var templateData = Rxn<Map<String, dynamic>>();
   var sessionId = Rxn<String>();
+
+  // Update mode
+  var isUpdateMode = false.obs;
+  var workoutToUpdate = Rxn<Workout>();
 
   // Dropdown selections
   var selectedDifficulty = 'INTERMEDIATE'.obs;
@@ -51,9 +57,28 @@ class CreatePackageController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    checkTemplate();
-    getSession();
-    getCategories();
+    // Check if this is update mode
+    if (workoutToUpdate.value != null) {
+      isUpdateMode.value = true;
+      _populateUpdateFields(workoutToUpdate.value!);
+    } else {
+      checkTemplate();
+      getSession();
+      getCategories();
+    }
+  }
+
+  void _populateUpdateFields(Workout workout) {
+    nameController.text = workout.name ?? "";
+    descriptionController.text = workout.description ?? "";
+    selectedDifficulty.value = workout.difficulty ?? "INTERMEDIATE";
+    selectedDurationInMinutes.value = workout.duration ?? 0;
+    _updateDurationText();
+    print("Update mode: Prefilled fields from workout ${workout.id}");
+  }
+
+  void populateUpdateFields(Workout workout) {
+    _populateUpdateFields(workout);
   }
 
   Future<void> checkTemplate() async {
@@ -64,7 +89,7 @@ class CreatePackageController extends GetxController {
       String? token = await sharedPreference.getAccessToken();
 
       final response = await GetConnect().get(
-        'https://wellfitsync.com/workouts/template/my-template',
+        Urls.workoutTemplate,
         headers: {
           'Content-Type': 'application/json',
           'Authorization': token ?? '',
@@ -104,7 +129,7 @@ class CreatePackageController extends GetxController {
       String? token = await sharedPreference.getAccessToken();
 
       final response = await GetConnect().get(
-        'https://wellfitsync.com/session',
+        Urls.session,
         headers: {
           'Content-Type': 'application/json',
           'Authorization': token ?? '',
@@ -195,7 +220,7 @@ class CreatePackageController extends GetxController {
       String? token = await sharedPreference.getAccessToken();
 
       final response = await GetConnect().get(
-        'https://wellfitsync.com/categories',
+        Urls.categories,
         headers: {
           'Content-Type': 'application/json',
           'Authorization': token ?? '',
@@ -226,12 +251,116 @@ class CreatePackageController extends GetxController {
   }
 
   Future<void> createPackage() async {
-    if (templateFound.value) {
+    if (isUpdateMode.value) {
+      // Update mode
+      await _updateWorkout();
+    } else if (templateFound.value) {
       // Create workout mode
       await _createWorkout();
     } else {
       // Request template mode
       await _requestTemplate();
+    }
+  }
+
+  Future<void> _updateWorkout() async {
+    if (nameController.text.trim().isEmpty) {
+      Get.snackbar("Error", "Please enter a workout name");
+      return;
+    }
+
+    if (descriptionController.text.trim().isEmpty) {
+      Get.snackbar("Error", "Please enter a description");
+      return;
+    }
+
+    isLoading.value = true;
+    try {
+      final SharedPreferencesHelperController sharedPreference = Get.put(
+        SharedPreferencesHelperController(),
+      );
+      String? token = await sharedPreference.getAccessToken();
+      String coverImageUrl = workoutToUpdate.value?.coverImage ?? "";
+
+      // If user picked a new image, upload it
+      if (pickedImage.value != null) {
+        var request = http.MultipartRequest('POST', Uri.parse(Urls.uploadFile));
+        request.headers['Authorization'] = token ?? '';
+
+        final file = pickedImage.value!;
+        final ext = path.extension(file.path).toLowerCase();
+        String mimeType = 'jpeg';
+        if (ext == '.png') {
+          mimeType = 'png';
+        }
+
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            'file',
+            file.path,
+            contentType: MediaType('image', mimeType),
+          ),
+        );
+
+        print("Uploading new image for workout update...");
+        var streamedResponse = await request.send();
+        var uploadResponse = await http.Response.fromStream(streamedResponse);
+
+        if (uploadResponse.statusCode != 200 &&
+            uploadResponse.statusCode != 201) {
+          Get.snackbar(
+            "Error",
+            "Image upload failed: ${uploadResponse.statusCode}",
+          );
+          isLoading.value = false;
+          return;
+        }
+
+        final responseData = jsonDecode(uploadResponse.body);
+        if (responseData is Map<String, dynamic>) {
+          if (responseData['url'] != null) {
+            coverImageUrl = responseData['url'];
+          } else if (responseData['file'] != null &&
+              responseData['file']['url'] != null) {
+            coverImageUrl = responseData['file']['url'];
+          }
+        }
+      }
+
+      // Update workout
+      final body = {
+        "name": nameController.text,
+        "difficulty": selectedDifficulty.value,
+        "duration": selectedDurationInMinutes.value,
+        "description": descriptionController.text,
+        "coverImage": coverImageUrl,
+      };
+
+      print("Updating workout ${workoutToUpdate.value?.id}: $body");
+      final response = await GetConnect().patch(
+        Urls.updateWorkout(workoutToUpdate.value?.id ?? ''),
+        body,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token ?? '',
+        },
+      );
+
+      print("Update Workout Response: ${response.statusCode}");
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Get.snackbar("Success", "Workout updated successfully");
+        Get.back();
+      } else {
+        Get.snackbar(
+          "Error",
+          "Failed to update workout: ${response.statusText}",
+        );
+      }
+    } catch (e) {
+      Get.snackbar("Error", "An error occurred: $e");
+    } finally {
+      isLoading.value = false;
     }
   }
 
@@ -325,7 +454,7 @@ class CreatePackageController extends GetxController {
 
       print("Creating workout: $body");
       final response = await GetConnect().post(
-        'https://wellfitsync.com/workouts/create-workout',
+        Urls.createWorkout,
         body,
         headers: {
           'Content-Type': 'application/json',
@@ -400,7 +529,7 @@ class CreatePackageController extends GetxController {
 
       print("Validating request template API...");
       final validationResponse = await GetConnect().post(
-        'https://wellfitsync.com/workouts/request-template',
+        Urls.requestTemplate,
         validationBody,
         headers: {
           'Content-Type': 'application/json',
@@ -514,7 +643,7 @@ class CreatePackageController extends GetxController {
       };
 
       final finalResponse = await GetConnect().post(
-        'https://wellfitsync.com/workouts/request-template',
+        Urls.requestTemplate,
         finalBody,
         headers: {
           'Content-Type': 'application/json',
@@ -522,7 +651,7 @@ class CreatePackageController extends GetxController {
         },
       );
 
-      print("Final POST: https://wellfitsync.com/workouts/request-template");
+      print("Final POST: ${Urls.requestTemplate}");
       print("Status Code: ${finalResponse.statusCode}");
 
       if (finalResponse.statusCode == 200 || finalResponse.statusCode == 201) {

@@ -1,37 +1,66 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../controller/create_package_controller.dart';
+import '../model/workout_model.dart';
+import 'workout_list_screen.dart';
 
 class CreatePackageScreen extends StatelessWidget {
-  const CreatePackageScreen({super.key});
+  final Workout? workoutToUpdate;
+  final bool isUpdateMode;
 
-  Future<void> _launchURL(String url) async {
-    try {
-      if (await canLaunchUrl(Uri.parse(url))) {
-        await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
-      } else {
-        Get.snackbar("Error", "Could not launch URL");
-      }
-    } catch (e) {
-      Get.snackbar("Error", "Failed to open URL: $e");
-    }
-  }
+  const CreatePackageScreen({
+    super.key,
+    this.workoutToUpdate,
+    this.isUpdateMode = false,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(CreatePackageController());
+    final controller = Get.put(
+      CreatePackageController(),
+      tag: isUpdateMode ? 'update_${workoutToUpdate?.id}' : 'create',
+    );
+
+    // Set update mode data if provided
+    if (isUpdateMode && workoutToUpdate != null) {
+      controller.isUpdateMode.value = true;
+      controller.workoutToUpdate.value = workoutToUpdate;
+      // Prefill fields
+      Future.delayed(Duration.zero, () {
+        controller.populateUpdateFields(workoutToUpdate!);
+      });
+    }
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          controller.templateFound.value
+          controller.isUpdateMode.value
+              ? "Update Workout"
+              : controller.templateFound.value
               ? "Create Workout"
               : "Request Workout Template",
           style: getTextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
+        actions: [
+          if (!controller.isUpdateMode.value)
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: Center(
+                child: TextButton.icon(
+                  onPressed: () {
+                    Get.to(
+                      () => const WorkoutListScreen(),
+                      transition: Transition.rightToLeft,
+                    );
+                  },
+                  icon: const Icon(Icons.list),
+                  label: const Text("Workouts"),
+                ),
+              ),
+            ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -64,7 +93,8 @@ class CreatePackageScreen extends StatelessWidget {
                   style: getTextStyle(fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 8),
-                if (controller.templateFound.value == false)
+                if (controller.templateFound.value == false &&
+                    controller.isUpdateMode.value == false)
                   DropdownButtonFormField<String>(
                     initialValue: controller.selectedCategoryId.value,
                     items: controller.categoryList.map((category) {
@@ -117,7 +147,8 @@ class CreatePackageScreen extends StatelessWidget {
                 SizedBox(height: 16),
 
                 // Workout Type Dropdown - Only for template request mode
-                if (controller.templateFound.value == false) ...[
+                if (controller.templateFound.value == false &&
+                    controller.isUpdateMode.value == false) ...[
                   Text(
                     "Workout Type",
                     style: getTextStyle(fontWeight: FontWeight.bold),
@@ -173,7 +204,8 @@ class CreatePackageScreen extends StatelessWidget {
                   style: getTextStyle(fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 8),
-                if (controller.templateFound.value == false)
+                if (controller.templateFound.value == false &&
+                    controller.isUpdateMode.value == false)
                   DropdownButtonFormField<String>(
                     initialValue: controller.selectedStatus.value,
                     items: controller.statusOptions.map((String value) {
@@ -291,7 +323,9 @@ class CreatePackageScreen extends StatelessWidget {
                     child: controller.isLoading.value
                         ? CircularProgressIndicator(color: Colors.white)
                         : Text(
-                            controller.templateFound.value
+                            controller.isUpdateMode.value
+                                ? "Update Workout"
+                                : controller.templateFound.value
                                 ? "Create Workout"
                                 : "Request Template",
                             style: getTextStyle(
