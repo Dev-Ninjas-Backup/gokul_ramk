@@ -7,7 +7,7 @@ class SocketService {
   late IO.Socket socket;
   final Logger _logger = Logger();
 
-  // Stream controllers for messages
+  // Callbacks for messages
   late Function(MessageModel) onMessageReceived;
   late Function(String) onConnectionStatusChanged;
 
@@ -17,8 +17,9 @@ class SocketService {
     return _instance;
   }
 
-  /// Initialize socket connection
-  Future<void> connect(String baseUrl, String userId) async {
+  /// Initiate socket connection with userId
+  /// Similar to initiateSocket in TypeScript
+  Future<void> initiateSocket(String baseUrl, String userId) async {
     try {
       socket = IO.io(
         baseUrl,
@@ -29,44 +30,53 @@ class SocketService {
             .build(),
       );
 
-      // Connection event listeners
-      socket.onConnect((_) {
-        _logger.i('Socket connected');
-        onConnectionStatusChanged?.call('connected');
-      });
+      _setupListeners();
+      socket.connect();
+    } catch (e) {
+      _logger.e('Socket initiation error: $e');
+      rethrow;
+    }
+  }
 
-      socket.onConnectError((error) {
-        _logger.e('Connection error: $error');
-        onConnectionStatusChanged?.call('error');
-      });
+  /// Setup all socket event listeners
+  void _setupListeners() {
+    // Connection event listeners
+    socket.onConnect((_) {
+      _logger.i('Socket connected with ID: ${socket.id}');
+      onConnectionStatusChanged?.call('connected');
+    });
 
-      socket.onDisconnect((_) {
-        _logger.i('Socket disconnected');
-        onConnectionStatusChanged?.call('disconnected');
-      });
+    socket.onConnectError((error) {
+      _logger.e('Connection error: $error');
+      onConnectionStatusChanged?.call('error');
+    });
 
-      // Listen for incoming messages
-      socket.on('receive_message', (data) {
-        _logger.i('Message received: $data');
+    socket.onDisconnect((_) {
+      _logger.i('Socket disconnected');
+      onConnectionStatusChanged?.call('disconnected');
+    });
+
+    // Listen for incoming messages
+    socket.on('receive_message', (data) {
+      _logger.i('Message received: $data');
+      try {
         final message = MessageModel.fromJson({
           'id': data['id'] ?? '',
           'senderId': data['senderId'] ?? '',
           'receiverId': data['receiverId'] ?? '',
           'text': data['message'] ?? data['text'] ?? '',
-          'timestamp': DateTime.now().toIso8601String(),
-          'isRead': false,
+          'timestamp': data['timestamp'] ?? DateTime.now().toIso8601String(),
+          'isRead': data['isRead'] ?? false,
         });
         onMessageReceived?.call(message);
-      });
-
-      socket.connect();
-    } catch (e) {
-      _logger.e('Socket connection error: $e');
-      rethrow;
-    }
+      } catch (e) {
+        _logger.e('Error parsing received message: $e');
+      }
+    });
   }
 
   /// Send message through socket
+  /// Similar to sendMessage in React
   void sendMessage({
     required String senderId,
     required String receiverId,
@@ -78,17 +88,34 @@ class SocketService {
         'receiverId': receiverId,
         'text': text,
       });
-      _logger.i('Message sent: senderId=$senderId, receiverId=$receiverId');
+      _logger.i(
+        'Message emitted: senderId=$senderId, receiverId=$receiverId, text=$text',
+      );
     } catch (e) {
       _logger.e('Error sending message: $e');
+      rethrow;
+    }
+  }
+
+  /// Reconnect socket
+  void reconnect() {
+    try {
+      if (!socket.connected) {
+        socket.connect();
+        _logger.i('Socket reconnecting...');
+      }
+    } catch (e) {
+      _logger.e('Error reconnecting: $e');
     }
   }
 
   /// Disconnect socket
   void disconnect() {
     try {
-      socket.disconnect();
-      _logger.i('Socket disconnected');
+      if (socket.connected) {
+        socket.disconnect();
+        _logger.i('Socket disconnected');
+      }
     } catch (e) {
       _logger.e('Error disconnecting: $e');
     }
@@ -97,17 +124,5 @@ class SocketService {
   /// Check if socket is connected
   bool isConnected() {
     return socket.connected;
-  }
-
-  /// Reconnect socket
-  void reconnect() {
-    try {
-      if (socket.disconnected) {
-        socket.connect();
-        _logger.i('Socket reconnected');
-      }
-    } catch (e) {
-      _logger.e('Error reconnecting: $e');
-    }
   }
 }

@@ -1,3 +1,5 @@
+// ignore_for_file: unused_field
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/services/local_service/shared_preferences_helper.dart';
@@ -57,6 +59,7 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
     });
   }
 
+  /// Initialize controller with user credentials
   void _initializeController() async {
     try {
       // Get token and userId from SharedPreferences
@@ -84,6 +87,8 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
     }
   }
 
+  /// Send message through socket
+  /// Similar to sendMessage in React component
   void _sendMessage() {
     if (_messageController.text.trim().isNotEmpty) {
       controller.sendMessage(_messageController.text.trim());

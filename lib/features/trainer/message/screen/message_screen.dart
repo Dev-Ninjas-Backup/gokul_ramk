@@ -20,6 +20,8 @@ class _MessageScreenState extends State<MessageScreen> {
     _initializeController();
   }
 
+  /// Initialize controller with user credentials
+  /// Similar to SocketProvider initialization in React
   void _initializeController() async {
     try {
       // Get token and userId from SharedPreferences
@@ -42,6 +44,7 @@ class _MessageScreenState extends State<MessageScreen> {
         return;
       }
 
+      // Initialize controller with socket connection
       await controller.initialize(
         userId: userId,
         userToken: userToken,
