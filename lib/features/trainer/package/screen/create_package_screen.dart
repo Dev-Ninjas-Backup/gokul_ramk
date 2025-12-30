@@ -1,398 +1,345 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
-import 'package:gokul_ramk/core/services/network_service/network_client.dart';
-import '../controller/package_controller.dart';
+import '../controller/create_package_controller.dart';
+import '../model/workout_model.dart';
+import 'workout_list_screen.dart';
 
 class CreatePackageScreen extends StatelessWidget {
-  CreatePackageScreen({super.key}) {
-    // Register NetworkClient if not already registered
-    if (!Get.isRegistered<NetworkClient>()) {
-      Get.put(
-        NetworkClient(
-          onUnAuthorize: () {
-            Get.snackbar("Session Expired", "Logging you out...");
-            Get.offAllNamed('/login');
-          },
-        ),
-      );
-    }
+  final Workout? workoutToUpdate;
+  final bool isUpdateMode;
 
-    // Register PackageController
-    if (!Get.isRegistered<PackageController>()) {
-      Get.put(PackageController());
-    }
-  }
-
-  late final PackageController controller = Get.find<PackageController>();
+  const CreatePackageScreen({
+    super.key,
+    this.workoutToUpdate,
+    this.isUpdateMode = false,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(
+      CreatePackageController(),
+      tag: isUpdateMode ? 'update_${workoutToUpdate?.id}' : 'create',
+    );
+
+    // Set update mode data if provided
+    if (isUpdateMode && workoutToUpdate != null) {
+      controller.isUpdateMode.value = true;
+      controller.workoutToUpdate.value = workoutToUpdate;
+      // Prefill fields
+      Future.delayed(Duration.zero, () {
+        controller.populateUpdateFields(workoutToUpdate!);
+      });
+    }
+
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        automaticallyImplyLeading: true,
-        backgroundColor: Colors.white,
-        elevation: 0,
         title: Text(
-          "Create Package",
-          style: getTextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
+          controller.isUpdateMode.value
+              ? "Update Workout"
+              : controller.templateFound.value
+              ? "Create Workout"
+              : "Request Workout Template",
+          style: getTextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
+        centerTitle: true,
         actions: [
-          TextButton(
-            onPressed: () {
-              Get.toNamed('/trainer/allPackagesScreen');
-            },
-            child: Text(
-              "All Packages",
-              style: getTextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: Colors.blue,
+          if (!controller.isUpdateMode.value)
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: Center(
+                child: TextButton.icon(
+                  onPressed: () {
+                    Get.to(
+                      () => const WorkoutListScreen(),
+                      transition: Transition.rightToLeft,
+                    );
+                  },
+                  icon: const Icon(Icons.list),
+                  label: const Text("Workouts"),
+                ),
               ),
             ),
-          ),
         ],
       ),
-      body: Obx(() {
-        if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        if (controller.errorMessage.isNotEmpty) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          child: Obx(
+            () => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(controller.errorMessage.value),
+                // Name Field
+                Text("Name", style: getTextStyle(fontWeight: FontWeight.bold)),
+                SizedBox(height: 8),
+                TextField(
+                  controller: controller.nameController,
+                  decoration: InputDecoration(
+                    hintText: "Enter workout name",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 14,
+                    ),
+                  ),
+                ),
                 SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () => controller.fetchPrograms(),
-                  child: const Text('Retry'),
+
+                // Category Dropdown
+                Text(
+                  "Category",
+                  style: getTextStyle(fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 8),
+                if (controller.templateFound.value == false &&
+                    controller.isUpdateMode.value == false)
+                  DropdownButtonFormField<String>(
+                    initialValue: controller.selectedCategoryId.value,
+                    items: controller.categoryList.map((category) {
+                      return DropdownMenuItem(
+                        value: category.id,
+                        child: Text(category.name ?? "Unknown"),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      controller.selectedCategoryId.value = value;
+                    },
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 14,
+                      ),
+                    ),
+                    hint: Text("Select Category"),
+                  ),
+                SizedBox(height: 16),
+
+                // Difficulty Dropdown
+                Text(
+                  "Difficulty",
+                  style: getTextStyle(fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 8),
+                DropdownButtonFormField<String>(
+                  initialValue: controller.selectedDifficulty.value,
+                  items: controller.difficultyOptions.map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (newValue) {
+                    if (newValue != null) {
+                      controller.selectedDifficulty.value = newValue;
+                    }
+                  },
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 16),
+
+                // Workout Type Dropdown - Only for template request mode
+                if (controller.templateFound.value == false &&
+                    controller.isUpdateMode.value == false) ...[
+                  Text(
+                    "Workout Type",
+                    style: getTextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 8),
+                  DropdownButtonFormField<String>(
+                    initialValue: controller.selectedWorkoutType.value,
+                    items: controller.workoutTypeOptions.map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (newValue) {
+                      if (newValue != null) {
+                        controller.selectedWorkoutType.value = newValue;
+                      }
+                    },
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                ],
+
+                // Duration Field
+                if (controller.selectedWorkoutType.value == 'ONLINE') ...[
+                  Text(
+                    "Duration (minutes)",
+                    style: getTextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 8),
+                  TextField(
+                    controller: controller.durationController,
+                    readOnly: true,
+                    onTap: () => controller.pickDuration(context),
+                    decoration: InputDecoration(
+                      hintText: "Select Duration",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      suffixIcon: Icon(Icons.access_time, color: Colors.grey),
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                ],
+
+                // Status Dropdown
+                Text(
+                  "Status",
+                  style: getTextStyle(fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 8),
+                if (controller.templateFound.value == false &&
+                    controller.isUpdateMode.value == false)
+                  DropdownButtonFormField<String>(
+                    initialValue: controller.selectedStatus.value,
+                    items: controller.statusOptions.map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (newValue) {
+                      if (newValue != null) {
+                        controller.selectedStatus.value = newValue;
+                      }
+                    },
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
+                SizedBox(height: 16),
+
+                // Cover Image Picker
+                Text(
+                  "Cover Image",
+                  style: getTextStyle(fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 8),
+                Stack(
+                  children: [
+                    GestureDetector(
+                      onTap: controller.pickImage,
+                      child: Container(
+                        height: 150,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: Colors.grey),
+                          image: controller.pickedImage.value != null
+                              ? DecorationImage(
+                                  image: FileImage(
+                                    controller.pickedImage.value!,
+                                  ),
+                                  fit: BoxFit.cover,
+                                )
+                              : null,
+                        ),
+                        child: controller.pickedImage.value == null
+                            ? Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.add_a_photo, color: Colors.grey),
+                                  Text("Tap to select image"),
+                                ],
+                              )
+                            : null,
+                      ),
+                    ),
+                    if (controller.pickedImage.value != null)
+                      Positioned(
+                        top: 8,
+                        right: 8,
+                        child: GestureDetector(
+                          onTap: () => controller.pickedImage.value = null,
+                          child: Container(
+                            padding: EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: Colors.black54,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Icons.close,
+                              color: Colors.white,
+                              size: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+                SizedBox(height: 16),
+
+                // Description Field
+                Text(
+                  "Description",
+                  style: getTextStyle(fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 8),
+                TextField(
+                  controller: controller.descriptionController,
+                  maxLines: 4,
+                  decoration: InputDecoration(
+                    hintText: "Enter description",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 32),
+
+                // Submit Button
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: controller.isLoading.value
+                        ? null
+                        : controller.createPackage,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: controller.isLoading.value
+                        ? CircularProgressIndicator(color: Colors.white)
+                        : Text(
+                            controller.isUpdateMode.value
+                                ? "Update Workout"
+                                : controller.templateFound.value
+                                ? "Create Workout"
+                                : "Request Template",
+                            style: getTextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                  ),
                 ),
               ],
             ),
-          );
-        }
-
-        return SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Package Details Section
-              Text(
-                "Package Details",
-                style: getTextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 12),
-              _buildTextField(
-                controller: controller.nameController,
-                label: "Package Name",
-                hint: "e.g., Premium Fitness Package",
-              ),
-              SizedBox(height: 12),
-              _buildTextField(
-                controller: controller.descriptionController,
-                label: "Description",
-                hint: "Describe what's included in this package",
-                maxLines: 3,
-              ),
-              SizedBox(height: 12),
-              Row(
-                children: [
-                  Expanded(
-                    child: _buildTextField(
-                      controller: controller.priceController,
-                      label: "Price (\$)",
-                      hint: "199.99",
-                      keyboardType: const TextInputType.numberWithOptions(
-                        decimal: true,
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 12),
-                  Expanded(
-                    child: _buildTextField(
-                      controller: controller.durationController,
-                      label: "Duration (days)",
-                      hint: "30",
-                      keyboardType: TextInputType.number,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 24),
-
-              // Select Programs Section
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        "Select Programs",
-                        style: getTextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(width: 4),
-                      Text(
-                        "*",
-                        style: getTextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.red,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Obx(
-                    () => Text(
-                      "${controller.selectedProgramIds.length} selected",
-                      style: getTextStyle(
-                        fontSize: 12,
-                        color: controller.selectedProgramIds.isEmpty
-                            ? Colors.red
-                            : Colors.green,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 12),
-              if (controller.programList.isEmpty)
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text(
-                      "No programs available",
-                      style: getTextStyle(color: Colors.grey),
-                    ),
-                  ),
-                )
-              else
-                Obx(
-                  () => ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: controller.programList.length,
-                    itemBuilder: (context, index) {
-                      final program = controller.programList[index];
-
-                      return Obx(() {
-                        final isSelected = controller.selectedProgramIds
-                            .contains(program.id);
-
-                        return GestureDetector(
-                          onTap: () {
-                            Get.toNamed(
-                              '/trainer/programDetailsScreen',
-                              parameters: {'programId': program.id},
-                            );
-                          },
-                          child: Card(
-                            margin: const EdgeInsets.only(bottom: 8),
-                            elevation: isSelected ? 4 : 0,
-                            color: isSelected ? Colors.blue[50] : Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              side: BorderSide(
-                                color: isSelected
-                                    ? Colors.blue
-                                    : Colors.grey[300]!,
-                                width: isSelected ? 2 : 1,
-                              ),
-                            ),
-                            child: ListTile(
-                              contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 8,
-                              ),
-                              leading: GestureDetector(
-                                onTap: () {
-                                  controller.toggleProgramSelection(program.id);
-                                },
-                                child: Checkbox(
-                                  value: isSelected,
-                                  onChanged: (_) {
-                                    controller.toggleProgramSelection(
-                                      program.id,
-                                    );
-                                  },
-                                ),
-                              ),
-                              title: Text(
-                                program.name,
-                                style: getTextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                  color: isSelected
-                                      ? Colors.blue
-                                      : Colors.black,
-                                ),
-                              ),
-                              subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(height: 4),
-                                  Text(
-                                    program.description,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: getTextStyle(
-                                      fontSize: 12,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                  SizedBox(height: 4),
-                                  Row(
-                                    children: [
-                                      _buildProgramTag(
-                                        "${program.durationWeeks} weeks",
-                                        isSelected
-                                            ? Colors.blue[100]!
-                                            : Colors.blue[50]!,
-                                      ),
-                                      SizedBox(width: 8),
-                                      _buildProgramTag(
-                                        "${program.sessionsPerWeek}x/week",
-                                        isSelected
-                                            ? Colors.green[100]!
-                                            : Colors.green[50]!,
-                                      ),
-                                      SizedBox(width: 8),
-                                      _buildProgramTag(
-                                        "\$${program.price}",
-                                        isSelected
-                                            ? Colors.orange[100]!
-                                            : Colors.orange[50]!,
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
-                      });
-                    },
-                  ),
-                ),
-              SizedBox(height: 24),
-
-              // Create Button
-              SizedBox(
-                width: double.infinity,
-                height: 48,
-                child: Obx(
-                  () => ElevatedButton(
-                    onPressed: controller.isCreating.value
-                        ? null
-                        : () {
-                            controller.createPackage();
-                          },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                      disabledBackgroundColor: Colors.grey,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: controller.isCreating.value
-                        ? const SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                Colors.white,
-                              ),
-                              strokeWidth: 2,
-                            ),
-                          )
-                        : Text(
-                            "Create Package",
-                            style: getTextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 16),
-            ],
-          ),
-        );
-      }),
-    );
-  }
-
-  Widget _buildTextField({
-    required TextEditingController controller,
-    required String label,
-    required String hint,
-    TextInputType keyboardType = TextInputType.text,
-    int maxLines = 1,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: getTextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-            color: Colors.grey.shade700,
           ),
         ),
-        SizedBox(height: 6),
-        TextField(
-          controller: controller,
-          keyboardType: keyboardType,
-          maxLines: maxLines,
-          decoration: InputDecoration(
-            hintText: hint,
-            hintStyle: getTextStyle(color: Colors.grey.shade400),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: Colors.grey.shade300),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: Colors.grey.shade300),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: Colors.blue, width: 2),
-            ),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 12,
-              vertical: 12,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildProgramTag(String text, Color backgroundColor) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: Text(
-        text,
-        style: getTextStyle(fontSize: 10, fontWeight: FontWeight.w500),
       ),
     );
   }

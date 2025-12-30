@@ -14,17 +14,32 @@ class AboutMeWidget extends StatelessWidget {
     return Obx(() {
       final trainer = controller.trainerProfileData.value;
 
-      if (trainer == null) {
+      final args = Get.arguments;
+      final fallbackBio = (args is List && args.length > 2)
+          ? (args[2] as String? ?? '')
+          : '';
+
+      List<String>? fallbackSpecs;
+      if (args is List && args.length > 3 && args[3] is List) {
+        fallbackSpecs = (args[3] as List).map((e) => e.toString()).toList();
+      }
+
+      if (trainer == null && fallbackBio.isEmpty) {
         return const Center(child: CircularProgressIndicator());
       }
+
+      final bioDisplay = fallbackBio.isNotEmpty
+          ? fallbackBio
+          : (trainer?.bio ?? 'No bio yet');
+      final specsDisplay = fallbackSpecs ?? (trainer?.specializations ?? []);
 
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (trainer.specializations.isNotEmpty == true)
+          if (specsDisplay.isNotEmpty)
             Wrap(
               spacing: 8,
-              children: trainer.specializations
+              children: specsDisplay
                   .map(
                     (tag) => Chip(
                       label: Text(
@@ -53,7 +68,7 @@ class AboutMeWidget extends StatelessWidget {
           const SizedBox(height: 8),
 
           Text(
-            trainer.bio.isNotEmpty == true ? trainer.bio : 'No bio yet',
+            bioDisplay.isNotEmpty == true ? bioDisplay : 'No bio yet',
             style: getTextStyle(
               fontSize: 15,
               color: AppColors.secondaryFontColor,

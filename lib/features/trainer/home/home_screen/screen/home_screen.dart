@@ -4,6 +4,8 @@ import 'package:gokul_ramk/features/trainer/home/home_screen/meal_plan_screen/sc
 import 'package:gokul_ramk/features/trainer/home/home_screen/meal_screen/screen/create_meal_screen.dart';
 import 'package:gokul_ramk/features/trainer/program/screen/create_program.dart';
 import 'package:gokul_ramk/features/trainer/package/screen/create_package_screen.dart';
+import 'package:gokul_ramk/features/trainer/home/home_screen/exercise_screen/screen/create_exercise_screen.dart';
+import 'package:gokul_ramk/features/trainer/home/home_screen/exercise_screen/screen/exercise_list_screen.dart';
 
 import '../../../../../core/common/styles/global_text_style.dart';
 import '../../../../../core/utils/constants/icon_path.dart';
@@ -111,6 +113,40 @@ class HomeScreen extends StatelessWidget {
 
             SizedBox(height: 24),
 
+            // Workouts package
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.blue[50],
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "Workouts package",
+                    style: getTextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 6),
+                  Text(
+                    "Bundle multiple workout package for your clients.",
+                    style: getTextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 12),
+                  ElevatedButton(
+                    onPressed: () {
+                      Get.to(() => CreatePackageScreen());
+                    },
+                    child: Text("Start Now"),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 12),
             // Create Program
             Container(
               width: double.infinity,
@@ -138,7 +174,7 @@ class HomeScreen extends StatelessWidget {
                   SizedBox(height: 12),
                   ElevatedButton(
                     onPressed: () {
-                      Get.to(CreateProgramScreen());
+                      Get.to(() => CreateProgramScreen());
                     },
                     child: Text("Start Now"),
                   ),
@@ -172,7 +208,7 @@ class HomeScreen extends StatelessWidget {
                   SizedBox(height: 12),
                   ElevatedButton(
                     onPressed: () {
-                      Get.to(CreatePackageScreen());
+                      Get.to(() => CreatePackageScreen());
                     },
                     child: Text("Start Now"),
                   ),
@@ -202,9 +238,72 @@ class HomeScreen extends StatelessWidget {
                   SizedBox(height: 12),
                   ElevatedButton(
                     onPressed: () {
-                      Get.to(MealCreateScreen());
+                      Get.to(() => MealCreateScreen());
                     },
                     child: Text("Start Now"),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 12),
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.blue[50],
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "Create New Exercise",
+                    style: getTextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+
+                  SizedBox(height: 12),
+                  ElevatedButton(
+                    onPressed: () {
+                      Get.to(CreateExerciseScreen());
+                    },
+                    child: Text("Start Now"),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 12),
+
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.orange[50],
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "View Exercises",
+                    style: getTextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 6),
+                  Text(
+                    "Browse and edit all exercises.",
+                    style: getTextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 12),
+                  ElevatedButton(
+                    onPressed: () {
+                      Get.to(() => ExerciseListScreen());
+                    },
+                    child: Text("Open"),
                   ),
                 ],
               ),
@@ -233,7 +332,7 @@ class HomeScreen extends StatelessWidget {
                   SizedBox(height: 12),
                   ElevatedButton(
                     onPressed: () {
-                      Get.to(CreateMealPlanScreen());
+                      Get.to(() => CreateMealPlanScreen());
                     },
                     child: Text("Start Now"),
                   ),
