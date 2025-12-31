@@ -6,7 +6,7 @@ import 'package:gokul_ramk/features/user/session/neutrition_tab/model/nutrition_
 class NutritionGoalFoodItem extends StatelessWidget {
   final NutritionGoalFoodModel foodModel;
   VoidCallback? onTap;
-  NutritionGoalFoodItem({super.key, required this.foodModel,this.onTap});
+  NutritionGoalFoodItem({super.key, required this.foodModel, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -28,12 +28,39 @@ class NutritionGoalFoodItem extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-            child: Image.network(
-              foodModel.imageUrl,
-              height: 160,
-              width: double.infinity,
-              fit: BoxFit.cover,
-            ),
+            child: foodModel.imageUrl.isNotEmpty
+                ? Image.network(
+                    foodModel.imageUrl,
+                    height: 160,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        height: 160,
+                        width: double.infinity,
+                        color: Colors.grey.shade200,
+                        child: Center(
+                          child: Icon(
+                            Icons.image_not_supported,
+                            color: Colors.grey.shade400,
+                            size: 48,
+                          ),
+                        ),
+                      );
+                    },
+                  )
+                : Container(
+                    height: 160,
+                    width: double.infinity,
+                    color: Colors.grey.shade200,
+                    child: Center(
+                      child: Icon(
+                        Icons.image,
+                        color: Colors.grey.shade400,
+                        size: 48,
+                      ),
+                    ),
+                  ),
           ),
           Padding(
             padding: const EdgeInsets.all(10),
