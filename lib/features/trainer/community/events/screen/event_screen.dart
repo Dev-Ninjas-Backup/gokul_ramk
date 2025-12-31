@@ -55,6 +55,73 @@ class _EventsScreenState extends State<EventsScreen> {
     return '${hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}$period';
   }
 
+  Widget _buildImageWithLoading(String imageUrl) {
+    return Container(
+      height: 200,
+      width: double.infinity,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          Image.network(
+            imageUrl,
+            fit: BoxFit.cover,
+            height: 200,
+            width: double.infinity,
+            loadingBuilder: (context, child, loadingProgress) {
+              if (loadingProgress == null) {
+                // Image is fully loaded
+                return child;
+              }
+              // Image is still loading
+              return Container(
+                color: Colors.grey[100],
+                child: Center(
+                  child: CircularProgressIndicator(
+                    value: loadingProgress.expectedTotalBytes != null
+                        ? loadingProgress.cumulativeBytesLoaded /
+                            loadingProgress.expectedTotalBytes!
+                        : null,
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      Colors.blue.shade600,
+                    ),
+                    strokeWidth: 3.0,
+                    backgroundColor: Colors.blue.shade100,
+                  ),
+                ),
+              );
+            },
+            errorBuilder: (context, error, stackTrace) {
+              return Container(
+                height: 200,
+                color: Colors.grey[300],
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.image_not_supported,
+                        size: 48,
+                        color: Colors.grey[500],
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        'Image not available',
+                        style: getTextStyle(
+                          fontSize: 12,
+                          color: Colors.grey[600] ?? Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -110,19 +177,7 @@ class _EventsScreenState extends State<EventsScreen> {
                               top: Radius.circular(12),
                             ),
                             child: event.coverImage != null
-                                ? Image.network(
-                                    event.coverImage!,
-                                    fit: BoxFit.cover,
-                                    height: 200,
-                                    width: double.infinity,
-                                    errorBuilder: (context, error, stackTrace) {
-                                      return Container(
-                                        height: 200,
-                                        color: Colors.grey[300],
-                                        child: Icon(Icons.image_not_supported),
-                                      );
-                                    },
-                                  )
+                                ? _buildImageWithLoading(event.coverImage!)
                                 : Container(
                                     height: 200,
                                     color: Colors.grey[300],
@@ -213,43 +268,39 @@ class _EventsScreenState extends State<EventsScreen> {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Obx(() {
-                          final isJoining = controller.joiningEventIds.contains(
-                            event.id,
-                          );
-                          return ElevatedButton(
-                            onPressed: isJoining
-                                ? null
-                                : () {
-                                    if (widget.userRole == UserRole.trainer) {
-                                      // Handle host event action
-                                    } else {
-                                      // Join event action
-                                      controller.joinEvent(event.id);
-                                    }
-                                  },
-                            child: isJoining
-                                ? SizedBox(
-                                    height: 20,
-                                    width: 20,
-                                    child: CircularProgressIndicator(
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                        Colors.white,
-                                      ),
-                                      strokeWidth: 2,
-                                    ),
-                                  )
-                                : Text(
-                                    widget.userRole == UserRole.trainer
-                                        ? "Host Event"
-                                        : "Join Event",
-                                    style: getTextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                          );
-                        }),
+                        child: widget.userRole == UserRole.trainer
+                            ? SizedBox.shrink()
+                            : Obx(() {
+                                final isJoining = controller.joiningEventIds
+                                    .contains(event.id);
+                                return ElevatedButton(
+                                  onPressed: isJoining
+                                      ? null
+                                      : () {
+                                          // Join event action
+                                          controller.joinEvent(event.id);
+                                        },
+                                  child: isJoining
+                                      ? SizedBox(
+                                          height: 20,
+                                          width: 20,
+                                          child: CircularProgressIndicator(
+                                            valueColor:
+                                                AlwaysStoppedAnimation<Color>(
+                                                  Colors.white,
+                                                ),
+                                            strokeWidth: 2,
+                                          ),
+                                        )
+                                      : Text(
+                                          "Join Event",
+                                          style: getTextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                );
+                              }),
                       ),
                     ],
                   ),

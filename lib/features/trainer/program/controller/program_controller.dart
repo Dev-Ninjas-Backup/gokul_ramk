@@ -7,6 +7,7 @@ import 'package:gokul_ramk/features/trainer/profile/trainer_profile/controller/t
 import '../model/categories_model.dart';
 import '../model/excercise_model.dart';
 import '../services/program_services.dart';
+import 'my_programs_controller.dart';
 
 class ProgramController extends GetxController {
   final ProgramService service = ProgramService();
@@ -33,6 +34,10 @@ class ProgramController extends GetxController {
   var thumbnailUrl = "".obs;
   var videoUrl = "".obs;
 
+  // Difficulty
+  var selectedDifficulty = Rxn<String>();
+  final difficultyOptions = ["BEGINNER", "INTERMEDIATE", "ADVANCED"];
+
   // Loading State
   var isLoading = false.obs;
 
@@ -47,13 +52,32 @@ class ProgramController extends GetxController {
   var allExercises = <Exercise>[].obs;
   var selectedExercise = Rxn<Exercise>();
 
+  // Update mode
+  var isUpdateMode = false.obs;
+  var updateProgramId = Rxn<String>();
+
   final picker = ImagePicker();
 
   @override
   void onInit() {
     super.onInit();
     fetchCategories();
-    fetchExercises();
+    // fetchExercises();
+  }
+
+  // Initialize with program data for update mode
+  void initializeWithProgram(Map<String, dynamic> programData) {
+    isUpdateMode.value = true;
+    updateProgramId.value = programData['id'];
+    nameC.text = programData['name'] ?? "";
+    descriptionC.text = programData['description'] ?? "";
+    priceC.text = programData['price']?.toString() ?? "";
+    maxParticipantsC.text = programData['maxParticipants']?.toString() ?? "50";
+    selectedDifficulty.value = programData['difficulty'];
+
+    // Set URLs for existing files (no file object needed for update)
+    thumbnailUrl.value = programData['thumbnailUrl'] ?? "";
+    videoUrl.value = programData['videoUrl'] ?? "";
   }
 
   // =================== Fetch Categories ===================
@@ -77,30 +101,30 @@ class ProgramController extends GetxController {
   }
 
   // =================== Fetch Exercises ===================
-  Future<void> fetchExercises() async {
-    isLoading(true);
-    try {
-      final response = await service.fetchAllExercises();
-      allExercises.assignAll(response);
+  // Future<void> fetchExercises() async {
+  //   isLoading(true);
+  //   try {
+  //     final response = await service.fetchAllExercises();
+  //     allExercises.assignAll(response);
 
-      // Print readable list of exercise names
-      if (kDebugMode) {
-        print(
-          "===============================================Exercises: ${allExercises.map((e) => e.name).toList()}",
-        );
-      }
+  //     // Print readable list of exercise names
+  //     if (kDebugMode) {
+  //       print(
+  //         "===============================================Exercises: ${allExercises.map((e) => e.name).toList()}",
+  //       );
+  //     }
 
-      if (selectedExercise.value == null && allExercises.isNotEmpty) {
-        selectExercise(allExercises.first);
-      } else {
-        debugPrint("No Exercises=================");
-      }
-    } catch (e) {
-      debugPrint("Error fetching exercises: $e");
-    } finally {
-      isLoading(false);
-    }
-  }
+  //     if (selectedExercise.value == null && allExercises.isNotEmpty) {
+  //       selectExercise(allExercises.first);
+  //     } else {
+  //       debugPrint("No Exercises=================");
+  //     }
+  //   } catch (e) {
+  //     debugPrint("Error fetching exercises: $e");
+  //   } finally {
+  //     isLoading(false);
+  //   }
+  // }
 
   void selectExercise(Exercise? exercise) {
     selectedExercise.value = exercise;
@@ -159,90 +183,116 @@ class ProgramController extends GetxController {
   }
 
   Future<void> submitProgram() async {
-    if (thumbnailFile.value == null) return debugPrint("Add thumbnail image");
-    if (introVideoFile.value == null) return debugPrint("Add intro video");
+    // Validation
+    if (nameC.text.isEmpty) {
+      Get.snackbar('Validation', 'Program name is required');
+      return;
+    }
+    if (descriptionC.text.isEmpty) {
+      Get.snackbar('Validation', 'Description is required');
+      return;
+    }
+    if (!isUpdateMode.value && thumbnailFile.value == null) {
+      Get.snackbar('Validation', 'Thumbnail image is required');
+      return;
+    }
+    if (!isUpdateMode.value && introVideoFile.value == null) {
+      Get.snackbar('Validation', 'Video is required');
+      return;
+    }
+    if (selectedDifficulty.value == null) {
+      Get.snackbar('Validation', 'Please select difficulty level');
+      return;
+    }
+    if (priceC.text.isEmpty) {
+      Get.snackbar('Validation', 'Price is required');
+      return;
+    }
 
     isLoading(true);
     Get.dialog(
       const Center(child: CircularProgressIndicator()),
-      barrierDismissible: true,
+      barrierDismissible: false,
     );
 
     try {
-      // Upload files
-      final thumb = await service.uploadFile(thumbnailFile.value!);
-      final vid = await service.uploadFile(introVideoFile.value!);
-      if (thumb == null || vid == null) return;
+      // Upload files if new files are selected
+      if (thumbnailFile.value != null) {
+        final thumb = await service.uploadFile(thumbnailFile.value!);
+        if (thumb == null) {
+          Get.back();
+          isLoading(false);
+          Get.snackbar('Error', 'Thumbnail upload failed');
+          return;
+        }
+        thumbnailUrl.value = thumb;
+      }
 
-      thumbnailUrl.value = thumb;
-      videoUrl.value = vid;
+      if (introVideoFile.value != null) {
+        final vid = await service.uploadFile(introVideoFile.value!);
+        if (vid == null) {
+          Get.back();
+          isLoading(false);
+          Get.snackbar('Error', 'Video upload failed');
+          return;
+        }
+        videoUrl.value = vid;
+      }
 
-      // Prepare body
+      // Prepare body with new schema
       final body = {
         "name": nameC.text.trim(),
         "description": descriptionC.text.trim(),
-        "categoryId": selectedCategoryId.value,
-        "duration": int.tryParse(durationC.text) ?? 4,
-        "sessionsPerWeek": int.tryParse(sessionsPerWeekC.text) ?? 3,
+        "difficulty": selectedDifficulty.value,
         "thumbnailUrl": thumbnailUrl.value,
         "videoUrl": videoUrl.value,
-        "price": double.tryParse(priceC.text) ?? 0.0,
-        "maxParticipants": int.tryParse(maxParticipantsC.text) ?? 100,
-        "workoutDays": [
-          {
-            "dayNumber": selectedDay.value + 1,
-            "sets": int.tryParse(setsC.text) ?? 3,
-            "reps": int.tryParse(repsC.text) ?? 12,
-            "duration": int.tryParse(workoutDurationC.text) ?? 30,
-            "exerciseId": exerciseIdC.text,
-            "description": "Day ${selectedDay.value + 1} workout",
-          },
-        ],
+        "price": int.tryParse(priceC.text) ?? 0,
+        "currency": "USD",
+        "isActive": true,
+        "maxParticipants": int.tryParse(maxParticipantsC.text) ?? 50,
       };
 
-      final success = await service.createProgram(body);
-      if (success) {
-        Get.back(); // close loading dialog
-
-        // Show success dialog
-        Get.defaultDialog(
-          title: "Success!",
-          middleText: "Your program has been created successfully!",
-          textConfirm: "Continue",
-          confirmTextColor: Colors.white,
-          onConfirm: () {
-            Get.back(); // close success dialog
-
-            // Refresh the program list in TrainerProfileController
-            try {
-              TrainerProfileController trainerProfileController;
-
-              trainerProfileController =
-                  Get.isRegistered<TrainerProfileController>()
-                  ? Get.find<TrainerProfileController>()
-                  : Get.put(TrainerProfileController());
-
-              trainerProfileController.fetchPrograms();
-              if (kDebugMode) print("✅ Programs list refreshed after creation");
-            } catch (e) {
-              if (kDebugMode) print("❌ Error refreshing programs: $e");
-            }
-
-            // Clear form fields
-            clearFormFields();
-
-            // Navigate back to previous screen
-            Get.back();
-          },
-          barrierDismissible: false,
+      bool success;
+      if (isUpdateMode.value) {
+        debugPrint(
+          'PATCH /programs/[1m[31m[4m${updateProgramId.value}[0m with body:',
         );
-        return; // Exit here to prevent finally block from closing the success dialog
+        debugPrint(body.toString());
+        success = await service.updateProgram(updateProgramId.value!, body);
+      } else {
+        success = await service.createProgram(body);
       }
+
+      if (success) {
+        clearFormFields();
+        isUpdateMode.value = false;
+        updateProgramId.value = null;
+        Get.back(); // close loading dialog
+        isLoading(false);
+
+        // Small delay to let snackbar fully render before navigating
+        await Future.delayed(const Duration(milliseconds: 500));
+
+        // Refresh programs list if MyProgramsController is registered
+        if (Get.isRegistered<MyProgramsController>()) {
+          if (kDebugMode) print("🔄 Calling refreshPrograms after update...");
+          final programsController = Get.find<MyProgramsController>();
+          await programsController.refreshPrograms();
+          if (kDebugMode) print("✅ Programs refreshed after update");
+        } else {
+          if (kDebugMode) print("⚠️ MyProgramsController not registered");
+        }
+
+        Get.back(); // navigate back
+        return;
+      }
+      // If not successful, close dialog and let snackbar show (service shows error snackbar)
+      Get.back();
     } catch (e) {
-      if (kDebugMode) print("❌ Error creating program: $e");
-      Get.back(); // close loading dialog on error
-    } finally {
+      if (kDebugMode) print("❌ Error submitting program: $e");
+      Get.back(); // close loading dialog
       isLoading(false);
+      Get.snackbar('Error', 'Error: ${e.toString()}');
     }
   }
 
