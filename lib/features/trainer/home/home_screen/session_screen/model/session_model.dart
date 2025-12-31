@@ -8,6 +8,8 @@ class SessionModel {
   final String description;
   final int duration;
   final dynamic price;
+  final dynamic startDate;
+  final dynamic endDate;
 
   SessionModel({
     required this.id,
@@ -19,6 +21,8 @@ class SessionModel {
     required this.description,
     required this.duration,
     required this.price,
+    this.startDate,
+    this.endDate,
   });
 
   factory SessionModel.fromJson(Map<String, dynamic> json) {
@@ -34,6 +38,8 @@ class SessionModel {
           ? json['duration']
           : int.tryParse('${json['duration']}') ?? 0,
       price: json['price'],
+      startDate: json['startDate'],
+      endDate: json['endDate'],
     );
   }
 }

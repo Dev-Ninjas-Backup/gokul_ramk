@@ -24,7 +24,7 @@ class WorkoutDetailsScreen extends StatelessWidget {
             icon: const Icon(Icons.edit),
             onPressed: () {
               Get.to(
-                () => CreatePackageScreen(
+                () => CreateWorkoutScreen(
                   workoutToUpdate: workout,
                   isUpdateMode: true,
                 ),
