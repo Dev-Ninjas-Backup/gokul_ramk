@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:gokul_ramk/features/trainer/program/controller/program_controller.dart';
 import 'package:gokul_ramk/features/user/user_home/controller/user_home_controller.dart';
 import 'package:gokul_ramk/features/user/user_home/screen/program/program_details_screen.dart';
-import 'package:gokul_ramk/features/user/user_home/screen/program_detail_screen.dart';
 import 'package:gokul_ramk/features/user/user_home/widget/program_card.dart';
  // Make sure this is your ProgramCard1 widget
 

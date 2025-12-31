@@ -6,6 +6,7 @@ import 'package:gokul_ramk/features/user/user_home/model/program_model.dart';
 import 'package:gokul_ramk/features/user/user_home/model/trainer_model.dart';
 import 'package:gokul_ramk/features/user/user_home/model/user_home_model.dart';
 import 'package:gokul_ramk/features/user/user_home/model/workout_model.dart';
+import 'package:gokul_ramk/features/user/user_home/screen/package/model/package_model.dart';
 
 class CategoryService {
   final NetworkClient client;
@@ -79,108 +80,147 @@ class CategoryService {
     }
   }
 
-Future<FeatureTrainerModel> fetchTrainerDetails(String trainerID) async {
-  final String url = "${Urls.baseUrl}/user/$trainerID";
+  Future<FeatureTrainerModel> fetchTrainerDetails(String trainerID) async {
+    final String url = "${Urls.baseUrl}/user/$trainerID";
 
-  final response = await client.getRequest(url: url);
+    final response = await client.getRequest(url: url);
 
-  if (response.isSuccess &&
-      (response.statusCode == 200 || response.statusCode == 201)) {
-      
-    final Map<String, dynamic> data = response.responseData!['data'];
+    if (response.isSuccess &&
+        (response.statusCode == 200 || response.statusCode == 201)) {
+      final Map<String, dynamic> data = response.responseData!['data'];
 
-    return FeatureTrainerModel.fromJson(data);
-  } else {
-    throw response.errorMessage ?? "Failed to fetch trainer details";
-  }
-}
-// Future<TopTrainer> fetchTopTrainerDetails(String trainerID) async {
-//   final String url = "${Urls.baseUrl}/user/$trainerID";
-
-//   final response = await client.getRequest(url: url);
-
-//   if (response.isSuccess &&
-//       (response.statusCode == 200 || response.statusCode == 201)) {
-      
-//     final Map<String, dynamic> data = response.responseData!['data'];
-
-//     return TopTrainer.fromJson(data);
-//   } else {
-//     throw response.errorMessage ?? "Failed to fetch trainer details";
-//   }
-// }
-
-
-
-
-
-Future<List<Program1>> fetchProgram() async {
-  const String url = "${Urls.baseUrl}/programs?limit=3";
-
-  final response = await client.getRequest(url: url);
-
-  if (response.isSuccess &&
-      (response.statusCode == 200 || response.statusCode == 201)) {
-
-    final raw = response.responseData;
-
-    final List list =
-        raw?['data']?['data'] is List ? raw!['data']['data'] : [];
-
-    return list
-        .map((e) => Program1.fromJson(e as Map<String, dynamic>))
-        .toList();
-  }
-
-  return [];
-}
-
-
-
-
-
-Future<List<Program1>> fetchAllProgram() async {
-  const String url = "${Urls.baseUrl}/programs";
-
-  final response = await client.getRequest(url: url);
-
-  if (response.isSuccess &&
-      (response.statusCode == 200 || response.statusCode == 201)) {
-
-    final raw = response.responseData;
-
-    final List list =
-        raw?['data']?['data'] is List ? raw!['data']['data'] : [];
-
-    return list
-        .map((e) => Program1.fromJson(e as Map<String, dynamic>))
-        .toList();
-  }
-
-  return [];
-}
-
-
-
-
-
-
-Future<Program1?> fetchProgramById(String id) async {
-  final String url = "${Urls.baseUrl}/programs/$id";
-
-  final response = await client.getRequest(url: url);
-
-  if (response.isSuccess &&
-      (response.statusCode == 200 || response.statusCode == 201)) {
-    final raw = response.responseData;
-    final data = raw?['data'];
-
-    if (data != null) {
-      return Program1.fromJson(data as Map<String, dynamic>);
+      return FeatureTrainerModel.fromJson(data);
+    } else {
+      throw response.errorMessage ?? "Failed to fetch trainer details";
     }
   }
-  return null;
-}
+  // Future<TopTrainer> fetchTopTrainerDetails(String trainerID) async {
+  //   final String url = "${Urls.baseUrl}/user/$trainerID";
 
+  //   final response = await client.getRequest(url: url);
 
+  //   if (response.isSuccess &&
+  //       (response.statusCode == 200 || response.statusCode == 201)) {
+
+  //     final Map<String, dynamic> data = response.responseData!['data'];
+
+  //     return TopTrainer.fromJson(data);
+  //   } else {
+  //     throw response.errorMessage ?? "Failed to fetch trainer details";
+  //   }
+  // }
+
+  Future<List<Program1>> fetchProgram() async {
+    const String url = "${Urls.baseUrl}/programs?limit=3";
+
+    final response = await client.getRequest(url: url);
+
+    if (response.isSuccess &&
+        (response.statusCode == 200 || response.statusCode == 201)) {
+      final raw = response.responseData;
+
+      final List list = raw?['data']?['data'] is List
+          ? raw!['data']['data']
+          : [];
+
+      return list
+          .map((e) => Program1.fromJson(e as Map<String, dynamic>))
+          .toList();
+    }
+
+    return [];
+  }
+
+  Future<List<Program1>> fetchAllProgram() async {
+    const String url = "${Urls.baseUrl}/programs";
+
+    final response = await client.getRequest(url: url);
+
+    if (response.isSuccess &&
+        (response.statusCode == 200 || response.statusCode == 201)) {
+      final raw = response.responseData;
+
+      final List list = raw?['data']?['data'] is List
+          ? raw!['data']['data']
+          : [];
+
+      return list
+          .map((e) => Program1.fromJson(e as Map<String, dynamic>))
+          .toList();
+    }
+
+    return [];
+  }
+
+  Future<Program1?> fetchProgramById(String id) async {
+    final String url = "${Urls.baseUrl}/programs/$id";
+
+    final response = await client.getRequest(url: url);
+
+    if (response.isSuccess &&
+        (response.statusCode == 200 || response.statusCode == 201)) {
+      final raw = response.responseData;
+      final data = raw?['data'];
+
+      if (data != null) {
+        return Program1.fromJson(data as Map<String, dynamic>);
+      }
+    }
+    return null;
+  }
+
+  Future<List<PackageData>> fetchPackage() async {
+    const String url = "${Urls.baseUrl}/package?limit=3";
+
+    final response = await client.getRequest(url: url);
+
+    if (response.isSuccess &&
+        (response.statusCode == 200 || response.statusCode == 201)) {
+      final raw = response.responseData;
+
+      final List list = raw?['data'] is List ? raw!['data'] : [];
+
+      return list
+          .map((e) => PackageData.fromJson(e as Map<String, dynamic>))
+          .toList();
+    }
+
+    return [];
+  }
+
+  Future<List<PackageData>> fetchAllPackage() async {
+    const String url = "${Urls.baseUrl}/package";
+
+    final response = await client.getRequest(url: url);
+
+    if (response.isSuccess &&
+        (response.statusCode == 200 || response.statusCode == 201)) {
+      final raw = response.responseData;
+
+      final List list = raw?['data'] is List ? raw!['data'] : [];
+
+      return list
+          .map((e) => PackageData.fromJson(e as Map<String, dynamic>))
+          .toList();
+    }
+
+    return [];
+  }
+
+  Future<PackageData?> fetchPackageById(String id) async {
+    final String url = "${Urls.baseUrl}/package/$id";
+
+    final response = await client.getRequest(url: url);
+
+    if (response.isSuccess &&
+        (response.statusCode == 200 || response.statusCode == 201)) {
+      final raw = response.responseData;
+      final data = raw;
+
+      if (data != null) {
+        return PackageData.fromJson(data as Map<String, dynamic>);
+      }
+    }
+    return null;
+  }
 }
