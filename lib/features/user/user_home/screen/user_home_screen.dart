@@ -5,12 +5,14 @@ import 'package:gokul_ramk/core/common/widgets/get_random_color.dart';
 import 'package:gokul_ramk/core/utils/constants/icon_path.dart';
 import 'package:gokul_ramk/features/user/bottom_navbar/controller/navbar_controller.dart';
 import 'package:gokul_ramk/features/user/user_home/controller/user_home_controller.dart';
+import 'package:gokul_ramk/features/user/user_home/model/program_model.dart';
 import 'package:gokul_ramk/features/user/user_home/view_trainer_profile/screen/view_trainer_profile_screen.dart';
 import 'package:gokul_ramk/features/user/user_home/widget/catrgory_button.dart';
 import 'package:gokul_ramk/features/user/user_home/widget/featured_trainer_card.dart';
 import 'package:gokul_ramk/features/user/user_home/widget/highlight_card.dart';
 import 'package:gokul_ramk/features/user/user_home/widget/home_carousel_slider.dart';
 import 'package:gokul_ramk/features/user/user_home/widget/neutrition_card.dart';
+import 'package:gokul_ramk/features/user/user_home/widget/program_card.dart';
 import 'package:gokul_ramk/features/user/user_home/widget/progress_card.dart';
 import 'package:gokul_ramk/features/user/user_home/widget/stats_card.dart';
 import 'package:gokul_ramk/features/user/user_home/widget/workout_card.dart';
@@ -182,6 +184,65 @@ class UserHomeScreen extends StatelessWidget {
               ),
 
               const SizedBox(height: 12),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Program",
+                    style: getTextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+
+                  GestureDetector(
+                    onTap: () {
+                    
+                    
+                    
+                    },
+                    child: Text(
+                      "See All",
+                      style: getTextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 12),
+
+              Obx(() {
+                if (controller.isLoading.value) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                // if (controller.errorMessage.isNotEmpty) {
+                //   return Center(
+                //     child: Text(controller.errorMessage.value),
+                //   );
+                // }
+
+                if (controller.programs1.isEmpty) {
+                  return const Center(child: Text('No programs found'));
+                }
+
+                return ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+
+                  itemCount: controller.programs1.length,
+                  itemBuilder: (context, index) {
+                    final program = controller.programs1[index];
+                    return ProgramCard1(program: program);
+                  },
+                );
+              }),
+
+              const SizedBox(height: 12),
+
               Text(
                 "Health & Nutrition",
                 style: getTextStyle(fontSize: 18, fontWeight: FontWeight.bold),

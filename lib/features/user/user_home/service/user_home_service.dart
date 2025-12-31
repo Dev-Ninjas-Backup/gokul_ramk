@@ -1,6 +1,8 @@
 import 'package:gokul_ramk/core/endpoint/end_points.dart';
 import 'package:gokul_ramk/core/services/network_service/network_client.dart';
+import 'package:gokul_ramk/features/trainer/workout/model/program_model.dart';
 import 'package:gokul_ramk/features/user/user_home/model/feature_workout_model.dart';
+import 'package:gokul_ramk/features/user/user_home/model/program_model.dart';
 import 'package:gokul_ramk/features/user/user_home/model/trainer_model.dart';
 import 'package:gokul_ramk/features/user/user_home/model/user_home_model.dart';
 import 'package:gokul_ramk/features/user/user_home/model/workout_model.dart';
@@ -107,5 +109,31 @@ Future<FeatureTrainerModel> fetchTrainerDetails(String trainerID) async {
 //     throw response.errorMessage ?? "Failed to fetch trainer details";
 //   }
 // }
+
+
+
+
+
+Future<List<Program1>> fetchProgram() async {
+  const String url = "${Urls.baseUrl}/programs?limit=5";
+
+  final response = await client.getRequest(url: url);
+
+  if (response.isSuccess &&
+      (response.statusCode == 200 || response.statusCode == 201)) {
+
+    final raw = response.responseData;
+
+    final List list =
+        raw?['data']?['data'] is List ? raw!['data']['data'] : [];
+
+    return list
+        .map((e) => Program1.fromJson(e as Map<String, dynamic>))
+        .toList();
+  }
+
+  return [];
+}
+
 
 }

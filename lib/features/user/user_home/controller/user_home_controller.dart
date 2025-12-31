@@ -3,7 +3,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/services/network_service/network_client.dart';
+import 'package:gokul_ramk/features/trainer/workout/model/program_model.dart';
 import 'package:gokul_ramk/features/user/user_home/model/feature_workout_model.dart';
+import 'package:gokul_ramk/features/user/user_home/model/program_model.dart';
 import 'package:gokul_ramk/features/user/user_home/model/trainer_model.dart';
 import 'package:gokul_ramk/features/user/user_home/model/user_home_model.dart';
 import 'package:gokul_ramk/features/user/user_home/model/workout_model.dart';
@@ -165,6 +167,7 @@ class UserHomeController extends GetxController {
     fetchFeatureWorkoutMethod();
     fetchTrainerMethod();
     fetchUserProfile();
+    fetchPrograms();
     super.onInit();
   }
 
@@ -213,4 +216,20 @@ class UserHomeController extends GetxController {
     "Day 3: Upper Body Strength - Push & pull focus",
     "Day 5: Core & Flexibility - Improve balance",
   ].obs;
+
+  final programs1 = <Program1>[].obs;
+
+  Future<void> fetchPrograms() async {
+    try {
+      isLoading.value = true;
+
+      final result = await service.fetchProgram();
+      programs1.assignAll(result);
+    } catch (e) {
+      print("error peogram:$e");
+      programs1.clear();
+    } finally {
+      isLoading.value = false;
+    }
+  }
 }
