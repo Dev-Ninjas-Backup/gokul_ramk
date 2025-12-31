@@ -5,7 +5,11 @@ import 'package:gokul_ramk/core/common/widgets/get_random_color.dart';
 import 'package:gokul_ramk/core/utils/constants/icon_path.dart';
 import 'package:gokul_ramk/features/user/bottom_navbar/controller/navbar_controller.dart';
 import 'package:gokul_ramk/features/user/user_home/controller/user_home_controller.dart';
+import 'package:gokul_ramk/features/user/user_home/screen/package/widgets/package_all_card.dart';
+import 'package:gokul_ramk/features/user/user_home/screen/package/widgets/package_card.dart';
+import 'package:gokul_ramk/features/user/user_home/screen/package/widgets/package_details.dart';
 import 'package:gokul_ramk/features/user/user_home/screen/program/all_program_screen.dart';
+import 'package:gokul_ramk/features/user/user_home/screen/program/program_details_screen.dart';
 import 'package:gokul_ramk/features/user/user_home/view_trainer_profile/screen/view_trainer_profile_screen.dart';
 import 'package:gokul_ramk/features/user/user_home/widget/catrgory_button.dart';
 import 'package:gokul_ramk/features/user/user_home/widget/featured_trainer_card.dart';
@@ -197,9 +201,7 @@ class UserHomeScreen extends StatelessWidget {
 
                   GestureDetector(
                     onTap: () {
-                    
-                    Get.to(()=>AllProgramsScreenUser());
-                    
+                      Get.to(() => AllProgramsScreenUser());
                     },
                     child: Text(
                       "See All",
@@ -236,7 +238,18 @@ class UserHomeScreen extends StatelessWidget {
                   itemCount: controller.programs1.length,
                   itemBuilder: (context, index) {
                     final program = controller.programs1[index];
-                    return ProgramCard1(program: program);
+                    return GestureDetector(
+                      onTap: () {
+                        Get.to(
+                          () => ProgramDetailsScreenUser(
+                            programId: program.id.toString(),
+                          ),
+                        );
+                      },
+
+                      child: ProgramCard1(program: program),
+                    );
+                    // return ProgramCard1(program: program);
                   },
                 );
               }),
@@ -358,6 +371,68 @@ class UserHomeScreen extends StatelessWidget {
                   },
                 ),
               ),
+
+              const SizedBox(height: 12),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Package",
+                    style: getTextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+
+                  GestureDetector(
+                    onTap: () {
+                        Get.to(()=>AllPackageScreenUser());
+                    },
+                    child: Text(
+                      "See All",
+                      style: getTextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 12),
+
+              Obx(() {
+                if (controller.isLoading.value) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+
+
+                if (controller.package1.isEmpty) {
+                  return const Center(child: Text('No package found'));
+                }
+
+                return ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+
+                  itemCount: controller.package1.length,
+                  itemBuilder: (context, index) {
+                    final package = controller.package1[index];
+                    return GestureDetector(
+                      onTap: () {
+                        Get.to(
+                          () => PackageDetailsScreenUser(
+                            packageId: package.id.toString(),
+                          ),
+                        );
+                      },
+
+                      child: PackageCard1(package: package,),
+                    );
+                  },
+                );
+              }),
 
               const SizedBox(height: 12),
 

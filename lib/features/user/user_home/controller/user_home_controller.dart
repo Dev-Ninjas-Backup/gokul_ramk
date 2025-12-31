@@ -9,6 +9,7 @@ import 'package:gokul_ramk/features/user/user_home/model/program_model.dart';
 import 'package:gokul_ramk/features/user/user_home/model/trainer_model.dart';
 import 'package:gokul_ramk/features/user/user_home/model/user_home_model.dart';
 import 'package:gokul_ramk/features/user/user_home/model/workout_model.dart';
+import 'package:gokul_ramk/features/user/user_home/screen/package/model/package_model.dart';
 import 'package:gokul_ramk/features/user/user_home/service/user_home_service.dart';
 
 class UserHomeController extends GetxController {
@@ -169,6 +170,8 @@ class UserHomeController extends GetxController {
     fetchUserProfile();
     fetchPrograms();
     fetchAllPrograms();
+    fetchPackage();
+    fetchAllpackage();
     super.onInit();
   }
 
@@ -249,4 +252,44 @@ class UserHomeController extends GetxController {
       isLoading.value = false;
     }
   }
+
+
+
+
+
+  final package1 = <PackageData>[].obs;
+
+  Future<void> fetchPackage() async {
+    try {
+      isLoading.value = true;
+
+      final result = await service.fetchPackage();
+      package1.assignAll(result);
+
+      print("package:${package1.length}");
+    } catch (e) {
+      print("error package:$e");
+      package1.clear();
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  final packageAll1 = <PackageData>[].obs;
+
+  Future<void> fetchAllpackage() async {
+    try {
+      isLoading.value = true;
+
+      final result = await service.fetchAllPackage();
+      packageAll1.assignAll(result);
+    } catch (e) {
+      print("error peogram:$e");
+      packageAll1.clear();
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+
 }
