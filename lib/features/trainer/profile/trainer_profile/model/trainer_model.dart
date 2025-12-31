@@ -21,6 +21,7 @@ class Trainer {
   final String hourlyRate;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final double earnedAmount;
 
   Trainer({
     required this.id,
@@ -45,6 +46,7 @@ class Trainer {
     required this.hourlyRate,
     required this.createdAt,
     required this.updatedAt,
+    required this.earnedAmount,
   });
 
   factory Trainer.fromJson(Map<String, dynamic> json) {
@@ -94,6 +96,8 @@ class Trainer {
       isVerified: json['isVerified'] ?? false,
 
       hourlyRate: json['hourlyRate']?.toString() ?? "0",
+
+      earnedAmount: (json['earnedAmount'] as num?)?.toDouble() ?? 0.0,
 
       createdAt:
           DateTime.tryParse(json['createdAt'] ?? "") ??

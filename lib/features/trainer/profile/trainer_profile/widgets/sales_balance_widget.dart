@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
 import 'package:gokul_ramk/core/utils/constants/colors.dart';
 import 'package:gokul_ramk/features/trainer/profile/trainer_profile/controller/trainer_profile_controller.dart';
+import 'package:gokul_ramk/core/services/local_service/shared_preferences_helper.dart';
+import 'package:gokul_ramk/features/trainer/profile/trainer_profile/service/withdraw_service.dart';
 import 'package:gokul_ramk/routes/app_routes.dart';
 
 class SalesAndBalanceWidget extends StatelessWidget {
@@ -54,20 +56,100 @@ class SalesAndBalanceWidget extends StatelessWidget {
                 "Balance",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              _dropdownFilter(),
+              // _dropdownFilter(),
             ],
           ),
         ),
         Obx(() {
           return _summaryCard(
-            title: "Balance: \$${controller.balance.value.toStringAsFixed(0)}",
-            subtitle:
-                "Total products sold: ${controller.totalProductsSold.value}",
+            title: "Balance: \$${controller.balance.value.toStringAsFixed(2)}",
+            subtitle: "",
+
+            // "Total products sold: ${controller.totalProductsSold.value}",
             buttonText: "Request Payout",
             color: Color(0XFF148CBB),
             background: Color(0XFFE8F4F8),
-            onTap: () {
-              // handle request payout
+            onTap: () async {
+              final SharedPreferencesHelperController prefs = Get.find();
+              final userId = await prefs.getUserId();
+              if (userId == null) {
+                Get.snackbar('Error', 'User not logged in');
+                return;
+              }
+
+              final TextEditingController amountCtrl = TextEditingController();
+              bool submitting = false;
+
+              await showDialog<void>(
+                // ignore: use_build_context_synchronously
+                context: context,
+                builder: (ctx) => StatefulBuilder(
+                  builder: (ctx, setState) => AlertDialog(
+                    title: const Text('Request Payout'),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TextField(
+                          controller: amountCtrl,
+                          keyboardType: TextInputType.numberWithOptions(
+                            decimal: true,
+                          ),
+                          decoration: const InputDecoration(
+                            labelText: 'Amount',
+                            hintText: 'Enter amount to withdraw',
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        // Use local state from StatefulBuilder (submitting) instead of Obx
+                        submitting
+                            ? const CircularProgressIndicator()
+                            : const SizedBox.shrink(),
+                      ],
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Get.back(),
+                        child: const Text('Cancel'),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          final txt = amountCtrl.text.trim();
+                          final amt = double.tryParse(txt);
+                          if (amt == null || amt <= 0) {
+                            Get.snackbar('Invalid', 'Enter a valid amount');
+                            return;
+                          }
+                          setState(() => submitting = true);
+                          final res = await WithdrawService.requestWithdraw(
+                            userId: userId,
+                            amount: amt,
+                          );
+                          setState(() => submitting = false);
+                          if (res.isSuccess) {
+                            // update local balance
+                            controller.balance.value =
+                                (controller.balance.value - amt).clamp(
+                                  0,
+                                  double.infinity,
+                                );
+                            Get.back(); // close dialog
+                            final message =
+                                res.responseData != null &&
+                                    res.responseData['message'] != null
+                                ? res.responseData['message']
+                                : 'Withdraw request created';
+                            Get.snackbar('Success', message.toString());
+                          } else {
+                            final err = res.errorMessage ?? 'Request failed';
+                            Get.snackbar('Error', err);
+                          }
+                        },
+                        child: const Text('Send'),
+                      ),
+                    ],
+                  ),
+                ),
+              );
             },
           );
         }),

@@ -1,4 +1,6 @@
 // trainer_profile_controller.dart
+// ignore_for_file: curly_braces_in_flow_control_structures
+
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -10,6 +12,7 @@ import 'package:gokul_ramk/features/trainer/profile/trainer_profile/model/progra
 import 'package:image_picker/image_picker.dart';
 
 import '../service/trainer_profile_service.dart';
+import 'package:gokul_ramk/features/user/user_profile/service/user_profile_service.dart';
 
 class TrainerProfileController extends GetxController {
   TrainerService trainerService = TrainerService();
@@ -46,8 +49,28 @@ class TrainerProfileController extends GetxController {
       isLoading.value = true;
       var data = await trainerService.getProfile();
       trainerProfileData.value = data;
+      // Use earnedAmount from API as balance if available
+      if (data != null) {
+        try {
+          balance.value = data.earnedAmount;
+        } catch (_) {}
+      }
       // Ensure observers are notified even if same instance is assigned
       trainerProfileData.refresh();
+      // Also fetch user profile to obtain earnedAmount for balance display.
+      try {
+        final userRes = await UserProfileService.fetchProfile();
+        if (userRes.isSuccess && userRes.responseData != null) {
+          final ud = userRes.responseData!['data'] ?? userRes.responseData;
+          if (ud is Map<String, dynamic>) {
+            final earned = (ud['earnedAmount'] as num?)?.toDouble();
+            if (earned != null) balance.value = earned;
+          }
+        }
+      } catch (e) {
+        if (kDebugMode) print('Could not fetch user profile for balance: $e');
+      }
+
       if (kDebugMode)
         print(
           '✅ Trainer profile fetched: ${trainerProfileData.value?.fullname}',

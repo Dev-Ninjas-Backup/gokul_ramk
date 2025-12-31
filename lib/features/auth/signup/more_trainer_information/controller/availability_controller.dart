@@ -107,5 +107,4 @@ class AvailabilityController extends GetxController {
     return result;
   }
 
-  String _two(int n) => n.toString().padLeft(2, '0');
 }
