@@ -8,10 +8,13 @@ import 'package:get/get.dart';
 import 'package:gokul_ramk/core/services/network_service/network_client.dart';
 import 'package:gokul_ramk/features/trainer/profile/my_products/model/product_model.dart';
 import 'package:gokul_ramk/features/trainer/profile/trainer_profile/model/trainer_model.dart';
+import 'package:gokul_ramk/features/trainer/profile/trainer_profile/model/withdraw_model.dart';
 import 'package:gokul_ramk/features/trainer/profile/trainer_profile/model/program_model.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../service/trainer_profile_service.dart';
+import 'package:gokul_ramk/features/trainer/profile/trainer_profile/service/withdraw_service.dart';
+// ...existing imports
 import 'package:gokul_ramk/features/user/user_profile/service/user_profile_service.dart';
 
 class TrainerProfileController extends GetxController {
@@ -29,6 +32,12 @@ class TrainerProfileController extends GetxController {
 
   var balance = 15590.0.obs;
 
+  // Withdraw history
+  var withdrawHistory = <WithdrawModel>[].obs;
+  var withdrawPage = 1.obs;
+  var withdrawLimit = 10.obs;
+  var withdrawTotalPages = 1.obs;
+
   //for api
   var trainerProfileData = Rxn<Trainer>();
 
@@ -40,6 +49,7 @@ class TrainerProfileController extends GetxController {
     fetchTrainerProfile();
     fetchRecentProducts();
     fetchPrograms();
+    fetchWithdrawHistory();
   }
 
   var isLoading = false.obs;
@@ -101,6 +111,43 @@ class TrainerProfileController extends GetxController {
     }
   }
 
+  /// Fetch withdraw history (paginated). Updates [withdrawHistory] and metadata.
+  Future<void> fetchWithdrawHistory({
+    int page = 1,
+    int limit = 10,
+    String? status,
+  }) async {
+    try {
+      final res = await WithdrawService.getWithdrawHistory(
+        page: page,
+        limit: limit,
+        status: status,
+      );
+      if (res.isSuccess && res.responseData != null) {
+        final body = res.responseData!;
+        final dataList = body['data'] as List<dynamic>? ?? [];
+        final items = dataList.map((e) {
+          if (e is Map<String, dynamic>) return WithdrawModel.fromJson(e);
+          return WithdrawModel.fromJson(Map<String, dynamic>.from(e));
+        }).toList();
+        withdrawHistory.value = items;
+
+        final metadata = body['metadata'] as Map<String, dynamic>?;
+        if (metadata != null) {
+          withdrawPage.value = (metadata['page'] as num?)?.toInt() ?? page;
+          withdrawLimit.value = (metadata['limit'] as num?)?.toInt() ?? limit;
+          withdrawTotalPages.value =
+              (metadata['totalPage'] as num?)?.toInt() ?? 1;
+        }
+      } else {
+        if (kDebugMode)
+          print('Failed to fetch withdraw history: ${res.errorMessage}');
+      }
+    } catch (e) {
+      if (kDebugMode) print('Error fetching withdraw history: $e');
+    }
+  }
+
   Future<void> updateProfileImage() async {
     try {
       final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
@@ -136,6 +183,8 @@ class TrainerProfileController extends GetxController {
             if (patchRes.isSuccess) {
               EasyLoading.showSuccess("Profile updated");
               fetchTrainerProfile();
+              // refresh withdraw history too in case balance changed
+              fetchWithdrawHistory();
             } else {
               EasyLoading.showError(patchRes.errorMessage ?? "Update failed");
             }

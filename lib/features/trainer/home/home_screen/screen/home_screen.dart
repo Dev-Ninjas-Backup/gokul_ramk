@@ -11,15 +11,17 @@ import 'package:gokul_ramk/features/trainer/home/home_screen/session_screen/scre
 
 import '../../../../../core/common/styles/global_text_style.dart';
 import '../../../../../core/utils/constants/icon_path.dart';
-import '../widgets/client_card.dart';
+// import '../widgets/client_card.dart';
 import '../widgets/session_card.dart';
 import '../widgets/stat_card.dart';
+import '../controller/home_controller.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final HomeController controller = Get.put(HomeController());
     return SafeArea(
       child: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -50,11 +52,13 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
             SizedBox(height: 8),
-            Text(
-              "You have 3 sessions today and 2 new requests.",
-              style: getTextStyle(
-                color: Colors.grey,
-                fontWeight: FontWeight.bold,
+            Obx(
+              () => Text(
+                "You have ${controller.upcomingSessionsCount.value} sessions today and ${controller.pendingCount.value} new requests.",
+                style: getTextStyle(
+                  color: Colors.grey,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
 
@@ -64,16 +68,37 @@ class HomeScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                statCard("Active Clients", "12 Active"),
-                statCard("Upcoming Sessions", "3 Today"),
+                Obx(
+                  () => statCard(
+                    "Active Clients",
+                    "${controller.confirmedCount.value} Active",
+                  ),
+                ),
+                Obx(
+                  () => statCard(
+                    "Upcoming Sessions",
+                    "${controller.upcomingSessionsCount.value} Today/Tomorrow",
+                  ),
+                ),
               ],
             ),
             SizedBox(height: 12),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                statCard("Pending Requests", "2 New"),
-                statCard("Earnings This Month", "\$1250"),
+                // Pending requests now fetched from API
+                Obx(
+                  () => statCard(
+                    "Pending Requests",
+                    "${controller.pendingCount.value} New",
+                  ),
+                ),
+                Obx(
+                  () => statCard(
+                    "Available Balance",
+                    "\$${controller.availableBalance.value.toStringAsFixed(2)}",
+                  ),
+                ),
               ],
             ),
 
@@ -85,35 +110,59 @@ class HomeScreen extends StatelessWidget {
               style: getTextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 12),
-            sessionCard(
-              "Today, 10:00 AM",
-              "Yoga Session with Sarah",
-              Colors.blue[50]!,
-            ),
-            SizedBox(height: 10),
-            sessionCard(
-              "Today, 2:00 PM",
-              "Strength Training with John",
-              Colors.green[50]!,
-            ),
+            Obx(() {
+              final recent = controller.recentSessions();
+              if (recent.isEmpty) {
+                // fallback to previous hardcoded cards
+                return sessionCard(
+                  "No upcoming sessions",
+                  "You have no upcoming sessions.",
+                  Colors.blue[50]!,
+                );
+              }
+
+              final colors = [
+                Colors.blue[50]!,
+                Colors.green[50]!,
+                Colors.orange[50]!,
+                Colors.purple[50]!,
+              ];
+              return Column(
+                children: List.generate(recent.length.clamp(0, 2), (i) {
+                  final s = recent[i];
+                  final time = controller.formatSessionDate(s);
+                  final title =
+                      s['title']?.toString() ??
+                      s['name']?.toString() ??
+                      'Session';
+                  final bg = colors[i % colors.length];
+                  return Column(
+                    children: [
+                      sessionCard(time, title, bg),
+                      SizedBox(height: 10),
+                    ],
+                  );
+                }),
+              );
+            }),
 
             SizedBox(height: 24),
 
             // Clients
-            Text(
-              "Client Highlights",
-              style: getTextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 12),
-            Row(
-              children: [
-                Expanded(child: clientCard("Alex Carter")),
-                SizedBox(width: 12),
-                Expanded(child: clientCard("Alex Carter")),
-              ],
-            ),
+            // Text(
+            //   "Client Highlights",
+            //   style: getTextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            // ),
+            // SizedBox(height: 12),
+            // Row(
+            //   children: [
+            //     Expanded(child: clientCard("Alex Carter")),
+            //     SizedBox(width: 12),
+            //     Expanded(child: clientCard("Alex Carter")),
+            //   ],
+            // ),
 
-            SizedBox(height: 24),
+            // SizedBox(height: 24),
 
             // Workouts package
             Container(
