@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
 import 'package:gokul_ramk/features/user/session/controller/session_controller.dart';
+import 'package:gokul_ramk/features/user/user_home/view_trainer_profile/screen/view_trainer_profile_screen.dart';
 
 class TopTrainerItem extends StatelessWidget {
   final SessionController controller;
@@ -27,18 +30,26 @@ class TopTrainerItem extends StatelessWidget {
 
     return Column(
       children: [
-        CircleAvatar(
-          radius: 35,
-          backgroundColor: Colors.grey.shade200,
-          child: ClipOval(
-            child: Image.network(
-              imageUrl,
-              fit: BoxFit.cover,
-              width: 70,
-              height: 70,
-              errorBuilder: (context, error, stackTrace) {
-                return const Icon(Icons.broken_image, size: 35);
-              },
+        GestureDetector(
+
+        onTap: () {
+
+        Get.to(()=>ViewTrainerProfileScreen(trainerId: controller.topTrainers[index].id,));
+          
+        },
+          child: CircleAvatar(
+            radius: 35,
+            backgroundColor: Colors.grey.shade200,
+            child: ClipOval(
+              child: Image.network(
+                imageUrl,
+                fit: BoxFit.cover,
+                width: 70,
+                height: 70,
+                errorBuilder: (context, error, stackTrace) {
+                  return const Icon(Icons.broken_image, size: 35);
+                },
+              ),
             ),
           ),
         ),

@@ -29,7 +29,7 @@ class CategoryService {
   }
 
   Future<List<WorkOutModel>> fetchWorkouts(String categorirsID) async {
-    final String url = "${Urls.workOuts}?categoryId=$categorirsID";
+    final String url = "${Urls.baseUrl}/workouts?categoryId=$categorirsID";
 
     // final String url = "https://wellfitsync.com/workouts?categoryId=58a55959-7f30-438c-9d89-f1b4b997d1b5";
 
@@ -38,6 +38,7 @@ class CategoryService {
     if (response.isSuccess &&
         (response.statusCode == 200 || response.statusCode == 201)) {
       try {
+      print("workout:statuscode: ${response.statusCode}");
         final List data = response.responseData!['data']['data'];
 
         return data.map((json) => WorkOutModel.fromJson(json)).toList();
