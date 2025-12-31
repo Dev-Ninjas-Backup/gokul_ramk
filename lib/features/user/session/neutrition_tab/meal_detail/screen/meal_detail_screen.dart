@@ -56,16 +56,41 @@ class MealDetailScreen extends StatelessWidget {
                   CustomAppBarTitle(title: meal.title),
                   const SizedBox(height: 20),
                   // Image
-                  Container(
-                    width: double.maxFinite,
-                    height: 180,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: NetworkImage(meal.image),
-                        fit: BoxFit.cover,
-                      ),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: meal.image.isNotEmpty
+                        ? Image.network(
+                            meal.image,
+                            width: double.maxFinite,
+                            height: 180,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Container(
+                                width: double.maxFinite,
+                                height: 180,
+                                color: Colors.grey.shade200,
+                                child: Center(
+                                  child: Icon(
+                                    Icons.image_not_supported,
+                                    color: Colors.grey.shade400,
+                                    size: 64,
+                                  ),
+                                ),
+                              );
+                            },
+                          )
+                        : Container(
+                            width: double.maxFinite,
+                            height: 180,
+                            color: Colors.grey.shade200,
+                            child: Center(
+                              child: Icon(
+                                Icons.image,
+                                color: Colors.grey.shade400,
+                                size: 64,
+                              ),
+                            ),
+                          ),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
@@ -170,69 +195,69 @@ class MealDetailScreen extends StatelessWidget {
                         const SizedBox(height: 20),
 
                         // Buttons
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Obx(
-                                () => ElevatedButton(
-                                  onPressed: controller.isCreatingMealPlan.value
-                                      ? null
-                                      : () => controller.createMealPlan(),
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.green.withValues(
-                                      alpha: 0.1,
-                                    ),
-                                    foregroundColor: Colors.green.shade700,
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 14,
-                                    ),
-                                  ),
-                                  child: controller.isCreatingMealPlan.value
-                                      ? SizedBox(
-                                          height: 20,
-                                          width: 20,
-                                          child: CircularProgressIndicator(
-                                            strokeWidth: 2,
-                                            valueColor:
-                                                AlwaysStoppedAnimation<Color>(
-                                                  Colors.green,
-                                                ),
-                                          ),
-                                        )
-                                      : Text(
-                                          "Add to Meal Plan",
-                                          style: getTextStyle(
-                                            fontSize: 16,
-                                            color: Colors.green,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: ElevatedButton(
-                                onPressed: () {},
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.green,
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 14,
-                                  ),
-                                ),
-                                child: Text(
-                                  "Share with Trainer",
-                                  style: getTextStyle(
-                                    fontSize: 16,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 30),
+                        // Row(
+                        //   children: [
+                        //     Expanded(
+                        //       child: Obx(
+                        //         () => ElevatedButton(
+                        //           onPressed: controller.isCreatingMealPlan.value
+                        //               ? null
+                        //               : () => controller.createMealPlan(),
+                        //           style: ElevatedButton.styleFrom(
+                        //             backgroundColor: Colors.green.withValues(
+                        //               alpha: 0.1,
+                        //             ),
+                        //             foregroundColor: Colors.green.shade700,
+                        //             padding: const EdgeInsets.symmetric(
+                        //               vertical: 14,
+                        //             ),
+                        //           ),
+                        //           child: controller.isCreatingMealPlan.value
+                        //               ? SizedBox(
+                        //                   height: 20,
+                        //                   width: 20,
+                        //                   child: CircularProgressIndicator(
+                        //                     strokeWidth: 2,
+                        //                     valueColor:
+                        //                         AlwaysStoppedAnimation<Color>(
+                        //                           Colors.green,
+                        //                         ),
+                        //                   ),
+                        //                 )
+                        //               : Text(
+                        //                   "Add to Meal Plan",
+                        //                   style: getTextStyle(
+                        //                     fontSize: 16,
+                        //                     color: Colors.green,
+                        //                     fontWeight: FontWeight.w600,
+                        //                   ),
+                        //                 ),
+                        //         ),
+                        //       ),
+                        //     ),
+                        //     const SizedBox(width: 12),
+                        //     Expanded(
+                        //       child: ElevatedButton(
+                        //         onPressed: () {},
+                        //         style: ElevatedButton.styleFrom(
+                        //           backgroundColor: Colors.green,
+                        //           padding: const EdgeInsets.symmetric(
+                        //             vertical: 14,
+                        //           ),
+                        //         ),
+                        //         child: Text(
+                        //           "Share with Trainer",
+                        //           style: getTextStyle(
+                        //             fontSize: 16,
+                        //             color: Colors.white,
+                        //             fontWeight: FontWeight.w600,
+                        //           ),
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
+                        // const SizedBox(height: 30),
 
                         // Similar Meals
                         Text(
@@ -271,16 +296,22 @@ class MealDetailScreen extends StatelessWidget {
                                   final similarMeal =
                                       controller.similarMeals[index];
                                   return GestureDetector(
-                                    onTap: () {
-                                      Get.offNamed(
-                                        Get.currentRoute,
-                                        arguments: similarMeal.id,
+                                    onTap: () async {
+                                      await controller.fetchMealDetail(
+                                        similarMeal.id,
                                       );
+                                      await controller.fetchSimilarMeals();
                                     },
                                     child: SimilarMealWidget(
                                       title: similarMeal.title,
                                       image: similarMeal.image,
                                       desc: similarMeal.description,
+                                      onViewDetails: () async {
+                                        await controller.fetchMealDetail(
+                                          similarMeal.id,
+                                        );
+                                        await controller.fetchSimilarMeals();
+                                      },
                                     ),
                                   );
                                 },

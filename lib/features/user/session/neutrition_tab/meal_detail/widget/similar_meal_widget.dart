@@ -3,11 +3,13 @@ import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
 
 class SimilarMealWidget extends StatelessWidget {
   final String title, image, desc;
+  final VoidCallback? onViewDetails;
   const SimilarMealWidget({
     super.key,
     required this.title,
     required this.image,
     required this.desc,
+    this.onViewDetails,
   });
 
   @override
@@ -32,12 +34,39 @@ class SimilarMealWidget extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-            child: Image.network(
-              image,
-              height: 100,
-              width: double.infinity,
-              fit: BoxFit.cover,
-            ),
+            child: image.isNotEmpty
+                ? Image.network(
+                    image,
+                    height: 100,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        height: 100,
+                        width: double.infinity,
+                        color: Colors.grey.shade200,
+                        child: Center(
+                          child: Icon(
+                            Icons.image_not_supported,
+                            color: Colors.grey.shade400,
+                            size: 40,
+                          ),
+                        ),
+                      );
+                    },
+                  )
+                : Container(
+                    height: 100,
+                    width: double.infinity,
+                    color: Colors.grey.shade200,
+                    child: Center(
+                      child: Icon(
+                        Icons.image,
+                        color: Colors.grey.shade400,
+                        size: 40,
+                      ),
+                    ),
+                  ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -54,7 +83,7 @@ class SimilarMealWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: onViewDetails,
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 36),
                 backgroundColor: Colors.green,

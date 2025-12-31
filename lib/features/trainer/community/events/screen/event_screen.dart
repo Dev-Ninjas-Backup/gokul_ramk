@@ -79,7 +79,7 @@ class _EventsScreenState extends State<EventsScreen> {
                   child: CircularProgressIndicator(
                     value: loadingProgress.expectedTotalBytes != null
                         ? loadingProgress.cumulativeBytesLoaded /
-                            loadingProgress.expectedTotalBytes!
+                              loadingProgress.expectedTotalBytes!
                         : null,
                     valueColor: AlwaysStoppedAnimation<Color>(
                       Colors.blue.shade600,

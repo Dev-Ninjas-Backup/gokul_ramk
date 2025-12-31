@@ -15,7 +15,17 @@ class TopMealItem extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 31,
-            backgroundImage: NetworkImage(topMeal.image),
+            backgroundColor: Colors.grey.shade200,
+            backgroundImage: topMeal.image.isNotEmpty
+                ? NetworkImage(topMeal.image)
+                : null,
+            child: topMeal.image.isEmpty
+                ? Icon(
+                    Icons.image_not_supported,
+                    color: Colors.grey.shade400,
+                    size: 32,
+                  )
+                : null,
           ),
           const SizedBox(height: 6),
           Text(
