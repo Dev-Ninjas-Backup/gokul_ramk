@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
+import 'package:gokul_ramk/features/trainer/home/home_screen/exercise_screen/screen/exercise_list_screen.dart';
+//import 'package:gokul_ramk/features/trainer/program/model/excercise_model.dart';
 import '../controller/create_exercise_controller.dart';
 
 class CreateExerciseScreen extends StatelessWidget {
@@ -41,7 +43,7 @@ class CreateExerciseScreen extends StatelessWidget {
           }
 
           return DropdownButtonFormField<String>(
-            value: controller.selectedWorkoutId.value,
+            initialValue: controller.selectedWorkoutId.value,
             items: controller.workouts
                 .map((w) => DropdownMenuItem(value: w.id, child: Text(w.name)))
                 .toList(),
@@ -65,6 +67,15 @@ class CreateExerciseScreen extends StatelessWidget {
         title: const Text('Create Exercise'),
         backgroundColor: Colors.white,
         centerTitle: true,
+        actions: [
+          TextButton.icon(
+            onPressed: () {
+              Get.to(() => ExerciseListScreen());
+            },
+            icon: const Icon(Icons.list),
+            label: const Text("Exercises"),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),

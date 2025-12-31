@@ -5,9 +5,9 @@ import 'package:gokul_ramk/features/trainer/home/home_screen/meal_screen/screen/
 import 'package:gokul_ramk/features/trainer/program/screen/create_program.dart';
 import 'package:gokul_ramk/features/trainer/workout/screen/create_workout_screen.dart';
 import 'package:gokul_ramk/features/trainer/home/home_screen/exercise_screen/screen/create_exercise_screen.dart';
-import 'package:gokul_ramk/features/trainer/home/home_screen/exercise_screen/screen/exercise_list_screen.dart';
+//import 'package:gokul_ramk/features/trainer/home/home_screen/exercise_screen/screen/exercise_list_screen.dart';
 import 'package:gokul_ramk/features/trainer/home/home_screen/session_screen/screen/create_session_screen.dart';
-import 'package:gokul_ramk/features/trainer/home/home_screen/session_screen/screen/session_list_screen.dart';
+//import 'package:gokul_ramk/features/trainer/home/home_screen/session_screen/screen/session_list_screen.dart';
 import 'package:gokul_ramk/features/trainer/package/screen/create_package_screen.dart';
 
 import '../../../../../core/common/styles/global_text_style.dart';
@@ -170,7 +170,7 @@ class HomeScreen extends StatelessWidget {
               width: double.infinity,
               padding: EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.blue[50],
+                color: Colors.green[50],
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Column(
@@ -204,7 +204,7 @@ class HomeScreen extends StatelessWidget {
               width: double.infinity,
               padding: EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.green[50],
+                color: Colors.blue[50],
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Column(
@@ -220,7 +220,7 @@ class HomeScreen extends StatelessWidget {
                   SizedBox(height: 6),
                   Text(
                     "Design a structured training plan tailored for your clients.",
-
+                    textAlign: TextAlign.center,
                     style: getTextStyle(fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 12),
@@ -239,7 +239,7 @@ class HomeScreen extends StatelessWidget {
               width: double.infinity,
               padding: EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.blue[50],
+                color: Colors.green[50],
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Column(
@@ -267,36 +267,7 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 12),
-            // Create meal
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.green[50],
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    "Create Meal",
-                    style: getTextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
 
-                  SizedBox(height: 12),
-                  ElevatedButton(
-                    onPressed: () {
-                      Get.to(() => MealCreateScreen());
-                    },
-                    child: Text("Start Now"),
-                  ),
-                ],
-              ),
-            ),
             SizedBox(height: 12),
             Container(
               width: double.infinity,
@@ -317,6 +288,11 @@ class HomeScreen extends StatelessWidget {
                   ),
 
                   SizedBox(height: 12),
+                  Text(
+                    "Add new exercises to your exercise library.",
+                    style: getTextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 12),
                   ElevatedButton(
                     onPressed: () {
                       Get.to(CreateExerciseScreen());
@@ -326,43 +302,42 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
             ),
+            // SizedBox(height: 12),
+
+            // Container(
+            //   width: double.infinity,
+            //   padding: EdgeInsets.all(16),
+            //   decoration: BoxDecoration(
+            //     color: Colors.orange[50],
+            //     borderRadius: BorderRadius.circular(16),
+            //   ),
+            //   child: Column(
+            //     crossAxisAlignment: CrossAxisAlignment.center,
+            //     children: [
+            //       Text(
+            //         "View Exercises",
+            //         style: getTextStyle(
+            //           fontSize: 18,
+            //           fontWeight: FontWeight.bold,
+            //         ),
+            //       ),
+            //       SizedBox(height: 6),
+            //       Text(
+            //         "Browse and edit all exercises.",
+            //         style: getTextStyle(fontWeight: FontWeight.bold),
+            //       ),
+            //       SizedBox(height: 12),
+            //       ElevatedButton(
+            //         onPressed: () {
+            //           Get.to(() => ExerciseListScreen());
+            //         },
+            //         child: Text("Open"),
+            //       ),
+            //     ],
+            //   ),
+            // ),
             SizedBox(height: 12),
 
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.orange[50],
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    "View Exercises",
-                    style: getTextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 6),
-                  Text(
-                    "Browse and edit all exercises.",
-                    style: getTextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 12),
-                  ElevatedButton(
-                    onPressed: () {
-                      Get.to(() => ExerciseListScreen());
-                    },
-                    child: Text("Open"),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 12),
-
-            // Create meal
             Container(
               width: double.infinity,
               padding: EdgeInsets.all(16),
@@ -374,11 +349,53 @@ class HomeScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
+                    "Create Meal",
+                    style: getTextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+
+                  SizedBox(height: 12),
+                  Text(
+                    "Add new meals to your meal library.",
+                    style: getTextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 12),
+                  ElevatedButton(
+                    onPressed: () {
+                      Get.to(() => MealCreateScreen());
+                    },
+                    child: Text("Start Now"),
+                  ),
+                ],
+              ),
+            ),
+
+            SizedBox(height: 12),
+
+            // Create meal
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.blue[50],
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
                     "Create Meal Plan",
                     style: getTextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
+                  ),
+                  SizedBox(height: 12),
+                  Text(
+                    "Design personalized meal plans for your clients.",
+                    style: getTextStyle(fontWeight: FontWeight.bold),
                   ),
 
                   SizedBox(height: 12),
@@ -396,7 +413,7 @@ class HomeScreen extends StatelessWidget {
               width: double.infinity,
               padding: EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.blue[50],
+                color: Colors.green[50],
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Column(
@@ -424,39 +441,39 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 12),
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.teal[50],
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    "View Sessions",
-                    style: getTextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 6),
-                  Text(
-                    "Browse and manage sessions.",
-                    style: getTextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 12),
-                  ElevatedButton(
-                    onPressed: () {
-                      Get.to(() => SessionListScreen());
-                    },
-                    child: Text("Open"),
-                  ),
-                ],
-              ),
-            ),
+            // SizedBox(height: 12),
+            // Container(
+            //   width: double.infinity,
+            //   padding: EdgeInsets.all(16),
+            //   decoration: BoxDecoration(
+            //     color: Colors.teal[50],
+            //     borderRadius: BorderRadius.circular(16),
+            //   ),
+            //   child: Column(
+            //     crossAxisAlignment: CrossAxisAlignment.center,
+            //     children: [
+            //       Text(
+            //         "View Sessions",
+            //         style: getTextStyle(
+            //           fontSize: 18,
+            //           fontWeight: FontWeight.bold,
+            //         ),
+            //       ),
+            //       SizedBox(height: 6),
+            //       Text(
+            //         "Browse and manage sessions.",
+            //         style: getTextStyle(fontWeight: FontWeight.bold),
+            //       ),
+            //       SizedBox(height: 12),
+            //       ElevatedButton(
+            //         onPressed: () {
+            //           Get.to(() => SessionListScreen());
+            //         },
+            //         child: Text("Open"),
+            //       ),
+            //     ],
+            //   ),
+            // ),
           ],
         ),
       ),
