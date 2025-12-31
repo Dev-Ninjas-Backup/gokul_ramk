@@ -115,7 +115,7 @@ Future<FeatureTrainerModel> fetchTrainerDetails(String trainerID) async {
 
 
 Future<List<Program1>> fetchProgram() async {
-  const String url = "${Urls.baseUrl}/programs?limit=5";
+  const String url = "${Urls.baseUrl}/programs?limit=3";
 
   final response = await client.getRequest(url: url);
 
@@ -158,6 +158,28 @@ Future<List<Program1>> fetchAllProgram() async {
   }
 
   return [];
+}
+
+
+
+
+
+
+Future<Program1?> fetchProgramById(String id) async {
+  final String url = "${Urls.baseUrl}/programs/$id";
+
+  final response = await client.getRequest(url: url);
+
+  if (response.isSuccess &&
+      (response.statusCode == 200 || response.statusCode == 201)) {
+    final raw = response.responseData;
+    final data = raw?['data'];
+
+    if (data != null) {
+      return Program1.fromJson(data as Map<String, dynamic>);
+    }
+  }
+  return null;
 }
 
 
