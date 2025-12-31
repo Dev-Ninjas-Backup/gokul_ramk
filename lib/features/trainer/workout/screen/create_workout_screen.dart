@@ -5,11 +5,11 @@ import '../controller/create_workout_controller.dart';
 import '../model/workout_model.dart';
 import 'workout_list_screen.dart';
 
-class CreatePackageScreen extends StatelessWidget {
+class CreateWorkoutScreen extends StatelessWidget {
   final Workout? workoutToUpdate;
   final bool isUpdateMode;
 
-  const CreatePackageScreen({
+  const CreateWorkoutScreen({
     super.key,
     this.workoutToUpdate,
     this.isUpdateMode = false,
