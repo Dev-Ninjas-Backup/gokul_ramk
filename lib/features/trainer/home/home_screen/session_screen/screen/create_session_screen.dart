@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
+import 'package:gokul_ramk/features/trainer/home/home_screen/session_screen/screen/session_list_screen.dart';
 import '../controller/create_session_controller.dart';
 import '../model/package_model.dart';
 import '../model/program_model.dart';
@@ -79,6 +80,15 @@ class CreateSessionScreen extends StatelessWidget {
         title: const Text('Create Session'),
         backgroundColor: Colors.white,
         centerTitle: true,
+        actions: [
+          TextButton.icon(
+            onPressed: () {
+              Get.to(() => SessionListScreen());
+            },
+            icon: const Icon(Icons.list),
+            label: const Text("Sessions"),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
