@@ -49,30 +49,76 @@ class ProgramService {
 
   //fetch excercises
 
-  Future<List<Exercise>> fetchAllExercises() async {
-    try {
-      final res = await _client.getRequest(
-        url: "https://wellfitsync.com/workout-exercises",
-      );
+  // Future<List<Exercise>> fetchAllExercises() async {
+  //   try {
+  //     final res = await _client.getRequest(
+  //       url: "https://wellfitsync.com/workout-exercises",
+  //     );
 
-      if (res.isSuccess && res.responseData != null) {
-        final List<dynamic> data = res.responseData!['data']['data'];
-        return data.map((json) => Exercise.fromJson(json)).toList();
-      }
-    } catch (e) {
-      Get.snackbar("Error", "Failed to load exercises");
-      rethrow;
-    }
+  //     if (res.isSuccess && res.responseData != null) {
+  //       final List<dynamic> data = res.responseData!['data']['data'];
+  //       return data.map((json) => Exercise.fromJson(json)).toList();
+  //     }
+  //   } catch (e) {
+  //     Get.snackbar("Error", "Failed to load exercises");
+  //     rethrow;
+  //   }
 
-    return [];
-  }
+  //   return [];
+  // }
 
   // Create program
   Future<bool> createProgram(Map<String, dynamic> body) async {
     final res = await _client.postRequest(
-      url: "https://wellfitsync.com/programs",
+      url: "https://wellfitsync.com/programs/create-program",
       body: body,
     );
-    return res.isSuccess;
+
+    if (res.isSuccess) {
+      Get.snackbar(
+        "Success",
+        "Program created successfully!",
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+      return true;
+    } else {
+      Get.snackbar(
+        "Error",
+        res.errorMessage ?? "Failed to create program",
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      return false;
+    }
+  }
+
+  // Update program
+  Future<bool> updateProgram(
+    String programId,
+    Map<String, dynamic> body,
+  ) async {
+    final res = await _client.patchRequest(
+      url: "https://wellfitsync.com/programs/$programId",
+      body: body,
+    );
+
+    if (res.isSuccess) {
+      Get.snackbar(
+        "Success",
+        "Program updated successfully!",
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+      return true;
+    } else {
+      Get.snackbar(
+        "Error",
+        res.errorMessage ?? "Failed to update program",
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      return false;
+    }
   }
 }
