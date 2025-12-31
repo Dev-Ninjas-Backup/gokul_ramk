@@ -47,16 +47,56 @@ class SalesAndBalanceWidget extends StatelessWidget {
           );
         }),
         SizedBox(height: 16),
+        // Padding(
+        //   padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        //   child: Row(
+        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //     children: [
+        //       Text(
+        //         "Balance",
+        //         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        //       ),
+        //       // _dropdownFilter(),
+        //       ElevatedButton(
+        //         onPressed: () {
+        //           Get.toNamed(AppRoute.withdrawHistory);
+        //         },
+        //         child: Text("."),
+        //       ),
+        //     ],
+        //   ),
+        // ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                "Balance",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              Expanded(
+                child: Text(
+                  "Balance",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
               ),
-              // _dropdownFilter(),
+              SizedBox(width: 8),
+              // Make the button flexible so it won't overflow on narrow screens.
+              Flexible(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerRight,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
+                      minimumSize: Size(0, 0),
+                    ),
+                    onPressed: () {
+                      Get.toNamed(AppRoute.withdrawHistory);
+                    },
+                    child: Text("Withdraw History"),
+                  ),
+                ),
+              ),
             ],
           ),
         ),

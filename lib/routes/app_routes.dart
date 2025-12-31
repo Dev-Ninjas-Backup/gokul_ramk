@@ -23,6 +23,7 @@ import 'package:gokul_ramk/features/trainer/community/challenges/screen/create_c
 import 'package:gokul_ramk/features/trainer/community/events/screen/create_event_screen.dart';
 import 'package:gokul_ramk/features/trainer/home/home_screen/screen/home_screen.dart';
 import 'package:gokul_ramk/features/trainer/my_clients/client_profile/sceen/client_profile_screen.dart';
+import 'package:gokul_ramk/features/trainer/profile/trainer_profile/widgets/withdraw_history.dart';
 import 'package:gokul_ramk/features/trainer/package/screen/all_packages_screen.dart';
 import 'package:gokul_ramk/features/trainer/package/screen/create_package_screen.dart';
 import 'package:gokul_ramk/features/trainer/package/screen/package_details_screen.dart';
@@ -108,6 +109,7 @@ class AppRoute {
   static String createPackageScreen = '/trainer/createPackageScreen';
   static String packageDetailsScreen = '/trainer/packageDetailsScreen';
   static String allPackagesScreen = '/trainer/allPackagesScreen';
+    static String withdrawHistory = "/withdrawHistory";
 
   // Message routes
   static String messageScreen = '/message';
@@ -120,6 +122,7 @@ class AppRoute {
   static String getemailVerificationScreen() => emailVerificationScreen;
   static String getforgotPasswordScreen() => forgotPasswordScreen;
   static String getforgotPassVerifyOtpScreen() => forgotPassVerifyOtpScreen;
+  static String getwithdrawHistory() => withdrawHistory;
 
   static String getcreateNewPasswordScreen() => createNewPasswordScreen;
   static String gettellUsAboutYourselfScreen1() => tellUsAboutYourselfScreen1;
@@ -264,5 +267,6 @@ class AppRoute {
     // Message routes
     GetPage(name: messageScreen, page: () => MessageScreen()),
     GetPage(name: messageDetailScreen, page: () => MessageDetailScreen()),
+    GetPage(name: withdrawHistory, page: () => WithdrawHistoryScreen()),
   ];
 }

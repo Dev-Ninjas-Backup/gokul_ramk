@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
 import 'package:gokul_ramk/core/endpoint/end_points.dart';
 import 'package:gokul_ramk/core/services/network_service/network_client.dart';
+import 'package:gokul_ramk/core/utils/constants/imagepath.dart';
 
 class SessionDetailScreen extends StatelessWidget {
   final String sessionId;
@@ -37,6 +38,9 @@ class SessionDetailScreen extends StatelessWidget {
             final session = snapshot.data!;
             final trainer = session['trainer'];
             final workouts = session['workouts'] as List? ?? [];
+            final trainerImage =
+                (trainer != null ? (trainer['images']?.toString() ?? '') : '')
+                    .trim();
 
             return SingleChildScrollView(
               padding: const EdgeInsets.all(16),
@@ -86,7 +90,10 @@ class SessionDetailScreen extends StatelessWidget {
                           children: [
                             CircleAvatar(
                               radius: 18,
-                              backgroundImage: NetworkImage(trainer['images']),
+                              backgroundImage: trainerImage.isNotEmpty
+                                  ? NetworkImage(trainerImage)
+                                  : AssetImage(Imagepath.trainer)
+                                        as ImageProvider,
                             ),
                             const SizedBox(width: 10),
                             Column(
