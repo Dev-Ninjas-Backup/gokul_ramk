@@ -78,7 +78,8 @@ class MessageApiService {
 
         final conversationList = uniqueConversations.values.toList();
         _logger.i(
-            'Parsed unique conversations count: ${conversationList.length}');
+          'Parsed unique conversations count: ${conversationList.length}',
+        );
         return conversationList;
       } else if (response.statusCode == 401) {
         throw Exception('Unauthorized');

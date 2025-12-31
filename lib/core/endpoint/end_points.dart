@@ -19,7 +19,8 @@ class Urls {
   //user onboarding(tell us about yourseft)
   static const String tellAboutOnboarding = "$baseUrl/user/onbording-step/me";
   static const String userProfile = "$baseUrl/user/profile/me";
-  static const String updateUserProfile = "$baseUrl/user/update-user-profile/me";
+  static const String updateUserProfile =
+      "$baseUrl/user/update-user-profile/me";
   static const String trainerProfile = "$baseUrl/trainer";
   //categories/workout
   static const String categories = "$baseUrl/categories";

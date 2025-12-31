@@ -29,7 +29,7 @@ class BookingDetailsController extends GetxController {
       if (fetchedBooking != null) {
         booking.value = fetchedBooking;
         print('Fetched booking details: ${fetchedBooking.id}');
-        
+
         // Fetch user profile image
         await fetchUserProfileImage(fetchedBooking.user.id);
       } else {
@@ -46,7 +46,8 @@ class BookingDetailsController extends GetxController {
   /// Fetch user profile to get their profile image
   Future<void> fetchUserProfileImage(String userId) async {
     try {
-      final token = await networkClient.sharedPreferencesHelper.getAccessToken();
+      final token = await networkClient.sharedPreferencesHelper
+          .getAccessToken();
       final response = await http.get(
         Uri.parse(Urls.getUserProfile(userId)),
         headers: {
