@@ -234,7 +234,17 @@ class ViewTrainerProfileScreen extends StatelessWidget {
                   children: [
                     Expanded(
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          // Navigate to message detail screen with trainer info
+                          Get.toNamed(
+                            '/message/detail',
+                            arguments: {
+                              'partnerId': trainer.id,
+                              'partnerName': trainer.name,
+                              'partnerImage': trainer.image,
+                            },
+                          );
+                        },
                         style: ElevatedButton.styleFrom(
                           // ignore: deprecated_member_use
                           backgroundColor: Colors.green.withOpacity(0.2),

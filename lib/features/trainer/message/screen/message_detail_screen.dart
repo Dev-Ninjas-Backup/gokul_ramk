@@ -69,7 +69,8 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
   Future<void> _fetchPartnerProfileImage() async {
     try {
       final networkClient = Get.find<NetworkClient>();
-      final token = await networkClient.sharedPreferencesHelper.getAccessToken();
+      final token = await networkClient.sharedPreferencesHelper
+          .getAccessToken();
 
       final response = await http.get(
         Uri.parse(Urls.getUserProfile(_partnerId)),

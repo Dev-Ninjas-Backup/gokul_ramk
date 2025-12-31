@@ -105,8 +105,9 @@ class _BookingSessionCardState extends State<BookingSessionCard> {
   Future<void> _fetchUserProfileImage() async {
     try {
       final networkClient = Get.find<NetworkClient>();
-      final token = await networkClient.sharedPreferencesHelper.getAccessToken();
-      
+      final token = await networkClient.sharedPreferencesHelper
+          .getAccessToken();
+
       final response = await http.get(
         Uri.parse(Urls.getUserProfile(widget.session.user.id)),
         headers: {
@@ -244,7 +245,9 @@ class _BookingSessionCardState extends State<BookingSessionCard> {
                   } else if (value == 'confirm') {
                     widget.onMarkConfirm(widget.session.id);
                   } else if (value == 'details') {
-                    Get.to(() => BookingDetailsScreen(bookingId: widget.session.id));
+                    Get.to(
+                      () => BookingDetailsScreen(bookingId: widget.session.id),
+                    );
                   }
                 },
                 itemBuilder: (context) => [

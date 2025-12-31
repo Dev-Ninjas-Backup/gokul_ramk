@@ -24,10 +24,10 @@ class MessageModel {
       timestamp: json['timestamp'] != null
           ? DateTime.parse(json['timestamp'].toString())
           : json['updatedAt'] != null
-              ? DateTime.parse(json['updatedAt'].toString())
-              : json['createdAt'] != null
-                  ? DateTime.parse(json['createdAt'].toString())
-                  : DateTime.now(),
+          ? DateTime.parse(json['updatedAt'].toString())
+          : json['createdAt'] != null
+          ? DateTime.parse(json['createdAt'].toString())
+          : DateTime.now(),
       isRead: json['isRead'] ?? false,
     );
   }

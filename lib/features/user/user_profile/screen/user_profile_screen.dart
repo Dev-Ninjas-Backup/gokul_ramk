@@ -201,6 +201,14 @@ class UserProfileScreen extends StatelessWidget {
                     ),
                     const Divider(height: 1),
                     SettingsTile(
+                      icon: Icon(Icons.message_outlined, color: Colors.grey),
+                      title: "Messages",
+                      onTap: () {
+                        Get.toNamed('/message');
+                      },
+                    ),
+                    const Divider(height: 1),
+                    SettingsTile(
                       icon: ImageIcon(
                         AssetImage(IconPath.languageIcon),
                         color: Colors.grey,

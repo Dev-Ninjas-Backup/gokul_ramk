@@ -23,14 +23,16 @@ class ConversationModel {
 
   factory ConversationModel.fromJson(Map<String, dynamic> json) {
     // Support multiple response formats
-    final partnerName = json['partnerName'] ??
+    final partnerName =
+        json['partnerName'] ??
         json['name'] ??
         json['fullname'] ??
         json['receiver']?['fullname'] ??
         json['sender']?['fullname'] ??
         'Unknown User';
 
-    final partnerImage = json['partnerImage'] ??
+    final partnerImage =
+        json['partnerImage'] ??
         json['profileImage'] ??
         json['images'] ??
         json['receiver']?['images'] ??
@@ -39,7 +41,8 @@ class ConversationModel {
     return ConversationModel(
       id: json['id'] ?? json['_id'] ?? '',
       userId: json['userId'] ?? json['senderId'] ?? '',
-      conversationPartner: json['conversationPartner'] ??
+      conversationPartner:
+          json['conversationPartner'] ??
           json['participantId'] ??
           json['receiverId'] ??
           json['senderId'] ??
@@ -50,8 +53,8 @@ class ConversationModel {
       lastMessageTime: json['lastMessageTime'] != null
           ? DateTime.parse(json['lastMessageTime'].toString())
           : json['updatedAt'] != null
-              ? DateTime.parse(json['updatedAt'].toString())
-              : DateTime.now(),
+          ? DateTime.parse(json['updatedAt'].toString())
+          : DateTime.now(),
       unreadCount: json['unreadCount'] ?? 0,
     );
   }

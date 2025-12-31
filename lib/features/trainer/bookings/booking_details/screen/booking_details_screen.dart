@@ -57,7 +57,10 @@ class BookingDetailsScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: AppColors.primaryColor, width: 1.5),
+                    border: Border.all(
+                      color: AppColors.primaryColor,
+                      width: 1.5,
+                    ),
                   ),
                   child: Column(
                     children: [
@@ -67,12 +70,17 @@ class BookingDetailsScreen extends StatelessWidget {
                           Obx(
                             () => CircleAvatar(
                               radius: 40,
-                              backgroundImage: controller
-                                      .userProfileImage.value?.isNotEmpty ??
-                                  false
-                                ? NetworkImage(controller.userProfileImage.value!)
-                                : AssetImage(Imagepath.trainer)
-                                    as ImageProvider,
+                              backgroundImage:
+                                  controller
+                                          .userProfileImage
+                                          .value
+                                          ?.isNotEmpty ??
+                                      false
+                                  ? NetworkImage(
+                                      controller.userProfileImage.value!,
+                                    )
+                                  : AssetImage(Imagepath.trainer)
+                                        as ImageProvider,
                             ),
                           ),
                         ],
@@ -95,7 +103,8 @@ class BookingDetailsScreen extends StatelessWidget {
                           color: AppColors.primaryFontColor,
                         ),
                       ),
-                      if (booking.user.phone != null && booking.user.phone!.isNotEmpty)
+                      if (booking.user.phone != null &&
+                          booking.user.phone!.isNotEmpty)
                         Padding(
                           padding: EdgeInsets.only(top: 4),
                           child: Text(
