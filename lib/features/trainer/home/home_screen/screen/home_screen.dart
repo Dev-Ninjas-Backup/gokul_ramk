@@ -8,6 +8,7 @@ import 'package:gokul_ramk/features/trainer/home/home_screen/exercise_screen/scr
 import 'package:gokul_ramk/features/trainer/home/home_screen/exercise_screen/screen/exercise_list_screen.dart';
 import 'package:gokul_ramk/features/trainer/home/home_screen/session_screen/screen/create_session_screen.dart';
 import 'package:gokul_ramk/features/trainer/home/home_screen/session_screen/screen/session_list_screen.dart';
+import 'package:gokul_ramk/features/trainer/package/screen/create_package_screen.dart';
 
 import '../../../../../core/common/styles/global_text_style.dart';
 import '../../../../../core/utils/constants/icon_path.dart';
@@ -190,7 +191,7 @@ class HomeScreen extends StatelessWidget {
                   SizedBox(height: 12),
                   ElevatedButton(
                     onPressed: () {
-                      Get.to(() => CreatePackageScreen());
+                      Get.to(() => CreateWorkoutScreen());
                     },
                     child: Text("Start Now"),
                   ),
@@ -253,7 +254,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 6),
                   Text(
-                    "Bundle multiple programs into a package for your clients.",
+                    "Bundle multiple sessions into a package for your clients.",
                     style: getTextStyle(fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 12),

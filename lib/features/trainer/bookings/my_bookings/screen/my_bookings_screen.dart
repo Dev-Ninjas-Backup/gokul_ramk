@@ -25,12 +25,12 @@ class MyBookingsScreen extends StatelessWidget {
                       color: AppColors.primaryFontColor,
                     ),
                   ),
-                  Spacer(),
-                  Icon(
-                    Icons.sort_rounded,
-                    color: AppColors.primaryFontColor,
-                    size: 30,
-                  ),
+                  // Spacer(),
+                  // Icon(
+                  //   Icons.sort_rounded,
+                  //   color: AppColors.primaryFontColor,
+                  //   size: 30,
+                  // ),
                 ],
               ),
               SizedBox(height: 30),

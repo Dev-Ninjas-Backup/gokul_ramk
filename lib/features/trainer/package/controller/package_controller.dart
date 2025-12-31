@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/services/network_service/network_client.dart';
+import 'package:gokul_ramk/features/trainer/workout/model/program_model.dart';
 import '../model/package_model.dart';
-import '../model/program_model.dart';
 
 class PackageController extends GetxController {
   final NetworkClient _networkClient = Get.find<NetworkClient>();

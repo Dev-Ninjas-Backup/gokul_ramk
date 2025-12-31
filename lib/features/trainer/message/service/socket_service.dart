@@ -43,17 +43,17 @@ class SocketService {
     // Connection event listeners
     socket.onConnect((_) {
       _logger.i('Socket connected with ID: ${socket.id}');
-      onConnectionStatusChanged?.call('connected');
+      onConnectionStatusChanged.call('connected');
     });
 
     socket.onConnectError((error) {
       _logger.e('Connection error: $error');
-      onConnectionStatusChanged?.call('error');
+      onConnectionStatusChanged.call('error');
     });
 
     socket.onDisconnect((_) {
       _logger.i('Socket disconnected');
-      onConnectionStatusChanged?.call('disconnected');
+      onConnectionStatusChanged.call('disconnected');
     });
 
     // Listen for incoming messages
@@ -68,7 +68,7 @@ class SocketService {
           'timestamp': data['timestamp'] ?? DateTime.now().toIso8601String(),
           'isRead': data['isRead'] ?? false,
         });
-        onMessageReceived?.call(message);
+        onMessageReceived.call(message);
       } catch (e) {
         _logger.e('Error parsing received message: $e');
       }
