@@ -168,6 +168,7 @@ class UserHomeController extends GetxController {
     fetchTrainerMethod();
     fetchUserProfile();
     fetchPrograms();
+    fetchAllPrograms();
     super.onInit();
   }
 
@@ -228,6 +229,22 @@ class UserHomeController extends GetxController {
     } catch (e) {
       print("error peogram:$e");
       programs1.clear();
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  final programsAll1 = <Program1>[].obs;
+
+  Future<void> fetchAllPrograms() async {
+    try {
+      isLoading.value = true;
+
+      final result = await service.fetchAllProgram();
+      programsAll1.assignAll(result);
+    } catch (e) {
+      print("error peogram:$e");
+      programsAll1.clear();
     } finally {
       isLoading.value = false;
     }
