@@ -136,4 +136,29 @@ Future<List<Program1>> fetchProgram() async {
 }
 
 
+
+
+
+Future<List<Program1>> fetchAllProgram() async {
+  const String url = "${Urls.baseUrl}/programs";
+
+  final response = await client.getRequest(url: url);
+
+  if (response.isSuccess &&
+      (response.statusCode == 200 || response.statusCode == 201)) {
+
+    final raw = response.responseData;
+
+    final List list =
+        raw?['data']?['data'] is List ? raw!['data']['data'] : [];
+
+    return list
+        .map((e) => Program1.fromJson(e as Map<String, dynamic>))
+        .toList();
+  }
+
+  return [];
+}
+
+
 }

@@ -5,7 +5,7 @@ import 'package:gokul_ramk/core/common/widgets/get_random_color.dart';
 import 'package:gokul_ramk/core/utils/constants/icon_path.dart';
 import 'package:gokul_ramk/features/user/bottom_navbar/controller/navbar_controller.dart';
 import 'package:gokul_ramk/features/user/user_home/controller/user_home_controller.dart';
-import 'package:gokul_ramk/features/user/user_home/model/program_model.dart';
+import 'package:gokul_ramk/features/user/user_home/screen/program/all_program_screen.dart';
 import 'package:gokul_ramk/features/user/user_home/view_trainer_profile/screen/view_trainer_profile_screen.dart';
 import 'package:gokul_ramk/features/user/user_home/widget/catrgory_button.dart';
 import 'package:gokul_ramk/features/user/user_home/widget/featured_trainer_card.dart';
@@ -198,7 +198,7 @@ class UserHomeScreen extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                     
-                    
+                    Get.to(()=>AllProgramsScreenUser());
                     
                     },
                     child: Text(
