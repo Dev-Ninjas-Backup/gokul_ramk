@@ -5,9 +5,7 @@ import 'package:gokul_ramk/core/common/widgets/custom_app_bar_title.dart';
 import 'package:gokul_ramk/core/utils/constants/colors.dart';
 import 'package:gokul_ramk/core/utils/constants/imagepath.dart';
 import 'package:gokul_ramk/features/trainer/bookings/booking_details/controller/booking_details_controller.dart';
-import 'package:gokul_ramk/features/trainer/bookings/booking_details/widgets/bottom_reschedule_button.dart';
 import 'package:gokul_ramk/features/trainer/bookings/booking_details/widgets/infotiile_widget.dart';
-import 'package:gokul_ramk/features/trainer/bookings/booking_details/widgets/map.dart';
 
 class BookingDetailsScreen extends StatelessWidget {
   final String bookingId;
