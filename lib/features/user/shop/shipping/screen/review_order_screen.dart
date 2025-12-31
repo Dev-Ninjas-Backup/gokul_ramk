@@ -29,58 +29,58 @@ class ReviewOrderScreen extends StatelessWidget {
               spacing: 10,
               children: [
                 CustomAppBarTitle(title: 'Review Your Order'),
-                const SizedBox(height: 10),
+                // const SizedBox(height: 10),
 
-                Container(
-                  padding: EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black38),
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Row(
-                    spacing: 16,
-                    children: [
-                      Container(
-                        height: 80,
-                        width: 80,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: Colors.grey.shade200),
-                          image: DecorationImage(
-                            image: AssetImage(Imagepath.proteinBottle),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          spacing: 12,
-                          children: [
-                            Text(
-                              'Whey Protein Isolate',
-                              style: getTextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  '\$49',
-                                  style: getTextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text('01'),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                // Container(
+                //   padding: EdgeInsets.all(8),
+                //   decoration: BoxDecoration(
+                //     border: Border.all(color: Colors.black38),
+                //     borderRadius: BorderRadius.circular(16),
+                //   ),
+                //   child: Row(
+                //     spacing: 16,
+                //     children: [
+                //       Container(
+                //         height: 80,
+                //         width: 80,
+                //         decoration: BoxDecoration(
+                //           borderRadius: BorderRadius.circular(12),
+                //           border: Border.all(color: Colors.grey.shade200),
+                //           image: DecorationImage(
+                //             image: AssetImage(Imagepath.proteinBottle),
+                //           ),
+                //         ),
+                //       ),
+                //       Expanded(
+                //         child: Column(
+                //           crossAxisAlignment: CrossAxisAlignment.start,
+                //           spacing: 12,
+                //           children: [
+                //             Text(
+                //               'Whey Protein Isolate',
+                //               style: getTextStyle(
+                //                 fontSize: 16,
+                //                 fontWeight: FontWeight.w700,
+                //               ),
+                //             ),
+                //             Row(
+                //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //               children: [
+                //                 Text(
+                //                   '\$49',
+                //                   style: getTextStyle(
+                //                     fontWeight: FontWeight.bold,
+                //                   ),
+                //                 ),
+                //                 Text('01'),
+                //               ],
+                //             ),
+                //           ],
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
 
                 const SizedBox(height: 4),
 

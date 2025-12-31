@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
-import 'package:gokul_ramk/features/user/session/trainers_tab/widget/yoga_trainer_view_profile1.dart';
 import 'package:gokul_ramk/features/user/user_home/controller/user_home_controller.dart';
+import 'package:gokul_ramk/features/user/user_home/view_trainer_profile/screen/view_trainer_profile_screen.dart';
 
 class TrainerProfileCard extends StatelessWidget {
   final int index;
@@ -81,31 +81,35 @@ class TrainerProfileCard extends StatelessWidget {
                   const SizedBox(height: 8),
                   Row(
                     children: [
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green.withValues(
-                              alpha: 0.1,
-                            ),
-                          ),
-                          child: Text(
-                            "Message",
-                            style: getTextStyle(
-                              color: Colors.green,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
+                      // Expanded(
+                      //   child: ElevatedButton(
+                      //     onPressed: () {},
+                      //     style: ElevatedButton.styleFrom(
+                      //       backgroundColor: Colors.green.withValues(
+                      //         alpha: 0.1,
+                      //       ),
+                      //     ),
+                      //     child: Text(
+                      //       "Message",
+                      //       style: getTextStyle(
+                      //         color: Colors.green,
+                      //         fontWeight: FontWeight.bold,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+                      // const SizedBox(width: 8),
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
                             Get.to(
-                              ViewTrainerYogaProfileScreen(
+                              ViewTrainerProfileScreen(
                                 trainerId: controller.yogaTrainers[index].id,
                               ),
+
+                              // ViewTrainerYogaProfileScreen(
+                              //   trainerId: controller.yogaTrainers[index].id,
+                              // ),
                             );
                           },
                           style: ElevatedButton.styleFrom(

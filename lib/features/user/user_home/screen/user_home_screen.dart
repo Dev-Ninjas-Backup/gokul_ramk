@@ -80,114 +80,114 @@ class UserHomeScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
+               const SizedBox(height: 20),
 
-              // Today's Highlights
-              Text(
-                "Today's Highlights",
-                style: getTextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 12),
-              ListView.builder(
-                itemCount: controller.highlightList.length,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  final item = controller.highlightList[index];
-                  return HighlightCard(
-                    title: item['title'],
-                    subtitle: item['subtitle'],
-                    buttonText: item['buttonText'],
-                    buttonColor: getRandomDeepColor(),
-                    image: item['image'],
-                    onTap: () {},
-                  );
-                },
-              ),
+            //   // Today's Highlights
+            //   Text(
+            //     "Today's Highlights",
+            //     style: getTextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            //   ),
+            //   const SizedBox(height: 12),
+            //   ListView.builder(
+            //     itemCount: controller.highlightList.length,
+            //     shrinkWrap: true,
+            //     physics: const NeverScrollableScrollPhysics(),
+            //     itemBuilder: (context, index) {
+            //       final item = controller.highlightList[index];
+            //       return HighlightCard(
+            //         title: item['title'],
+            //         subtitle: item['subtitle'],
+            //         buttonText: item['buttonText'],
+            //         buttonColor: getRandomDeepColor(),
+            //         image: item['image'],
+            //         onTap: () {},
+            //       );
+            //     },
+            //   ),
 
-              // Progress & Activity
-              Text(
-                "Today's Progress & Activity",
-                style: getTextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 12),
-              Obx(() => ProgressCard(progress: controller.progress.value)),
+            //   // Progress & Activity
+            //   Text(
+            //     "Today's Progress & Activity",
+            //     style: getTextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            //   ),
+            //   const SizedBox(height: 12),
+            //   Obx(() => ProgressCard(progress: controller.progress.value)),
 
-              const SizedBox(height: 16),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: controller.stats.entries
-                      .map((e) => StatsCard(title: e.key, value: e.value))
-                      .toList(),
-                ),
-              ),
+            //   const SizedBox(height: 16),
+            //   SingleChildScrollView(
+            //     scrollDirection: Axis.horizontal,
+            //     child: Row(
+            //       children: controller.stats.entries
+            //           .map((e) => StatsCard(title: e.key, value: e.value))
+            //           .toList(),
+            //     ),
+            //   ),
 
-              const SizedBox(height: 16),
+            //  const SizedBox(height: 16),
 
-              // Categories
-              Text(
-                "Explore Workouts",
-                style: getTextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 12),
-              Obx(() {
-                if (controller.isLoading.value) {
-                  return Center(child: CircularProgressIndicator());
-                }
-                return SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: controller.categories
-                        .map(
-                          (cat) => CategoryButton(
-                            label: cat.name,
-                            isSelected:
-                                controller.selectedCategory.value == cat.id,
-                            onTap: () {
-                              controller.selectedCategory.value = cat.id;
-                              controller.fetchWorkoutListMethod();
-                            },
-                          ),
-                        )
-                        .toList(),
-                  ),
-                );
-              }),
+              // // Categories
+              // Text(
+              //   "Explore Workouts",
+              //   style: getTextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              // ),
+              // const SizedBox(height: 12),
+              // Obx(() {
+              //   if (controller.isLoading.value) {
+              //     return Center(child: CircularProgressIndicator());
+              //   }
+              //   return SingleChildScrollView(
+              //     scrollDirection: Axis.horizontal,
+              //     child: Row(
+              //       children: controller.categories
+              //           .map(
+              //             (cat) => CategoryButton(
+              //               label: cat.name,
+              //               isSelected:
+              //                   controller.selectedCategory.value == cat.id,
+              //               onTap: () {
+              //                 controller.selectedCategory.value = cat.id;
+              //                 controller.fetchWorkoutListMethod();
+              //               },
+              //             ),
+              //           )
+              //           .toList(),
+              //     ),
+              //   );
+              // }),
 
-              const SizedBox(height: 16),
+              // const SizedBox(height: 16),
 
-              // explore Workouts
-              Obx(
-                () => ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: controller.workoutList.length,
-                  itemBuilder: (context, index) {
-                    final workout = controller.workoutList[index];
-                    debugPrint("Workout Name: ${workout.name}");
-                    return
-                    //  Text(workout.name.toString());
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: WorkoutCard(
-                        large: true,
-                        title: workout.name.toString(),
-                        subtitle: workout.duration.toString(),
-                        image: workout.coverImage.toString(),
-                        difficulty: workout.difficulty.toString(),
-                        onBookmarkTap: () {
-                          bookmarkController.removeBookmark(
-                            controller.workoutList[index].id.toString(),
-                          );
-                        },
-                      ),
-                    );
-                  },
-                ),
-              ),
+              // // explore Workouts
+              // Obx(
+              //   () => ListView.builder(
+              //     shrinkWrap: true,
+              //     physics: NeverScrollableScrollPhysics(),
+              //     itemCount: controller.workoutList.length,
+              //     itemBuilder: (context, index) {
+              //       final workout = controller.workoutList[index];
+              //       debugPrint("Workout Name: ${workout.name}");
+              //       return
+              //       //  Text(workout.name.toString());
+              //       Padding(
+              //         padding: const EdgeInsets.only(bottom: 10),
+              //         child: WorkoutCard(
+              //           large: true,
+              //           title: workout.name.toString(),
+              //           subtitle: workout.duration.toString(),
+              //           image: workout.coverImage.toString(),
+              //           difficulty: workout.difficulty.toString(),
+              //           onBookmarkTap: () {
+              //             bookmarkController.removeBookmark(
+              //               controller.workoutList[index].id.toString(),
+              //             );
+              //           },
+              //         ),
+              //       );
+              //     },
+              //   ),
+              // ),
 
-              const SizedBox(height: 12),
+      //        const SizedBox(height: 12),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
