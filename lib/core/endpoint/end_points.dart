@@ -103,4 +103,7 @@ class Urls {
       "$baseUrl/message/unique-conversation";
   static String conversation(String senderId, String receiverId) =>
       "$baseUrl/message/conversation/$senderId/$receiverId";
+
+  // User profile endpoints
+  static String getUserProfile(String userId) => "$baseUrl/user/$userId";
 }
