@@ -27,16 +27,18 @@ class MessageController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _initializeSocket();
+    _initializeSocketCallbacks();
   }
 
-  /// Initialize socket with callbacks
-  void _initializeSocket() {
+  /// Initialize socket callbacks
+  /// Similar to SocketProvider in React
+  void _initializeSocketCallbacks() {
     _socketService.onMessageReceived = _onMessageReceived;
     _socketService.onConnectionStatusChanged = _onConnectionStatusChanged;
   }
 
-  /// Connect to socket and fetch conversations
+  /// Initialize and connect to socket
+  /// Similar to initiateSocket in TypeScript
   Future<void> initialize({
     required String userId,
     required String userToken,
@@ -48,9 +50,8 @@ class MessageController extends GetxController {
       _baseUrl = baseUrl;
       currentUserId.value = userId;
 
-      // Connect socket
-      await _socketService.connect(baseUrl, userId);
-      isSocketConnected.value = true;
+      // Initiate socket connection with userId
+      await _socketService.initiateSocket(baseUrl, userId);
 
       // Fetch initial conversations
       await fetchConversations();
@@ -68,6 +69,7 @@ class MessageController extends GetxController {
 
       final result = await _apiService.getUniqueConversations(
         token: _userToken,
+        currentUserId: _userId,
       );
       conversations.assignAll(result);
     } catch (e) {
@@ -100,19 +102,21 @@ class MessageController extends GetxController {
   }
 
   /// Send message via socket
+  /// Similar to sendMessage in React component
   void sendMessage(String text) {
     if (currentReceiverId.value.isEmpty || text.trim().isEmpty) {
       return;
     }
 
     try {
+      // Emit message through socket
       _socketService.sendMessage(
         senderId: _userId,
         receiverId: currentReceiverId.value,
         text: text,
       );
 
-      // Add message to local list immediately for UI
+      // Add message to local list immediately for optimistic UI update
       final message = MessageModel(
         id: DateTime.now().toString(),
         senderId: _userId,
@@ -122,6 +126,7 @@ class MessageController extends GetxController {
         isRead: false,
       );
       currentMessages.add(message);
+      _logger.i('Message sent: $_userId -> ${currentReceiverId.value}');
     } catch (e) {
       _logger.e('Error sending message: $e');
       errorMessage.value = 'Failed to send message';
@@ -129,6 +134,7 @@ class MessageController extends GetxController {
   }
 
   /// Handle received message
+  /// Similar to the socket.on('receive_message') in React SocketProvider
   void _onMessageReceived(MessageModel message) {
     _logger.i('Message received in controller: $message');
 
@@ -178,7 +184,7 @@ class MessageController extends GetxController {
     currentReceiverId.value = '';
   }
 
-  /// Disconnect socket
+  /// Disconnect socket on controller close
   @override
   void onClose() {
     _socketService.disconnect();

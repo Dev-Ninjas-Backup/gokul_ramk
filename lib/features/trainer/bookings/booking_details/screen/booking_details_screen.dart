@@ -51,36 +51,54 @@ class BookingDetailsScreen extends StatelessWidget {
                 CustomAppBarTitle(title: 'Booking Details'),
                 SizedBox(height: 20),
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Column(
-                      children: [
-                        CircleAvatar(
-                          radius: 40,
-                          backgroundImage: AssetImage(Imagepath.trainer),
-                        ),
-                        SizedBox(height: 12),
-                        Text(
-                          booking.user.fullname,
-                          style: getTextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.primaryFontColor,
+                // User/Client Information
+                Container(
+                  padding: EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: AppColors.primaryColor, width: 1.5),
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Obx(
+                            () => CircleAvatar(
+                              radius: 40,
+                              backgroundImage: controller
+                                      .userProfileImage.value?.isNotEmpty ??
+                                  false
+                                ? NetworkImage(controller.userProfileImage.value!)
+                                : AssetImage(Imagepath.trainer)
+                                    as ImageProvider,
+                            ),
                           ),
+                        ],
+                      ),
+                      SizedBox(height: 12),
+                      Text(
+                        booking.user.fullname,
+                        style: getTextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.primaryFontColor,
                         ),
-                        SizedBox(height: 4),
-                        Text(
-                          booking.user.email,
-                          style: getTextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14,
-                            color: AppColors.primaryFontColor,
-                          ),
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        booking.user.email,
+                        style: getTextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14,
+                          color: AppColors.primaryFontColor,
                         ),
-                        SizedBox(height: 4),
-                        if (booking.user.phone != null)
-                          Text(
+                      ),
+                      if (booking.user.phone != null && booking.user.phone!.isNotEmpty)
+                        Padding(
+                          padding: EdgeInsets.only(top: 4),
+                          child: Text(
                             "Phone: ${booking.user.phone}",
                             style: getTextStyle(
                               fontWeight: FontWeight.w500,
@@ -88,9 +106,9 @@ class BookingDetailsScreen extends StatelessWidget {
                               color: AppColors.primaryFontColor,
                             ),
                           ),
-                      ],
-                    ),
-                  ],
+                        ),
+                    ],
+                  ),
                 ),
 
                 SizedBox(height: 20),

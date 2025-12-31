@@ -9,8 +9,11 @@ class MessageApiService {
   final Logger _logger = Logger();
 
   /// Get unique conversations (users who started message)
+  /// Parses the API response which contains messages with sender/receiver objects
+  /// Extracts unique conversation partners based on the current user
   Future<List<ConversationModel>> getUniqueConversations({
     required String token,
+    required String currentUserId,
   }) async {
     try {
       final response = await http.get(
@@ -23,30 +26,60 @@ class MessageApiService {
       if (response.statusCode == 200) {
         final decodedData = jsonDecode(response.body);
 
-        // Handle different response formats
-        List<dynamic> conversations = [];
-        if (decodedData is List) {
-          conversations = decodedData;
-        } else if (decodedData is Map) {
-          // Try different response wrapper keys
-          if (decodedData['data'] != null) {
-            conversations = decodedData['data'] as List<dynamic>;
-          } else if (decodedData['conversations'] != null) {
-            conversations = decodedData['conversations'] as List<dynamic>;
-          } else if (decodedData['result'] != null) {
-            conversations = decodedData['result'] as List<dynamic>;
-          } else {
-            conversations = [];
-          }
+        // Extract messages from API response
+        List<dynamic> messages = [];
+        if (decodedData is Map && decodedData['data'] != null) {
+          messages = decodedData['data'] as List<dynamic>;
+        } else if (decodedData is List) {
+          messages = decodedData;
         }
 
-        _logger.i('Parsed conversations count: ${conversations.length}');
-        return conversations
-            .map(
-              (json) =>
-                  ConversationModel.fromJson(json as Map<String, dynamic>),
-            )
-            .toList();
+        _logger.i('Total messages received: ${messages.length}');
+
+        // Build unique conversations from messages
+        // Extract unique conversation partners
+        final Map<String, ConversationModel> uniqueConversations = {};
+
+        for (var messageData in messages) {
+          final message = messageData as Map<String, dynamic>;
+          final senderId = message['senderId'] ?? '';
+          final receiverId = message['receiverId'] ?? '';
+          final sender = message['sender'] as Map<String, dynamic>? ?? {};
+          final receiver = message['receiver'] as Map<String, dynamic>? ?? {};
+
+          // Determine the conversation partner
+          late String partnerId;
+          late Map<String, dynamic> partnerData;
+
+          if (senderId == currentUserId) {
+            // I am the sender, partner is receiver
+            partnerId = receiverId;
+            partnerData = receiver;
+          } else {
+            // I am the receiver, partner is sender
+            partnerId = senderId;
+            partnerData = sender;
+          }
+
+          // Add or update conversation
+          uniqueConversations[partnerId] = ConversationModel(
+            id: message['id'] ?? '',
+            userId: currentUserId,
+            conversationPartner: partnerId,
+            partnerName: partnerData['fullname'] ?? 'Unknown User',
+            partnerImage: partnerData['images'],
+            lastMessage: message['message'] ?? '',
+            lastMessageTime: message['updatedAt'] != null
+                ? DateTime.parse(message['updatedAt'].toString())
+                : DateTime.now(),
+            unreadCount: 0,
+          );
+        }
+
+        final conversationList = uniqueConversations.values.toList();
+        _logger.i(
+            'Parsed unique conversations count: ${conversationList.length}');
+        return conversationList;
       } else if (response.statusCode == 401) {
         throw Exception('Unauthorized');
       } else {

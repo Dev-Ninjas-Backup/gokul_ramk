@@ -1,7 +1,13 @@
+// ignore_for_file: unused_field
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gokul_ramk/core/endpoint/end_points.dart';
+import 'package:gokul_ramk/core/services/network_service/network_client.dart';
 import 'package:gokul_ramk/core/services/local_service/shared_preferences_helper.dart';
 import '../controller/message_controller.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class MessageDetailScreen extends StatefulWidget {
   const MessageDetailScreen({super.key});
@@ -37,11 +43,13 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
     _partnerName = args?['partnerName'] ?? 'User';
     _partnerImage = args?['partnerImage'];
 
-    // Load conversation messages
+    // Load conversation messages and fetch partner profile image
     if (_partnerId.isNotEmpty) {
       controller.loadConversation(_partnerId).then((_) {
         _scrollToBottom();
       });
+      // Fetch partner's profile image
+      _fetchPartnerProfileImage();
     }
   }
 
@@ -57,6 +65,38 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
     });
   }
 
+  /// Fetch partner's profile image from API
+  Future<void> _fetchPartnerProfileImage() async {
+    try {
+      final networkClient = Get.find<NetworkClient>();
+      final token = await networkClient.sharedPreferencesHelper.getAccessToken();
+
+      final response = await http.get(
+        Uri.parse(Urls.getUserProfile(_partnerId)),
+        headers: {
+          'Authorization': token ?? '',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final decodedData = jsonDecode(response.body);
+        if (decodedData is Map && decodedData['data'] != null) {
+          final userData = decodedData['data'] as Map<String, dynamic>;
+          final images = userData['images'] as String?;
+          if (images != null && images.isNotEmpty) {
+            setState(() {
+              _partnerImage = images;
+            });
+          }
+        }
+      }
+    } catch (e) {
+      print('Error fetching partner profile image: $e');
+    }
+  }
+
+  /// Initialize controller with user credentials
   void _initializeController() async {
     try {
       // Get token and userId from SharedPreferences
@@ -84,6 +124,8 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
     }
   }
 
+  /// Send message through socket
+  /// Similar to sendMessage in React component
   void _sendMessage() {
     if (_messageController.text.trim().isNotEmpty) {
       controller.sendMessage(_messageController.text.trim());

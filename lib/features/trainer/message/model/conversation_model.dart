@@ -22,17 +22,36 @@ class ConversationModel {
   });
 
   factory ConversationModel.fromJson(Map<String, dynamic> json) {
+    // Support multiple response formats
+    final partnerName = json['partnerName'] ??
+        json['name'] ??
+        json['fullname'] ??
+        json['receiver']?['fullname'] ??
+        json['sender']?['fullname'] ??
+        'Unknown User';
+
+    final partnerImage = json['partnerImage'] ??
+        json['profileImage'] ??
+        json['images'] ??
+        json['receiver']?['images'] ??
+        json['sender']?['images'];
+
     return ConversationModel(
       id: json['id'] ?? json['_id'] ?? '',
-      userId: json['userId'] ?? '',
-      conversationPartner:
-          json['conversationPartner'] ?? json['participantId'] ?? '',
-      partnerName: json['partnerName'] ?? json['name'],
-      partnerImage: json['partnerImage'] ?? json['profileImage'],
-      lastMessage: json['lastMessage'] ?? '',
+      userId: json['userId'] ?? json['senderId'] ?? '',
+      conversationPartner: json['conversationPartner'] ??
+          json['participantId'] ??
+          json['receiverId'] ??
+          json['senderId'] ??
+          '',
+      partnerName: partnerName,
+      partnerImage: partnerImage,
+      lastMessage: json['lastMessage'] ?? json['message'] ?? '',
       lastMessageTime: json['lastMessageTime'] != null
           ? DateTime.parse(json['lastMessageTime'].toString())
-          : DateTime.now(),
+          : json['updatedAt'] != null
+              ? DateTime.parse(json['updatedAt'].toString())
+              : DateTime.now(),
       unreadCount: json['unreadCount'] ?? 0,
     );
   }
