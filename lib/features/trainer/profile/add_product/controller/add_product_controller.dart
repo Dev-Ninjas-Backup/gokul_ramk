@@ -12,6 +12,7 @@ import 'package:gokul_ramk/features/trainer/profile/add_product/model/category_m
 import 'package:gokul_ramk/features/trainer/profile/add_product/post_request_service/add_product_request_service.dart';
 import 'package:gokul_ramk/features/trainer/profile/add_product/post_request_service/category_request_service.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AddProductController extends GetxController {
   var categories = <ProductCategory>[].obs;
@@ -209,8 +210,9 @@ class AddProductController extends GetxController {
         clearAllFields();
 
         // Show success dialog
-        Get.dialog(
-          AlertDialog(
+        showDialog(
+          context: Get.context!,
+          builder: (context) => AlertDialog(
             title: const Text('Success!'),
             content: const Text(
               'Your product has been submitted for review. '
@@ -219,7 +221,7 @@ class AddProductController extends GetxController {
             actions: [
               TextButton(
                 onPressed: () {
-                  Get.back(); // Close dialog
+                  Navigator.pop(context);
                 },
                 child: const Text('OK'),
               ),
@@ -227,12 +229,107 @@ class AddProductController extends GetxController {
           ),
         );
       } else {
-        EasyLoading.showError(
-          responseData['message'] ?? 'Failed to create product',
+        EasyLoading.dismiss();
+
+        // Extract error message from nested response structure
+        String errorMessage =
+            responseData['message'] ?? 'Failed to create product';
+        String? onboardingUrl;
+
+        // Check for nested error response (Stripe verification case)
+        if (responseData['data'] is Map<String, dynamic>) {
+          final data = responseData['data'] as Map<String, dynamic>;
+          if (data['response'] is Map<String, dynamic>) {
+            final nestedResponse = data['response'] as Map<String, dynamic>;
+            errorMessage = nestedResponse['message'] ?? errorMessage;
+            onboardingUrl = nestedResponse['onboardingUrl'] as String?;
+          }
+        }
+
+        // Show error dialog with better formatting
+        showDialog(
+          context: Get.context!,
+          builder: (context) => AlertDialog(
+            title: const Text('Error Creating Product'),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    errorMessage,
+                    style: const TextStyle(color: Colors.red, fontSize: 14),
+                  ),
+                  if (onboardingUrl != null) ...[
+                    const SizedBox(height: 16),
+                    const Text(
+                      'You need to complete Stripe verification:',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 8),
+                    GestureDetector(
+                      onTap: () async {
+                        try {
+                          final Uri stripeUrl = Uri.parse(onboardingUrl!);
+                          await launchUrl(
+                            stripeUrl,
+                            mode: LaunchMode.externalApplication,
+                          );
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Error opening URL: $e')),
+                          );
+                        }
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 8,
+                          horizontal: 12,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.blue,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: const Text(
+                          'Complete Stripe Onboarding',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          ),
         );
       }
     } catch (e) {
-      EasyLoading.showError('Error: $e');
+      EasyLoading.dismiss();
+      showDialog(
+        context: Get.context!,
+        builder: (context) => AlertDialog(
+          title: const Text('Error'),
+          content: Text('Error: $e', style: const TextStyle(fontSize: 14)),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
     }
   }
 
