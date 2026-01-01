@@ -316,61 +316,61 @@ class UserHomeScreen extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 24),
-              Text(
-                "Featured Workouts",
-                style: getTextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
+              // const SizedBox(height: 24),
+              // Text(
+              //   "Featured Workouts",
+              //   style: getTextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              // ),
 
-              const SizedBox(height: 12),
-              Obx(
-                () => SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    spacing: 5,
-                    children: controller.filters.map((filter) {
-                      final isSelected =
-                          controller.selectedFeaturedWorkout.value == filter;
-                      return CategoryButton(
-                        label: filter,
-                        isSelected: isSelected,
-                        onTap: () {
-                          controller.selectedFeaturedWorkout.value = filter;
-                          controller.fetchFeatureWorkoutMethod();
-                        },
-                      );
-                    }).toList(),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 12),
-              // featured Workouts
-              Obx(
-                () => ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: controller.featureWorkoutList.length,
-                  itemBuilder: (context, index) {
-                    final featureWorkout = controller.featureWorkoutList[index];
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: WorkoutCard(
-                        large: true,
-                        title: featureWorkout.name.toString(),
-                        subtitle: featureWorkout.duration.toString(),
-                        difficulty: featureWorkout.difficulty.toString(),
-                        image: featureWorkout.coverImage.toString(),
+              // const SizedBox(height: 12),
+              // Obx(
+              //   () => SingleChildScrollView(
+              //     scrollDirection: Axis.horizontal,
+              //     child: Row(
+              //       spacing: 5,
+              //       children: controller.filters.map((filter) {
+              //         final isSelected =
+              //             controller.selectedFeaturedWorkout.value == filter;
+              //         return CategoryButton(
+              //           label: filter,
+              //           isSelected: isSelected,
+              //           onTap: () {
+              //             controller.selectedFeaturedWorkout.value = filter;
+              //             controller.fetchFeatureWorkoutMethod();
+              //           },
+              //         );
+              //       }).toList(),
+              //     ),
+              //   ),
+              // ),
+              // const SizedBox(height: 12),
+              // // featured Workouts
+              // Obx(
+              //   () => ListView.builder(
+              //     shrinkWrap: true,
+              //     physics: NeverScrollableScrollPhysics(),
+              //     itemCount: controller.featureWorkoutList.length,
+              //     itemBuilder: (context, index) {
+              //       final featureWorkout = controller.featureWorkoutList[index];
+              //       return Padding(
+              //         padding: const EdgeInsets.only(bottom: 10),
+              //         child: WorkoutCard(
+              //           large: true,
+              //           title: featureWorkout.name.toString(),
+              //           subtitle: featureWorkout.duration.toString(),
+              //           difficulty: featureWorkout.difficulty.toString(),
+              //           image: featureWorkout.coverImage.toString(),
 
-                        onBookmarkTap: () {
-                          bookmarkController.removeBookmark(
-                            controller.featureWorkoutList[index].id.toString(),
-                          );
-                        },
-                      ),
-                    );
-                  },
-                ),
-              ),
+              //           onBookmarkTap: () {
+              //             bookmarkController.removeBookmark(
+              //               controller.featureWorkoutList[index].id.toString(),
+              //             );
+              //           },
+              //         ),
+              //       );
+              //     },
+              //   ),
+              // ),
 
               const SizedBox(height: 12),
               Row(
