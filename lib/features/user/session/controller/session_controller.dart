@@ -1,6 +1,5 @@
 // ignore_for_file: avoid_print
 
-
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/services/network_service/network_client.dart';
@@ -13,6 +12,8 @@ import 'package:gokul_ramk/features/user/session/neutrition_tab/repository/meal_
 import 'package:gokul_ramk/features/user/session/neutrition_tab/repository/meal_repository.dart';
 
 import 'package:gokul_ramk/features/user/session/service/discover_service.dart';
+import 'package:gokul_ramk/core/endpoint/end_points.dart';
+import 'package:gokul_ramk/core/utils/constants/imagepath.dart';
 import 'package:gokul_ramk/features/user/session/trainers_tab/model/top_trainer_model.dart';
 
 class SessionController extends GetxController {
@@ -46,72 +47,11 @@ class SessionController extends GetxController {
   var isLoadingMealPlans = false.obs;
   var mealPlanError = ''.obs;
 
-  List communityFoodList = <ComunityFoodModel>[
-    ComunityFoodModel(
-      title: '🥤 7-Day Smoothie Challenge',
-      buttonText: 'Join Challenge',
-      image:
-          'https://vjcooks.com/wp-content/uploads/2025/05/VJcooks_GrilledHoneySoySalmonBowls_2-1749x2048.jpg',
-    ),
-    ComunityFoodModel(
-      title: '🍲 Meal Prep Mastery',
-      buttonText: 'Share Your Meal',
-      image:
-          'https://www.feastingathome.com/wp-content/uploads/2017/06/Grilled-Salmon-Tzatziki-Bowl-109.jpg',
-    ),
-  ];
-  List neutritionGoalCollection = <NutritionGoalFoodModel>[
-    NutritionGoalFoodModel(
-      title: '🔥 Slim & Fit',
-      subTitle: 'Balanced, low-calorie meals designed to help you burn fat.',
-      imageUrl:
-          'https://www.alaskaseafood.org/wp-content/uploads/Char-Grilled-Salmon-Satay-Peanut-Tamarind-Rice-Bowl-5-Web-JPG-940x550.jpg',
-      buttonText: 'Explore Plan',
-    ),
-    NutritionGoalFoodModel(
-      title: '🔥 Slim & Fit',
-      subTitle: 'Balanced, low-calorie meals designed to help you burn fat.',
-      imageUrl:
-          'https://www.alaskaseafood.org/wp-content/uploads/Char-Grilled-Salmon-Satay-Peanut-Tamarind-Rice-Bowl-5-Web-JPG-940x550.jpg',
-      buttonText: 'Cook Fast',
-    ),
-    NutritionGoalFoodModel(
-      title: '🔥 Slim & Fit',
-      subTitle: 'Balanced, low-calorie meals designed to help you burn fat.',
-      imageUrl:
-          'https://www.alaskaseafood.org/wp-content/uploads/Char-Grilled-Salmon-Satay-Peanut-Tamarind-Rice-Bowl-5-Web-JPG-940x550.jpg',
-      buttonText: 'Explore Plan',
-    ),
-    NutritionGoalFoodModel(
-      title: '🔥 Slim & Fit',
-      subTitle: 'Balanced, low-calorie meals designed to help you burn fat.',
-      imageUrl:
-          'https://www.alaskaseafood.org/wp-content/uploads/Char-Grilled-Salmon-Satay-Peanut-Tamarind-Rice-Bowl-5-Web-JPG-940x550.jpg',
-      buttonText: 'Go Green',
-    ),
-  ];
-  List topMealNutrition = <TopMealNutritionModel>[
-    TopMealNutritionModel(
-      name: 'Grilled Salmon Bowl',
-      image:
-          'https://thebigmansworld.com/wp-content/uploads/2024/01/salmon-bowl-1-800x533.jpg',
-    ),
-    TopMealNutritionModel(
-      name: 'Quinoa & Avocado Salad',
-      image:
-          'https://thebigmansworld.com/wp-content/uploads/2024/01/salmon-bowl-1-800x533.jpg',
-    ),
-    TopMealNutritionModel(
-      name: 'Chicken & Brown Rice Meal',
-      image:
-          'https://thebigmansworld.com/wp-content/uploads/2024/01/salmon-bowl-1-800x533.jpg',
-    ),
-    TopMealNutritionModel(
-      name: 'Grilled Salmon Bowl',
-      image:
-          'https://thebigmansworld.com/wp-content/uploads/2024/01/salmon-bowl-1-800x533.jpg',
-    ),
-  ];
+  // Removed static/demo lists. These will be populated from repositories or services.
+  List<ComunityFoodModel> communityFoodList = <ComunityFoodModel>[];
+  List<NutritionGoalFoodModel> neutritionGoalCollection =
+      <NutritionGoalFoodModel>[];
+  List<TopMealNutritionModel> topMealNutrition = <TopMealNutritionModel>[];
 
   var topTrainers = <TopTrainer>[].obs;
   var isLoading = false.obs;
@@ -153,56 +93,52 @@ class SessionController extends GetxController {
   //   ),
   // ].obs;
 
-  final List<Map<String, dynamic>> workoutList = [
-    {
-      "title": "Full Body Stretching",
-      "subtitle": "10 minutes | Intermediate",
-      "image":
-          "https://images.pexels.com/photos/3823039/pexels-photo-3823039.jpeg",
-      "isBookmarked": true,
-      "isOnlineSession": true,
-    },
-    {
-      "title": "Yoga",
-      "subtitle": "15 minutes | Basic",
-      "image":
-          "https://images.pexels.com/photos/3823037/pexels-photo-3823037.jpeg",
-      "isBookmarked": false,
-      "isOnlineSession": true,
-    },
-    {
-      "title": "Full Body Stretching",
-      "subtitle": "10 minutes | Intermediate",
-      "image":
-          "https://images.pexels.com/photos/3823039/pexels-photo-3823039.jpeg",
-      "isBookmarked": true,
-      "isOnlineSession": false,
-    },
-    {
-      "title": "Yoga",
-      "subtitle": "15 minutes | Basic",
-      "image":
-          "https://images.pexels.com/photos/3823037/pexels-photo-3823037.jpeg",
-      "isBookmarked": false,
-      "isOnlineSession": true,
-    },
-    {
-      "title": "Full Body Stretching",
-      "subtitle": "10 minutes | Intermediate",
-      "image":
-          "https://images.pexels.com/photos/3823039/pexels-photo-3823039.jpeg",
-      "isBookmarked": true,
-      "isOnlineSession": false,
-    },
-    {
-      "title": "Yoga",
-      "subtitle": "15 minutes | Basic",
-      "image":
-          "https://images.pexels.com/photos/3823037/pexels-photo-3823037.jpeg",
-      "isBookmarked": false,
-      "isOnlineSession": true,
-    },
-  ];
+  // Reactive list populated from sessions API. Each item maps to the fields used by SessionsWidget.
+  var workoutList = <Map<String, dynamic>>[].obs;
+
+  /// Fetch sessions from the server and map into `workoutList` entries.
+  Future<void> fetchSessions({int page = 1, int limit = 20}) async {
+    try {
+      isLoading(true);
+      final url = '${Urls.createSession}?page=$page&limit=$limit';
+      final response = await service.client.getRequest(url: url);
+      if (response.isSuccess && response.responseData != null) {
+        final dataObj = response.responseData!['data'];
+        List items = [];
+        if (dataObj is Map && dataObj['data'] is List) {
+          items = dataObj['data'];
+        } else if (dataObj is List) {
+          items = dataObj;
+        }
+
+        final mapped = items.map<Map<String, dynamic>>((s) {
+          final trainer = s['trainer'] as Map<String, dynamic>?;
+          final imageUrl =
+              (trainer != null &&
+                  trainer['images'] != null &&
+                  trainer['images'].toString().isNotEmpty)
+              ? trainer['images'].toString()
+              : Imagepath.trainer;
+          return {
+            'title': s['title'] ?? '',
+            'subtitle': s['description'] ?? '',
+            'image': imageUrl,
+            'id': s['id']?.toString() ?? '',
+            'isBookmarked': false,
+            'isOnlineSession':
+                (s['sessionType']?.toString().toLowerCase() == 'online'),
+            'raw': s,
+          };
+        }).toList();
+
+        workoutList.assignAll(mapped);
+      }
+    } catch (e) {
+      if (kDebugMode) print('fetchSessions error: $e');
+    } finally {
+      isLoading(false);
+    }
+  }
 
   @override
   void onInit() {
@@ -211,6 +147,8 @@ class SessionController extends GetxController {
     mealPlanRepository = MealPlanRepository();
     fetchMeals();
     fetchMealPlans();
+    // fetch sessions to populate the sessions tab
+    fetchSessions();
   }
 
   Future<void> fetchMeals({int limit = 10, int page = 1}) async {
