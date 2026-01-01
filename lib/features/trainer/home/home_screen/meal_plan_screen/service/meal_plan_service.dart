@@ -96,4 +96,44 @@ class MealPlanService {
 
     return await createMealPlan(data: data, imageUrl: finalImageUrl);
   }
+
+  /// Edit existing meal plan (PATCH). Uses same body shape as create.
+  Future<NetworkResponse> editMealPlan({
+    required String id,
+    required Map<String, dynamic> data,
+    required String imageUrl,
+  }) async {
+    data["image"] = imageUrl;
+    final url = '${Urls.editMealPlan}/$id';
+    return await client.patchRequest(url: url, body: data);
+  }
+
+  /// Upload Image → Edit Plan → Return response
+  Future<NetworkResponse> editPlanWithImage({
+    required String id,
+    required Map<String, dynamic> data,
+    File? imageFile,
+  }) async {
+    String finalImageUrl = "";
+
+    if (imageFile != null) {
+      final uploadedUrl = await uploadImage(imageFile);
+
+      if (uploadedUrl == null) {
+        return NetworkResponse(
+          isSuccess: false,
+          errorMessage: "Image upload failed===============",
+          statusCode: -1,
+        );
+      }
+
+      if (uploadedUrl.startsWith("http")) {
+        finalImageUrl = uploadedUrl;
+      } else {
+        finalImageUrl = Urls.baseUrl + uploadedUrl;
+      }
+    }
+
+    return await editMealPlan(id: id, data: data, imageUrl: finalImageUrl);
+  }
 }

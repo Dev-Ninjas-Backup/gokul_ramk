@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gokul_ramk/features/trainer/home/home_screen/session_screen/screen/session_detail_screen.dart';
 import 'package:gokul_ramk/features/user/session/controller/session_controller.dart';
 import 'package:gokul_ramk/features/user/session/sessions_tab/widget/sessions_widget.dart';
-import 'package:gokul_ramk/routes/app_routes.dart';
 
 class SessionsTab extends StatelessWidget {
   SessionsTab({super.key});
@@ -11,27 +11,29 @@ class SessionsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      itemCount: controller.workoutList.length,
-      itemBuilder: (context, index) {
-        final workout = controller.workoutList[index];
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 10),
-          child: SessionsWidget(
-            title: workout['title'],
-            subtitle: workout['subtitle'],
-            image: workout['image'],
-            isBookmarked: workout['isBookmarked'] ?? false,
-            isOnlineSession: workout['isOnlineSession'] ?? false,
-            onTapBookMark: () {},
-            onTapButton: () {
-              Get.toNamed(AppRoute.programDetailScreen);
-            },
-          ),
-        );
-      },
-    );
+    return Obx(() {
+      return ListView.builder(
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: controller.workoutList.length,
+        itemBuilder: (context, index) {
+          final workout = controller.workoutList[index];
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: SessionsWidget(
+              title: workout['title'],
+              subtitle: workout['subtitle'],
+              image: workout['image'],
+              isBookmarked: workout['isBookmarked'] ?? false,
+              isOnlineSession: workout['isOnlineSession'] ?? false,
+              onTapBookMark: () {},
+              onTapButton: () {
+                Get.to(() => SessionDetailScreen(sessionId: workout['id']));
+              },
+            ),
+          );
+        },
+      );
+    });
   }
 }

@@ -55,7 +55,7 @@ class HomeScreen extends StatelessWidget {
             SizedBox(height: 8),
             Obx(
               () => Text(
-                "You have ${controller.upcomingSessionsCount.value} sessions today and ${controller.pendingCount.value} new requests.",
+                "You have ${controller.totalSessionsCount.value} total sessions and ${controller.pendingCount.value} new requests.",
                 style: getTextStyle(
                   color: Colors.grey,
                   fontWeight: FontWeight.bold,
@@ -77,8 +77,8 @@ class HomeScreen extends StatelessWidget {
                 ),
                 Obx(
                   () => statCard(
-                    "Upcoming Sessions",
-                    "${controller.upcomingSessionsCount.value} Today/Tomorrow",
+                    "Total Sessions",
+                    "${controller.totalSessionsCount.value} Total",
                   ),
                 ),
               ],
@@ -106,47 +106,46 @@ class HomeScreen extends StatelessWidget {
             SizedBox(height: 24),
 
             // Sessions
-            Text(
-              "Upcoming Sessions",
-              style: getTextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 12),
-            Obx(() {
-              final recent = controller.recentSessions();
-              if (recent.isEmpty) {
-                // fallback to previous hardcoded cards
-                return sessionCard(
-                  "No upcoming sessions",
-                  "You have no upcoming sessions.",
-                  Colors.blue[50]!,
-                );
-              }
+            // Text(
+            //   "Upcoming Sessions",
+            //   style: getTextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            // ),
+            // SizedBox(height: 12),
+            // Obx(() {
+            //   final recent = controller.recentSessions();
+            //   if (recent.isEmpty) {
+            //     // fallback to previous hardcoded cards
+            //     return sessionCard(
+            //       "No upcoming sessions",
+            //       "You have no upcoming sessions.",
+            //       Colors.blue[50]!,
+            //     );
+            //   }
 
-              final colors = [
-                Colors.blue[50]!,
-                Colors.green[50]!,
-                Colors.orange[50]!,
-                Colors.purple[50]!,
-              ];
-              return Column(
-                children: List.generate(recent.length.clamp(0, 2), (i) {
-                  final s = recent[i];
-                  final time = controller.formatSessionDate(s);
-                  final title =
-                      s['title']?.toString() ??
-                      s['name']?.toString() ??
-                      'Session';
-                  final bg = colors[i % colors.length];
-                  return Column(
-                    children: [
-                      sessionCard(time, title, bg),
-                      SizedBox(height: 10),
-                    ],
-                  );
-                }),
-              );
-            }),
-
+            //   final colors = [
+            //     Colors.blue[50]!,
+            //     Colors.green[50]!,
+            //     Colors.orange[50]!,
+            //     Colors.purple[50]!,
+            //   ];
+            //   return Column(
+            //     children: List.generate(recent.length.clamp(0, 2), (i) {
+            //       final s = recent[i];
+            //       final time = controller.formatSessionDate(s);
+            //       final title =
+            //           s['title']?.toString() ??
+            //           s['name']?.toString() ??
+            //           'Session';
+            //       final bg = colors[i % colors.length];
+            //       return Column(
+            //         children: [
+            //           sessionCard(time, title, bg),
+            //           SizedBox(height: 10),
+            //         ],
+            //       );
+            //     }),
+            //   );
+            // }),
             SizedBox(height: 24),
 
             // Clients

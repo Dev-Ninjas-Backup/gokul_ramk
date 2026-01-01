@@ -110,4 +110,7 @@ class Urls {
 
   // User profile endpoints
   static String getUserProfile(String userId) => "$baseUrl/user/$userId";
+  static const String getMyMealPlan = "$baseUrl/meal-plan/my-meal-plan";
+  static const String getMealDetails = "$baseUrl/meal-plan/plan";
+  static String editMealPlan = "$baseUrl/meal-plan/plan";
 }

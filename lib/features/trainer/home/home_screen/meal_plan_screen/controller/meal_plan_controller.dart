@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:gokul_ramk/core/services/network_service/network_client.dart';
 import 'package:gokul_ramk/features/trainer/home/home_screen/meal_plan_screen/model/get_meal_model.dart';
 import 'package:gokul_ramk/features/trainer/home/home_screen/meal_plan_screen/service/meal_plan_service.dart';
+import 'package:gokul_ramk/features/trainer/home/home_screen/meal_plan_screen/model/meal_plan_model.dart';
 
 class CreateMealPlanController extends GetxController {
   final MealPlanService service = MealPlanService(
@@ -44,6 +45,36 @@ class CreateMealPlanController extends GetxController {
 
   // loading
   var isLoading = false.obs;
+
+  // edit mode
+  var isEditing = false.obs;
+  String? editPlanId;
+  String? existingImageUrl;
+
+  /// Populate controller fields from an existing plan (for edit)
+  void populateFromPlan(MealPlanModel plan) {
+    // set identifiers immediately
+    editPlanId = plan.id;
+    existingImageUrl = plan.imageUrl;
+
+    // Defer visible state updates to after the current frame to avoid
+    // changing observable state while the widget tree is being built.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      isEditing.value = true;
+      titleCtrl.text = plan.title;
+      descCtrl.text = plan.description;
+      goalCtrl.text = plan.goal;
+      durationCtrl.text = plan.duration;
+      intensityCtrl.text = plan.intensityLevel;
+      proteinCtrl.text = plan.proteinExample;
+      weeklyItems.assignAll(plan.weeklyBreakdown);
+      dailyItems.assignAll(plan.dailyExamples);
+      // plan.meals contains meal ids; pick first if available
+      if (plan.meals.isNotEmpty) selectedMealId.value = plan.meals.first;
+      // clear any picked image since we're editing an existing plan
+      pickedImagePath.value = '';
+    });
+  }
 
   @override
   void onInit() {
@@ -89,14 +120,41 @@ class CreateMealPlanController extends GetxController {
           ? File(pickedImagePath.value)
           : null;
 
-      final res = await service.createPlanWithImage(
-        data: body,
-        imageFile: imageFile,
-      );
+      NetworkResponse res;
+
+      if (editPlanId != null) {
+        // Edit existing plan
+        if (imageFile != null) {
+          res = await service.editPlanWithImage(
+            id: editPlanId!,
+            data: body,
+            imageFile: imageFile,
+          );
+        } else {
+          // send patch without uploading a new image; backend expects "image" key maybe empty
+          res = await service.editMealPlan(
+            id: editPlanId!,
+            data: body,
+            imageUrl: existingImageUrl ?? '',
+          );
+        }
+      } else {
+        // Create new plan
+        res = await service.createPlanWithImage(
+          data: body,
+          imageFile: imageFile,
+        );
+      }
 
       if (res.isSuccess) {
-        EasyLoading.showInfo("Success Meal Plan Created");
+        EasyLoading.showInfo(
+          editPlanId != null
+              ? "Success Meal Plan Updated"
+              : "Success Meal Plan Created",
+        );
         clearAll();
+        // after edit/creation, go back to list
+        Get.back();
       } else {
         Get.snackbar("Error", res.errorMessage ?? "Failed");
       }
@@ -121,5 +179,9 @@ class CreateMealPlanController extends GetxController {
     dailyItems.clear();
     pickedImagePath.value = "";
     selectedMealId.value = null;
+    // reset edit state
+    editPlanId = null;
+    isEditing.value = false;
+    existingImageUrl = null;
   }
 }

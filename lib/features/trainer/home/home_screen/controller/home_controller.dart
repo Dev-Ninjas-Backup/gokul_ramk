@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/features/user/bookings/service/bookings_service.dart';
-import 'package:gokul_ramk/features/trainer/home/home_screen/session_screen/service/session_service.dart';
+// session service no longer required here; HomeController reads metadata from sessions endpoint via NetworkClient
+import 'package:gokul_ramk/core/services/network_service/network_client.dart';
+import 'package:gokul_ramk/core/endpoint/end_points.dart';
 import 'package:gokul_ramk/features/user/user_profile/service/user_profile_service.dart';
 
 class HomeController extends GetxController {
@@ -11,10 +13,8 @@ class HomeController extends GetxController {
   // Active clients count = number of CONFIRMED bookings
   var confirmedCount = 0.obs;
   var isLoading = false.obs;
-  // upcoming sessions (startDate matched to today or tomorrow)
-  var upcomingSessionsCount = 0.obs;
-  // store sessions list fetched from API
-  var sessionsList = <Map<String, dynamic>>[].obs;
+  // total sessions count returned by sessions endpoint
+  var totalSessionsCount = 0.obs;
   // Available balance from user profile (earnedAmount)
   var availableBalance = 0.0.obs;
 
@@ -22,7 +22,7 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     fetchPendingCount();
-    fetchUpcomingSessions();
+    fetchTotalSessions();
     fetchAvailableBalance();
   }
 
@@ -40,7 +40,7 @@ class HomeController extends GetxController {
   void _refreshAll() {
     // fire-and-forget refreshes; they each handle their own errors
     fetchPendingCount();
-    fetchUpcomingSessions();
+    fetchTotalSessions();
     fetchAvailableBalance();
   }
 
@@ -74,40 +74,32 @@ class HomeController extends GetxController {
   }
 
   /// Fetch sessions and count those with startDate equal to today or tomorrow.
-  Future<void> fetchUpcomingSessions({int page = 1, int limit = 50}) async {
+  /// Fetch sessions endpoint metadata and set total sessions count.
+  /// Uses the same sessions endpoint but reads the `total` field from the response payload.
+  Future<void> fetchTotalSessions({int page = 1, int limit = 10}) async {
     try {
       isLoading.value = true;
-      final fetched = await SessionService.fetchSessions(
-        page: page,
-        limit: limit,
-      );
-      // store sessions (normalize to Map)
-      sessionsList.value = fetched.map((e) {
-        if (e is Map<String, dynamic>) return e;
-        return Map<String, dynamic>.from(e);
-      }).toList();
+      final client = Get.find<NetworkClient>();
+      final url = '${Urls.createSession}?page=$page&limit=$limit';
+      final res = await client.getRequest(url: url);
 
-      final now = DateTime.now();
-      final today = DateTime(now.year, now.month, now.day);
-      final tomorrow = today.add(Duration(days: 1));
-
-      int count = 0;
-      for (final item in fetched) {
-        try {
-          if (item is Map<String, dynamic>) {
-            final sd = item['startDate'];
-            if (sd == null) continue;
-            final dt = DateTime.tryParse(sd.toString());
-            if (dt == null) continue;
-            final local = dt.toLocal();
-            final dOnly = DateTime(local.year, local.month, local.day);
-            if (dOnly == today || dOnly == tomorrow) count++;
+      if (res.isSuccess && res.responseData != null) {
+        final dataObj = res.responseData!['data'];
+        if (dataObj is Map && dataObj['total'] != null) {
+          try {
+            final t = (dataObj['total'] as num).toInt();
+            totalSessionsCount.value = t;
+          } catch (_) {
+            // fallback: if total is string
+            totalSessionsCount.value =
+                int.tryParse(dataObj['total']?.toString() ?? '') ?? 0;
           }
-        } catch (_) {}
+        } else if (dataObj is List) {
+          totalSessionsCount.value = dataObj.length;
+        }
       }
-      upcomingSessionsCount.value = count;
     } catch (e) {
-      if (kDebugMode) print('fetchUpcomingSessions error: $e');
+      if (kDebugMode) print('fetchTotalSessions error: $e');
     } finally {
       isLoading.value = false;
     }
@@ -115,47 +107,7 @@ class HomeController extends GetxController {
 
   /// Return up to [limit] recent sessions sorted by startDate (ascending).
   /// If no sessions have a startDate, fall back to sorting by createdAt (desc).
-  List<Map<String, dynamic>> recentSessions({int limit = 2}) {
-    final withStart = sessionsList
-        .where((s) => s['startDate'] != null)
-        .toList();
-    if (withStart.isNotEmpty) {
-      withStart.sort((a, b) {
-        final da =
-            DateTime.tryParse(a['startDate'].toString()) ??
-            DateTime.fromMillisecondsSinceEpoch(0);
-        final db =
-            DateTime.tryParse(b['startDate'].toString()) ??
-            DateTime.fromMillisecondsSinceEpoch(0);
-        return da.compareTo(db);
-      });
-      return withStart.take(limit).toList();
-    }
-
-    // If no sessions have a startDate, return an empty list (do not fallback to createdAt)
-    return <Map<String, dynamic>>[];
-  }
-
-  /// Format session date string similar to existing UI: "Today, 10:00 AM" or "Tomorrow, 2:00 PM" or "MM/dd, h:mm AM"
-  String formatSessionDate(Map<String, dynamic> session) {
-    String? raw =
-        session['startDate']?.toString() ?? session['createdAt']?.toString();
-    if (raw == null) return '';
-    final dt = DateTime.tryParse(raw);
-    if (dt == null) return '';
-    final local = dt.toLocal();
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
-    final tomorrow = today.add(Duration(days: 1));
-    final dOnly = DateTime(local.year, local.month, local.day);
-    final hour = local.hour % 12 == 0 ? 12 : local.hour % 12;
-    final minute = local.minute.toString().padLeft(2, '0');
-    final ampm = local.hour >= 12 ? 'PM' : 'AM';
-    final timePart = '$hour:$minute $ampm';
-    if (dOnly == today) return 'Today, $timePart';
-    if (dOnly == tomorrow) return 'Tomorrow, $timePart';
-    return '${local.month}/${local.day}, $timePart';
-  }
+  // Removed upcoming session helpers: we now rely on API 'total' to show total sessions.
 
   /// Fetch user profile and set availableBalance from earnedAmount
   Future<void> fetchAvailableBalance() async {

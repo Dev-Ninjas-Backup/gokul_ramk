@@ -19,34 +19,34 @@ class SalesAndBalanceWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "Sales summary",
-                style: getTextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-              ),
-              _dropdownFilter(),
-            ],
-          ),
-        ),
-        Obx(() {
-          return _summaryCard(
-            title:
-                "Revenue: \$${controller.totalRevenue.value.toStringAsFixed(0)}",
-            subtitle:
-                "Total products sold: ${controller.totalProductsSold.value}",
-            buttonText: "View Details",
-            color: Color(0XFF60BF7B),
-            background: Color(0XFFEFF9F2),
-            onTap: () {
-              Get.toNamed(AppRoute.productDetails);
-            },
-          );
-        }),
-        SizedBox(height: 16),
+        // Padding(
+        //   padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        //   child: Row(
+        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //     children: [
+        //       Text(
+        //         "Sales summary",
+        //         style: getTextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+        //       ),
+        //       _dropdownFilter(),
+        //     ],
+        //   ),
+        // ),
+        // Obx(() {
+        //   return _summaryCard(
+        //     title:
+        //         "Revenue: \$${controller.totalRevenue.value.toStringAsFixed(0)}",
+        //     subtitle:
+        //         "Total products sold: ${controller.totalProductsSold.value}",
+        //     buttonText: "View Details",
+        //     color: Color(0XFF60BF7B),
+        //     background: Color(0XFFEFF9F2),
+        //     onTap: () {
+        //       Get.toNamed(AppRoute.productDetails);
+        //     },
+        //   );
+        // }),
+        // SizedBox(height: 16),
         // Padding(
         //   padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         //   child: Row(
@@ -78,24 +78,15 @@ class SalesAndBalanceWidget extends StatelessWidget {
               ),
               SizedBox(width: 8),
               // Make the button flexible so it won't overflow on narrow screens.
-              Flexible(
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  alignment: Alignment.centerRight,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 8,
-                      ),
-                      minimumSize: Size(0, 0),
-                    ),
-                    onPressed: () {
-                      Get.toNamed(AppRoute.withdrawHistory);
-                    },
-                    child: Text("Withdraw History"),
-                  ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  minimumSize: Size(0, 0),
                 ),
+                onPressed: () {
+                  Get.toNamed(AppRoute.withdrawHistory);
+                },
+                child: Text("Withdraw History"),
               ),
             ],
           ),
@@ -197,24 +188,24 @@ class SalesAndBalanceWidget extends StatelessWidget {
     );
   }
 
-  Widget _dropdownFilter() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey.shade300),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Row(
-        children: [
-          Text(
-            "This Month",
-            style: getTextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-          ),
-          Icon(Icons.arrow_drop_down),
-        ],
-      ),
-    );
-  }
+  // Widget _dropdownFilter() {
+  //   return Container(
+  //     padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+  //     decoration: BoxDecoration(
+  //       border: Border.all(color: Colors.grey.shade300),
+  //       borderRadius: BorderRadius.circular(20),
+  //     ),
+  //     child: Row(
+  //       children: [
+  //         Text(
+  //           "This Month",
+  //           style: getTextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+  //         ),
+  //         Icon(Icons.arrow_drop_down),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget _summaryCard({
     required String title,
