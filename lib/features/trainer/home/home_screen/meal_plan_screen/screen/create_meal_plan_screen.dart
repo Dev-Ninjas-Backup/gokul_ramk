@@ -3,11 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
 import 'package:gokul_ramk/features/trainer/home/home_screen/meal_plan_screen/controller/meal_plan_controller.dart';
+import 'package:gokul_ramk/features/trainer/home/home_screen/meal_plan_screen/model/meal_plan_model.dart';
+import 'package:gokul_ramk/features/trainer/home/home_screen/meal_plan_screen/screen/meal_plan_list_screen.dart';
 
 class CreateMealPlanScreen extends StatelessWidget {
-  final controller = Get.put(CreateMealPlanController());
+  final CreateMealPlanController controller = Get.put(
+    CreateMealPlanController(),
+  );
+  final MealPlanModel? plan;
 
-  CreateMealPlanScreen({super.key});
+  CreateMealPlanScreen({super.key, this.plan}) {
+    if (plan != null) {
+      // populate controller with existing plan data for editing
+      controller.populateFromPlan(plan!);
+    }
+  }
 
   Widget input(String label, TextEditingController ctrl, {int maxLines = 1}) {
     return Column(
@@ -37,7 +47,7 @@ class CreateMealPlanScreen extends StatelessWidget {
       () => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title,),
+          Text(title),
           const SizedBox(height: 6),
 
           // TextField + Add Button in Column
@@ -103,9 +113,9 @@ class CreateMealPlanScreen extends StatelessWidget {
           ),
           const SizedBox(height: 10),
 
-          controller.pickedImagePath.isEmpty
-              ? const Center(child: Text("No image selected"))
-              : ClipRRect(
+          // show picked file if any, otherwise show existing image if editing
+          controller.pickedImagePath.isNotEmpty
+              ? ClipRRect(
                   borderRadius: BorderRadius.circular(12),
                   child: Image.file(
                     File(controller.pickedImagePath.value),
@@ -113,7 +123,20 @@ class CreateMealPlanScreen extends StatelessWidget {
                     width: double.infinity,
                     fit: BoxFit.cover,
                   ),
-                ),
+                )
+              : (controller.existingImageUrl != null &&
+                    controller.existingImageUrl!.isNotEmpty)
+              ? ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.network(
+                    controller.existingImageUrl!,
+                    height: 150,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                    errorBuilder: (c, e, s) => const SizedBox.shrink(),
+                  ),
+                )
+              : const Center(child: Text("No image selected")),
           const SizedBox(height: 20),
         ],
       ),
@@ -126,7 +149,7 @@ class CreateMealPlanScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Category",
+          "Meal",
           style: getTextStyle(fontSize: 12, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 8),
@@ -164,6 +187,18 @@ class CreateMealPlanScreen extends StatelessWidget {
         title: const Text('Create Meal Plan'),
         backgroundColor: Colors.white,
         centerTitle: true,
+        actions: [
+          TextButton.icon(
+            onPressed: () {
+              Get.to(() => MealPlanListScreen());
+            },
+            icon: const Icon(Icons.list, color: Colors.blue),
+            label: const Text(
+              'Check Plans',
+              style: TextStyle(color: Colors.blue),
+            ),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -199,7 +234,11 @@ class CreateMealPlanScreen extends StatelessWidget {
                       style: ElevatedButton.styleFrom(
                         minimumSize: const Size(double.infinity, 50),
                       ),
-                      child: const Text('Create Plan'),
+                      child: Text(
+                        controller.isEditing.value
+                            ? 'Edit Plan'
+                            : 'Create Plan',
+                      ),
                     ),
             ),
             const SizedBox(height: 35),

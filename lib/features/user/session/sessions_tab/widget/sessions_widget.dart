@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
-import 'package:gokul_ramk/core/common/widgets/get_random_color.dart';
+// removed random color dependency; using theme primary color for buttons to keep UI consistent
 
 class SessionsWidget extends StatelessWidget {
   final String title;
@@ -19,11 +19,17 @@ class SessionsWidget extends StatelessWidget {
     this.isBookmarked = false,
     this.isOnlineSession = false,
     this.onTapBookMark,
-    this.onTapButton
+    this.onTapButton,
   });
 
   @override
   Widget build(BuildContext context) {
+    // Choose network or asset image depending on the provided string.
+    final ImageProvider backgroundImage =
+        (image.startsWith('http') || image.startsWith('https'))
+        ? NetworkImage(image)
+        : AssetImage(image) as ImageProvider;
+
     return Container(
       width: double.maxFinite,
       height: 220,
@@ -31,10 +37,10 @@ class SessionsWidget extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         image: DecorationImage(
-          image: NetworkImage(image),
+          image: backgroundImage,
           fit: BoxFit.cover,
           colorFilter: ColorFilter.mode(
-            Colors.black.withValues(alpha: 0.3),
+            Colors.black.withOpacity(0.35),
             BlendMode.darken,
           ),
         ),
@@ -54,13 +60,18 @@ class SessionsWidget extends StatelessWidget {
                     children: [
                       Text(
                         title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: getTextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
+                      const SizedBox(height: 4),
                       Text(
                         subtitle,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                         style: getTextStyle(color: Colors.white, fontSize: 12),
                       ),
                     ],
@@ -82,7 +93,7 @@ class SessionsWidget extends StatelessWidget {
               height: 36,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: getRandomDeepColor(),
+                  backgroundColor: Theme.of(context).primaryColor,
                 ),
                 onPressed: onTapButton,
                 child: Text('View Details'),
