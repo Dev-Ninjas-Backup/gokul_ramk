@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
@@ -66,7 +67,9 @@ class EditExerciseController extends GetxController {
         Get.snackbar('Error', 'Failed to load exercise');
       }
     } catch (e) {
-      print('Init edit exercise error: $e');
+      if (kDebugMode) {
+        print('Init edit exercise error: $e');
+      }
     } finally {
       isLoading(false);
     }

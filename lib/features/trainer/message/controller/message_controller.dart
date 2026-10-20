@@ -22,7 +22,6 @@ class MessageController extends GetxController {
 
   late String _userId;
   late String _userToken;
-  late String _baseUrl;
 
   @override
   void onInit() {
@@ -47,7 +46,6 @@ class MessageController extends GetxController {
     try {
       _userId = userId;
       _userToken = userToken;
-      _baseUrl = baseUrl;
       currentUserId.value = userId;
 
       // Initiate socket connection with userId

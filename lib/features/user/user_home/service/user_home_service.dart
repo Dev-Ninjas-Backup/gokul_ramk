@@ -1,6 +1,5 @@
 import 'package:gokul_ramk/core/endpoint/end_points.dart';
 import 'package:gokul_ramk/core/services/network_service/network_client.dart';
-import 'package:gokul_ramk/features/trainer/workout/model/program_model.dart';
 import 'package:gokul_ramk/features/user/user_home/model/feature_workout_model.dart';
 import 'package:gokul_ramk/features/user/user_home/model/program_model.dart';
 import 'package:gokul_ramk/features/user/user_home/model/trainer_model.dart';
@@ -38,7 +37,6 @@ class CategoryService {
     if (response.isSuccess &&
         (response.statusCode == 200 || response.statusCode == 201)) {
       try {
-      print("workout:statuscode: ${response.statusCode}");
         final List data = response.responseData!['data']['data'];
 
         return data.map((json) => WorkOutModel.fromJson(json)).toList();

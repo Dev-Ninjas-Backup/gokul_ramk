@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import '../model/session_model.dart';
 import '../service/session_service.dart';
@@ -25,7 +26,9 @@ class SessionListController extends GetxController {
       );
       this.page.value = page;
     } catch (e) {
-      print('fetchSessions error: $e');
+      if (kDebugMode) {
+        print('fetchSessions error: $e');
+      }
     } finally {
       isLoading(false);
     }

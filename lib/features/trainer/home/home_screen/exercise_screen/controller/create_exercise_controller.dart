@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
@@ -38,7 +39,9 @@ class CreateExerciseController extends GetxController {
       workouts.assignAll(list);
       if (workouts.isNotEmpty) selectedWorkoutId.value = workouts.first.id;
     } catch (e) {
-      print("Fetch workouts error: $e");
+      if (kDebugMode) {
+        print("Fetch workouts error: $e");
+      }
     } finally {
       isLoading(false);
     }
