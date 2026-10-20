@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
@@ -138,7 +139,9 @@ class _BookingSessionCardState extends State<BookingSessionCard> {
         });
       }
     } catch (e) {
-      print('Error fetching user profile image: $e');
+      if (kDebugMode) {
+        print('Error fetching user profile image: $e');
+      }
       setState(() {
         isLoadingImage = false;
       });

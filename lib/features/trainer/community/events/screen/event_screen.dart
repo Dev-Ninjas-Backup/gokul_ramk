@@ -56,7 +56,7 @@ class _EventsScreenState extends State<EventsScreen> {
   }
 
   Widget _buildImageWithLoading(String imageUrl) {
-    return Container(
+    return SizedBox(
       height: 200,
       width: double.infinity,
       child: Stack(

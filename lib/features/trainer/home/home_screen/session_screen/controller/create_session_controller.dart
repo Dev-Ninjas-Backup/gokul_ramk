@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
@@ -45,7 +46,9 @@ class CreateSessionController extends GetxController {
       if (programs.isNotEmpty) selectedProgramId.value = programs.first.id;
       if (categories.isNotEmpty) selectedCategoryId.value = categories.first.id;
     } catch (e) {
-      print('fetchDropdowns error: $e');
+      if (kDebugMode) {
+        print('fetchDropdowns error: $e');
+      }
     } finally {
       isLoading(false);
     }
