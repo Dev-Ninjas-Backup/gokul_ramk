@@ -276,7 +276,7 @@ class AddProductController extends GetxController {
                             mode: LaunchMode.externalApplication,
                           );
                         } catch (e) {
-                          ScaffoldMessenger.of(context).showSnackBar(
+                          ScaffoldMessenger.of(Get.context!).showSnackBar(
                             SnackBar(content: Text('Error opening URL: $e')),
                           );
                         }

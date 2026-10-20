@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
-import 'package:gokul_ramk/core/common/widgets/get_random_color.dart';
 import 'package:gokul_ramk/core/utils/constants/icon_path.dart';
 import 'package:gokul_ramk/features/user/bottom_navbar/controller/navbar_controller.dart';
 import 'package:gokul_ramk/features/user/user_home/controller/user_home_controller.dart';
@@ -11,15 +10,10 @@ import 'package:gokul_ramk/features/user/user_home/screen/package/widgets/packag
 import 'package:gokul_ramk/features/user/user_home/screen/program/all_program_screen.dart';
 import 'package:gokul_ramk/features/user/user_home/screen/program/program_details_screen.dart';
 import 'package:gokul_ramk/features/user/user_home/view_trainer_profile/screen/view_trainer_profile_screen.dart';
-import 'package:gokul_ramk/features/user/user_home/widget/catrgory_button.dart';
 import 'package:gokul_ramk/features/user/user_home/widget/featured_trainer_card.dart';
-import 'package:gokul_ramk/features/user/user_home/widget/highlight_card.dart';
 import 'package:gokul_ramk/features/user/user_home/widget/home_carousel_slider.dart';
 import 'package:gokul_ramk/features/user/user_home/widget/neutrition_card.dart';
 import 'package:gokul_ramk/features/user/user_home/widget/program_card.dart';
-import 'package:gokul_ramk/features/user/user_home/widget/progress_card.dart';
-import 'package:gokul_ramk/features/user/user_home/widget/stats_card.dart';
-import 'package:gokul_ramk/features/user/user_home/widget/workout_card.dart';
 import 'package:gokul_ramk/routes/app_routes.dart';
 
 import '../../bookmark/controller/bookmark_controller.dart';

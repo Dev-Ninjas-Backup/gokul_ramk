@@ -132,7 +132,7 @@ class WorkoutListScreen extends StatelessWidget {
                                 decoration: BoxDecoration(
                                   color: _getDifficultyColor(
                                     workout.difficulty,
-                                  ).withOpacity(0.2),
+                                  ).withValues(alpha: .2),
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Text(

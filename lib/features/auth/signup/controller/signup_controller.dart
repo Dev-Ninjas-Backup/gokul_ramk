@@ -112,7 +112,7 @@ class SignupController extends GetxController {
     }
     if (validateSignup()) {
       final NetworkResponse response = await authServiceController
-          .requestRsendotp(email: emailController.text);
+          .requestResendOtp(email: emailController.text);
       if (response.isSuccess) {
         sharedPreferencesHelperController.saveEmailOrPhone(
           emailOrPhone.containsKey("email")

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import '../model/booking_model.dart';
 import '../service/bookings_service.dart';
@@ -26,7 +27,9 @@ class BookingsController extends GetxController {
         }
       }
     } catch (e) {
-      print('fetchBookings controller error: $e');
+      if (kDebugMode) {
+        print('fetchBookings controller error: $e');
+      }
     } finally {
       isLoading.value = false;
     }
@@ -48,7 +51,9 @@ class BookingsController extends GetxController {
         return false;
       }
     } catch (e) {
-      print('cancelBooking controller error: $e');
+      if (kDebugMode) {
+        print('cancelBooking controller error: $e');
+      }
       Get.snackbar('Error', e.toString());
       return false;
     } finally {
