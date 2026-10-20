@@ -40,7 +40,7 @@ class AuthServiceController extends GetxController {
   }
 
   //send otp
-  Future<NetworkResponse> requestRsendotp({required String email}) async {
+  Future<NetworkResponse> requestResendOtp({required String email}) async {
     try {
       return await networkClient.postRequest(
         url: Urls.resendOtp,
@@ -121,7 +121,7 @@ class AuthServiceController extends GetxController {
     required String newPassword,
   }) async {
     try {
-      return networkClient.postRequest(
+      return await networkClient.postRequest(
         url: Urls.resetPassword,
         body: {'email': email, 'new_password': newPassword},
       );

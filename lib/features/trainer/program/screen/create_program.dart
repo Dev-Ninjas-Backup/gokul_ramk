@@ -265,7 +265,7 @@ class _CreateProgramScreenState extends State<CreateProgramScreen> {
             const SizedBox(height: 8),
             Obx(
               () => DropdownButtonFormField<String>(
-                value: controller.selectedDifficulty.value,
+                initialValue: controller.selectedDifficulty.value,
                 items: controller.difficultyOptions
                     .map(
                       (difficulty) => DropdownMenuItem(

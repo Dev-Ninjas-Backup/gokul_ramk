@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import '../service/user_profile_service.dart';
 
@@ -35,7 +36,9 @@ class UserProfileController extends GetxController {
         }
       }
     } catch (e) {
-      print('fetchProfile error: $e');
+      if (kDebugMode) {
+        print('fetchProfile error: $e');
+      }
     }
   }
 
@@ -55,7 +58,9 @@ class UserProfileController extends GetxController {
       userImage.value = (profile['images'] ?? '') as String?;
       return true;
     } catch (e) {
-      print('updateProfile (local merge) error: $e');
+      if (kDebugMode) {
+        print('updateProfile (local merge) error: $e');
+      }
       return false;
     }
   }

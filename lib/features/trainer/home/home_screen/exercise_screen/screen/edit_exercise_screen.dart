@@ -37,10 +37,11 @@ class EditExerciseScreen extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         Obx(() {
-          if (controller.workouts.isEmpty)
+          if (controller.workouts.isEmpty) {
             return const Text('No workouts found');
+          }
           return DropdownButtonFormField<String>(
-            value: controller.selectedWorkoutId.value,
+            initialValue: controller.selectedWorkoutId.value,
             items: controller.workouts
                 .map((w) => DropdownMenuItem(value: w.id, child: Text(w.name)))
                 .toList(),
@@ -71,8 +72,9 @@ class EditExerciseScreen extends StatelessWidget {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Obx(() {
-          if (controller.isLoading.value)
+          if (controller.isLoading.value) {
             return const Center(child: CircularProgressIndicator());
+          }
 
           return Column(
             children: [

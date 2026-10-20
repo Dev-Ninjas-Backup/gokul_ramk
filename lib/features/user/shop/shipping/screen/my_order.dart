@@ -72,7 +72,7 @@ class MyOrdersScreen extends StatelessWidget {
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                   );
-                }).toList(),
+                }),
 
                 const Divider(thickness: 1),
               ],

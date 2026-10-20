@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/common/styles/global_text_style.dart';
-import 'package:gokul_ramk/features/user/session/trainers_tab/widget/strength_trainer_profile_view.dart';
 import 'package:gokul_ramk/features/user/user_home/controller/user_home_controller.dart';
 import 'package:gokul_ramk/features/user/user_home/view_trainer_profile/screen/view_trainer_profile_screen.dart';
 

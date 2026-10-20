@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/services/network_service/network_client.dart';
-import 'package:gokul_ramk/features/trainer/program/model/excercise_model.dart';
 import '../model/categories_model.dart';
 
 class ProgramService {

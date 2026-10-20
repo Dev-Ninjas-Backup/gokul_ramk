@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/features/trainer/home/home_screen/exercise_screen/model/exercise_model.dart';
 import 'package:gokul_ramk/features/trainer/home/home_screen/exercise_screen/service/exercise_service.dart';
@@ -29,7 +30,9 @@ class ExerciseListController extends GetxController {
       // update controller's page observable
       this.page.value = page;
     } catch (e) {
-      print('Fetch exercises error: $e');
+      if (kDebugMode) {
+        print('Fetch exercises error: $e');
+      }
     } finally {
       isLoading(false);
     }
