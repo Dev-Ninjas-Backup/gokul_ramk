@@ -14,7 +14,7 @@ class PersonalDetailsScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Obx(() {
           final p = controller.profile;
-          String _value(Object? v) => v == null ? '-' : v.toString();
+          String value(Object? v) => v == null ? '-' : v.toString();
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -23,15 +23,15 @@ class PersonalDetailsScreen extends StatelessWidget {
                 'Basic Information',
                 Column(
                   children: [
-                    _infoRow('Full name', _value(p['fullname'])),
+                    _infoRow('Full name', value(p['fullname'])),
                     const SizedBox(height: 12),
-                    _infoRow('Nationality', _value(p['nationality'])),
+                    _infoRow('Nationality', value(p['nationality'])),
                     const SizedBox(height: 12),
-                    _infoRow('City', _value(p['city'])),
+                    _infoRow('City', value(p['city'])),
                     const SizedBox(height: 12),
-                    _infoRow('Gender', _value(p['gender'])),
+                    _infoRow('Gender', value(p['gender'])),
                     const SizedBox(height: 12),
-                    _infoRow('Age', _value(p['age'])),
+                    _infoRow('Age', value(p['age'])),
                   ],
                 ),
               ),
@@ -67,7 +67,7 @@ class PersonalDetailsScreen extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 8),
+          BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 8),
         ],
       ),
       child: Column(

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
@@ -38,7 +39,9 @@ class ChatController extends GetxController {
       if (id != null) userId.value = id;
       if (token != null) userToken.value = token;
     } catch (e) {
-      print('Error initializing user: $e');
+      if (kDebugMode) {
+        print('Error initializing user: $e');
+      }
     }
   }
 
@@ -107,7 +110,9 @@ class ChatController extends GetxController {
         "createdAt": DateTime.now().toString(),
       });
     } catch (e) {
-      print('Error sending message: $e');
+      if (kDebugMode) {
+        print('Error sending message: $e');
+      }
       EasyLoading.showError('Failed to send message. Please try again.');
 
       // Add error message

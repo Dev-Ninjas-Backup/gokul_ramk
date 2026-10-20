@@ -96,7 +96,9 @@ class ProgramDetailsController extends GetxController {
           await _launchUrl(checkoutUrl);
         }
       } else {
-      print("Booking failed");
+      if (kDebugMode) {
+        print("Booking failed");
+      }
         Get.snackbar('Error', decoded['message'] ?? 'Booking failed');
       }
     } catch (e) {

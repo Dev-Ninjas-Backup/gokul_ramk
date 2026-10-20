@@ -14,7 +14,7 @@ class MedicalInfoScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Obx(() {
           final p = controller.profile;
-          bool _val(Object? v) => v == true;
+          bool val(Object? v) => v == true;
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -23,21 +23,21 @@ class MedicalInfoScreen extends StatelessWidget {
                 'Health Conditions',
                 Column(
                   children: [
-                    _yesNoRow('Heart Condition', _val(p['heartCondition'])),
+                    _yesNoRow('Heart Condition', val(p['heartCondition'])),
                     const SizedBox(height: 8),
-                    _yesNoRow('Chest Pain', _val(p['chestPain'])),
+                    _yesNoRow('Chest Pain', val(p['chestPain'])),
                     const SizedBox(height: 8),
-                    _yesNoRow('Medication', _val(p['medication'])),
+                    _yesNoRow('Medication', val(p['medication'])),
                     const SizedBox(height: 12),
                     _card(
                       'Incidents',
                       Column(
                         children: [
-                          _yesNoRow('Has Injuries', _val(p['hasInjuries'])),
+                          _yesNoRow('Has Injuries', val(p['hasInjuries'])),
                           const SizedBox(height: 8),
-                          _yesNoRow('Has Dizziness', _val(p['hasDizziness'])),
+                          _yesNoRow('Has Dizziness', val(p['hasDizziness'])),
                           const SizedBox(height: 8),
-                          _yesNoRow('Has Surgery', _val(p['hasSurgery'])),
+                          _yesNoRow('Has Surgery', val(p['hasSurgery'])),
                         ],
                       ),
                     ),
@@ -82,7 +82,7 @@ class MedicalInfoScreen extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 8),
+          BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 8),
         ],
       ),
       child: Column(

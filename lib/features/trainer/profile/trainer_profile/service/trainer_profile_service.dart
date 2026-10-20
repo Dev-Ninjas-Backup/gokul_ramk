@@ -61,8 +61,9 @@ class TrainerService {
       }
 
       if (dataMap != null) {
-        if (kDebugMode)
+        if (kDebugMode) {
           print('✅ TrainerService.getProfile - parsed data: $dataMap');
+        }
         return Trainer.fromJson(dataMap);
       }
     }

@@ -1,4 +1,3 @@
-import 'message_model.dart';
 
 class ConversationModel {
   final String id;

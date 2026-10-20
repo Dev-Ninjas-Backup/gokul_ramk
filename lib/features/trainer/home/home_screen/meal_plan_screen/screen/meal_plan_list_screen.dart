@@ -55,7 +55,7 @@ class MealPlanListScreen extends StatelessWidget {
             itemBuilder: (context, index) {
               final p = plans[index];
               final img = p.imageUrl ?? '';
-              String _normalize(String? raw) {
+              String normalize(String? raw) {
                 if (raw == null) return '';
                 final s = raw.toString();
                 if (s.startsWith('http')) return s;
@@ -64,7 +64,7 @@ class MealPlanListScreen extends StatelessWidget {
                 return s;
               }
 
-              final imgFixed = _normalize(img);
+              final imgFixed = normalize(img);
 
               return Container(
                 decoration: BoxDecoration(

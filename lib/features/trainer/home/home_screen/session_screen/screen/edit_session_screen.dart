@@ -43,7 +43,7 @@ class EditSessionScreen extends StatelessWidget {
         Obx(() {
           if (items.isEmpty) return const Text('No items');
           return DropdownButtonFormField<String>(
-            value: selected.value,
+            initialValue: selected.value,
             items: items
                 .map(
                   (e) => DropdownMenuItem(
@@ -77,8 +77,9 @@ class EditSessionScreen extends StatelessWidget {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Obx(() {
-          if (controller.isLoading.value)
+          if (controller.isLoading.value) {
             return const Center(child: CircularProgressIndicator());
+          }
           return Column(
             children: [
               dropdownList(

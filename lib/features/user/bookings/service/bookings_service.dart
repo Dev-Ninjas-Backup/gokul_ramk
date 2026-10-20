@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/endpoint/end_points.dart';
 import 'package:gokul_ramk/core/services/network_service/network_client.dart';
@@ -9,7 +10,9 @@ class BookingsService {
       final res = await client.getRequest(url: Urls.getBookings);
       return res;
     } catch (e) {
-      print('fetchBookings error: $e');
+      if (kDebugMode) {
+        print('fetchBookings error: $e');
+      }
       return NetworkResponse(
         isSuccess: false,
         errorMessage: e.toString(),
@@ -26,7 +29,9 @@ class BookingsService {
       final res = await client.deleteRequest(url);
       return res;
     } catch (e) {
-      print('cancelBooking error: $e');
+      if (kDebugMode) {
+        print('cancelBooking error: $e');
+      }
       return NetworkResponse(
         isSuccess: false,
         errorMessage: e.toString(),

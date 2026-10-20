@@ -37,7 +37,7 @@ class MealPlanDetailScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.06),
+            color: Colors.black.withValues(alpha: .06),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -124,7 +124,7 @@ class MealPlanDetailScreen extends StatelessWidget {
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             colors: [
-                              Colors.black.withOpacity(0.65),
+                              Colors.black.withValues(alpha: .65),
                               Colors.transparent,
                             ],
                             begin: Alignment.bottomCenter,
@@ -143,7 +143,7 @@ class MealPlanDetailScreen extends StatelessWidget {
                             height: 42,
                             width: 42,
                             decoration: BoxDecoration(
-                              color: Colors.black.withOpacity(0.55),
+                              color: Colors.black.withValues(alpha: .55),
                               shape: BoxShape.circle,
                             ),
                             child: const Icon(

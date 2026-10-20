@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/endpoint/end_points.dart';
 import 'package:gokul_ramk/core/services/network_service/network_client.dart';
@@ -16,7 +17,9 @@ class WithdrawService {
       );
       return res;
     } catch (e) {
-      print('requestWithdraw error: $e');
+      if (kDebugMode) {
+        print('requestWithdraw error: $e');
+      }
       return NetworkResponse(
         isSuccess: false,
         errorMessage: e.toString(),
@@ -51,7 +54,9 @@ class WithdrawService {
       final res = await client.getRequest(url: url);
       return res;
     } catch (e) {
-      print('getWithdrawHistory error: $e');
+      if (kDebugMode) {
+        print('getWithdrawHistory error: $e');
+      }
       return NetworkResponse(
         isSuccess: false,
         errorMessage: e.toString(),

@@ -136,7 +136,7 @@ class CreateWorkoutScreen extends StatelessWidget {
                       ),
                       SizedBox(height: 8),
                       DropdownButtonFormField<String>(
-                        value: controller.selectedSessionId.value,
+                        initialValue: controller.selectedSessionId.value,
                         items: controller.sessionsList.map((session) {
                           return DropdownMenuItem<String>(
                             value: session['id'],

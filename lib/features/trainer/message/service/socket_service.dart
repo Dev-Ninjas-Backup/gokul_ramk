@@ -1,3 +1,5 @@
+// ignore_for_file: library_prefixes
+
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:logger/logger.dart';
 import '../model/message_model.dart';

@@ -40,7 +40,7 @@ class SessionsWidget extends StatelessWidget {
           image: backgroundImage,
           fit: BoxFit.cover,
           colorFilter: ColorFilter.mode(
-            Colors.black.withOpacity(0.35),
+            Colors.black.withValues(alpha: .35),
             BlendMode.darken,
           ),
         ),

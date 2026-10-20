@@ -13,7 +13,6 @@ import 'package:gokul_ramk/features/trainer/package/screen/create_package_screen
 import '../../../../../core/common/styles/global_text_style.dart';
 import '../../../../../core/utils/constants/icon_path.dart';
 // import '../widgets/client_card.dart';
-import '../widgets/session_card.dart';
 import '../widgets/stat_card.dart';
 import '../controller/home_controller.dart';
 
