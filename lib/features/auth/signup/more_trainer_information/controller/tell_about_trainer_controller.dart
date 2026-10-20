@@ -224,8 +224,9 @@ class TellAboutTrainerController extends GetxController {
                   );
                 }
               } catch (e) {
-                if (kDebugMode)
+                if (kDebugMode) {
                   print("Error parsing availability item $item: $e");
+                }
               }
             }
             // Force refresh to ensure UI updates

@@ -1,5 +1,6 @@
 // ignore_for_file: unused_field
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gokul_ramk/core/endpoint/end_points.dart';
@@ -93,7 +94,9 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
         }
       }
     } catch (e) {
-      print('Error fetching partner profile image: $e');
+      if (kDebugMode) {
+        print('Error fetching partner profile image: $e');
+      }
     }
   }
 
